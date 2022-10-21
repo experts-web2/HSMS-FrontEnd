@@ -1,0 +1,22 @@
+.navbar{
+    position: fixed;
+    height: 56px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0b3948;
+    padding: 0px 10px !important;
+}
+.Title{
+    font-size: 50px;
+    color: #acb0bd;
+    
+}
+.navButton{
+    background-color: #0b3948;
+    border: #0b3948;
+}
+.outlet{
+    padding-top: 56px;
+}
