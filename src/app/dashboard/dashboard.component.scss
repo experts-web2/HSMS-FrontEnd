@@ -1,31 +1,36 @@
-.dashboard_card{
+.dashboard_card {
     height: 110px;
     width: 285px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 2px 8px;
     display: flex;
     justify-content: space-between;
+
     .fa-file-waveform,
     .fa-wheelchair,
     .fa-truck-medical,
-    .fa-people-line{
+    .fa-people-line {
         font-size: 50px;
     }
-    .text-font{
+
+    .text-font {
         font-size: 30px;
         display: block;
         margin-top: 30px;
     }
-    .file-icon{
-        color: #9DEED1;
 
+    .file-icon {
+        color: #3ebf91;
     }
-    .wheelchair-icon{
+
+    .wheelchair-icon {
         color: #1F5AA8;
     }
-    .truck-icon{
+
+    .truck-icon {
         color: #EFA837;
     }
-    .group-icon{
+
+    .group-icon {
         color: #B2C3D7;
     }
 }

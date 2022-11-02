@@ -6,7 +6,7 @@ import { DashboardComponent } from './dashboard.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
-
+import { NgxEchartsModule } from 'ngx-echarts';
 
 
 @NgModule({
@@ -18,7 +18,10 @@ import {MatTableModule} from '@angular/material/table';
     DashboardRoutingModule,
     MatCardModule,
     MatSelectModule,
-    MatTableModule
+    MatTableModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts'),
+    }),
   ]
 })
 export class DashboardModule { }

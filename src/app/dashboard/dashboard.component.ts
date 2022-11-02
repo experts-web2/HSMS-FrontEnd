@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { appointmentModel } from '../models/patient-model';
+// import { FormControl } from '@angular/forms';
+import * as echarts from 'echarts';
+// import { EChartOption } from 'echarts';
+// import { appointmentModel } from '../models/patient-model';
 import { PatientService } from '../Services/patient/patient.service';
+// import { ChartColors } from '@app/types/chart'
+import EChartOption = echarts.EChartsOption
+
+
+
+
 
 // const APPOINTMENTS_DATA: any[] = [
 //   {name: '', time: 'There Are No Tokens For Today', doctor: ''},
@@ -27,6 +35,15 @@ import { PatientService } from '../Services/patient/patient.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+
+  // grid: EChartOption.Grid = {
+  //   top: 5,
+  //   bottom: 5,
+  //   left: -10,
+  //   right: 0,
+  // }
+  chartOption: any = {}
+
   displayedColumns: string[] = ['name', 'time', 'doctor'];
   displayedMessageColumns: string[] = ['sendAt', 'message'];
   displayedTokensColumns: string[] = ['token', 'patient', 'doctor'];
@@ -56,6 +73,35 @@ export class DashboardComponent implements OnInit {
     this.getAppointments();
     this.getMessagesData();
     this.getTokensData();
+    this.chartOption = this.createChartOption([17, 22, 31, 46, 12, 40, 33, 16])
+
+  }
+
+  private createChartOption(data: number[]): EChartOption {
+    return {
+      color: ['#5A79C3'],
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        show: true,
+      },
+      yAxis: {
+        type: 'value',
+        show: true,
+        // Scale, min & max: specifies whether not to contain zero position and adjust axis values in case of scattered data.
+        scale: true,
+        // min: Math.min(...data),
+        // max: Math.max(...data),
+      },
+      series: [
+        {
+          data,
+          type: 'line',
+          symbol: 'circle'
+        },
+      ],
+    }
   }
 
   selectedFilter: string = "Last 7 Days";
