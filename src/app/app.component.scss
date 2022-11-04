@@ -22,17 +22,50 @@
     height: 56px;
     padding: 17px 6px;
 }
+
+    .menu-active{
+        color: #11438F;
+        border-bottom: 2px solid #11438F;
+    }
 .outlet{
     padding-top: 56px;
 }
 .arrow-height{
     height: 17px;
 }
+.menu-items-width{
+    width: 40%;
+}
+.notification-icon,
+.blub-icon{
+    margin-left: 20px;
+}
 .search-Field{
-    display: flex;
+    margin-left: 20px;
+    .search-icon{
+        top: 22%;
+        left: 5%;
+        color: #11438F;
+    }
+    .search-input{
+        height: 40px;
+        width: 250px;
+        border-radius: 4px;
+        outline: none;
+        &::placeholder{
+            padding-left: 40px;
+        }
+    }
+}
+.span-elpis{
+    max-width: 40px;
+    width: fit-content;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 .creat-drop{
-    background-color: #0d6efd; 
+    background-color: #11438F; 
     max-height: 40px;
-    padding: 8px 15px;
+    padding: 8px 25px;
+    border-radius: 4px;
 }
