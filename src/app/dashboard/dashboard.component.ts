@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 // import { FormControl } from '@angular/forms';
 import * as echarts from 'echarts';
+import { AddTokenModalComponent } from '../dialog/add-token-modal/add-token-modal.component';
 // import { EChartOption } from 'echarts';
 // import { appointmentModel } from '../models/patient-model';
 import { PatientService } from '../Services/patient/patient.service';
@@ -52,7 +54,7 @@ export class DashboardComponent implements OnInit {
   tokensData: any;
 
 
-  constructor(private patientService: PatientService) { }
+  constructor(private patientService: PatientService,private dialog: MatDialog) { }
 
   filter: any = [
     {
@@ -122,6 +124,15 @@ export class DashboardComponent implements OnInit {
     this.patientService.getTokens().subscribe((res: any) => {
       this.tokensData = res
     })
+  }
+
+  addToken(){
+    this.dialog.open(AddTokenModalComponent, {
+      maxWidth: '100vw',
+      width: 'calc(100vw - 515px)',
+      height: 'calc(100vh - 35px)',
+      data: {},
+    });    
   }
 
 }

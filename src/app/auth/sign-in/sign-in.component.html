@@ -1,6 +1,6 @@
 <div style="width: 100%;">
     <form [formGroup]="loginForm" class=" form-width text-center mx-auto">
-        <h2 class="mb-5 mt-3">Login To Your Account</h2>
+        <h2 class="mb-5 mt-3">Login to your account</h2>
         <div class="form-group my-5">
             <input type="email" class="form-control" placeholder="Email" formControlName="email">
             <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="alert alert-danger">

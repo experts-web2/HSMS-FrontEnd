@@ -9,6 +9,7 @@ import {MatTableModule} from '@angular/material/table';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 
+
 @NgModule({
   declarations: [
     DashboardComponent
