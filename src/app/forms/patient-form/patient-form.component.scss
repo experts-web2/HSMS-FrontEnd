@@ -1,0 +1,98 @@
+.dialog-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.inpt-Field1{
+    width: 75%
+}
+.input_Divs{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.matDialogContent::-webkit-scrollbar{
+    width:5px;
+}
+
+   
+ 
+.matDialogContent::-webkit-scrollbar-track {
+  box-shadow: none;
+}
+ 
+.matDialogContent::-webkit-scrollbar-thumb {
+  background-color: #4545df41;
+  border-radius: 8px;
+  outline: 1px solid rgba(112, 128, 144, 0);
+}
+.inpt-Date{
+    width: 90%;
+    height: 36px;
+    border: none;
+}
+.inpt-Ph-rel{
+    width: 45%;
+}
+.inpt-phone{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 75%
+}
+.inpt-radio{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.inpt-age{
+    width: 30%
+}
+.date-div{
+    padding: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 75%;
+    padding: 1px;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .375rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.datepickerIcon{
+    line-height: 38px;
+}
+.inpt-Date:focus{
+    outline: none;
+    border: none;
+}
+.mat-icon-button{
+    height: 36px !important;
+    line-height: 36px !important;
+    width: 36px !important;
+}
+.plus-sign{
+    font-weight: 600;
+    font-size: 23px;
+    color: #4545df;
+}
+.inpt-chips{
+    width: 90%;
+    height: 36px;
+    border: none;
+}
+.inpt-chips:focus{
+    outline: none;
+    border: none;
+}
+.patient-btn{
+    display: flex;
+    flex-direction: row-reverse;
+}

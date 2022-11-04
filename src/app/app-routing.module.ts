@@ -5,7 +5,8 @@ import { HomeComponent } from './home/home.component';
 const routes: Routes = [
   {path:'' ,component:HomeComponent},
   {path:'home' ,component:HomeComponent},
-  {path:'register',loadChildren:()=> import('./registration/registration.module').then((m)=>m.RegistrationModule)}
+  {path:'register',loadChildren:()=> import('./registration/registration.module').then((m)=>m.RegistrationModule)},
+  {path:'forms',loadChildren:()=> import('./forms/form.module').then((m)=>m.FormModule)}
 ];
 
 @NgModule({

@@ -24,6 +24,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatChipsModule } from '@angular/material/chips';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -52,8 +55,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatProgressSpinnerModule
-    
+    MatProgressSpinnerModule,
+    MatNativeDateModule,
+    MatChipsModule,
+    ReactiveFormsModule,
+    FormsModule
+      
   ],
   imports: [
     CommonModule

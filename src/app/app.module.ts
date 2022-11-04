@@ -7,19 +7,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { HomeComponent } from './home/home.component';
 import { RegistrationModule } from './registration/registration.module';
+import { SharedModule } from './shared-module/shared-module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
-    
+    HomeComponent        
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     RegistrationModule,
-    StoreModule.forRoot({}, {})
+    StoreModule.forRoot({}, {}),
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

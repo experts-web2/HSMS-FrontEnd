@@ -1,0 +1,93 @@
+ <div mat-dialog-title class="dialog-title">
+    <div>
+        <span>Add Patient</span>
+        <input class="btn-close"  mat-dialog-close >
+    </div>
+ </div>
+<div mat-dialog-content class="matDialogContent">
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+        <div class="input_Divs">
+            <mat-label>MR#</mat-label>
+            <input class="form-control inpt-Field1 " matInput  placeholder="MR#" formControlName="mrNum">
+        </div>
+         <div class="input_Divs">
+            <mat-label>Name<span class="text-danger">*</span></mat-label>
+            <input class="form-control inpt-Field1" matInput placeholder="Name" formControlName="name">
+        </div>
+        <div class="input_Divs">
+            <mat-label>Phone#<span class="text-danger">*</span></mat-label>
+            <div class="inpt-phone">
+                <input class="form-control inpt-Ph-rel" matInput placeholder="Phone#" formControlName="phoneNum">
+                    <span class="plus-sign">+</span>
+                    <mat-select class="form-control inpt-Ph-rel" placeholder="Select Relation" formControlName="relation">
+                    <mat-option *ngFor="let relation of relations" [value]="relation.value">
+                        {{relation.value}}
+                    </mat-option>
+                    </mat-select>
+            </div>
+        </div>
+        <div class="input_Divs">
+            <mat-label>Gender</mat-label>
+            <div class="inpt-phone">
+                <mat-radio-group class="inpt-radio" aria-label="Select an option" formControlName="gender">
+                    <mat-radio-button value="Male">Male</mat-radio-button>
+                    <mat-radio-button value="Female">Female</mat-radio-button>
+                    <mat-radio-button value="Other">Other</mat-radio-button>
+                  </mat-radio-group>
+            </div>
+        </div>
+        <div class="input_Divs">
+            <mat-label>Age</mat-label>
+            <div class="inpt-phone">
+                <input class="form-control inpt-age" matInput placeholder="Years" #years>
+                <input class="form-control inpt-age" matInput placeholder="Months" #months>
+                <input class="form-control inpt-age" matInput placeholder="Days" #days>
+                <input hidden class="" formControlName="age">
+            </div>
+        </div>
+        <div class="input_Divs">
+            <mat-label>Registration Date</mat-label>
+            <div class="date-div">
+
+                <input readonly class=" inpt-Date" matInput [matDatepicker]="picker" formControlName="registrationDate">
+                <mat-datepicker-toggle class="datepickerIcon" matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </div>
+        </div>
+        <div class="input_Divs">
+            <mat-label>Add Tags</mat-label>
+            <mat-chip-list class="form-control inpt-Field1" #chipList aria-label="Fruit selection">
+                <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
+                  {{tag}}
+                  <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+                <input class="inpt-chips" placeholder="Add tag value and press enter"
+                       [matChipInputFor]="chipList"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       [matChipInputAddOnBlur]="addOnBlur"
+                       (matChipInputTokenEnd)="add($event)">
+              </mat-chip-list>
+        </div>
+        <div class="input_Divs">
+            <mat-label>Select Tags</mat-label>
+            <mat-select class="form-control inpt-Field1" placeholder="Select Tags" formControlName="relation">
+                <mat-option *ngFor="let tag of tags" [value]="tag">
+                    {{tag}}
+                </mat-option>
+                </mat-select>
+        </div>
+        <div class="input_Divs">
+            <mat-label>Add Photo</mat-label>
+            <div>
+                <input class="form-control" type="button" (click)="openCamera()" value="Take Picture" >
+                <input class="form-control inpt-Field1" type="file" accept="image/png, image/jpeg, application/pdf" placeholder="Add Photo" formControlName="addPhoto">
+            </div>
+        </div>
+        <div class="patient-btn">
+            <input class="btn btn-primary " type="submit" value="Add Patient +">
+        </div>        
+    </form>
+</div> 
+
