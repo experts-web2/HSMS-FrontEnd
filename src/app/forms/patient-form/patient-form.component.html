@@ -82,7 +82,7 @@
             <mat-label>Add Photo</mat-label>
             <div>
                 <input class="form-control" type="button" (click)="openCamera()" value="Take Picture" >
-                <input class="form-control inpt-Field1" type="file" accept="image/png, image/jpeg, application/pdf" placeholder="Add Photo" formControlName="addPhoto">
+                <input class="form-control inpt-Field1" type="file"  accept="image/png, image/jpeg, application/pdf" placeholder="Add Photo" (change)="getUploadImage($event)" formControlName="addPhoto">
             </div>
         </div>
         <div class="patient-btn">

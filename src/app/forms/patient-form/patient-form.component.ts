@@ -15,6 +15,7 @@ export class PatientFormComponent implements OnInit {
   relations:any[] = [{value:'Father'},{value:'Mother'},{value:'Sister'},{value:'Brother'},{value:'Son'},{value:'Daughter'},{value:'Wife'},{value:'Other'}];
   addOnBlur = true;
   age:string = 'age';
+  base64ImageString:string = '';
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   tags: any[] = [];
 
@@ -29,7 +30,7 @@ export class PatientFormComponent implements OnInit {
       age: [this.age],
       registrationDate: [''],
       addTags: [this.tags],
-      addPhoto: ['']
+      addPhoto: [this.base64ImageString]
     });
     
   }
@@ -66,8 +67,12 @@ export class PatientFormComponent implements OnInit {
       width:'400px'
     });
     camera.afterClosed().subscribe(data=>{
-      console.log(data._imageAsDataUrl);
+      this.base64ImageString=data._imageAsDataUrl;
+
       
     });
+  }
+  getUploadImage(file:any){
+    console.log(file);
   }
 }
