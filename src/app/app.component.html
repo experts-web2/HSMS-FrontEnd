@@ -15,7 +15,7 @@
       <div class="d-flex">
         <a class="navButton btn btn-primary creat-drop" [matMenuTriggerFor]="creat">Creat<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #creat="matMenu">
-          <a mat-menu-item>Patient</a>
+          <a mat-menu-item (click)="addPatient()">Patient</a>
           <a mat-menu-item>Invoice</a>
           <a mat-menu-item>Health Record</a>
         </mat-menu> 
