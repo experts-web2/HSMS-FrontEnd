@@ -1,0 +1,29 @@
+.img-set {
+    height: calc(100vh - 56px);
+}
+
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    column-gap: 15px;
+
+    .form-group {
+        .alert-danger {
+            margin-top: 10px;
+            height: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-control {
+            height: 70px;
+        }
+
+        margin: 20px 0px;
+    }
+}
+
+::ng-deep .intl-tel-input {
+    width: 100%;
+}

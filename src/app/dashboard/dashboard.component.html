@@ -1,0 +1,110 @@
+<div class="mt-4 justify-content-evenly d-flex">
+
+    <mat-card class="dashboard_card "><div class="text-center"><p>Total Appointments</p> <span class="file-icon text-font">17</span></div> <i class="fa-solid fa-file-waveform d-flex align-items-end file-icon"></i></mat-card>
+    <mat-card class="dashboard_card "><div class="text-center"><p>Registered Patients</p> <span class="wheelchair-icon text-font">56</span></div> <i class="fa-solid fa-wheelchair d-flex align-items-end wheelchair-icon"></i></mat-card>
+    <mat-card class="dashboard_card "><div class="text-center"><p>Patients Visited Today</p> <span class="truck-icon text-font">1</span></div> <i class="fa-solid fa-truck-medical d-flex align-items-end truck-icon"></i></mat-card>
+    <mat-card class="dashboard_card "><div class="text-center"><p>Total Users</p> <span class="group-icon text-font">10</span></div> <i class="fa-sharp fa-solid fa-people-line d-flex align-items-end group-icon"></i></mat-card>
+</div>
+<button class="navButton btn btn-primary" (click)="addToken()">Add Token</button>
+
+<div class="mt-4">
+    <span style="margin-right: 15px;">Patient Visits</span>
+
+    <mat-form-field>
+        <mat-select name="filterString" [(value)]="selectedFilter">
+            <mat-option *ngFor="let item of filter" [value]="selectedFilter">{{item.label}}</mat-option>
+            <!-- <mat-option >United States</mat-option>
+      <mat-option >Canada</mat-option> -->
+        </mat-select>
+    </mat-form-field>
+</div>
+<div echarts [options]="chartOption" class=""></div>
+
+<div class="mt-4">
+    <h4>Appointments Today</h4>
+    <table mat-table [dataSource]="appointmentsData" class="mat-elevation-z8 w-100">
+      
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Patien Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+      
+        <!-- Time Column -->
+        <ng-container matColumnDef="time">
+          <th mat-header-cell *matHeaderCellDef> Appointment Time </th>
+          <td mat-cell *matCellDef="let element"> {{element.time}} </td>
+        </ng-container>
+      
+        <!-- Doctor Column -->
+        <ng-container matColumnDef="doctor">
+          <th mat-header-cell *matHeaderCellDef> Doctor Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.doctor}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      
+      
+</div>
+
+
+
+
+
+
+<div class="mt-4">
+    <h4>Messages</h4>
+    <table mat-table [dataSource]="messagesData" class="mat-elevation-z8 w-100">
+      
+        <!-- Time Column -->
+        <ng-container matColumnDef="sendAt">
+          <th mat-header-cell *matHeaderCellDef> Send At </th>
+          <td mat-cell *matCellDef="let element"> {{element.sendAt}} </td>
+        </ng-container>
+      
+        <!-- Message Column -->
+        <ng-container matColumnDef="message">
+          <th mat-header-cell *matHeaderCellDef> Message </th>
+          <td mat-cell *matCellDef="let element"> {{element.message}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedMessageColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedMessageColumns;"></tr>
+      </table>
+      
+      
+</div>
+
+
+
+
+<div class="mt-4">
+    <h4>Tokens Today</h4>
+    <table mat-table [dataSource]="tokensData" class="mat-elevation-z8 w-100">
+      
+        <!-- Time Column -->
+        <ng-container matColumnDef="token">
+          <th mat-header-cell *matHeaderCellDef> Token# </th>
+          <td mat-cell *matCellDef="let element"> {{element.token}} </td>
+        </ng-container>
+      
+        <!-- Patient Column -->
+        <ng-container matColumnDef="patient">
+          <th mat-header-cell *matHeaderCellDef> Patient Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.patient}} </td>
+        </ng-container>
+
+              <!-- Doctor Column -->
+              <ng-container matColumnDef="doctor">
+                <th mat-header-cell *matHeaderCellDef> Doctor Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.doctor}} </td>
+              </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedTokensColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedTokensColumns"></tr>
+      </table>
+      
+      
+</div>

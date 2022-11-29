@@ -1,0 +1,39 @@
+    .close-button {
+        cursor: pointer;
+        top: 0;
+        right: 0;
+    }
+
+    .search-icon{
+        left: 67%;
+        font-size: 30px;
+    }
+
+    .search-field{
+        width: 300px;
+        border-radius: 20px;
+        height: 30px;
+        padding-left: 10px;
+        border: 1px solid #cfcfcf ;
+    }
+    .pulse{
+        height: 35px;
+        width: 115px;
+    }
+    .appointmentField{
+        display: grid;
+        grid-template-columns: repeat(5,1fr);
+        grid-template-rows: auto;
+        column-gap: 20px;
+        row-gap: 10px;
+    }
+    .description{
+        width: 240px;
+    }
+
+    .total{
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        grid-template-rows: auto;
+        column-gap: 10px;
+    }

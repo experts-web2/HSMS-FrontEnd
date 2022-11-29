@@ -1,0 +1,94 @@
+<div class="row gx-0" style="background-color: #F4F4F4;">
+    <div class="col-5">
+        <img class="w-100 img-set" [src]="doctorImage">
+    </div>
+    <div class="col-7">
+        <form [formGroup]="signUpForm">
+            <h1 class="text-center pt-3">Sign up</h1>
+            <div class="grid-wrapper px-3">
+                <div class="form-group">
+                    <input required type="text" class="form-control" placeholder="First Name"
+                        formControlName="f_name">
+                    <div *ngIf="f_name?.invalid && (f_name?.dirty || f_name?.touched)" class="alert alert-danger">
+                        <div *ngIf="f_name?.errors?.['required']">
+                            First name is required.
+                        </div>
+                        <div *ngIf="f_name?.errors?.['minlength']">
+                            Name must be at least 4 characters long.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Last Name" formControlName="l_name">
+                    <div *ngIf="l_name?.invalid && (l_name?.dirty || l_name?.touched)" class="alert alert-danger">
+
+                        <div *ngIf="l_name?.errors?.['required']">
+                            Last name is required.
+                        </div>
+                        <div *ngIf="l_name?.errors?.['minlength']">
+                            Name must be at least 4 characters long.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Designation"
+                        formControlName="designation">
+                    <div *ngIf="designation?.invalid && (designation?.dirty || designation?.touched)"
+                        class="alert alert-danger">
+                        <div *ngIf="designation?.errors?.['required']">
+                            Designation is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Email"
+                        formControlName="email">
+                    <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="alert alert-danger">
+                        <div *ngIf="email?.errors?.['required']">
+                            Email is required.
+                        </div>
+                        <div *ngIf="email?.errors?.['pattern']">
+                            Please enter a valid Email address.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Password" formControlName="password">
+                    <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="alert alert-danger">
+                        <div *ngIf="password?.errors?.['required']">
+                            password is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Confirm Password"
+                        formControlName="confirm_password">
+                    <div *ngIf="confirm_password?.invalid && (confirm_password?.dirty || confirm_password?.touched)"
+                        class="alert alert-danger">
+                        <div *ngIf="confirm_password?.errors?.['required']">
+                            confirm password is required.
+                        </div>
+                    </div>
+                    <div *ngIf="confirm_password?.dirty && confirm_password?.touched">
+                        <div class="alert alert-danger"
+                            *ngIf="!confirm_password?.errors?.['required'] && confirm_password?.value != password?.value">
+                            Confirm Password Must Match with Password.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" class="form-control" formControlName="phone_no">
+                    <div *ngIf="phone_no?.invalid && (phone_no?.dirty || phone_no?.touched)" class="alert alert-danger">
+                        <div *ngIf="phone_no?.errors?.['required']">
+                            phone no is required.
+                        </div>
+                        <div *ngIf="phone_no?.invalid && !phone_no?.errors?.['required']">
+                            Enter valid phone number
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" (click)="validate()" class="btn btn-success mx-3">Register</button>
+        </form>
+    </div>
+</div>
