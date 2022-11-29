@@ -1,6 +1,12 @@
 <nav class="p-0">
   <div class="navbar p-0">
     <span class="Title">HSMS</span>
+    <div class=" menu-items-width d-flex justify-content-between align-items-center ">
+      <a class="navButton btn btn-primary" [ngClass]="{'menu-active': step==='step1'}" (click)="step='step1'" routerLink="/home">Dashboards</a>
+      <a class="navButton btn btn-primary" [ngClass]="{'menu-active': step==='step2'}" (click)="step='step2'" routerLink="/register">Health Records</a>
+      <a class="navButton btn btn-primary" [ngClass]="{'menu-active': step==='step3'}" (click)="step='step3'" routerLink="/register">Laboratory</a>
+      <a class="navButton btn btn-primary" [ngClass]="{'menu-active': step==='step4'}" (click)="step='step4'" routerLink="/register">Messages</a>
+      <a class="navButton btn btn-primary" [ngClass]="{'menu-active': step==='step5'}" (click)="step='step5'" [matMenuTriggerFor]="more">More<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
     <div>
       <button class="navButton btn btn-primary" routerLink="/home">Home</button>
       <button class="navButton btn btn-primary" routerLink="/sign-up">Register</button>
@@ -17,20 +23,20 @@
           <a mat-menu-item>Item 2</a>
         </mat-menu>       
       </div>
-      <div class="d-flex">
-        <a class="navButton btn btn-primary creat-drop" [matMenuTriggerFor]="creat">Creat<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+      <div class="d-flex align-items-center">
+        <a class="navButton btn btn-primary creat-drop text-white" [matMenuTriggerFor]="creat">Creat<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #creat="matMenu">
           <a mat-menu-item (click)="addPatient()">Patient</a>
           <a mat-menu-item>Invoice</a>
           <a mat-menu-item>Health Record</a>
         </mat-menu> 
-        <div class="search-Field">
-          <mat-icon>search</mat-icon> 
-          <input placeholder="Search">
+        <div class="search-Field d-flex position-relative">
+          <mat-icon class="position-absolute search-icon">search</mat-icon> 
+          <input class="search-input" placeholder="Search">
         </div>
-        <a class="navButton btn btn-primary"><mat-icon >lightbulb_on</mat-icon></a>
-        <a class="navButton btn btn-primary"><mat-icon style="rotate: 45deg;">notifications</mat-icon></a>
-        <a class="navButton btn btn-primary " [matMenuTriggerFor]="User">User Name<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <a class="navButton btn btn-primary blub-icon"><mat-icon >lightbulb_on</mat-icon></a>
+        <a class="navButton btn btn-primary notification-icon"><mat-icon style="rotate: 45deg;">notifications</mat-icon></a>
+        <a class="navButton btn btn-primary " [matMenuTriggerFor]="User"><span class="span-elpis">User Name</span><mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #User="matMenu">
           <a mat-menu-item>Option 1</a>
           <a mat-menu-item>Option 2</a>

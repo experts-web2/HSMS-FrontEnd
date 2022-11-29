@@ -10,6 +10,7 @@ import { PatientFormComponent } from './forms/patient-form/patient-form.componen
 })
 export class AppComponent {
   title = 'HSMS';
+  step=''
   constructor(private dialog:MatDialog){}
 
   addPatient(){
