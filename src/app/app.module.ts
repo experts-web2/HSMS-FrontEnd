@@ -13,17 +13,14 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatSelectModule} from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-
-
-
-
+import { SharedModule } from './shared-module/shared-module';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AddTokenModalComponent
-    
+    HomeComponent    
   ],
   imports: [
     BrowserModule,
@@ -35,7 +32,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatSelectModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
-    StoreModule.forRoot({}, {})
+    StoreModule.forRoot({}, {}),
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

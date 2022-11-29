@@ -7,6 +7,36 @@
     </div>
     <!-- <button routerLink="/home">Home</button>
     <button routerLink="/home">Home</button> -->
+      <a class="navButton btn btn-primary" routerLink="/home">Dashboards</a>
+      <a class="navButton btn btn-primary" routerLink="/register">Health Records</a>
+      <a class="navButton btn btn-primary" routerLink="/register">Laboratory</a>
+      <a class="navButton btn btn-primary" routerLink="/register">Messages</a>
+      <a class="navButton btn btn-primary" [matMenuTriggerFor]="more">More<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <mat-menu #more="matMenu">
+          <a mat-menu-item>Item 1</a>
+          <a mat-menu-item>Item 2</a>
+        </mat-menu>       
+      </div>
+      <div class="d-flex">
+        <a class="navButton btn btn-primary creat-drop" [matMenuTriggerFor]="creat">Creat<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <mat-menu #creat="matMenu">
+          <a mat-menu-item (click)="addPatient()">Patient</a>
+          <a mat-menu-item>Invoice</a>
+          <a mat-menu-item>Health Record</a>
+        </mat-menu> 
+        <div class="search-Field">
+          <mat-icon>search</mat-icon> 
+          <input placeholder="Search">
+        </div>
+        <a class="navButton btn btn-primary"><mat-icon >lightbulb_on</mat-icon></a>
+        <a class="navButton btn btn-primary"><mat-icon style="rotate: 45deg;">notifications</mat-icon></a>
+        <a class="navButton btn btn-primary " [matMenuTriggerFor]="User">User Name<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <mat-menu #User="matMenu">
+          <a mat-menu-item>Option 1</a>
+          <a mat-menu-item>Option 2</a>
+          <a mat-menu-item>Option 3</a>
+        </mat-menu>
+      </div>
   </div>
 </nav>
 <div  class="outlet">
