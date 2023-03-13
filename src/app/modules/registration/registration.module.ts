@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { RegistrationRoutingModule } from './registration-routing.module';
 import { RegisterComponent } from './register/register.component';
-import { SharedModule } from '../shared-module/shared-module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from 'src/app/shared-module/shared-module';
 
 
 @NgModule({

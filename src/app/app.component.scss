@@ -22,6 +22,8 @@
     border-radius: 0px;
     height: 56px;
     padding: 17px 6px;
+    text-align: center;
+    white-space: nowrap;
 }
 
     .menu-active{
@@ -71,3 +73,11 @@
     border-radius: 4px;
     padding: 8px 15px;
 }
+
+@media only screen and (max-width: 1200px) {
+    .navbar {
+      display: flex;
+      flex-wrap: wrap;
+      height: fit-content;
+    }
+  }

@@ -1,8 +1,6 @@
-import { Dialog } from '@angular/cdk/dialog';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PatientFormComponent } from './forms/patient-form/patient-form.component';
-
+import { PatientFormComponent } from './modules/forms/patient-form/patient-form.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

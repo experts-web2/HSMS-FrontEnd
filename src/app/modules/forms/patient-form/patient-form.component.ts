@@ -3,7 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes'
 import { MatDialog } from '@angular/material/dialog';
-import { CameraComponent } from 'src/app/camera/camera.component';
+import { CameraComponent } from 'src/app/modules/camera/camera.component';
+import { PatientService } from '../../../Services/patient/patient.service';
 
 @Component({
   selector: 'app-patient-form',
@@ -18,7 +19,7 @@ export class PatientFormComponent implements OnInit {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   tags: any[] = [];
 
-  constructor(private fb:FormBuilder, private dialog:MatDialog) { 
+  constructor(private fb:FormBuilder, private dialog:MatDialog, private readonly patientService:PatientService) { 
 
     this.patientForm = this.fb.group({
       mrNum: [''],
@@ -34,6 +35,10 @@ export class PatientFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.patientService.getData().subscribe(data=>{
+      console.log(data);
+      
+    })
   }
 
   onSubmit(){

@@ -1,13 +1,21 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { patientData } from 'src/data'
+import { HttpService } from '../httpService/http.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService {
+export class PatientService extends HttpService{
 
-  constructor() { }
+  constructor(private http: HttpClient) {
+    super(http)
+  }
+
+  getData(): Observable<any>{
+    return this.get('https://jsonplaceholder.typicode.com/todos');
+  }
 
   getAppointments() {
     return of(patientData.getAppointments())
