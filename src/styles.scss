@@ -37,3 +37,16 @@ $HSMS-theme: mat.define-light-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+::-webkit-scrollbar{
+  width:7px;
+}
+::-webkit-scrollbar-track {
+box-shadow: none;
+}
+::-webkit-scrollbar-thumb {
+background-color: #4545cf5d;
+border-radius: 8px;
+outline: 1px solid rgba(112, 128, 144, 0);
+}

@@ -19,7 +19,7 @@ import { SharedModule } from './shared-module/shared-module';
   declarations: [
     AppComponent,
     HomeComponent,
-    AddTokenModalComponent
+    AddTokenModalComponent,
     HomeComponent    
   ],
   imports: [
