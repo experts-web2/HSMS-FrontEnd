@@ -59,8 +59,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatNativeDateModule,
     MatChipsModule,
     ReactiveFormsModule,
-    FormsModule
-      
+    FormsModule      
   ],
   imports: [
     CommonModule

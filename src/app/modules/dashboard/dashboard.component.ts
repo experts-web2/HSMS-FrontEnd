@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 // import { FormControl } from '@angular/forms';
 import * as echarts from 'echarts';
-import { AddTokenModalComponent } from '../dialog/add-token-modal/add-token-modal.component';
 // import { EChartOption } from 'echarts';
 // import { appointmentModel } from '../models/patient-model';
-import { PatientService } from '../Services/patient/patient.service';
+import { PatientService } from '../../Services/patient/patient.service';
 // import { ChartColors } from '@app/types/chart'
 import EChartOption = echarts.EChartsOption
+import { AddTokenModalComponent } from '../dialog/add-token-modal/add-token-modal.component';
 
 
 
