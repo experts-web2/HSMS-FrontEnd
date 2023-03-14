@@ -59,7 +59,7 @@
         </div>
         <div class="input_Divs">
             <mat-label>Add Tags</mat-label>
-            <mat-chip-list class="form-control inpt-Field1" #chipList aria-label="Fruit selection">
+            <mat-chip-grid class="form-control inpt-Field1" #chipGrid aria-label="Fruit selection">
                 <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
                   {{tag}}
                   <button matChipRemove>
@@ -67,11 +67,11 @@
                   </button>
                 </mat-chip>
                 <input class="inpt-chips" placeholder="Add tag value and press enter"
-                       [matChipInputFor]="chipList"
+                       [matChipInputFor]="chipGrid"
                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                        [matChipInputAddOnBlur]="addOnBlur"
                        (matChipInputTokenEnd)="add($event)">
-              </mat-chip-list>
+              </mat-chip-grid>
         </div>
         <div class="input_Divs">
             <mat-label>Select Tags</mat-label>
