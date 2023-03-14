@@ -22,7 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
     HomeComponent    
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     BrowserAnimationsModule,
     RegistrationModule,
