@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../State/user/user.service';
+import { UserStateService } from '../../State/user/user.service';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +8,7 @@ import { UserService } from '../../State/user/user.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserStateService) { }
 
   ngOnInit(): void {
   }
@@ -21,6 +21,14 @@ export class HomeComponent implements OnInit {
 
   adduser(){
     this.userService.addUser();
+  }
+
+  setStateData(){
+    this.userService.setData();
+  }
+
+  getStateData(){
+    this.userService.getData();
   }
 
 

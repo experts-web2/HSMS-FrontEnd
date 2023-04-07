@@ -46,7 +46,7 @@ export class SignUpComponent implements OnInit {
         firstName: formUser.firstName,
         lastName: formUser.lastName,
         email: formUser.email,
-        phoneNumber: formUser.phonneNumber,
+        phoneNumber: formUser.phoneNumber,
         roles: [formUser.designation],
         password: formUser.password,
         active: true

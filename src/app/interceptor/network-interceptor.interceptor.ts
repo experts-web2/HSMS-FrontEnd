@@ -13,6 +13,7 @@ export class NetworkInterceptorInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    request.headers
     return next.handle(request);
   }
 }
