@@ -6,6 +6,11 @@
     background-color: #f2f2f2;
     padding: 20px;
   }
+
+  .first-title{
+    font-size: 24px;
+    font-weight: 500;
+  }
   
   .profile-container {
     display: flex;
@@ -22,6 +27,7 @@
   
   .profile-name {
     font-size: 28px;
+    font-weight: 600;
     margin: 0;
   }
   
@@ -39,6 +45,7 @@
   
   .section-title {
     font-size: 24px;
+    font-weight: 700;
     margin-top: 40px;
   }
   
@@ -87,7 +94,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 8px;
-    padding: 50px;
+    height: 200px;
   }
   
   .m-history-card-heading{
@@ -112,5 +119,21 @@
     display: flex;
     justify-content: space-between;
     width: 95%;
-    padding: 15px;
+    padding: 10px 15px;
+    font-size: 17px;
+    span:last-child{
+    color: #777;
+    font-weight: 600;
+    }
+  }
+  .clipboard-icon{
+    background-color: rgb(255, 239, 239);
+    color: red;
+    width: 50px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 64px;
+    border-radius: 10px;
   }

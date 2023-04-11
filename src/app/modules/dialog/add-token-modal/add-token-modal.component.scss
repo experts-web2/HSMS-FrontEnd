@@ -5,8 +5,14 @@
     }
 
     .search-icon{
-        left: 67%;
+        right: 10px;
+        top: 3px;
+        color: white;
         font-size: 30px;
+        padding: 0 3px 0 0;
+        background: #11438F;
+        border-radius: 0px 10px 10px 0px;
+        width: fit-content;
     }
 
     .search-field{
@@ -36,4 +42,8 @@
         grid-template-columns: repeat(3,1fr);
         grid-template-rows: auto;
         column-gap: 10px;
+    }
+
+    .amount{
+        height: 57px;
     }
