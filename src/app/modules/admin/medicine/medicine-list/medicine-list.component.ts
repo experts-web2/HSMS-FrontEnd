@@ -5,6 +5,7 @@ import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { TableColumnFilterTypes } from 'src/app/constants/enums/table-column-filterTypes';
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
 import { PotencyUnits } from 'src/app/constants/enums/potency-units';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 
 @Component({
   selector: 'app-medicine-list',
@@ -13,6 +14,7 @@ import { PotencyUnits } from 'src/app/constants/enums/potency-units';
 })
 export class MedicineListComponent implements OnInit {
   medicineList: Array<any> = [];
+  totalRecords: number = 0;
   
   columns: Array<ITableColumns> = [
   {
@@ -67,10 +69,11 @@ export class MedicineListComponent implements OnInit {
     this.getMedicine();
   }
 
-  getMedicine(filterRequest?: IFiltersRequest){
-    this.medicineService.getMedicine().subscribe(x => {
+  getMedicine(fetchRequest: IFetchRequest = {}){
+    this.medicineService.getMedicine(fetchRequest).subscribe(x => {
       console.log(x);
-      this.medicineList = x.data;      
+      this.medicineList = x.data; 
+      this.totalRecords = x.total;     
     })
   }
 

@@ -34,4 +34,8 @@ export class UserService extends HttpService {
     return this.post(`${this.baseEndpoint}`, fetchRequest)
   }
 
+  getUsersByAccount(): Observable<any>{
+    return this.get(`${this.baseEndpoint}/byaccountid`)
+  }
+
 }

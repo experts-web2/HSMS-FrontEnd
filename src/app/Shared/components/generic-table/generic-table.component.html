@@ -45,7 +45,7 @@
   <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
     <tr>
       <td *ngFor="let column of columns">
-        {{resolveField(rowData, column)}}
+        {{resolveField(rowData, column) ?? 'N/A'}}
       </td>
       <td *ngIf="showActions">
         <div >
