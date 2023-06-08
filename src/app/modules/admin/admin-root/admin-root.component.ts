@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./admin-root.component.scss']
 })
 export class AdminRootComponent {
-
+  sidebarVisible = true;
 }
