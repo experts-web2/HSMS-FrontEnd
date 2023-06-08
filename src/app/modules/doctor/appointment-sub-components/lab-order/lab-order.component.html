@@ -1,0 +1,12 @@
+<div class="d-flex">
+    <div class="col-3">
+        <div class="tab" *ngFor="let tab of tabsToView" [ngClass]="tab.active ? 'activeTab': ''" (click)="active(tab.id)">
+            <span>{{tab.name}}</span>
+        </div>
+    </div>
+    <div class="col-9 tablet-main">
+        <div class="tablet" *ngFor="let test of testsListToShow">
+            <span>{{test.name}}</span>
+        </div>
+    </div>
+</div>

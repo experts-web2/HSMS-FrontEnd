@@ -1,0 +1,68 @@
+<p-table
+    #dt
+  [value]="data"
+  [totalRecords]="totalRecords"
+  [rows]="10"
+  [paginator]="true"
+  [loading]="loading"
+  [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [showCurrentPageReport]="true"
+  [globalFilterFields]="filterColumns"
+  (onPage)="pageChange($event)"
+  (onSort)="sort($event)"
+  (onFilter)="filter($event)"
+  (onLazyLoad)="lazyload($event)"  
+>
+  <ng-template pTemplate="caption">
+    <div class="flex">
+      <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" #search (input)="dt.filterGlobal(search.value, 'contains')" placeholder="Search keyword" />
+      </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let column of columns" style="min-width:15rem" [pSortableColumn]="column.property">
+        <div class="flex align-items-center">
+          {{ column.name }}<p-sortIcon [field]="column.property"></p-sortIcon>
+          <p-columnFilter
+            *ngIf="column.filter"
+            [type]="column.filterType || 'text'"
+            [field]="column.property"
+            display="menu"
+            (filterFunction)="filterFunction($event)"
+          ></p-columnFilter>
+        </div>
+      </th>
+      <th  style="min-width:15rem" *ngIf="showActions">
+        <div class="flex align-items-center">Actions</div>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+    <tr>
+      <td *ngFor="let column of columns">
+        {{resolveField(rowData, column)}}
+      </td>
+      <td *ngIf="showActions">
+        <div >
+            <i class="pi pi-trash btn btn-danger m-1" pTooltip="Delete Record" (click)="actionEmitter(rowData, 'delete')"></i>
+            <i class="pi pi-pencil btn btn-success m-1" pTooltip="Edit Record" (click)="actionEmitter(rowData, 'edit')"></i>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="columns.length">No records found.</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="flex align-items-center justify-content-between">
+        Total {{totalRecords }} records.
+    </div>
+  </ng-template>
+</p-table>

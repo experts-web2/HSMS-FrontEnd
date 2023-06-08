@@ -1,0 +1,4 @@
+<div class="loader" *ngIf="loaderService.getStatus() | async">
+    <button (click)="loaderService.hide()">close</button>
+loading....
+</div>

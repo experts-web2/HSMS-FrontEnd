@@ -1,0 +1,107 @@
+.prrescription-input{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+}
+.procedure-select-div{
+    display: flex;
+}
+// .procedure-select{
+//     width: 33%;
+// }
+.template-btn{
+    background: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+.template-btn:hover{
+    background-color: rgba(66, 63, 63, 0.626);
+}
+   
+.template-btn:active{
+    background-color: rgb(219, 207, 207);
+}
+
+.p-treeselect-items-wrapper{
+    width: 33%;
+}
+
+.delete-icon-span{
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    padding: 15px;
+    border-radius: 50%;
+}
+
+.delete-icon-span:hover{
+    background-color: rgba(66, 63, 63, 0.626);
+}
+
+.delete-icon-span:active{
+    background-color: rgb(219, 207, 207);
+}
+
+// .delete-icon-span:visited{
+//     background-color: rgba(202, 29, 29, 0.286);
+// }
+
+.bottom{
+    display: flex;
+    flex-direction: row;
+}
+
+.add-procedure{
+    display: flex;
+    margin-top: 30px;
+}
+
+.add-procedure-button{
+    width: 25%;
+    font-weight: bold;
+    color: #fff;
+    background-color: #11438F;
+    border-radius: 3px;
+    border: none;
+    height: 40px;
+}
+.add-procedure-button:active{
+   background-color: #000000;
+    
+}
+
+.inner-prescription{
+    display: flex;
+    justify-content: space-between;
+}
+
+.inner-prescription, input{
+    width: 93%;
+}
+
+.bottom{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+}
+.save-button{
+    background-color: #11438F;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    margin: 0px 5px;
+    height: 35px;
+}
+
+.datePicker{
+    height: 43.99px;
+}
+
+p-calender,.p-calendar{
+    width: 315px !important;
+}

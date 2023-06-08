@@ -1,11 +1,8 @@
-<nav class="p-0">
+<p-toast></p-toast>
+<nav class="p-0" [ngClass]="">
   <div class="navbar p-0">
     <span class="Title">HSMS</span>
     <div class=" menu-items-width d-flex justify-content-between align-items-center ">
-      <!-- <a class="navButton btn btn-primary" [ngClass]="{'menu-active': step==='step1'}" (click)="step='step1'" routerLink="/home">Dashboards</a>
-      <a class="navButton btn btn-primary" [ngClass]="{'menu-active': step==='step2'}" (click)="step='step2'" routerLink="/register">Health Records</a>
-      <a class="navButton btn btn-primary" [ngClass]="{'menu-active': step==='step3'}" (click)="step='step3'" routerLink="/register">Laboratory</a>
-      <a class="navButton btn btn-primary" [ngClass]="{'menu-active': step==='step4'}" (click)="step='step4'" routerLink="/register">Messages</a> -->
       <a class="navButton btn btn-primary" routerLink="/dashboard">Dashboard</a>
       <a class="navButton btn btn-primary" routerLink="/register">Health Records</a>
       <a class="navButton btn btn-primary" routerLink="/register">Laboratory</a>
@@ -31,9 +28,9 @@
         <a class="navButton btn btn-primary notification-icon"><mat-icon style="rotate: 45deg;">notifications</mat-icon></a>
         <a class="navButton btn btn-primary " [matMenuTriggerFor]="User"><span class="span-elpis">User Name</span><mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #User="matMenu">
-          <a mat-menu-item>Option 1</a>
+          <a mat-menu-item routerLink="/admin">admin</a>
           <a mat-menu-item>Option 2</a>
-          <a mat-menu-item>Option 3</a>
+          <a mat-menu-item (click)="logOut()">Log Out</a>
         </mat-menu>
         <div *ngFor="let h of [1,2,3]">{{h}}</div>
         <!-- <div>
@@ -41,9 +38,8 @@
           <button class="navButton btn btn-primary" routerLink="/sign-up">Register</button>
         </div> -->
       </div>
-  </div>
+    </div>
 </nav>
 <div  class="outlet">
   <router-outlet></router-outlet>
 </div>
-

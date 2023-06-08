@@ -1,0 +1,37 @@
+.sideNavContainer{
+    // background-color:  #11438F;
+    min-height: 100%;
+}
+
+.sideNavTab{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #11438F;
+    font-weight: bold;
+    height: 50px;
+}
+
+.sideNavTab:hover{    
+    color: #fff;
+    background-color: #11438F;
+    animation: scale-up 1s 1;
+}
+
+@keyframes scale-up {
+    0% {
+      transform: scale(1);
+      translate: 10px 0px;
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+}
+
+// .sideNavTab:active{
+//     color: #fff;
+//     background-color: #11438F;
+// }

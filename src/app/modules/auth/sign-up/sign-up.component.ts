@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { IUser } from '../../../models/user';
+import { IUser } from '../../../models/interfaces/user';
 import { UserService } from '../../../Services/user.service';
 
 
@@ -46,16 +46,15 @@ export class SignUpComponent implements OnInit {
         firstName: formUser.firstName,
         lastName: formUser.lastName,
         email: formUser.email,
+        gender: formUser.gender,
         phoneNumber: formUser.phoneNumber,
         roles: [formUser.designation],
         password: formUser.password,
-        active: true
+        active: true,
+        accountId: ''
       } 
-      console.log({user});
       
       this.userService.register(user).subscribe((x: any) => {
-        console.log(x);
-        
       });
   }
 

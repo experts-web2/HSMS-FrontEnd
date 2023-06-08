@@ -1,0 +1,37 @@
+<form (ngSubmit)="submitTest($event)" [formGroup]="testForm">
+    <div>
+        <label for="name">Test Name <span class="text-danger">*</span></label>
+        <input pInputText type="text" name="" id="name" formControlName="name" required>
+        <div *ngIf="(testForm.controls['name'].errors && testForm.controls['name'].touched) || (testForm.controls['name'].touched && !testForm.controls['name'].valid)"><small>Please enter category name.</small></div>
+    </div>
+    <div>
+        <label for="description">Description <span class="text-danger">*</span></label>
+        <input pInputText type="text" name="" id="description" formControlName="description" required>
+        <div *ngIf="(testForm.controls['description'].errors && testForm.controls['description'].touched) || (testForm.controls['description'].touched && !testForm.controls['description'].valid)"><small>Please add description.</small></div>
+    </div>
+    <div>
+        <label for="category">Lab Test Category <span class="text-danger">*</span></label>
+        <select class="form-select-sm" name="" id="category" formControlName="category">
+            <option [value]="''" selected disabled>Select A Lab Test Category</option>
+            <option *ngFor="let category of categories" [value]="category.id" >{{category.name}}</option>
+        </select>
+        <div *ngIf="(testForm.controls['category'].errors && testForm.controls['category'].touched) || (testForm.controls['category'].touched && !testForm.controls['category'].valid)"><small>Please select a test category.</small></div>
+    </div>
+    <div>
+        <label for="price">Price <span class="text-danger">*</span></label>
+        <input pInputText type="number" name="" id="price" formControlName="price" required>
+        <div *ngIf="(testForm.controls['price'].errors && testForm.controls['price'].touched) || (testForm.controls['price'].touched && !testForm.controls['price'].valid)"><small>Please enter price.</small></div>
+    </div>
+    <div>
+        <button class="btn btn-primary" 
+        type="submit" 
+        [disabled]="
+        (testForm.controls['name'].errors || !testForm.controls['name'].valid) && 
+        (testForm.controls['description'].errors || !testForm.controls['description'].valid) && 
+        (testForm.controls['category'].errors || !testForm.controls['category'].valid) && 
+        (testForm.controls['price'].errors || !testForm.controls['price'].valid) 
+        "
+        >Add</button>
+    </div>
+</form>
+<button class="btn btn-warning" [routerLink]="['/admin/tests-list']"> </button>

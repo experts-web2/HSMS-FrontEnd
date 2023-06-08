@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 //   providedIn: 'root'
 // })
 export  abstract class HttpService {
+  
   protected baseUrl = `${environment.backendurl}api`
   constructor(private readonly httpClient: HttpClient) {
   }

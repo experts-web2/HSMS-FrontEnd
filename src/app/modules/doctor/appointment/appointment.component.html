@@ -94,8 +94,30 @@
         </div>
       </div>
       <div class=" flex-column bg-white align-items-center p-3 rounded-3 m-md-3">
+        <div>
+          <p-tabView>
+            <p-tabPanel header="Prescription">
+              <app-prescription></app-prescription>
+            </p-tabPanel>
+            <p-tabPanel header="Vitals">
+                <app-vitals></app-vitals>
+            </p-tabPanel>
+            <p-tabPanel header="Medication">
+                <app-medication></app-medication>
+            </p-tabPanel>
+            <p-tabPanel header="Lab Order">
+              <app-lab-order></app-lab-order>
+            </p-tabPanel>
+            <p-tabPanel header="Radiology Order">
+                <p>
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+                    qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+                </p>
+            </p-tabPanel>
+          </p-tabView>
+        </div>
         <h2 class="section-title">Prescriptions</h2>
-        <button class="btn btn-secondry btn-success">+ Add Prescription</button>
+        <button class="btn btn-secondry btn-success" (click)="showDialogueMethod()">+ Add Prescription</button>
         <div class="d-flex align-items-center">
           <hr class="col-6">
         </div>
@@ -129,4 +151,6 @@
       </div>
     </section>
   </div>
+  <app-add-prescription-dialogue (show)="showDialogueMethod=$event"></app-add-prescription-dialogue>
+  <!-- <button (click)="showDialogueMethod()">open dialogue</button> -->
 </div>
