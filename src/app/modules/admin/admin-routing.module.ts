@@ -18,7 +18,7 @@ import { CategoriesListComponent } from './categories/categories-list/categories
 
 const routes: Routes = [
   {path:'', component: AdminRootComponent, children:[
-    {path: '', component: UserFormComponent},
+    {path: '', redirectTo:'user-list', pathMatch: 'full'},
     {path: 'user-list', component: UserListComponent},
     {path: 'user-form', component: UserFormComponent},
     {path: 'medicine', component: MedicineFormComponent},
@@ -31,7 +31,7 @@ const routes: Routes = [
     {path: 'beds', component: BedFormComponent},
     {path: 'shifts', component: ShiftsComponent},
     {path: 'HR', component: HumanRecourcesComponent},
-    {path: 'data-import-export', component: DataImpExpComponent},
+    {path: 'data-import-export', component: DataImpExpComponent}
   ]}
 ];
 

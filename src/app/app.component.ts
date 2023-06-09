@@ -3,6 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { PatientFormComponent } from './modules/forms/patient-form/patient-form.component';
 import { AuthService } from './Services/auth-service/auth.service';
 import { UserStateService } from './State/user/user.service';
+import { ILogedInUser } from './models/interfaces/Iloggedinuser';
+import { Roles } from './constants/enums/Roles-Enum';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,26 +16,41 @@ export class AppComponent implements OnInit {
   step = ''
   logedIn: boolean = false;
   showNav: boolean = false;
+  userName: string = '';
+  userRole: string = '';
+  isAdmin!: boolean;
+  logedInUser!: ILogedInUser;
 
 
 
-  constructor(private dialog:MatDialog, private readonly authService: AuthService, private readonly userStateService:UserStateService){}
+  constructor(private dialog: MatDialog, private readonly authService: AuthService, private readonly userStateService: UserStateService) { }
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.checkLoggedIn();
   }
 
-  checkLoggedIn(){
+  checkLoggedIn() {
+    this.userStateService.User_State.subscribe({
+      next: (x: ILogedInUser) => {
+        if (x) this.showNav = true;
+        else this.showNav = false;
+        this.userName = `${x.firstName} ${x.lastName}`;
+        console.log(x);
+        this.logedInUser = x;
+        this.isAdmin = x.roles.includes('Admin');
 
-  }
-
-  addPatient(){
-   const dialogRef = this.dialog.open(PatientFormComponent,{
-      width:'600px'
+      },
+      error: (err: Error) => { }
     })
   }
 
-  logOut(){
+  addPatient() {
+    const dialogRef = this.dialog.open(PatientFormComponent, {
+      width: '600px'
+    })
+  }
+
+  logOut() {
     this.authService.logOut();
   }
 }

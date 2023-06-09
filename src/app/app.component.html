@@ -1,6 +1,6 @@
 <p-toast></p-toast>
 <nav class="p-0" [ngClass]="">
-  <div class="navbar p-0">
+  <div class="navbar p-0" *ngIf="showNav">
     <span class="Title">HSMS</span>
     <div class=" menu-items-width d-flex justify-content-between align-items-center ">
       <a class="navButton btn btn-primary" routerLink="/dashboard">Dashboard</a>
@@ -14,7 +14,7 @@
         </mat-menu>       
       </div>
       <div class="d-flex align-items-center">
-        <a class="navButton btn btn-primary creat-drop text-white" [matMenuTriggerFor]="creat">Creat<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <a class="navButton btn btn-primary creat-drop text-white" [matMenuTriggerFor]="creat">Create<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #creat="matMenu">
           <a mat-menu-item (click)="addPatient()">Patient</a>
           <a mat-menu-item>Invoice</a>
@@ -26,9 +26,9 @@
         </div>
         <a class="navButton btn btn-primary blub-icon"><mat-icon >lightbulb_on</mat-icon></a>
         <a class="navButton btn btn-primary notification-icon"><mat-icon style="rotate: 45deg;">notifications</mat-icon></a>
-        <a class="navButton btn btn-primary " [matMenuTriggerFor]="User"><span class="span-elpis">User Name</span><mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <a class="navButton btn btn-primary " [matMenuTriggerFor]="User"><span class="span-elpis user-name">{{logedInUser.firstName.substring(0, 1).toUpperCase() + logedInUser.lastName.substring(0, 1).toUpperCase()}}</span><mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #User="matMenu">
-          <a mat-menu-item routerLink="/admin">admin</a>
+          <a mat-menu-item *ngIf="isAdmin" routerLink="/admin">Admin</a>
           <a mat-menu-item>Option 2</a>
           <a mat-menu-item (click)="logOut()">Log Out</a>
         </mat-menu>
