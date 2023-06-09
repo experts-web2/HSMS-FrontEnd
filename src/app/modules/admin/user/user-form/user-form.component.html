@@ -1,35 +1,37 @@
-<div>
-    <form class="d-flex flex-column" [formGroup]="userForm" (ngSubmit)="formSubmit($event)" >
-        <div class="d-flex flex-column gap-2">
-            <label htmlFor="fName">Firts Name</label>
+
+<p-dialog [header]="update ? 'Update User' : 'Add User'" [visible]="visible | async" (visibleChange)="hide()" [style]="{width: '50vw'}" >
+    <div>
+    <form class="d-flex flex-column" [formGroup]="userForm" (ngSubmit)="formSubmit($event, update)" >
+        <div class="d-flex flex-column gap-2 mb-4">
+            <label htmlFor="fName">Firts Name<span class="text-danger">*</span></label>
             <input pInputText id="fName"  formControlName="fName"/>
             <div class="validation" *ngIf="(userForm.controls['fName'].errors && userForm.controls['fName'].dirty) || (userForm.controls['fName'].errors && userForm.controls['fName'].touched)">
                 <small ><i class="fa fa-circle-exclamation"></i> First-Name is required.</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2">
-            <label htmlFor="lName">Last Name</label>
+        <div class="d-flex flex-column gap-2 mb-4">
+            <label htmlFor="lName">Last Name<span class="text-danger">*</span></label>
             <input pInputText id="lName" formControlName="lName" required/>
             <div class="validation" *ngIf="(userForm.controls['lName'].errors && userForm.controls['lName'].dirty) || (userForm.controls['lName'].errors && userForm.controls['lName'].touched)">                
                 <small><i class="fa fa-circle-exclamation"></i> Last-Name is required.</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2">
-            <label htmlFor="email">Email</label>
+        <div class="d-flex flex-column gap-2 mb-4">
+            <label htmlFor="email">Email<span class="text-danger">*</span></label>
             <input pInputText id="email" formControlName="email"/>
             <div class="validation" *ngIf="(userForm.controls['email'].errors && userForm.controls['email'].dirty) || (userForm.controls['email'].errors && userForm.controls['email'].touched)">                
                 <small><i class="fa fa-circle-exclamation"></i> Email is required.</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2">
-            <label htmlFor="password">Password</label>
+        <div class="d-flex flex-column gap-2 mb-4">
+            <label htmlFor="password">Password<span class="text-danger">*</span></label>
             <input pInputText id="password" formControlName="password"/>
             <div class="validation" *ngIf="(userForm.controls['password'].errors && userForm.controls['password'].dirty) || (userForm.controls['password'].errors && userForm.controls['password'].touched)">                
                 <small><i class="fa fa-circle-exclamation"></i> Password is required.</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2">
-            <label htmlFor="gender">Gender</label>
+        <div class="d-flex flex-column gap-2 mb-4">
+            <label htmlFor="gender">Gender<span class="text-danger">*</span></label>
             <div id="gender" class="d-flex flex-rows gap-5">
                 <div>
                     <label>
@@ -51,14 +53,15 @@
                 <small><i class="fa fa-circle-exclamation"></i> Gender is required</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2">
-            <label htmlFor="phoneNumber">Phone#</label>
+        <div class="d-flex flex-column gap-2 mb-4">
+            <label htmlFor="phoneNumber">Phone#<span class="text-danger">*</span></label>
             <input pInputText id="phoneNumber" formControlName="phoneNum"/>
             <div class="validation" *ngIf="(userForm.controls['phoneNum'].errors && userForm.controls['phoneNum'].dirty) || (userForm.controls['phoneNum'].errors && userForm.controls['phoneNum'].touched)">                
                 <small><i class="fa fa-circle-exclamation"></i> Phone# is required.</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2 mt-2">
+        <div class="d-flex flex-column gap-2">
+            <label>Role<span class="text-danger">*</span></label>
             <select class="form-select" formControlName="role">
                 <option selected [value]="null" disabled>Pease select a Role for the User.</option>
                 <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
@@ -67,6 +70,7 @@
                 <small> <i class="fa fa-circle-exclamation"></i> Role is required.</small>
             </div>
         </div>
-        <p-button label="Submit" type="Submit"></p-button>
+        <button type="Submit" class="mt-4 btn btn-primary w-25 ms-auto">{{!update ? 'Add' : 'Update'}}</button>
     </form>
 </div>
+</p-dialog>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Table } from 'primeng/table';
+import { BehaviorSubject } from 'rxjs';
 import { UserService } from 'src/app/Services/user.service';
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
 import { TableColumnFilterTypes } from 'src/app/constants/enums/table-column-filterTypes';
@@ -16,6 +17,8 @@ export class UserListComponent {
   
   userList: Array<any> = [];
   totalRecords: number = 0;
+  showForm: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  update:boolean = false;
   
   columns: Array<ITableColumns> = [
   {
@@ -81,6 +84,11 @@ export class UserListComponent {
 
   delete(e: any){
     console.log(e);
+    
+  }
+
+  addUser(){
+    this.showForm.next(true)
     
   }
 }

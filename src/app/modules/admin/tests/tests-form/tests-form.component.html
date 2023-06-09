@@ -1,3 +1,4 @@
+<p-dialog>
 <form (ngSubmit)="submitTest($event)" [formGroup]="testForm">
     <div>
         <label for="name">Test Name <span class="text-danger">*</span></label>
@@ -34,4 +35,5 @@
         >Add</button>
     </div>
 </form>
-<button class="btn btn-warning" [routerLink]="['/admin/tests-list']"> </button>
+<button class="btn btn-warning mt-3" [routerLink]="['/admin/tests-list']"> </button>
+</p-dialog>

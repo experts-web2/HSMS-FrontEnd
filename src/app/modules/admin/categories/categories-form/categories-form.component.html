@@ -1,10 +1,12 @@
-<form (ngSubmit)="formSubmit($event)" [formGroup]="categoryForm">
+<p-dialog >
+    <form (ngSubmit)="formSubmit($event)" [formGroup]="categoryForm">
     <div>
         <label for="name">Lab Test Category Name <span class="text-danger">*</span></label>
         <input pInputText type="text" name="" id="name" formControlName="name" required>
         <div *ngIf="(categoryForm.controls['name'].errors && categoryForm.controls['name'].touched) || (categoryForm.controls['name'].touched && !categoryForm.controls['name'].valid)"><small>Please enter category name.</small></div>
     </div>
     <div>
-        <button class="btn btn-primary" type="submit" [disabled]="categoryForm.controls['name'].errors || !categoryForm.controls['name'].valid">Add</button>
+        <button class="btn btn-primary mt-3" type="submit" [disabled]="categoryForm.controls['name'].errors || !categoryForm.controls['name'].valid">Add</button>
     </div>
-</form>
+    </form>
+</p-dialog>

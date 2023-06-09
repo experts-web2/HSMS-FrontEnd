@@ -1,3 +1,4 @@
+<p-dialog  [style]="{width: '50vw'}" >
 <div>
     <form (ngSubmit)="submitMedicine()" [formGroup]="medicineForm">
         <div class="d-flex flex-column">
@@ -38,7 +39,7 @@
             <div class="text-danger" *ngIf="(medicineForm.controls['type'].errors && medicineForm.controls['type'].touched) || (medicineForm.controls['type'].dirty && medicineForm.controls['type'].errors)">Please select a type.</div>
         </div>
         <div class="d-flex flex-column">
-            <button class="btn btn-primary col-2"
+            <button class="btn btn-primary mt-3 col-2"
                 [disabled]="
                 (medicineForm.controls['name'].errors || !medicineForm.controls['name'].valid) &&
                 (medicineForm.controls['potency'].errors || !medicineForm.controls['potency'].valid) &&
@@ -51,3 +52,4 @@
         </div>
     </form>
 </div>
+</p-dialog>
