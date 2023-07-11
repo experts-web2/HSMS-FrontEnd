@@ -15,6 +15,7 @@ import { ShiftsComponent } from './Shifts/shifts/shifts.component';
 import { DataImpExpComponent } from './import-export/data-imp-exp/data-imp-exp.component';
 import { TestsListComponent } from './tests/tests-list/tests-list.component';
 import { CategoriesListComponent } from './categories/categories-list/categories-list.component';
+import { DoctorFormComponent } from './doctors/doctor-form/doctor-form.component';
 
 const routes: Routes = [
   {path:'', component: AdminRootComponent, children:[
@@ -30,7 +31,9 @@ const routes: Routes = [
     {path: 'beds', component: BedFormComponent},
     {path: 'shifts', component: ShiftsComponent},
     {path: 'HR', component: HumanRecourcesComponent},
-    {path: 'data-import-export', component: DataImpExpComponent}
+    {path: 'data-import-export', component: DataImpExpComponent},
+    {path: 'doctors-form', component: DoctorFormComponent},
+
   ]}
 ];
 

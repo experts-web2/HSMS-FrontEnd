@@ -4,6 +4,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Table } from 'primeng/table';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
+import { ICustomActions } from 'src/app/models/interfaces/customActions';
 
 @Component({
   selector: 'app-generic-table',
@@ -22,6 +23,8 @@ export class GenericTableComponent {
     @Input() filterColumns!: any[];
     @Input() showActions!: boolean;
     @Input() totalRecords: number = 0;
+    @Input() actionsToShow: Array<string> = [];
+    @Input() additionalActions: Array<ICustomActions> = [];
     
     @Output() edit: EventEmitter<any> = new EventEmitter<any>();
     @Output() delete: EventEmitter<any> = new EventEmitter<any>();

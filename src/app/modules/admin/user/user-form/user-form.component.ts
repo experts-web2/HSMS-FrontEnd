@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Roles } from 'src/app/constants/enums/Roles-Enum';
 import { UserService } from '../../../../Services/user.service';
@@ -6,7 +6,7 @@ import { UserStateService } from 'src/app/State/user/user.service';
 import { IUser } from 'src/app/models/interfaces/user';
 import { AlertService } from '../../../../Services/alert/alert.service';
 import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
-import { BehaviorSubject } from 'rxjs';
+import { IAddOrUpdateUser } from 'src/app/models/interfaces/addOrUpdate-User';
 
 @Component({
   selector: 'app-user-form',
@@ -14,8 +14,6 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./user-form.component.scss']
 })
 export class UserFormComponent implements OnInit {
-  @Input() visible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  @Input() update: boolean = false;
   userForm!: FormGroup;
   roles: RolesDisplay[] = [{id: Roles.Doctor, name: 'Doctor'}, {id: Roles.Nurse, name: 'Nurse'}, {id: Roles.Patient, name: 'Ptient'}, {id: Roles.Admin, name: 'Admin'}, {id: Roles.LabTechnician, name: 'Lab Technician'}, {id: Roles.Sweeper, name: 'Sweeper'}];
   selectedRole!: RolesDisplay;
@@ -36,13 +34,13 @@ export class UserFormComponent implements OnInit {
     
   }
 
-  formSubmit(e: any, update: boolean){
+  formSubmit(e: any){
     console.log('event Hit');
     
     let value = this.userForm.value;
     let accountId: string = '';
     this.userStateService.User_State.subscribe({next: (x: ILogedInUser)=> {accountId = x.accountId}})
-    let userToAdd: IUser ={
+    let userToAdd: IAddOrUpdateUser ={
       firstName: value.fName,
       lastName: value.lName,
       active: true,
@@ -65,10 +63,6 @@ export class UserFormComponent implements OnInit {
     })
 
     console.log(this.userForm);    
-  }
-
-  hide(){    
-    this.visible.next(false);
   }
 }
 

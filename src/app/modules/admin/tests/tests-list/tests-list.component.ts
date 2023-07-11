@@ -91,7 +91,7 @@ export class TestsListComponent implements OnInit {
     console.log(test);
   }
 
-  delete(test: ILabeTest): void {
+  deleteTest(test: ILabeTest): void {
     console.log(test);
   }
 

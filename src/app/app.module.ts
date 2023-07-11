@@ -9,7 +9,6 @@ import { SharedModule } from './shared-module/shared-module';
 import { AddTokenModalComponent } from './modules/dialog/add-token-modal/add-token-modal.component';
 import { RegistrationModule } from './modules/registration/registration.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { HomeComponent } from './modules/home/home.component';
 import { createCustomElement } from '@angular/elements';
 import { PrimeNGConfig, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -20,7 +19,6 @@ import { AppHttpInterceptor } from './auth/interceptor/app-http.interceptor';
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent,
         AddTokenModalComponent,
     ],
     providers: [MessageService, 

@@ -1,7 +1,6 @@
 import { Genders } from "src/app/constants/enums/Gender-enum";
 
-export interface IUser {
-    id:string;
+export interface IAddOrUpdateUser {
     firstName: string;
     lastName: string;
     gender: Genders;

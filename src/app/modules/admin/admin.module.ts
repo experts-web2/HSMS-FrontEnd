@@ -23,6 +23,7 @@ import { HumanRecourcesComponent } from './human-resources/human-recources/human
 import { ShiftsComponent } from './Shifts/shifts/shifts.component';
 import { DataImpExpComponent } from './import-export/data-imp-exp/data-imp-exp.component'
 import { GenericTableComponent } from "../../Shared/components/generic-table/generic-table.component";
+import { DoctorFormComponent } from './doctors/doctor-form/doctor-form.component';
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { GenericTableComponent } from "../../Shared/components/generic-table/gen
         BedFormComponent,
         HumanRecourcesComponent,
         ShiftsComponent,
-        DataImpExpComponent
+        DataImpExpComponent,
+        DoctorFormComponent
     ],
     imports: [
         CommonModule,

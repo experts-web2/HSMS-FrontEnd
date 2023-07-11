@@ -6,5 +6,6 @@ export enum DataTypesEnum{
     Boolean = 'boolean',
     Array = 'Array',
     Object = 'object',
-    Date = 'date'
+    Date = 'date',
+    InnerHtml = 'innerHtml'
 }

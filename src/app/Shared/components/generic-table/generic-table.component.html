@@ -15,7 +15,7 @@
   (onLazyLoad)="lazyload($event)"  
 >
   <ng-template pTemplate="caption">
-    <div class="d-flex justify-content-between">
+    <div class="flex">
       <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
       <span class="p-input-icon-left ml-auto">
         <i class="pi pi-search"></i>
@@ -44,13 +44,24 @@
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
     <tr>
-      <td *ngFor="let column of columns">
-        {{resolveField(rowData, column) ?? 'N/A'}}
-      </td>
+      <ng-container *ngFor="let column of columns">
+        <td >
+          {{column.columnType !== 'innerHtml' ? resolveField(rowData, column): ''}}
+          <div *ngIf="column.columnType === 'innerHtml'" [innerHTML]="resolveField(rowData, column)"></div>
+        </td>
+
+      </ng-container>
       <td *ngIf="showActions">
         <div >
-            <i class="pi pi-trash btn btn-danger m-1" pTooltip="Delete Record" (click)="actionEmitter(rowData, 'delete')"></i>
-            <i class="pi pi-pencil btn btn-success m-1" pTooltip="Edit Record" (click)="actionEmitter(rowData, 'edit')"></i>
+            <i class="pi pi-trash btn btn-danger m-1" *ngIf="actionsToShow.includes('delete')" pTooltip="Delete Record" (click)="actionEmitter(rowData, 'delete')"></i>
+            <i class="pi pi-pencil btn btn-success m-1" *ngIf="actionsToShow.includes('edit')" pTooltip="Edit Record" (click)="actionEmitter(rowData, 'edit')"></i>
+            <ng-container *ngFor="let action of additionalActions">
+              <button [style]="action.style" [pTooltip]="action.toolTip ? action.toolTip : ''" (click)="action.action(rowData)">
+                <i *ngIf="action.icon" [class]="action.icon"  ></i>
+                {{action.icon && action.name ? action.name : ''}}
+              </button>
+
+            </ng-container>
         </div>
       </td>
     </tr>
