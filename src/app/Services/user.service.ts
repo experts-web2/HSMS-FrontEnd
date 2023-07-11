@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './httpService/http.service';
 import { HttpClient } from '@angular/common/http';
-import { BaseEndPoints } from '../models/enums/base-end-points';
-import { Endpoints } from '../models/enums/endpoints'; 
-import { IUser } from '../models/user';
+import { BaseEndPoints } from '../constants/enums/base-end-points';
+import { Endpoints } from '../constants/enums/endpoints'; 
+import { IUser } from '../models/interfaces/user';
 import { Observable } from 'rxjs';
-import { ILoginUser } from '../models/login-user';
+import { ILoginUser } from '../models/interfaces/login-user';
+import { IFetchRequest } from '../models/interfaces/fetchTableRequest';
+import { IAddOrUpdateUser } from '../models/interfaces/addOrUpdate-User';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,12 +19,24 @@ export class UserService extends HttpService {
     super(http)
    }   
 
-  register(user: IUser): Observable<any>{
+  register(user: IAddOrUpdateUser): Observable<any>{
    return this.post(`${this.baseEndpoint}/${Endpoints.Register}`, user);
   }
 
   login(loginUser: ILoginUser){
     return this.post(`${this.baseEndpoint}/${Endpoints.Login}`, loginUser);
+  }
+
+  addUser(user: IAddOrUpdateUser): Observable<any>{
+    return this.post(`${this.baseEndpoint}/register/user`, user)
+  }
+
+  getUsers(): Observable<Array<IUser>>{
+    return this.get(`${this.baseEndpoint}/byaccountid`);
+  }
+
+  deleteUser(userId: string){
+    return this.delete(`${this.baseEndpoint}/${userId}`);
   }
 
 }

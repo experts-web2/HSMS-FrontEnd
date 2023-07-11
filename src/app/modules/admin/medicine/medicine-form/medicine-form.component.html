@@ -1,0 +1,55 @@
+<p-dialog  [style]="{width: '50vw'}" >
+<div>
+    <form (ngSubmit)="submitMedicine()" [formGroup]="medicineForm">
+        <div class="d-flex flex-column">
+            <label for="name">Name<span class="text-danger">*</span></label>
+            <input pInputText [ngClass]="" type="text" id="name" formControlName="name" required>
+            
+            <div class="text-danger" *ngIf="(medicineForm.controls['name'].errors && medicineForm.controls['name'].touched) || (medicineForm.controls['name'].dirty && medicineForm.controls['name'].errors)">Please enter name</div>
+        </div>
+        <div class="d-flex flex-column">
+            <label for="potency">Potency<span class="text-danger">*</span></label>
+            <input pInputText type="number" id="potency" formControlName="potency" required>
+            <div class="text-danger" *ngIf="(medicineForm.controls['potency'].errors && medicineForm.controls['potency'].touched) || (medicineForm.controls['potency'].dirty && medicineForm.controls['potency'].errors)">Please enter potency.</div>
+        </div>
+        <div class="d-flex flex-column">
+            <label for="potencyUnit">Potency Unit<span class="text-danger">*</span></label>
+            <select class="form-select" id="potencyUnit" formControlName="potencyUnit" required>
+                <option [value]="null" selected disabled>Select a Potency Unit</option>
+                <option *ngFor="let potencyUnit of potecyUnits" [value]="potencyUnit.value" >{{potencyUnit.label}}</option>
+            </select>
+            <div class="text-danger" *ngIf="(medicineForm.controls['potencyUnit'].errors && medicineForm.controls['potencyUnit'].touched) || (medicineForm.controls['potencyUnit'].dirty && medicineForm.controls['potencyUnit'].errors)">Please select a potency unit.</div>
+        </div>
+        <div class="d-flex flex-column">
+            <label for="price">Price<span class="text-danger">*</span></label>
+            <input pInputText type="number" id="price" formControlName="price" required>
+            <div class="text-danger" *ngIf="(medicineForm.controls['price'].errors && medicineForm.controls['price'].touched) || (medicineForm.controls['price'].dirty && medicineForm.controls['price'].errors)">Please enter price.</div>
+        </div>
+        <div class="d-flex flex-column">
+            <label for="salts">Salts<span class="text-danger">*</span></label>
+            <input pInputText type="text" id="salts" formControlName="salts" required>
+            <div class="text-danger" *ngIf="(medicineForm.controls['salts'].errors && medicineForm.controls['salts'].touched) || (medicineForm.controls['salts'].dirty && medicineForm.controls['salts'].errors)">Please add salts.</div>
+        </div>
+        <div class="d-flex flex-column">
+            <label for="type">Type<span class="text-danger">*</span></label>
+            <select class="form-select"  id="type" formControlName="type" required>
+                <option [value]="null" selected disabled>Select Medicine Type</option>
+                <option *ngFor="let medicineType of medicineTypes" [value]="medicineType.value" >{{medicineType.label}}</option>
+            </select>
+            <div class="text-danger" *ngIf="(medicineForm.controls['type'].errors && medicineForm.controls['type'].touched) || (medicineForm.controls['type'].dirty && medicineForm.controls['type'].errors)">Please select a type.</div>
+        </div>
+        <div class="d-flex flex-column">
+            <button class="btn btn-primary mt-3 col-2"
+                [disabled]="
+                (medicineForm.controls['name'].errors || !medicineForm.controls['name'].valid) &&
+                (medicineForm.controls['potency'].errors || !medicineForm.controls['potency'].valid) &&
+                (medicineForm.controls['potencyUnit'].errors || !medicineForm.controls['potencyUnit'].valid) &&
+                (medicineForm.controls['price'].errors || !medicineForm.controls['price'].valid) &&
+                (medicineForm.controls['salts'].errors || !medicineForm.controls['salts'].valid) &&
+                (medicineForm.controls['type'].errors || !medicineForm.controls['type'].valid) 
+                "
+            type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+</p-dialog>

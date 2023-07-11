@@ -1,0 +1,72 @@
+<div>
+    <form class="d-flex flex-column" [formGroup]="userForm" (ngSubmit)="formSubmit($event)" >
+        <div class="d-flex flex-column gap-2">
+            <label htmlFor="fName">Firts Name</label>
+            <input pInputText id="fName"  formControlName="fName"/>
+            <div class="validation" *ngIf="(userForm.controls['fName'].errors && userForm.controls['fName'].dirty) || (userForm.controls['fName'].errors && userForm.controls['fName'].touched)">
+                <small ><i class="fa fa-circle-exclamation"></i> First-Name is required.</small>
+            </div>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            <label htmlFor="lName">Last Name</label>
+            <input pInputText id="lName" formControlName="lName" required/>
+            <div class="validation" *ngIf="(userForm.controls['lName'].errors && userForm.controls['lName'].dirty) || (userForm.controls['lName'].errors && userForm.controls['lName'].touched)">                
+                <small><i class="fa fa-circle-exclamation"></i> Last-Name is required.</small>
+            </div>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            <label htmlFor="email">Email</label>
+            <input pInputText id="email" formControlName="email"/>
+            <div class="validation" *ngIf="(userForm.controls['email'].errors && userForm.controls['email'].dirty) || (userForm.controls['email'].errors && userForm.controls['email'].touched)">                
+                <small><i class="fa fa-circle-exclamation"></i> Email is required.</small>
+            </div>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            <label htmlFor="password">Password</label>
+            <input pInputText id="password" formControlName="password"/>
+            <div class="validation" *ngIf="(userForm.controls['password'].errors && userForm.controls['password'].dirty) || (userForm.controls['password'].errors && userForm.controls['password'].touched)">                
+                <small><i class="fa fa-circle-exclamation"></i> Password is required.</small>
+            </div>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            <label htmlFor="gender">Gender</label>
+            <div id="gender" class="d-flex flex-rows gap-5">
+                <div>
+                    <label>
+                      <input type="radio" name="gender" value="Male" formControlName="gender"> Male
+                    </label>
+                </div>
+                <div>
+                    <label>
+                      <input type="radio" name="gender" value="Female" formControlName="gender"> Female
+                    </label>
+                </div>
+                <div>
+                    <label>
+                      <input type="radio" name="gender" value="Others" formControlName="gender"> Others
+                    </label>
+                </div>
+            </div>
+            <div class="validation" *ngIf="(userForm.controls['gender'].errors && userForm.controls['gender'].dirty) || (userForm.controls['gender'].errors && userForm.controls['gender'].touched)">                
+                <small><i class="fa fa-circle-exclamation"></i> Gender is required</small>
+            </div>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            <label htmlFor="phoneNumber">Phone#</label>
+            <input pInputText id="phoneNumber" formControlName="phoneNum"/>
+            <div class="validation" *ngIf="(userForm.controls['phoneNum'].errors && userForm.controls['phoneNum'].dirty) || (userForm.controls['phoneNum'].errors && userForm.controls['phoneNum'].touched)">                
+                <small><i class="fa fa-circle-exclamation"></i> Phone# is required.</small>
+            </div>
+        </div>
+        <div class="d-flex flex-column gap-2 mt-2">
+            <select class="form-select" formControlName="role">
+                <option selected [value]="null" disabled>Pease select a Role for the User.</option>
+                <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+            </select>
+            <div class="validation" *ngIf="(userForm.controls['role'].errors && userForm.controls['role'].dirty) || (userForm.controls['role'].errors && userForm.controls['role'].touched)">                
+                <small> <i class="fa fa-circle-exclamation"></i> Role is required.</small>
+            </div>
+        </div>
+        <p-button label="Submit" type="Submit"></p-button>
+    </form>
+</div>

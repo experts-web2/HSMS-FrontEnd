@@ -1,29 +1,67 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { of, Subject, from, Observable, BehaviorSubject, } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { EncryptionService } from 'src/app/Services/encryption-service/encryption.service';
+import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService implements OnDestroy {
-  private user: any = {name: 'hello', address: 'bye bye', age: 89};
+export class UserStateService {
+
+  private user?: ILogedInUser;
+  private readonly stateName = 'common';
   readonly User_State: BehaviorSubject<any>;
-  constructor() { 
+
+  constructor(private readonly encryptionService: EncryptionService) {
+    let localStorageData = localStorage.getItem(this.stateName);
+    
+    if(localStorageData){
+      let decryptedData = this.encryptionService.decryptData(localStorageData);
+      this.user = JSON.parse(decryptedData);
+    } 
+      
     this.User_State = new BehaviorSubject<any>(this.user);
   }
   
-  getUserState(){
-    console.log(this.User_State)
-    return this.User_State
+  getUserState(): Observable<ILogedInUser>{
+    return this.User_State as Observable<ILogedInUser>
   }
-  addUser(){
-    this.user.name = 'bye';
-    this.user.age = 34;
+
+  isLogedIn(): boolean{
+    let logedIn = false;
+    
+    this.User_State.subscribe({next: x =>{
+      if(x && x !== '' && x !== null) logedIn = true;            
+    },
+    error: (err)=>{}})
+    return logedIn;
+  }
+
+  setLogedInUser(user: ILogedInUser){
+    this.user = user;
     this.User_State.next(this.user);
+    this.hydrateState()
   }
   
-  
-  ngOnDestroy(): void {
-    // let hhh = 'asd'.toString('base64')
-    // let userState = atob(JSON.stringify(this.user).toString('base64'));
+  setData(){
+    let userState = atob(JSON.stringify(this.user));
+    localStorage.setItem(this.stateName,userState);
   }
+  getData(){
+    let localStorageData = localStorage.getItem(this.stateName) ?? '';
+    if(localStorageData === null || localStorageData === '') return null; 
+    let hydratedData = JSON.parse(localStorageData);
+    return hydratedData;    
+  }
+  
+  hydrateState(): void {
+    let userState = this.encryptionService.encryptData(JSON.stringify(this.user));
+    localStorage.setItem(this.stateName, userState);
+  }
+
+  destroyUserState(){
+    this.User_State.next(null);
+    localStorage.removeItem(this.stateName);
+  }
+  
 }

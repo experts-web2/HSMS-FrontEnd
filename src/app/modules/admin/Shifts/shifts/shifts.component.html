@@ -1,0 +1,23 @@
+<div class="shift-form-container">
+    <form (ngSubmit)="submitShift()" [formGroup]="shiftForm">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" name="" id="name" formControlName="name">
+        </div>
+        <div>
+            <label for="startTime"> Start Time</label>
+            <input type="text" name="" id="startTime" formControlName="startTime">
+        </div>
+        <div>
+            <label for="endTime">End Time</label>
+            <input type="time" name="" id="endTime" formControlName="endTime">
+        </div>
+        <div>
+            <label for="type"> Type </label>
+            <input type="time" name="" id="type" formControlName="type">
+        </div>
+        <div>
+            <input type="submit" value="Submit" >
+        </div>
+    </form>
+</div>

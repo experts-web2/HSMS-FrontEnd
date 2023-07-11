@@ -1,0 +1,28 @@
+// .container{
+//     display: flex;
+//     flex-direction: row;
+//     min-height: 100%;
+//     margin: 0px;
+//     padding: 0px;
+// }
+.sideNav{
+    width: 250px;
+}
+
+.mainPage{
+    padding: 5px;
+    margin-left: 20px;
+}
+.pushed-content{
+    margin-left: -250px;
+}
+
+.sideNav{
+    transition: 1s;
+    box-shadow: 0 0 5px rgba(23, 23, 32, 0.1), 0 0 15px rgba(23, 23, 32, 0.1);
+    height: calc(100vh - 56px);
+    padding: 10px;
+}
+.togle-btn{
+    z-index: 2;
+}

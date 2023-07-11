@@ -8,6 +8,9 @@ import { PatientService } from '../../Services/patient/patient.service';
 // import { ChartColors } from '@app/types/chart'
 import EChartOption = echarts.EChartsOption
 import { AddTokenModalComponent } from '../dialog/add-token-modal/add-token-modal.component';
+import { UserStateService } from '../../State/user/user.service';
+import { AppointmentService } from '../../Services/appointment.service';
+import { IFetchRequest } from '../../models/interfaces/fetchTableRequest';
 
 
 
@@ -54,7 +57,7 @@ export class DashboardComponent implements OnInit {
   tokensData: any;
 
 
-  constructor(private patientService: PatientService,private dialog: MatDialog) { }
+  constructor(private patientService: PatientService,private dialog: MatDialog, private readonly userStateService: UserStateService, private readonly appointmentService: AppointmentService) { }
 
   filter: any = [
     {
@@ -108,7 +111,16 @@ export class DashboardComponent implements OnInit {
 
   selectedFilter: string = "Last 7 Days";
 
-  getAppointments() {
+  getAppointments(fetchRequest: IFetchRequest = {}) {
+    this.appointmentService.getAppointments(fetchRequest).subscribe({
+      next: (x: any) => {
+        console.log(x);
+        
+      },
+      error: (err: Error) => {
+
+      }
+    })
     this.patientService.getAppointments().subscribe((res: any) => {
       this.appointmentsData = res.appointments
     })
