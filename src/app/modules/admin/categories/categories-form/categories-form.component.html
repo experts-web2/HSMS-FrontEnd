@@ -1,5 +1,5 @@
-    <form (ngSubmit)="formSubmit($event)" [formGroup]="categoryForm">
-    <div>
+    <form class="d-flex flex-column gap-2" (ngSubmit)="formSubmit($event)" [formGroup]="categoryForm">
+    <div class="d-flex flex-column gap-2">
         <label for="name">Lab Test Category Name <span class="text-danger">*</span></label>
         <input pInputText type="text" name="" id="name" formControlName="name" required>
         <div *ngIf="(categoryForm.controls['name'].errors && categoryForm.controls['name'].touched) || (categoryForm.controls['name'].touched && !categoryForm.controls['name'].valid)"><small>Please enter category name.</small></div>

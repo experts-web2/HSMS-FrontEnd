@@ -1,44 +1,44 @@
 <div>
-    <form (ngSubmit)="submitMedicine()" [formGroup]="medicineForm">
-        <div class="d-flex flex-column">
+    <form (ngSubmit)="submitMedicine()" class="medicineform-wrapper" [formGroup]="medicineForm">
+        <div class="d-flex flex-column gap-2">
             <label for="name">Name<span class="text-danger">*</span></label>
             <input pInputText [ngClass]="" type="text" id="name" formControlName="name" required>
             
             <div class="text-danger" *ngIf="(medicineForm.controls['name'].errors && medicineForm.controls['name'].touched) || (medicineForm.controls['name'].dirty && medicineForm.controls['name'].errors)">Please enter name</div>
         </div>
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-column gap-2">
             <label for="potency">Potency<span class="text-danger">*</span></label>
             <input pInputText type="number" id="potency" formControlName="potency" required>
             <div class="text-danger" *ngIf="(medicineForm.controls['potency'].errors && medicineForm.controls['potency'].touched) || (medicineForm.controls['potency'].dirty && medicineForm.controls['potency'].errors)">Please enter potency.</div>
         </div>
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-column gap-2">
             <label for="potencyUnits">Unit<span class="text-danger">*</span></label>
-            <select class="form-select" id="potencyUnits" formControlName="potencyUnits" required>
+            <select class="form-select h-100" id="potencyUnits" formControlName="potencyUnits" required>
                 <option [value]="null" selected disabled>Select a Potency Unit</option>
                 <option *ngFor="let potencyUnit of Units" [value]="potencyUnit.value" >{{potencyUnit.label}}</option>
             </select>
             <div class="text-danger" *ngIf="(medicineForm.controls['potencyUnits'].errors && medicineForm.controls['potencyUnits'].touched) || (medicineForm.controls['potencyUnits'].dirty && medicineForm.controls['potencyUnits'].errors)">Please select a potency unit.</div>
         </div>
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-column gap-2">
             <label for="price">Price<span class="text-danger">*</span></label>
             <input pInputText type="number" id="price" formControlName="price" required>
             <div class="text-danger" *ngIf="(medicineForm.controls['price'].errors && medicineForm.controls['price'].touched) || (medicineForm.controls['price'].dirty && medicineForm.controls['price'].errors)">Please enter price.</div>
         </div>
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-column gap-2">
             <label for="salts">Active Ingredeint<span class="text-danger">*</span></label>
             <input pInputText type="text" id="salts" formControlName="salt" required>
             <div class="text-danger" *ngIf="(medicineForm.controls['salt'].errors && medicineForm.controls['salt'].touched) || (medicineForm.controls['salt'].dirty && medicineForm.controls['salt'].errors)">Please add salt.</div>
         </div>
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-column gap-2">
             <label for="type">Category<span class="text-danger">*</span></label>
-            <select class="form-select"  id="type" formControlName="medicineType" required>
+            <select class="form-select h-100"  id="type" formControlName="medicineType" required>
                 <option [value]="null" selected disabled>Select Medicine Type</option>
                 <option *ngFor="let medicineType of medicineTypes" [value]="medicineType.value" >{{medicineType.label}}</option>
             </select>
             <div class="text-danger" *ngIf="(medicineForm.controls['medicineType'].errors && medicineForm.controls['medicineType'].touched) || (medicineForm.controls['medicineType'].dirty && medicineForm.controls['medicineType'].errors)">Please select a type.</div>
         </div>
         <div class="d-flex flex-column">
-            <button class="btn btn-primary mt-3 col-2"
+            <button class="btn btn-primary add-medicine mt-3 col-2"
                 [disabled]="
                 (medicineForm.controls['name'].errors || !medicineForm.controls['name'].valid) &&
                 (medicineForm.controls['potency'].errors || !medicineForm.controls['potency'].valid) &&

@@ -1,5 +1,6 @@
 <div>
-    <form class="d-flex flex-column" [formGroup]="userForm" (ngSubmit)="formSubmit($event)" >
+    <h1 class="mb-4 text-center">{{action === 'add'?'Add User':'Update User'}}</h1>
+    <form class="userform-wrapper" [formGroup]="userForm" (ngSubmit)="formSubmit($event)" >
         <div class="d-flex flex-column gap-2">
             <label htmlFor="firstName">Firts Name</label>
             <input pInputText id="firstName"  formControlName="firstName"/>
@@ -58,8 +59,9 @@
                 <small><i class="fa fa-circle-exclamation"></i> Phone# is required.</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2 mt-2" *ngIf="action ==='add'">
-            <select class="form-select" formControlName="role">
+        <div class="d-flex flex-column gap-2" *ngIf="action ==='add'">
+            <label htmlFor="phoneNumber">Select Role</label>
+            <select class="form-select h-100" formControlName="role">
                 <option selected [value]="null" disabled>Pease select a Role for the User.</option>
                 <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
             </select>
@@ -67,6 +69,6 @@
                 <small> <i class="fa fa-circle-exclamation"></i> Role is required.</small>
             </div>
         </div>
-        <p-button label="Submit" type="Submit"></p-button>
+        <p-button type="Submit" class="mt-3">{{action === 'add'?'Add User':'Update User'}}</p-button>
     </form>
 </div>

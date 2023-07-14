@@ -7,3 +7,12 @@
     border-left: 5px rgb(191, 10, 10) solid;
     border-right: 5px rgb(191, 10, 10) solid;
 }
+
+.userform-wrapper{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    @media screen and (max-width:586px) {
+        grid-template-columns: 100%;
+    }
+}
