@@ -8,6 +8,10 @@ import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { IUser } from 'src/app/models/interfaces/user';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AlertService } from 'src/app/Services/alert/alert.service';
+import { UserFormComponent } from '../user-form/user-form.component';
+
 
 @Component({
   selector: 'app-user-list',
@@ -19,7 +23,8 @@ export class UserListComponent implements OnInit {
   visible: boolean = false
   totalRecords: number = 0;
   userList: Array<IUser> = [];
-  actionsToShow: Array<string> = ['edit', 'delete']
+  ref!: DynamicDialogRef;
+  actionsToShow: Array<string> = ['edit']
   columns: Array<ITableColumns> = [
     {
       name: 'First Name',
@@ -68,13 +73,17 @@ export class UserListComponent implements OnInit {
       globalSearch: true,
       columnType: DataTypesEnum.InnerHtml,
       valueToShow: this.getStatus.bind(this)
-    }    
+    }
   ];
 
-  constructor(private readonly userService: UserService, private readonly userStateService: UserStateService){
+  constructor(private readonly userService: UserService,
+    private readonly userStateService: UserStateService,
+    public readonly dialogService: DialogService,
+    private readonly alertService: AlertService,) {
+
     this.userStateService.getUserState().subscribe({
-      next: (x)=>{
-        this.loggedInUser = x;  
+      next: (x) => {
+        this.loggedInUser = x;
       }
     })
   }
@@ -83,7 +92,7 @@ export class UserListComponent implements OnInit {
     this.getUsers();
   }
 
-  getUsers(){
+  getUsers() {
     this.userService.getUsers().subscribe({
       next: (x) => {
         console.log(x);
@@ -96,19 +105,42 @@ export class UserListComponent implements OnInit {
     })
   }
 
-  getStatus(status: boolean): string{
-    
-    
+  getStatus(status: boolean): string {
     let icon = '<span class="text-success"><i class="fa-solid fa-check"></i></span>';
-    if(!status) icon = '<span class="text-danger"><i  class="fa-solid fa-xmark"></i></span>';
+    if (!status) icon = '<span class="text-danger"><i  class="fa-solid fa-xmark"></i></span>';
     return icon;
   }
 
-  edit(e : IUser){
-    // this.userService.deleteUser()
+  edit(user: IUser) {
+    this.addUser(user, 'update')
   }
 
-  deleteUser(e: IUser){
+  addUser(user?: any, action: string = 'add') {
+    this.ref = this.dialogService.open(UserFormComponent, {
+      width: '100%',
+      height: '100%',
+      data: {
+        user: user,
+        action: action
+      }
+    });
+    this.ref.onClose.subscribe((user) => {
+      if (user === true) {
+        this.getUsers();
+      }
+    });
+  }
 
+
+  deleteUser(deleteUser: IUser) {
+    this.userService.deleteUser(deleteUser).subscribe({
+      next: (x) => {
+        this.alertService.success('Success', 'Test delete successfully');
+        this.getUsers();
+      },
+      error: (err) => {
+        this.alertService.error('Error', 'An error occoured while delete test')
+      }
+    })
   }
 }

@@ -3,7 +3,7 @@ import { Genders } from "src/app/constants/enums/Gender-enum";
 export interface IAddOrUpdateUser {
     firstName: string;
     lastName: string;
-    gender: Genders;
+    gender?: Genders;
     password: string;
     phoneNumber: string;
     email: string;

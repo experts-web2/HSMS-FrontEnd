@@ -4,7 +4,7 @@ export interface IUser {
     id:string;
     firstName: string;
     lastName: string;
-    gender: Genders;
+    gender?: Genders;
     password: string;
     phoneNumber: string;
     email: string;

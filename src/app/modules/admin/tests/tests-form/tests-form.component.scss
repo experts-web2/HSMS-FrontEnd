@@ -1,0 +1,8 @@
+.testsform-wrapper{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    @media screen and (max-width:586px) {
+        grid-template-columns: 100%;
+    }
+}

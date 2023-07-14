@@ -23,8 +23,6 @@ export class AdminSideNavComponent {
 
 
   navigate(route: string){
-    this.router.navigate([route])
-    // console.log(route);
-    
+    this.router.navigate([route])    
   }
 }

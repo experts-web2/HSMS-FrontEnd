@@ -1,2 +1,2 @@
-
-<app-generic-table [data]="testsList" [columns]="columns" (edit)="edit($event)" (delete)="deleteTest($event)" [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
+<div class="text-center inside-header"><h1>Tests</h1> <button class="btn btn-primary" (click)="addTests()"><i class="pi pi-plus me-2"></i> Add Test</button></div>
+<app-generic-table [data]="testsList" [columns]="columns" (edit)="edit($event)" (delete)="deleteTest($event)" [actionsToShow]="actionsToShow" [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>

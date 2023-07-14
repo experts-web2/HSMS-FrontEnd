@@ -6,6 +6,11 @@ import { TableColumnFilterTypes } from 'src/app/constants/enums/table-column-fil
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
 import { PotencyUnits } from 'src/app/constants/enums/potency-units';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MedicineFormComponent } from '../medicine-form/medicine-form.component';
+import { AlertService } from 'src/app/Services/alert/alert.service';
+import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
+
 
 @Component({
   selector: 'app-medicine-list',
@@ -15,7 +20,9 @@ import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 export class MedicineListComponent implements OnInit {
   medicineList: Array<any> = [];
   totalRecords: number = 0;
-  
+  ref!: DynamicDialogRef;
+  actionsToShow: Array<string> = ['edit', 'delete'];
+
   columns: Array<ITableColumns> = [
   {
     name: 'Name',
@@ -61,7 +68,8 @@ export class MedicineListComponent implements OnInit {
   }  
   ];
 
-  constructor(private readonly medicineService: MedicineService){
+  constructor(private readonly medicineService: MedicineService,
+    public dialogService: DialogService,private readonly alertService: AlertService,){
 
   }
 
@@ -71,20 +79,40 @@ export class MedicineListComponent implements OnInit {
 
   getMedicine(fetchRequest: IFetchRequest = {}){
     this.medicineService.getMedicine(fetchRequest).subscribe(x => {
-      console.log(x);
       this.medicineList = x.data; 
       this.totalRecords = x.total;     
     })
   }
 
-  edit(e: any){
-    console.log(e);
-    
+  addMedicine(medicine?:any,action:string='add'){
+    this.ref = this.dialogService.open(MedicineFormComponent, { 
+      width:'100%',
+      height:'100%',
+      data: {
+        medicine :medicine,
+        action: action
+      }
+    });
+    this.ref.onClose.subscribe((medicine) => {
+      if (medicine === true) {
+        this.getMedicine();
+      }
+  });
   }
 
-  delete(e: any){
-    console.log(e);
-    
+  edit(editMedicine: IMedicinerequest){
+    this.addMedicine(editMedicine,'update')
   }
 
+  delete(deleteMedicine: any){
+    this.medicineService.deleteMedicine(deleteMedicine).subscribe({
+      next: (x) => {
+        this.alertService.success('Success', 'Medicine delete successfully');
+        this.getMedicine();
+      },
+      error: (err) => {
+        this.alertService.error('Error', 'An error occoured while delete medicine')
+      }
+    })
+  }
 }

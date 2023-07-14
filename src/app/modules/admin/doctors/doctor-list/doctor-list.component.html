@@ -1,0 +1,10 @@
+<div class="text-center inside-header"><h1>Doctor</h1> <button class="btn btn-primary" (click)="addDoctor()"><i class="pi pi-plus me-2"></i> Add Doctor</button></div>
+
+<div class="d-flex flex-column">
+    <!-- <div>
+        <button pButton (click)="addDoctor()"><i class="fas fa-plus"></i> Add Doctor</button>
+    </div> -->
+    <div>
+        <app-generic-table [data]="doctorsList" [columns]="columns" (edit)="edit($event)" (delete)="deleteUser($event)" [actionsToShow]="actionsToShow" [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
+    </div>
+</div>
