@@ -76,7 +76,6 @@ export class AddTokenModalComponent implements OnInit {
   paymentType = [{ id: 'Cash', label: 'Cash' }, { id: 'Card', label: 'Card' }, { id: 'Cash', label: 'Cheque' },{ id: 'Online', label: 'Online Payment' }]
 
 addToken(){
-  console.log(this.addTokenForm)
 }
 
 addNew(){

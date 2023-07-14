@@ -16,12 +16,14 @@ import { DataImpExpComponent } from './import-export/data-imp-exp/data-imp-exp.c
 import { TestsListComponent } from './tests/tests-list/tests-list.component';
 import { CategoriesListComponent } from './categories/categories-list/categories-list.component';
 import { DoctorFormComponent } from './doctors/doctor-form/doctor-form.component';
+import { DoctorListComponent } from './doctors/doctor-list/doctor-list.component';
 
 const routes: Routes = [
   {path:'', component: AdminRootComponent, children:[
     {path: '', redirectTo:'user-list', pathMatch: 'full'},
     {path: 'user-list', component: UserListComponent},
-    // {path: 'medicine', component: MedicineFormComponent},
+    {path: 'doctors-list', component: DoctorListComponent},
+    {path: 'medicine', component: MedicineFormComponent},
     {path: 'medicine-list', component: MedicineListComponent},
     {path: 'wards', component: WardFormComponent},
     // {path: 'categories', component: CategoriesFormComponent},

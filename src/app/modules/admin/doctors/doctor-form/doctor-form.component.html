@@ -1,79 +1,182 @@
+<h3 style="text-align: center;"><b>{{action === 'add'?'Add Doctor':'Update Doctor'}}</b></h3>
 <p-tabView>
-    <p-tabPanel header="Biography Data">
-        <form action="">
-            <div class="d-flex flex-column">
-            <div>
-                <label for="name">Name<span class="text-danger">*</span></label>
-                <input class="form-control" type="text" name="" id="name">
+    <form (ngSubmit)="onSubmit()" [formGroup]="addDoctorForm">
+        <div class="d-flex flex-column">
+            <div class="row">
+                <div class="col-6">
+                    <label for="name">First Name<span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" formControlName="firstName" name="" required id="firstName">
+                    <div class="text-danger"
+                        *ngIf="(f['firstName'].errors && f['firstName'].touched) || (f['firstName'].dirty && f['firstName'].errors)">
+                        First Name is required.</div>
+                </div>
+                <div class="col-6">
+                    <label for="name">Last Name<span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="" formControlName="lastName" required id="lastName">
+                    <div class="text-danger"
+                        *ngIf="(f['lastName'].errors && f['lastName'].touched) || (f['lastName'].dirty && f['lastName'].errors)">
+                        Last Name is required.</div>
+                </div>
             </div>
-            <div>
+            <div class="row mt-3">
+                <div class="col-4">
+                    <label for="email">Email<span class="text-danger">*</span></label>
+                    <input class="form-control" type="email" name="" formControlName="email" id="email" required autocomplete="off">
+                    <div class="text-danger"
+                        *ngIf="(f['email'].errors && f['email'].touched) || (f['email'].dirty && f['email'].errors)">
+                        Email is required.</div>
+                    <div class="text-danger" *ngIf="f['email']?.errors?.['pattern']">Please enter a valid Email address.
+                    </div>
+                </div>
+
+                <div *ngIf="action !== 'update'" class="col-4">
+                    <label for="password">Password<span class="text-danger">*</span></label>
+                    <input class="form-control" type="password" name="" formControlName="password" id="password" autocomplete="off">
+
+                    <div class="text-danger"
+                        *ngIf="(f['password'].errors && f['password'].touched) || (f['password'].dirty && f['password'].errors)">
+                        Password is required.</div>
+                    <div class="text-danger" *ngIf="f['email']?.errors?.['minlength']">Password must be at least 6
+                        characters</div>
+                </div>
+                <div class="col-4">
+                    <label for="phone">Phone<span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="" formControlName="phoneNumber" id="phone">
+                </div>
+            </div>
+
+            <div class="row mt-3">
                 <label for="name">Gender</label>
-                <div class="d-flex">
-                    <div>
+                <div class="d-flex mt-3 justify-content-between align-items-center w-50">
+                    <div class="d-flex justify-content-between align-items-center" >
                         <label for="">Male</label>
-                        <input class="form-check-input" type="radio" name="" id="male" [value]="'male'">
+                        <input class="form-check-input mt-0 ms-2" type="radio" name="gender" id="male" formControlName="gender"
+                            [value]="1">
                     </div>
-                    <div>
+                    <div class="d-flex justify-content-between align-items-center">
                         <label for="">Female</label>
-                        <input class="form-check-input" type="radio" name="" id="female" [value]="'feMale'">
+                        <input class="form-check-input mt-0 ms-2" type="radio" name="gender" id="female" formControlName="gender"
+                            [value]="2">
                     </div>
-                    <div>
+                    <div class="d-flex justify-content-between align-items-center">
                         <label for="">Others</label>
-                        <input class="form-check-input" type="radio" name="" id="others" [value]="'others'">
+                        <input class="form-check-input mt-0 ms-2" type="radio" name="gender" id="others" formControlName="gender"
+                            [value]="3">
                     </div>
                 </div>
             </div>
-            <div>
-                <label for="phone">Phone<span class="text-danger">*</span></label>
-                <input class="form-control" type="text" name="" id="phone">
+            <div class="d-flex mt-3 justify-content-between align-items-center w-50">
+                <div class="d-flex justify-content-between align-items-center">
+                    <label for="opd">Opd<span class="text-danger"></span></label>
+                    <input class="form-check-input mt-0 ms-2" type="checkbox" formControlName="opd" name="" id="opd">
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <label for="token">Token<span class="text-danger"></span></label>
+                    <input class="form-check-input mt-0 ms-2" type="checkbox" formControlName="token" name="" id="token">
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <label for="appointment">Appointment<span class="text-danger"></span></label>
+                    <input class="form-check-input mt-0 ms-2" type="checkbox" name="" formControlName="appointment"
+                        id="appointment">
+                </div>
             </div>
-            <div>
-                <label for="email">Email<span class="text-danger">*</span></label>
-                <input class="form-control" type="email" name="" id="email">
+            <div class="row mt-3">
+                <div class="col-4">
+                    <label for="consultationFee">Consultation Fee<span class="text-danger">*</span></label>
+                    <input class="form-control" type="number" required name="" formControlName="consultationFee"
+                        id="consultationFee">
+                    <div class="text-danger"
+                        *ngIf="(f['consultationFee'].errors && f['consultationFee'].touched) || (f['consultationFee'].dirty && f['consultationFee'].errors)">
+                        Consultation Fee is required.</div>
+
+                </div>
+                <div class="col-4">
+                    <label for="sharePrice">Share Price<span class="text-danger">*</span></label>
+                    <input class="form-control" type="number" name="" formControlName="sharePrice" required
+                        id="sharePrice" placeholder="please enter share price in % ">
+                    <div class="text-danger"
+                        *ngIf="(f['sharePrice'].errors && f['sharePrice'].touched) || (f['sharePrice'].dirty && f['sharePrice'].errors)">
+                        Share Price Fee is required.</div>
+                </div>
+                <div class="col-4">
+                    <label for="timings">Timings</label>
+                    <input class="form-control" type="text" formControlName="timings" name="" id="timings" required>
+                    <div class="text-danger"
+                        *ngIf="(f['timings'].errors && f['timings'].touched) || (f['timings'].dirty && f['timings'].errors)">
+                        Timing is required.</div>
+                </div>
             </div>
-            <div>
-                <label for="departments">Doctor Departments</label>
-                <input class="form-control" type="text" name="" id="departments">
+
+
+
+            <div class="row mt-3">
+                <div class="col-6">
+                    <label for="speciality">Speciality<span class="text-danger">*</span></label>
+                    <select class="form-select" aria-label="Default select example" formControlName="speciality"
+                        required>
+                        <option [value]="null" selected disabled>Select Speciality</option>
+                        <option *ngFor="let status of category" [value]="status.id">{{ status.label }}</option>
+                    </select>
+                    <div class="text-danger"
+                        *ngIf="(f['speciality'].errors && f['speciality'].touched) || (f['speciality'].dirty && f['speciality'].errors)">
+                        Speciality is required.</div>
+                </div>
+
+                <div class="col-6">
+                    <label for="speciality">Qualification<span class="text-danger">*</span></label>
+                    <select class="form-select" aria-label="Default select example" formControlName="qualification"
+                        required>
+                        <option [value]="null" selected disabled>Select Qualification</option>
+                        <option *ngFor="let qualification of qualifications" [value]="qualification.id">{{
+                            qualification.label }}</option>
+                    </select>
+                    <div class="text-danger"
+                        *ngIf="(f['qualification'].errors && f['qualification'].touched) || (f['qualification'].dirty && f['qualification'].errors)">
+                        Qualification is required.</div>
+                </div>
             </div>
-            <div>
-                <label for="password">Password<span class="text-danger">*</span></label>
-                <input class="form-control" type="text" name="" id="password">
+
+            <div class="form-outline mt-3">
+                <label class="form-label" for="biography">Biography</label>
+                <textarea class="form-control" id="biography" formControlName="biography" rows="4"></textarea>
             </div>
-            <div>
-                <label for="name">roles</label>
-                <input class="form-check-input" type="checkbox" name="" id="name">
-            </div>                
+
+            <div class="mt-3">
+                <label for="service">Service<span class="text-danger">*</span></label>
+                <input class="form-control" type="text" name="" id="service" formControlName="service"
+                    placeholder="service years" required>
+
+                <div class="text-danger"
+                    *ngIf="(f['service'].errors && f['service'].touched) || (f['service'].dirty && f['service'].errors)">
+                    Service years is required.</div>
+            </div>
+
+
+
+            <div class="row mt-3">
+                <div class="col-8 d-flex align-items-center">
+                    <label class="btn btn-default p-0 me-4">
+                        <input type="file" accept="image/*" (change)="selectFile($event)" />
+                    </label>
+                    <div *ngIf="preview">
+                        <img width="50px" [src]="preview" class="preview" />
+                    </div>
+                </div>
+            </div>
+
         </div>
-        </form>
-    </p-tabPanel>
-    <p-tabPanel header="Biography">
-        <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-            ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-        </p>
-    </p-tabPanel>
-    <p-tabPanel header="Qualifications">
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
-            qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-        </p>
-    </p-tabPanel>
-    <p-tabPanel header="Service">
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
-            qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-        </p>
-    </p-tabPanel>
-    <p-tabPanel header="Timings">
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
-            qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-        </p>
-    </p-tabPanel>
-    <p-tabPanel header="FAQs">
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
-            qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-        </p>
-    </p-tabPanel>
+        <div class="form-group" style="text-align: end;">
+            <button type="submit" style="margin-left: 20px;" [disabled]="
+            (f['firstName'].errors || !f['firstName'].valid) &&
+            (f['lastName'].errors || !f['lastName'].valid) &&
+            (f['email'].errors || !f['email'].valid) &&
+            (f['consultationFee'].errors || !f['consultationFee'].valid) &&
+            (f['sharePrice'].errors || !f['sharePrice'].valid) &&
+            (f['timings'].errors || !f['timings'].valid) &&
+            (f['speciality'].errors || !f['speciality'].valid) &&
+            (f['qualification'].errors || !f['qualification'].valid) &&
+            (f['service'].errors || !f['service'].valid) 
+            " class="btn btn-primary">{{action === 'add'?'Add Doctor +':'Update Doctor +'}}</button>
+        </div>
+    </form>
 </p-tabView>

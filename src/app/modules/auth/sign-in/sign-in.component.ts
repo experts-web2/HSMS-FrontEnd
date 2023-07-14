@@ -44,7 +44,6 @@ export class SignInComponent implements OnInit, OnDestroy {
       password: formLogin.password,
       rememberMe: formLogin.rememberMe
     }
-    console.log(loginPayload);
 
     this.authService.login(loginPayload).subscribe({
       next: (x: any) => {

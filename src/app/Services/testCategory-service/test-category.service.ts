@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { HttpService } from '../httpService/http.service';
 import { HttpClient } from '@angular/common/http';
-import { IAddOrUpdateCategory } from 'src/app/models/interfaces/addOrUpdate-Category';
+import { IAddOrUpdateCategory, IAddOrUpdateCategoryRequest } from 'src/app/models/interfaces/addOrUpdate-Category';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 
 @Injectable({
@@ -20,8 +20,8 @@ export class TestCategoryService extends HttpService {
     return this.post(`${this.baseEndPoint}/add`, category);
   }
 
-  deleteCategory(id: string){
-    return this.delete(`${this.baseEndPoint}/delete/${id}`);
+  deleteCategory(deleteCategory: IAddOrUpdateCategoryRequest){
+    return this.delete(`${this.baseEndPoint}/delete/${deleteCategory.id}`);
   }
 
   updateCategory(id: string, category: IAddOrUpdateCategory){

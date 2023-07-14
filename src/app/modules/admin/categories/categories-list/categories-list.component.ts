@@ -6,6 +6,11 @@ import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { IFiltersRequest } from 'src/app/models/interfaces/filterRequst';
 import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AlertService } from 'src/app/Services/alert/alert.service';
+import { CategoriesFormComponent } from '../categories-form/categories-form.component';
+import { IAddOrUpdateCategoryRequest } from 'src/app/models/interfaces/addOrUpdate-Category';
+
 
 @Component({
   selector: 'app-categories-list',
@@ -15,7 +20,8 @@ import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 export class CategoriesListComponent {
   labTestCategoryList: Array<ILabTestCategory> = [];
   totalRecords: number = 0;
-  
+  actionsToShow: Array<string> = ['edit', 'delete'];
+  ref!: DynamicDialogRef;
   columns: Array<ITableColumns> = [
   {
     name: 'Name',
@@ -37,30 +43,51 @@ export class CategoriesListComponent {
   }  
   ];
 
-  constructor(private readonly testCategoryService: TestCategoryService){
+  constructor(private readonly testCategoryService: TestCategoryService,
+    public dialogService: DialogService,private readonly alertService: AlertService,){
 
   }
 
   ngOnInit(): void {
-    this.getMedicine();
+    this.getCategory();
   }
 
-  getMedicine(filterRequest: IFetchRequest = {}){
+  getCategory(filterRequest: IFetchRequest = {}){
     this.testCategoryService.getCategories(filterRequest).subscribe(x => {
-      console.log(x);
       this.labTestCategoryList = x.data;
       this.totalRecords = x.total      
     })
   }
 
-  edit(e: any){
-    console.log(e);
-    
-    
+  addCategory(category?:IAddOrUpdateCategoryRequest,action:string='add'){
+    this.ref = this.dialogService.open(CategoriesFormComponent, { 
+      width:'30%',
+      height:'60%',
+      data: {
+        category :category,
+        action: action
+      }
+    });
+    this.ref.onClose.subscribe((medicine) => {
+      if (medicine === true) {
+        this.getCategory();
+      }
+  });
   }
 
-  delete(e: any){
-    console.log(e);
-    
+  edit(editCategory: IAddOrUpdateCategoryRequest){
+    this.addCategory(editCategory,'update')
+  }
+
+  delete(deleteCategory: IAddOrUpdateCategoryRequest){
+    this.testCategoryService.deleteCategory(deleteCategory).subscribe({
+      next: (x) => {
+        this.alertService.success('Success', 'Category delete successfully');
+        this.getCategory();
+      },
+      error: (err) => {
+        this.alertService.error('Error', 'An error occoured while delete category')
+      }
+    })
   }
 }

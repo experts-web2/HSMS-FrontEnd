@@ -34,9 +34,9 @@ export class AppComponent implements OnInit {
       next: (x: ILogedInUser) => {
         if (x) this.showNav = true;
         else this.showNav = false;
-        this.userName = `${x.firstName} ${x.lastName}`;
+        this.userName = `${x?.firstName} ${x?.lastName}`;
         this.logedInUser = x;
-        this.isAdmin = x.roles.includes('Admin');
+        this.isAdmin = x?.roles.includes('Admin');
 
       },
       error: (err: Error) => { }

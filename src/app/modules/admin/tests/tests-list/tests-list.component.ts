@@ -7,6 +7,9 @@ import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { TestCategoryService } from '../../../../Services/testCategory-service/test-category.service';
 import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
+import { TestsFormComponent } from '../tests-form/tests-form.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+
 
 @Component({
   selector: 'app-tests-list',
@@ -17,6 +20,8 @@ export class TestsListComponent implements OnInit {
   testsList!: Array<ILabeTest>;
   categories!: Array<ILabTestCategory>;
   totalRecords: number = 0;
+  ref!: DynamicDialogRef;
+  actionsToShow: Array<string> = ['edit', 'delete'];
 
   columns: Array<ITableColumns> = [
     {
@@ -51,9 +56,13 @@ export class TestsListComponent implements OnInit {
     }
   ];
 
-  constructor(private readonly testsService: TestService, private readonly alertService: AlertService, private readonly testCategoryService: TestCategoryService) { }
+  constructor(
+    private readonly testsService: TestService,
+    private readonly alertService: AlertService,
+    private readonly testCategoryService: TestCategoryService,
+    public readonly dialogService: DialogService) { }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.getTests();
     this.getCategories();
   }
@@ -70,7 +79,7 @@ export class TestsListComponent implements OnInit {
     })
   }
 
-  getCategories(){
+  getCategories() {
     this.testCategoryService.getCategories().subscribe({
       next: (x: any) => {
         this.categories = x.data;
@@ -81,18 +90,43 @@ export class TestsListComponent implements OnInit {
     })
   }
 
-  getCategoryName(id: string): string{    
+  getCategoryName(id: string): string {
     let categoryName = this.categories?.find(x => x.id === id)?.name;
     if (!categoryName) return 'N/A';
     return categoryName
   }
 
+
+  addTests(test?: any, action: string = 'add') {
+    this.ref = this.dialogService.open(TestsFormComponent, {
+      width: '50%',
+      height: '50%',
+      data: {
+        test: test,
+        action: action
+      }
+    });
+    this.ref.onClose.subscribe((test) => {
+      if (test === true) {
+        this.getTests();
+      }
+    });
+  }
+
   edit(test: ILabeTest): void {
-    console.log(test);
+    this.addTests(test, 'update')
   }
 
   deleteTest(test: ILabeTest): void {
-    console.log(test);
+    this.testsService.deleteTest(test).subscribe({
+      next: (x) => {
+        this.alertService.success('Success', 'Test delete successfully');
+        this.getTests();
+      },
+      error: (err) => {
+        this.alertService.error('Error', 'An error occoured while delete test')
+      }
+    })
   }
 
 

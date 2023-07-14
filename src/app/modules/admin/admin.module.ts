@@ -24,6 +24,11 @@ import { ShiftsComponent } from './Shifts/shifts/shifts.component';
 import { DataImpExpComponent } from './import-export/data-imp-exp/data-imp-exp.component'
 import { GenericTableComponent } from "../../Shared/components/generic-table/generic-table.component";
 import { DoctorFormComponent } from './doctors/doctor-form/doctor-form.component';
+import { DoctorListComponent } from './doctors/doctor-list/doctor-list.component';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 
 @NgModule({
     declarations: [
@@ -44,7 +49,8 @@ import { DoctorFormComponent } from './doctors/doctor-form/doctor-form.component
         HumanRecourcesComponent,
         ShiftsComponent,
         DataImpExpComponent,
-        DoctorFormComponent
+        DoctorFormComponent,
+        DoctorListComponent
     ],
     imports: [
         CommonModule,
@@ -52,7 +58,13 @@ import { DoctorFormComponent } from './doctors/doctor-form/doctor-form.component
         PrimeNgModule,
         FormsModule,
         ReactiveFormsModule,
-        GenericTableComponent
+        GenericTableComponent,
+        DialogModule,
+        ConfirmDialogModule
+    ], providers:[
+        DialogService,
+        DynamicDialogRef,
+        DynamicDialogConfig
     ]
 })
 export class AdminModule { }

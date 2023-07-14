@@ -24,8 +24,8 @@ export class MedicineService extends HttpService{
     return this.post(`${this.baseEndPoint}/all`, fetchRequest)
   }
 
-  deleteMedicine(id: string){
-    return this.delete(`${this.baseEndPoint}/delete/${id}`)
+  deleteMedicine(deleteMedicine: any){
+    return this.delete(`${this.baseEndPoint}/delete/${deleteMedicine.id}`)
   }
 
   updateMedicine(id: string, medicine: IMedicinerequest){

@@ -1,34 +1,34 @@
 <div>
     <form class="d-flex flex-column" [formGroup]="userForm" (ngSubmit)="formSubmit($event)" >
         <div class="d-flex flex-column gap-2">
-            <label htmlFor="fName">Firts Name</label>
-            <input pInputText id="fName"  formControlName="fName"/>
-            <div class="validation" *ngIf="(userForm.controls['fName'].errors && userForm.controls['fName'].dirty) || (userForm.controls['fName'].errors && userForm.controls['fName'].touched)">
+            <label htmlFor="firstName">Firts Name</label>
+            <input pInputText id="firstName"  formControlName="firstName"/>
+            <div class="text-danger" *ngIf="(userForm.controls['firstName'].errors && userForm.controls['firstName'].dirty) || (userForm.controls['firstName'].errors && userForm.controls['firstName'].touched)">
                 <small ><i class="fa fa-circle-exclamation"></i> First-Name is required.</small>
             </div>
         </div>
         <div class="d-flex flex-column gap-2">
-            <label htmlFor="lName">Last Name</label>
-            <input pInputText id="lName" formControlName="lName" required/>
-            <div class="validation" *ngIf="(userForm.controls['lName'].errors && userForm.controls['lName'].dirty) || (userForm.controls['lName'].errors && userForm.controls['lName'].touched)">                
+            <label htmlFor="lastName">Last Name</label>
+            <input pInputText id="lastName" formControlName="lastName" required/>
+            <div class="text-danger" *ngIf="(userForm.controls['lastName'].errors && userForm.controls['lastName'].dirty) || (userForm.controls['lastName'].errors && userForm.controls['lastName'].touched)">                
                 <small><i class="fa fa-circle-exclamation"></i> Last-Name is required.</small>
             </div>
         </div>
         <div class="d-flex flex-column gap-2">
             <label htmlFor="email">Email</label>
             <input pInputText id="email" formControlName="email"/>
-            <div class="validation" *ngIf="(userForm.controls['email'].errors && userForm.controls['email'].dirty) || (userForm.controls['email'].errors && userForm.controls['email'].touched)">                
+            <div class="text-danger" *ngIf="(userForm.controls['email'].errors && userForm.controls['email'].dirty) || (userForm.controls['email'].errors && userForm.controls['email'].touched)">                
                 <small><i class="fa fa-circle-exclamation"></i> Email is required.</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2">
+        <div class="d-flex flex-column gap-2" *ngIf="action ==='add'">
             <label htmlFor="password">Password</label>
-            <input pInputText id="password" formControlName="password"/>
-            <div class="validation" *ngIf="(userForm.controls['password'].errors && userForm.controls['password'].dirty) || (userForm.controls['password'].errors && userForm.controls['password'].touched)">                
+            <input pInputText id="password" type="password" formControlName="password"/>
+            <div class="text-danger" *ngIf="(userForm.controls['password'].errors && userForm.controls['password'].dirty) || (userForm.controls['password'].errors && userForm.controls['password'].touched)">                
                 <small><i class="fa fa-circle-exclamation"></i> Password is required.</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2">
+        <!-- <div class="d-flex flex-column gap-2">
             <label htmlFor="gender">Gender</label>
             <div id="gender" class="d-flex flex-rows gap-5">
                 <div>
@@ -47,23 +47,23 @@
                     </label>
                 </div>
             </div>
-            <div class="validation" *ngIf="(userForm.controls['gender'].errors && userForm.controls['gender'].dirty) || (userForm.controls['gender'].errors && userForm.controls['gender'].touched)">                
+            <div class="text-danger" *ngIf="(userForm.controls['gender'].errors && userForm.controls['gender'].dirty) || (userForm.controls['gender'].errors && userForm.controls['gender'].touched)">                
                 <small><i class="fa fa-circle-exclamation"></i> Gender is required</small>
             </div>
-        </div>
+        </div> -->
         <div class="d-flex flex-column gap-2">
             <label htmlFor="phoneNumber">Phone#</label>
-            <input pInputText id="phoneNumber" formControlName="phoneNum"/>
-            <div class="validation" *ngIf="(userForm.controls['phoneNum'].errors && userForm.controls['phoneNum'].dirty) || (userForm.controls['phoneNum'].errors && userForm.controls['phoneNum'].touched)">                
+            <input pInputText id="phoneNumber" formControlName="phoneNumber"/>
+            <div class="text-danger" *ngIf="(userForm.controls['phoneNumber'].errors && userForm.controls['phoneNumber'].dirty) || (userForm.controls['phoneNumber'].errors && userForm.controls['phoneNumber'].touched)">                
                 <small><i class="fa fa-circle-exclamation"></i> Phone# is required.</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2 mt-2">
+        <div class="d-flex flex-column gap-2 mt-2" *ngIf="action ==='add'">
             <select class="form-select" formControlName="role">
                 <option selected [value]="null" disabled>Pease select a Role for the User.</option>
                 <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
             </select>
-            <div class="validation" *ngIf="(userForm.controls['role'].errors && userForm.controls['role'].dirty) || (userForm.controls['role'].errors && userForm.controls['role'].touched)">                
+            <div class="text-danger" *ngIf="(userForm.controls['role'].errors && userForm.controls['role'].dirty) || (userForm.controls['role'].errors && userForm.controls['role'].touched)">                
                 <small> <i class="fa fa-circle-exclamation"></i> Role is required.</small>
             </div>
         </div>

@@ -1,27 +1,27 @@
-<p-dialog>
-<form (ngSubmit)="submitTest($event)" [formGroup]="testForm">
+<h3 style="text-align: center;"><b>{{action === 'add'?'Add Test':'Update Test'}}</b></h3>
+<form (ngSubmit)="submitTest()" [formGroup]="testForm">
     <div>
         <label for="name">Test Name <span class="text-danger">*</span></label>
         <input pInputText type="text" name="" id="name" formControlName="name" required>
-        <div *ngIf="(testForm.controls['name'].errors && testForm.controls['name'].touched) || (testForm.controls['name'].touched && !testForm.controls['name'].valid)"><small>Please enter category name.</small></div>
+        <div class="text-danger" *ngIf="(testForm.controls['name'].errors && testForm.controls['name'].touched) || (testForm.controls['name'].touched && !testForm.controls['name'].valid)"><small>Please enter category name.</small></div>
     </div>
     <div>
         <label for="description">Description <span class="text-danger">*</span></label>
         <input pInputText type="text" name="" id="description" formControlName="description" required>
-        <div *ngIf="(testForm.controls['description'].errors && testForm.controls['description'].touched) || (testForm.controls['description'].touched && !testForm.controls['description'].valid)"><small>Please add description.</small></div>
+        <div class="text-danger" *ngIf="(testForm.controls['description'].errors && testForm.controls['description'].touched) || (testForm.controls['description'].touched && !testForm.controls['description'].valid)"><small>Please add description.</small></div>
     </div>
     <div>
         <label for="category">Lab Test Category <span class="text-danger">*</span></label>
-        <select class="form-select-sm" name="" id="category" formControlName="category">
+        <select class="form-select" name="" id="testCategoryId" formControlName="testCategoryId">
             <option [value]="''" selected disabled>Select A Lab Test Category</option>
             <option *ngFor="let category of categories" [value]="category.id" >{{category.name}}</option>
         </select>
-        <div *ngIf="(testForm.controls['category'].errors && testForm.controls['category'].touched) || (testForm.controls['category'].touched && !testForm.controls['category'].valid)"><small>Please select a test category.</small></div>
+        <div class="text-danger" *ngIf="(testForm.controls['testCategoryId'].errors && testForm.controls['testCategoryId'].touched) || (testForm.controls['testCategoryId'].touched && !testForm.controls['testCategoryId'].valid)"><small>Please select a test category.</small></div>
     </div>
     <div>
         <label for="price">Price <span class="text-danger">*</span></label>
         <input pInputText type="number" name="" id="price" formControlName="price" required>
-        <div *ngIf="(testForm.controls['price'].errors && testForm.controls['price'].touched) || (testForm.controls['price'].touched && !testForm.controls['price'].valid)"><small>Please enter price.</small></div>
+        <div class="text-danger" *ngIf="(testForm.controls['price'].errors && testForm.controls['price'].touched) || (testForm.controls['price'].touched && !testForm.controls['price'].valid)"><small>Please enter price.</small></div>
     </div>
     <div>
         <button class="btn btn-primary" 
@@ -29,11 +29,9 @@
         [disabled]="
         (testForm.controls['name'].errors || !testForm.controls['name'].valid) && 
         (testForm.controls['description'].errors || !testForm.controls['description'].valid) && 
-        (testForm.controls['category'].errors || !testForm.controls['category'].valid) && 
+        (testForm.controls['testCategoryId'].errors || !testForm.controls['testCategoryId'].valid) && 
         (testForm.controls['price'].errors || !testForm.controls['price'].valid) 
         "
-        >Add</button>
+        >{{action === 'add'?'Add Test':'Update Test'}}</button>
     </div>
 </form>
-<button class="btn btn-warning mt-3" [routerLink]="['/admin/tests-list']"> </button>
-</p-dialog>

@@ -1,14 +1,15 @@
 <div class="mt-4 justify-content-evenly d-flex">
 
-    <mat-card class="dashboard_card "><div class="text-center"><p>Total Appointments</p> <span class="file-icon text-font">17</span></div> <i class="fa-solid fa-file-waveform d-flex align-items-end file-icon"></i></mat-card>
-    <mat-card class="dashboard_card "><div class="text-center"><p>Registered Patients</p> <span class="wheelchair-icon text-font">56</span></div> <i class="fa-solid fa-wheelchair d-flex align-items-end wheelchair-icon"></i></mat-card>
-    <mat-card class="dashboard_card "><div class="text-center"><p>Patients Visited Today</p> <span class="truck-icon text-font">1</span></div> <i class="fa-solid fa-truck-medical d-flex align-items-end truck-icon"></i></mat-card>
-    <mat-card class="dashboard_card "><div class="text-center"><p>Total Users</p> <span class="group-icon text-font">10</span></div> <i class="fa-sharp fa-solid fa-people-line d-flex align-items-end group-icon"></i></mat-card>
+  <mat-card class="dashboard_card "><div class="px-3 mt-3 mb-3"><p>Total Appointments</p> <div class="d-flex justify-content-between align-items-center"> <span class="file-icon text-font">17</span><i class="fa-solid fa-file-waveform d-flex align-items-end file-icon"></i></div></div> </mat-card>
+  <mat-card class="dashboard_card "><div class="px-3 mt-3 mb-3"><p>Registered Patients</p> <div class="d-flex justify-content-between align-items-center"><span class="wheelchair-icon text-font">56</span><i class="fa-solid fa-wheelchair d-flex align-items-end wheelchair-icon"></i></div></div> </mat-card>
+  <mat-card class="dashboard_card "><div class="px-3 mt-3 mb-3"><p>Patients Visited Today</p><div class="d-flex justify-content-between align-items-center"> <span class="truck-icon text-font">1</span><i class="fa-solid fa-truck-medical d-flex align-items-end truck-icon"></i></div></div> </mat-card>
+  <mat-card class="dashboard_card "><div class="px-3 mt-3 mb-3"><p>Total Users</p><div class="d-flex justify-content-between align-items-center"> <span class="group-icon text-font">10</span><i class="fa-sharp fa-solid fa-people-line d-flex align-items-end group-icon"></i></div></div> </mat-card>
 </div>
-<button class="navButton btn btn-primary" (click)="addToken()">Add Token</button>
 
-<div class="mt-4">
-    <span style="margin-right: 15px;">Patient Visits</span>
+<div class="mt-4 mx-5 d-flex justify-content-between align-items-center">
+  <button class="navButton btn btn-primary" (click)="addToken()">Add Token</button>
+  <div class="d-flex">
+    <span style="margin-right: 15px; margin-top: 15px;">Patient Visits</span>
 
     <mat-form-field>
         <mat-select name="filterString" [(value)]="selectedFilter">
@@ -17,6 +18,7 @@
       <mat-option >Canada</mat-option> -->
         </mat-select>
     </mat-form-field>
+  </div>
 </div>
 <div echarts [options]="chartOption" class=""></div>
 
