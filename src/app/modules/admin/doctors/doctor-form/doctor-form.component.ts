@@ -111,8 +111,36 @@ export class DoctorFormComponent implements OnInit {
     }
   }
 
+
+  isEmailExist(){
+    let control = this.addDoctorForm.get('email');
+    if (control?.valid && control.value !== '') {
+      let canSave = false;
+      canSave = this.isEmailAlreadyInUse(control.value);
+      if (canSave) {
+        
+      }
+    }
+}
+
+isEmailAlreadyInUse(email:string):any{
+  let test = false;
+  this.doctorService.isEmailInUse(email).subscribe(
+    (data: boolean) => {
+      const pe = this.addDoctorForm.get('email');
+      if (data) {
+        pe?.setErrors({ invalid: true, inuse: true });
+        test = true;
+      }
+    },
+    (err) => console.log(err),
+    () => {
+    }, 
+  );
+  return test;
+}
+
   onSubmit() {
-    
       let requestPayLoad: IAddOrUpdateDoctorRequest = {
         name: `Dr.${this.addDoctorForm.controls['firstName'].value} ${this.addDoctorForm.controls['lastName'].value} `,
         gender: this.addDoctorForm.controls['gender'].value,
@@ -151,7 +179,7 @@ export class DoctorFormComponent implements OnInit {
         this.doctorService.updateDoctor(requestPayLoad, this.doctor.id).subscribe({
           next: (x: any) => {
             this.alertService.success('Success', 'Doctor update successfully');
-            this.ref.close();
+            this.ref.close(true);
           },
           error: (err: any) => {
             this.alertService.error('Error', 'An error occoured while update doctor')

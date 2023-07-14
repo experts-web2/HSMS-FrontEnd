@@ -8,6 +8,7 @@ import { AlertService } from '../../../../Services/alert/alert.service';
 import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IAddOrUpdateUser } from 'src/app/models/interfaces/addOrUpdate-User';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DoctorService } from 'src/app/Services/doctor.service';
 
 
 @Component({
@@ -18,13 +19,13 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 export class UserFormComponent implements OnInit {
   userForm!: FormGroup;
   roles: RolesDisplay[] = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.Sweeper, name: 'Sweeper' }];
-  selectedRole!: RolesDisplay;
   user: any;
   action: string;
   constructor(private fb: FormBuilder,
     private readonly userService: UserService,
     private readonly userStateService: UserStateService,
     private readonly alertService: AlertService,
+    private readonly doctorService: DoctorService,
     public readonly config: DynamicDialogConfig,
     public readonly ref: DynamicDialogRef) {
 
@@ -40,7 +41,6 @@ export class UserFormComponent implements OnInit {
       password: new FormControl<string>('', Validators.required),
       role: new FormControl<number | null>(null, [Validators.required]),
       phoneNumber: new FormControl<string>('', [Validators.required, Validators.pattern('[0-9]*')]),
-      gender: new FormControl<number | null>(null, [Validators.required]),
       photoPath: new FormControl<string | null>(null)
     })
 
@@ -52,11 +52,40 @@ export class UserFormComponent implements OnInit {
           active: true,
           phoneNumber: this.user.phoneNumber,
           photoPath: this.user.photoPath,
-          gender: this.user.gender,
           email: this.user.email,
           accountId: this.user.accountId
         });
     }
+  }
+
+  get f() { return this.userForm.controls; }
+
+  isEmailExist() {
+    let control = this.userForm.get('email');
+    if (control?.valid && control.value !== '') {
+      let canSave = false;
+      canSave = this.isEmailAlreadyInUse(control.value);
+      if (canSave) {
+
+      }
+    }
+  }
+
+  isEmailAlreadyInUse(email: string): any {
+    let test = false;
+    this.doctorService.isEmailInUse(email).subscribe(
+      (data: boolean) => {
+        const pe = this.userForm.get('email');
+        if (data) {
+          pe?.setErrors({ invalid: true, inuse: true });
+          test = true;
+        }
+      },
+      (err: any) => console.log(err),
+      () => {
+      },
+    );
+    return test;
   }
 
   formSubmit(e: any) {

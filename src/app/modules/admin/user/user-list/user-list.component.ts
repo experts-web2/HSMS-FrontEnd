@@ -24,7 +24,7 @@ export class UserListComponent implements OnInit {
   totalRecords: number = 0;
   userList: Array<IUser> = [];
   ref!: DynamicDialogRef;
-  actionsToShow: Array<string> = ['edit', 'delete']
+  actionsToShow: Array<string> = ['edit']
   columns: Array<ITableColumns> = [
     {
       name: 'First Name',

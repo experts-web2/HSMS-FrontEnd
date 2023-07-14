@@ -4,29 +4,32 @@
         <div class="d-flex flex-column gap-2">
             <label htmlFor="firstName">Firts Name</label>
             <input pInputText id="firstName"  formControlName="firstName"/>
-            <div class="text-danger" *ngIf="(userForm.controls['firstName'].errors && userForm.controls['firstName'].dirty) || (userForm.controls['firstName'].errors && userForm.controls['firstName'].touched)">
-                <small ><i class="fa fa-circle-exclamation"></i> First-Name is required.</small>
+            <div class="text-danger" *ngIf="(f['firstName'].errors && f['firstName'].dirty) || (f['firstName'].errors && f['firstName'].touched)">
+                <small>First-Name is required.</small>
             </div>
         </div>
         <div class="d-flex flex-column gap-2">
             <label htmlFor="lastName">Last Name</label>
             <input pInputText id="lastName" formControlName="lastName" required/>
-            <div class="text-danger" *ngIf="(userForm.controls['lastName'].errors && userForm.controls['lastName'].dirty) || (userForm.controls['lastName'].errors && userForm.controls['lastName'].touched)">                
-                <small><i class="fa fa-circle-exclamation"></i> Last-Name is required.</small>
+            <div class="text-danger" *ngIf="(f['lastName'].errors && f['lastName'].dirty) || (f['lastName'].errors && f['lastName'].touched)">                
+                <small> Last-Name is required.</small>
             </div>
         </div>
         <div class="d-flex flex-column gap-2">
             <label htmlFor="email">Email</label>
-            <input pInputText id="email" formControlName="email"/>
-            <div class="text-danger" *ngIf="(userForm.controls['email'].errors && userForm.controls['email'].dirty) || (userForm.controls['email'].errors && userForm.controls['email'].touched)">                
-                <small><i class="fa fa-circle-exclamation"></i> Email is required.</small>
+            <input pInputText id="email" formControlName="email" (blur)="isEmailExist()"/>
+            <div class="text-danger" *ngIf="(f['email'].errors && f['email'].dirty) || (f['email'].errors && f['email'].touched)">                
+                <small> Email is required.</small>
+            </div>
+            <div class="text-danger" *ngIf="f['email'].errors?.['inuse']">
+                This Email Address is already in use. Please enter a different Email Address.
             </div>
         </div>
         <div class="d-flex flex-column gap-2" *ngIf="action ==='add'">
             <label htmlFor="password">Password</label>
             <input pInputText id="password" type="password" formControlName="password"/>
-            <div class="text-danger" *ngIf="(userForm.controls['password'].errors && userForm.controls['password'].dirty) || (userForm.controls['password'].errors && userForm.controls['password'].touched)">                
-                <small><i class="fa fa-circle-exclamation"></i> Password is required.</small>
+            <div class="text-danger" *ngIf="(f['password'].errors && f['password'].dirty) || (f['password'].errors && f['password'].touched)">                
+                <small> Password is required.</small>
             </div>
         </div>
         <!-- <div class="d-flex flex-column gap-2">
@@ -48,27 +51,36 @@
                     </label>
                 </div>
             </div>
-            <div class="text-danger" *ngIf="(userForm.controls['gender'].errors && userForm.controls['gender'].dirty) || (userForm.controls['gender'].errors && userForm.controls['gender'].touched)">                
+            <div class="text-danger" *ngIf="(f['gender'].errors && f['gender'].dirty) || (f['gender'].errors && f['gender'].touched)">                
                 <small><i class="fa fa-circle-exclamation"></i> Gender is required</small>
             </div>
         </div> -->
         <div class="d-flex flex-column gap-2">
             <label htmlFor="phoneNumber">Phone#</label>
             <input pInputText id="phoneNumber" formControlName="phoneNumber"/>
-            <div class="text-danger" *ngIf="(userForm.controls['phoneNumber'].errors && userForm.controls['phoneNumber'].dirty) || (userForm.controls['phoneNumber'].errors && userForm.controls['phoneNumber'].touched)">                
-                <small><i class="fa fa-circle-exclamation"></i> Phone# is required.</small>
+            <div class="text-danger" *ngIf="(f['phoneNumber'].errors && f['phoneNumber'].dirty) || (f['phoneNumber'].errors && f['phoneNumber'].touched)">                
+                <small> Phone# is required.</small>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2" *ngIf="action ==='add'">
-            <label htmlFor="phoneNumber">Select Role</label>
+        <div class="d-flex flex-column gap-2">
+            <label htmlFor="phoneNumber">Role</label>
             <select class="form-select h-100" formControlName="role">
-                <option selected [value]="null" disabled>Pease select a Role for the User.</option>
+                <option selected [value]="null" disabled>Select Role.</option>
                 <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
             </select>
-            <div class="text-danger" *ngIf="(userForm.controls['role'].errors && userForm.controls['role'].dirty) || (userForm.controls['role'].errors && userForm.controls['role'].touched)">                
-                <small> <i class="fa fa-circle-exclamation"></i> Role is required.</small>
+            <div class="text-danger" *ngIf="(f['role'].errors && f['role'].dirty) || (f['role'].errors && f['role'].touched)">                
+                <small> Role is required.</small>
             </div>
         </div>
-        <p-button type="Submit" class="mt-3">{{action === 'add'?'Add User':'Update User'}}</p-button>
+        <div class="form-group" style="text-align: end;">
+        <button pButton type="Submit" class="mt-3"
+        [disabled]="
+        (f['firstName'].errors || !f['firstName'].valid) &&
+        (f['lastName'].errors || !f['lastName'].valid) &&
+        (f['email'].errors || !f['email'].valid) &&
+        (f['phoneNumber'].errors || !f['phoneNumber'].valid) &&
+        (f['role'].errors || !f['role'].valid)"
+        >{{action === 'add'?'Add User':'Update User'}}</button>
+    </div>
     </form>
 </div>

@@ -71,6 +71,8 @@ export class MedicineFormComponent implements OnInit {
     }
   }
 
+  get f() { return this.medicineForm.controls; }
+
   submitMedicine() {
     let medicineToAdd: IMedicinerequest = {
       name: this.medicineForm.value.name,

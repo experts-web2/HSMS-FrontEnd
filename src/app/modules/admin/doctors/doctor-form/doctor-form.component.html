@@ -21,22 +21,25 @@
             <div class="row mt-3">
                 <div class="col-4">
                     <label for="email">Email<span class="text-danger">*</span></label>
-                    <input class="form-control" type="email" name="" formControlName="email" id="email" required autocomplete="off">
+                    <input class="form-control" type="email"  formControlName="email" (blur)="isEmailExist()" required autocomplete="off">
                     <div class="text-danger"
                         *ngIf="(f['email'].errors && f['email'].touched) || (f['email'].dirty && f['email'].errors)">
                         Email is required.</div>
                     <div class="text-danger" *ngIf="f['email']?.errors?.['pattern']">Please enter a valid Email address.
                     </div>
+                    <div class="text-danger" *ngIf="f['email'].errors?.['inuse']">
+                        This Email Address is already in use. Please enter a different Email Address.
+                    </div>
                 </div>
 
                 <div *ngIf="action !== 'update'" class="col-4">
                     <label for="password">Password<span class="text-danger">*</span></label>
-                    <input class="form-control" type="password" name="" formControlName="password" id="password" autocomplete="off">
+                    <input class="form-control" type="password" name="" formControlName="password" autocomplete="off">
 
                     <div class="text-danger"
                         *ngIf="(f['password'].errors && f['password'].touched) || (f['password'].dirty && f['password'].errors)">
                         Password is required.</div>
-                    <div class="text-danger" *ngIf="f['email']?.errors?.['minlength']">Password must be at least 6
+                    <div class="text-danger" *ngIf="f['password']?.errors?.['minlength']">Password must be at least 6
                         characters</div>
                 </div>
                 <div class="col-4">
@@ -114,7 +117,7 @@
                     <label for="speciality">Speciality<span class="text-danger">*</span></label>
                     <select class="form-select" aria-label="Default select example" formControlName="speciality"
                         required>
-                        <option [value]="null" selected disabled>Select Speciality</option>
+                        <option selected [value]="null" disabled>Select Speciality</option>
                         <option *ngFor="let status of category" [value]="status.id">{{ status.label }}</option>
                     </select>
                     <div class="text-danger"
@@ -126,7 +129,7 @@
                     <label for="speciality">Qualification<span class="text-danger">*</span></label>
                     <select class="form-select" aria-label="Default select example" formControlName="qualification"
                         required>
-                        <option [value]="null" selected disabled>Select Qualification</option>
+                        <option selected [value]="null" disabled>Select Qualification</option>
                         <option *ngFor="let qualification of qualifications" [value]="qualification.id">{{
                             qualification.label }}</option>
                     </select>
@@ -167,7 +170,7 @@
 
         </div>
         <div class="form-group" style="text-align: end;">
-            <button type="submit" style="margin-left: 20px;" [disabled]="
+            <button pButton type="submit" style="margin-left: 20px;" [disabled]="
             (f['firstName'].errors || !f['firstName'].valid) &&
             (f['lastName'].errors || !f['lastName'].valid) &&
             (f['email'].errors || !f['email'].valid) &&

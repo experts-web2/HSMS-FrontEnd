@@ -100,7 +100,7 @@ export class TestsListComponent implements OnInit {
   addTests(test?: any, action: string = 'add') {
     this.ref = this.dialogService.open(TestsFormComponent, {
       width: '50%',
-      height: '50%',
+      height: '60%',
       data: {
         test: test,
         action: action

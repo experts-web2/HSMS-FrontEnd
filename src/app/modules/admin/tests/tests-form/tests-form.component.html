@@ -23,7 +23,7 @@
         <input pInputText type="number" name="" id="price" formControlName="price" required>
         <div class="text-danger" *ngIf="(testForm.controls['price'].errors && testForm.controls['price'].touched) || (testForm.controls['price'].touched && !testForm.controls['price'].valid)"><small>Please enter price.</small></div>
     </div>
-    <div>
+    <div style="text-align: end;">
         <button class="btn btn-primary" 
         type="submit" 
         [disabled]="

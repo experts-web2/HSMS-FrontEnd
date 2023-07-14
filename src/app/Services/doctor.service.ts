@@ -34,4 +34,8 @@ export class DoctorService extends HttpService {
   deleteDoctor(doctor: any){
     return this.delete(`${this.baseEndPoints}/delete/${doctor.id}`);
   }
+
+  isEmailInUse(email: string): Observable<boolean>{
+    return super.get(`${BaseEndPoints.User}/checkemail/${email}`);
+  }
 }

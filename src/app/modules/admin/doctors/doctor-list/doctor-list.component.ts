@@ -126,7 +126,7 @@ export class DoctorListComponent {
         }
       });
       this.ref.onClose.subscribe((doctor) => {
-        if (doctor === undefined) {
+        if (doctor === true) {
           this.getDoctors();
         }
     });
