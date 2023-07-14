@@ -1,6 +1,5 @@
 export interface IAddOrUpdatePatient{
-    accountId?: string;
-    doctorId: string;
+    doctorId?: string;
     mrNo: number;
     name: string;
     phoneNumber: string;
@@ -8,6 +7,8 @@ export interface IAddOrUpdatePatient{
     gender: number;
     age: string;
     registrationDate: Date;
-    photoPath: string;
-    tagIds: Array<string>;
+    photoPath?: string;
+    tagIds?: Array<string>;
+    inDoor?: boolean;
+    outDoor?: boolean;
 }
