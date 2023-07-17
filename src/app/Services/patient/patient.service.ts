@@ -4,6 +4,8 @@ import { patientData } from 'src/data'
 import { HttpService } from '../httpService/http.service';
 import { HttpClient } from '@angular/common/http';
 import { BaseEndPoints } from '../../constants/enums/base-end-points';
+import { IAddOrUpdatePatient } from 'src/app/models/interfaces/addOrUodate-Patient';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +21,12 @@ export class PatientService extends HttpService{
     return this.get('https://jsonplaceholder.typicode.com/todos');
   }
 
-  addPatient(data: any){
-    this.post(`${this.baseEndPoint}/add`, data);
+  addPatient(data: IAddOrUpdatePatient): Observable<any>{
+   return this.post(`${this.baseEndPoint}/add`, data);
+  }
+
+  getPatients(fetchRequest: IFetchRequest = {}): Observable<any>{
+    return this.post(`${this.baseEndPoint}/all`, fetchRequest);
   }
 
   getAppointments() {

@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes'
 import { MatDialog } from '@angular/material/dialog';
 import { CameraComponent } from 'src/app/modules/camera/camera.component';
 import { PatientService } from '../../../Services/patient/patient.service';
+import { IAddOrUpdatePatient } from 'src/app/models/interfaces/addOrUodate-Patient';
+import { AlertService } from '../../../Services/alert/alert.service';
+import { Relations } from 'src/app/constants/Constants/PatientRelatons';
 
 @Component({
   selector: 'app-patient-form',
@@ -12,41 +15,67 @@ import { PatientService } from '../../../Services/patient/patient.service';
   styleUrls: ['./patient-form.component.scss']
 })
 export class PatientFormComponent implements OnInit {
-  patientForm:any;
-  relations:any[] = [{value:'Father'},{value:'Mother'},{value:'Sister'},{value:'Brother'},{value:'Son'},{value:'Daughter'},{value:'Wife'},{value:'Other'}];
+  patientForm!: FormGroup;
+  relations:any[] = [{label:'Father', value: Relations.Parent},{label:'Mother', value: Relations.Parent},{label:'Sister', value: Relations.Sibling},{label:'Brother', value: Relations.Sibling},{label:'Son', value: Relations.Child},{label:'Daughter', value: Relations.Child},{label:'Wife', value: Relations.Spouse}, {label:'Husband', value: Relations.Spouse}];
   addOnBlur = true;
   base64ImagStr:string = '';
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   tags: any[] = [];
 
-  constructor(private fb:FormBuilder, private dialog:MatDialog, private readonly patientService:PatientService) { 
+  constructor(private fb:FormBuilder, private dialog: MatDialog, private readonly patientService: PatientService, private readonly alertService: AlertService) { 
 
     this.patientForm = this.fb.group({
-      mrNum: [''],
-      name: ['',Validators.required],
-      phoneNum: ['',Validators.required],
-      relation: [''],
-      gender: [''],
-      age: [''],
-      registrationDate: [''],
+      mrNum: [null],
+      name: [null, Validators.required],
+      phoneNum: [null,Validators.required],
+      relation: [null],
+      gender: [null],
+      age: [null],
+      registrationDate: [null],
       addTags: [this.tags],
       addPhoto: [this.base64ImagStr]
     });    
   }
-
+  
   ngOnInit(): void {
     this.patientService.getData().subscribe(data=>{
       console.log(data);
       
     })
+    this.patientService.getPatients().subscribe({
+      next: (x)=> {
+        console.log(x);
+        
+      }
+    })
   }
 
   onSubmit(){
     console.log(this.patientForm.value);
-    this.patientForm.reset();  
+    let values =   this.patientForm.value;
+    let patient: IAddOrUpdatePatient = {
+      mrNo: values['mrNum'],
+      name: values['name'],
+      phoneNumber: values['phoneNum'],
+      age: values['age'],
+      gender: values['gender'] === 'Male'? 1: (values['gender'] === 'Female' ? 2 : 3),
+      relation: values['relation'],
+      registrationDate: new Date(values['registrationDate']),
+    }
+    this.patientService.addPatient(patient).subscribe({
+      next: (x) => {
+        this.alertService.success('Patient Added');
+        this.patientForm.reset();
+      },
+      error: (err) => {
+
+      }
+    })
+
   }
+
   resetForm():void{
-    Object.keys(this.patientForm.value).forEach(key => this.patientForm.value[key] = '');
+    this.patientForm.reset()
   }
 
   add(event: MatChipInputEvent): void {
@@ -60,12 +89,13 @@ export class PatientFormComponent implements OnInit {
     // Clear the input value
     event.chipInput!.clear();
   }
+
   concatDate(years:string, months:string, days:string){
     console.log({years,months,days});
     let age;
-    let date = `${months}-${days}-${years}`;
-    age = new Date(date);
-    this.patientForm.value.age = age.toLocaleString();
+    let date = `${years} Years-${months} Months-${days} Days`;
+    
+    this.patientForm.patchValue({'age': date}); 
   }
 
   remove(tag: any): void {

@@ -1,71 +1,71 @@
-<div>
+<div [formGroup]="prescriptionForm">
     <div class="prrescription-input">
         <label htmlFor="medicalHistory">Medical History</label>
         <div class="inner-prescription">
-            <textarea rows="1" cols="93" class="col-11" id="medicalHistory" pInputTextarea ></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
+            <textarea rows="1" cols="93" class="col-11" id="medicalHistory" pInputTextarea formControlName="medicalHistory"></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
         </div>
     </div>
     <div class="prrescription-input">
         <label htmlFor="complaint">Complaint</label>
         <div class="inner-prescription">
-            <textarea rows="1" cols="93" class="col-11" id="complaint" pInputTextarea ></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
+            <textarea rows="1" cols="93" class="col-11" id="complaint" pInputTextarea formControlName="complaint"></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
         </div>
     </div>
     <div class="prrescription-input">
         <label htmlFor="examination">Examination</label>
         <div class="inner-prescription">
-            <textarea rows="1" cols="93" class="col-11" id="examination" pInputTextarea ></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
+            <textarea rows="1" cols="93" class="col-11" id="examination" pInputTextarea formControlName="examination"></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
         </div>
     </div>
     <div class="prrescription-input">
         <label htmlFor="diagnosis">Diagnosis</label>
         <div class="inner-prescription">
-            <textarea rows="1" cols="93" class="col-11" id="diagnosis" pInputTextarea ></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
+            <textarea rows="1" cols="93" class="col-11" id="diagnosis" pInputTextarea formControlName="diagnosis"></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
         </div>
     </div>
     <div class="prrescription-input">
         <label htmlFor="clinicalNotes">Clinical Notes</label>
         <div class="inner-prescription">
-            <textarea rows="1" cols="93" class="col-11" id="clinicalNotes" pInputTextarea ></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
+            <textarea rows="1" cols="93" class="col-11" id="clinicalNotes" pInputTextarea formControlName="clinicNotes"></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
         </div>
     </div>
     <div class="prrescription-input">
         <label htmlFor="advice">Advice</label>
         <div class="inner-prescription">
-            <textarea rows="1" cols="93" class="col-11" id="advice" pInputTextarea ></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
+            <textarea rows="1" cols="93" class="col-11" id="advice" pInputTextarea formControlName="advice"></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
         </div>
     </div>
     <div class="prrescription-input">
         <label htmlFor="investigation">Investigation</label>
         <div class="inner-prescription">
-            <textarea rows="1" cols="93" class="col-11" id="investigation" pInputTextarea ></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
+            <textarea rows="1" cols="93" class="col-11" id="investigation" pInputTextarea formControlName="investigation"></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
         </div>
     </div>
     <div class="prrescription-input">
         <label htmlFor="procedure">Procedure</label>
-        <div class="procedure-select-div">
-            <p-treeSelect class="md:w-20rem w-full" containerStyleClass="w-full" placeholder="Select Procedure"></p-treeSelect><span class="delete-icon-span"><i class="pi pi-trash"></i></span>
+        <div class="procedure-select-div col-4">
+            <select class="form-select "  disabled  name="" id="" placeholder="Select Procedure"></select>
         </div>
     </div>
     <div class="add-procedure">
-        <button class="add-procedure-button"><i class="pi pi-plus"></i> Add Procedure</button>
+        <button  disabled class="btn btn-primary"><i class="pi pi-plus"></i> Add Procedure</button>
     </div>
     <div class="bottom">
         <div>
-            <label htmlFor="improvement">Improvement</label>
+            <label htmlFor="improvement" >Improvement</label>
         <div class="procedure-select-div" name="improvement">
-            <p-treeSelect class="md:w-20rem w-full" containerStyleClass="w-full" placeholder="Select Improvement"></p-treeSelect>
+            <select class="form-select" disabled name="" id="" placeholder="Select Improvement"></select>
         </div>
         </div>
         <div class="d-flex flex-column">
             <label htmlFor="date">Recomended Follow-up Appointment Date</label>
             <div class="procedure-select-div" name="improvement">
-                <p-calendar id="date" class="datePicker" [showIcon]="true"></p-calendar>
+                <p-calendar id="date" class="datePicker" [showIcon]="true" formControlName="followUpDate"></p-calendar>
             </div>
         </div>
         <div class="d-flex">
-            <button class="save-button">Save & Print</button>
-            <button class="save-button">Save</button>
+            <button class="save-button" (click)="savePrescription(true)">Save & Print</button>
+            <button class="save-button" (click)="savePrescription()">Save</button>
         </div>
     </div>
 </div>

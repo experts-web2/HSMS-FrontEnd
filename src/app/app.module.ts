@@ -16,6 +16,7 @@ import { MessagesModule } from 'primeng/messages';
 import { GenericTableComponent } from "./Shared/components/generic-table/generic-table.component";
 import { LoaderComponent } from './Shared/components/loader/loader.component';
 import { AppHttpInterceptor } from './auth/interceptor/app-http.interceptor';
+import { PrimeNgModule } from './Shared/modules/prime-ng/prime-ng.module';
 @NgModule({
     declarations: [
         AppComponent,
@@ -43,7 +44,8 @@ import { AppHttpInterceptor } from './auth/interceptor/app-http.interceptor';
         ToastModule,
         MessagesModule,
         GenericTableComponent,
-        LoaderComponent
+        LoaderComponent,
+        PrimeNgModule
     ]
 })
 export class AppModule implements OnInit { 

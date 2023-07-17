@@ -30,6 +30,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TagModule } from 'primeng/tag';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
   declarations: [],
@@ -65,7 +66,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
     PanelMenuModule,
     MultiSelectModule,
     TagModule,
-    ProgressBarModule
+    ProgressBarModule,
+    PanelModule
   ],
   providers:[
     MessageService

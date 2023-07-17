@@ -11,7 +11,7 @@
     <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
         <div class="input_Divs">
             <mat-label>MR#</mat-label>
-            <input class="form-control inpt-Field1 " matInput  placeholder="MR#" formControlName="mrNum">
+            <input class="form-control inpt-Field1 " matInput type="number"  placeholder="MR#" formControlName="mrNum">
         </div>
          <div class="input_Divs">
             <mat-label>Name<span class="text-danger">*</span></mat-label>
@@ -24,10 +24,13 @@
                     <span class="plus-sign">+</span>
                     <mat-select class="form-control inpt-Ph-rel"  placeholder="Select Relation" formControlName="relation">
                     <mat-option *ngFor="let relation of relations" [value]="relation.value">
-                        {{relation.value}}
+                        {{relation.label}}
                     </mat-option>
                     </mat-select>
             </div>
+        </div>
+        <div class="input_Divs">
+
         </div>
         <div class="input_Divs">
             <mat-label>Gender</mat-label>
@@ -42,9 +45,9 @@
         <div class="input_Divs">
             <mat-label>Age</mat-label>
             <div class="inpt-phone">
-                <input class="form-control inpt-age" matInput placeholder="Years" #years (change)="concatDate(years.value, months.value, days.value)">
-                <input class="form-control inpt-age" matInput placeholder="Months" #months (change)="concatDate(years.value, months.value, days.value)">
-                <input class="form-control inpt-age" matInput placeholder="Days" #days (change)="concatDate(years.value, months.value, days.value)">
+                <input class="form-control inpt-age" matInput placeholder="Years" #years (input)="concatDate(years.value, months.value, days.value)">
+                <input class="form-control inpt-age" matInput placeholder="Months" #months (input)="concatDate(years.value, months.value, days.value)">
+                <input class="form-control inpt-age" matInput placeholder="Days" #days (input)="concatDate(years.value, months.value, days.value)">
                 <input hidden class="" formControlName="age">
             </div>
         </div>
