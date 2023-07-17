@@ -11,6 +11,9 @@ import { AddTokenModalComponent } from '../dialog/add-token-modal/add-token-moda
 import { UserStateService } from '../../State/user/user.service';
 import { AppointmentService } from '../../Services/appointment.service';
 import { IFetchRequest } from '../../models/interfaces/fetchTableRequest';
+import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
+import { TableColumnFilterTypes } from 'src/app/constants/enums/table-column-filterTypes';
+import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
 
 
 
@@ -49,12 +52,74 @@ export class DashboardComponent implements OnInit {
   // }
   chartOption: any = {}
 
-  displayedColumns: string[] = ['name', 'time', 'doctor'];
-  displayedMessageColumns: string[] = ['sendAt', 'message'];
-  displayedTokensColumns: string[] = ['token', 'patient', 'doctor'];
-  appointmentsData: any;
-  messagesData: any;
-  tokensData: any;
+  // displayedAppointmentColumns: string[] = ['name', 'time', 'doctor'];
+  // displayedMessageColumns: string[] = ['sendAt', 'message'];
+  // displayedTokensColumns: string[] = ['token', 'patient', 'doctor'];
+  appointmentsData!: Array<any>;
+  appointmentsTotalRecords: number = 0;
+
+  tokensData!: Array<any>;
+  tokneTotalRecords: number = 0;
+
+  messagesData!: Array<any>;
+  messageTotalRecords: number = 0;
+
+
+  displayedAppointmentColumns: Array<ITableColumns> = [
+    {
+      name: 'Patient Name',
+      property: 'name',
+      filter: true,
+      filterType: TableColumnFilterTypes.Text
+    },
+    {
+      name: 'Appointment Time',
+      property: 'time',
+      filter: true,
+      filterType: TableColumnFilterTypes.Numeric
+    },
+    {
+      name: 'Doctor Name',
+      property: 'doctor',
+      filter: true,
+      filterType: TableColumnFilterTypes.Numeric
+    }
+  ];
+  displayedMessageColumns: Array<ITableColumns> = [
+    {
+      name: 'Send At#',
+      property: 'sendAt',
+      filter: true,
+      filterType: TableColumnFilterTypes.Text
+    },
+    {
+      name: 'Message',
+      property: 'message',
+      filter: true,
+      filterType: TableColumnFilterTypes.Numeric
+    }
+  ];
+  displayedTokensColumns: Array<ITableColumns> = [
+    {
+      name: 'Token#',
+      property: 'token',
+      filter: true,
+      filterType: TableColumnFilterTypes.Text
+    },
+    {
+      name: 'Patient Name',
+      property: 'patient',
+      filter: true,
+      filterType: TableColumnFilterTypes.Numeric
+    },
+    {
+      name: 'Doctor Name',
+      property: 'doctor',
+      filter: true,
+      filterType: TableColumnFilterTypes.Numeric
+    }
+  ];
+ 
 
 
   constructor(private patientService: PatientService,private dialog: MatDialog, private readonly userStateService: UserStateService, private readonly appointmentService: AppointmentService) { }
@@ -77,7 +142,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.getAppointments();
     this.getMessagesData();
-    this.getTokensData();
+    // this.getTokensData();
     this.chartOption = this.createChartOption([17, 22, 31, 46, 12, 40, 33, 16])
 
   }
@@ -129,14 +194,15 @@ export class DashboardComponent implements OnInit {
   getMessagesData() {
     this.patientService.getMessages().subscribe((res: any) => {
       this.messagesData = res
+      this.messageTotalRecords = res.length
     })
   }
 
-  getTokensData() {
-    this.patientService.getTokens().subscribe((res: any) => {
-      this.tokensData = res
-    })
-  }
+  // getTokensData() {
+  //   this.patientService.getTokens().subscribe((res: any) => {
+  //     this.tokensData = res
+  //   })
+  // }
 
   addToken(){
     this.dialog.open(AddTokenModalComponent, {

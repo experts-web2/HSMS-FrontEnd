@@ -1,9 +1,33 @@
 <div class="mt-4 justify-content-evenly d-flex">
 
-  <mat-card class="dashboard_card "><div class="px-3 mt-3 mb-3"><p>Total Appointments</p> <div class="d-flex justify-content-between align-items-center"> <span class="file-icon text-font">17</span><i class="fa-solid fa-file-waveform d-flex align-items-end file-icon"></i></div></div> </mat-card>
-  <mat-card class="dashboard_card "><div class="px-3 mt-3 mb-3"><p>Registered Patients</p> <div class="d-flex justify-content-between align-items-center"><span class="wheelchair-icon text-font">56</span><i class="fa-solid fa-wheelchair d-flex align-items-end wheelchair-icon"></i></div></div> </mat-card>
-  <mat-card class="dashboard_card "><div class="px-3 mt-3 mb-3"><p>Patients Visited Today</p><div class="d-flex justify-content-between align-items-center"> <span class="truck-icon text-font">1</span><i class="fa-solid fa-truck-medical d-flex align-items-end truck-icon"></i></div></div> </mat-card>
-  <mat-card class="dashboard_card "><div class="px-3 mt-3 mb-3"><p>Total Users</p><div class="d-flex justify-content-between align-items-center"> <span class="group-icon text-font">10</span><i class="fa-sharp fa-solid fa-people-line d-flex align-items-end group-icon"></i></div></div> </mat-card>
+  <mat-card class="dashboard_card ">
+    <div class="px-3 mt-3 mb-3">
+      <p>Total Appointments</p>
+      <div class="d-flex justify-content-between align-items-center"> <span class="file-icon text-font">17</span><i
+          class="fa-solid fa-file-waveform d-flex align-items-end file-icon"></i></div>
+    </div>
+  </mat-card>
+  <mat-card class="dashboard_card ">
+    <div class="px-3 mt-3 mb-3">
+      <p>Registered Patients</p>
+      <div class="d-flex justify-content-between align-items-center"><span class="wheelchair-icon text-font">56</span><i
+          class="fa-solid fa-wheelchair d-flex align-items-end wheelchair-icon"></i></div>
+    </div>
+  </mat-card>
+  <mat-card class="dashboard_card ">
+    <div class="px-3 mt-3 mb-3">
+      <p>Patients Visited Today</p>
+      <div class="d-flex justify-content-between align-items-center"> <span class="truck-icon text-font">1</span><i
+          class="fa-solid fa-truck-medical d-flex align-items-end truck-icon"></i></div>
+    </div>
+  </mat-card>
+  <mat-card class="dashboard_card ">
+    <div class="px-3 mt-3 mb-3">
+      <p>Total Users</p>
+      <div class="d-flex justify-content-between align-items-center"> <span class="group-icon text-font">10</span><i
+          class="fa-sharp fa-solid fa-people-line d-flex align-items-end group-icon"></i></div>
+    </div>
+  </mat-card>
 </div>
 
 <div class="mt-4 mx-5 d-flex justify-content-between align-items-center">
@@ -12,33 +36,30 @@
     <span style="margin-right: 15px; margin-top: 15px;">Patient Visits</span>
 
     <mat-form-field>
-        <mat-select name="filterString" [(value)]="selectedFilter">
-            <mat-option *ngFor="let item of filter" [value]="selectedFilter">{{item.label}}</mat-option>
-            <!-- <mat-option >United States</mat-option>
+      <mat-select name="filterString" [(value)]="selectedFilter">
+        <mat-option *ngFor="let item of filter" [value]="selectedFilter">{{item.label}}</mat-option>
+        <!-- <mat-option >United States</mat-option>
       <mat-option >Canada</mat-option> -->
-        </mat-select>
+      </mat-select>
     </mat-form-field>
   </div>
 </div>
 <div echarts [options]="chartOption" class=""></div>
 
 <div class="mt-4">
-    <h4>Appointments Today</h4>
-    <table mat-table [dataSource]="appointmentsData" class="mat-elevation-z8 w-100">
+  <h4><b>Appointments Today</b></h4>
+  <!-- <table mat-table [dataSource]="appointmentsData" class="mat-elevation-z8 w-100">
       
-        <!-- Name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Patien Name </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
       
-        <!-- Time Column -->
         <ng-container matColumnDef="time">
           <th mat-header-cell *matHeaderCellDef> Appointment Time </th>
           <td mat-cell *matCellDef="let element"> {{element.time}} </td>
         </ng-container>
       
-        <!-- Doctor Column -->
         <ng-container matColumnDef="doctor">
           <th mat-header-cell *matHeaderCellDef> Doctor Name </th>
           <td mat-cell *matCellDef="let element"> {{element.doctor}} </td>
@@ -46,9 +67,11 @@
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-      
-      
+      </table> -->
+  <app-generic-table [data]="appointmentsData" [columns]="displayedAppointmentColumns" [showActions]="true"
+    [totalRecords]="appointmentsTotalRecords"></app-generic-table>
+
+
 </div>
 
 
@@ -57,16 +80,14 @@
 
 
 <div class="mt-4">
-    <h4>Messages</h4>
-    <table mat-table [dataSource]="messagesData" class="mat-elevation-z8 w-100">
+  <h4><b>Messages</b></h4>
+  <!-- <table mat-table [dataSource]="messagesData" class="mat-elevation-z8 w-100">
       
-        <!-- Time Column -->
         <ng-container matColumnDef="sendAt">
           <th mat-header-cell *matHeaderCellDef> Send At </th>
           <td mat-cell *matCellDef="let element"> {{element.sendAt}} </td>
         </ng-container>
       
-        <!-- Message Column -->
         <ng-container matColumnDef="message">
           <th mat-header-cell *matHeaderCellDef> Message </th>
           <td mat-cell *matCellDef="let element"> {{element.message}} </td>
@@ -74,31 +95,32 @@
       
         <tr mat-header-row *matHeaderRowDef="displayedMessageColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedMessageColumns;"></tr>
-      </table>
-      
-      
+      </table> -->
+
+  <app-generic-table [data]="messagesData" [columns]="displayedMessageColumns" [showActions]="true"
+    [totalRecords]="messageTotalRecords"></app-generic-table>
+
+
+
 </div>
 
 
 
 
 <div class="mt-4">
-    <h4>Tokens Today</h4>
-    <table mat-table [dataSource]="tokensData" class="mat-elevation-z8 w-100">
+  <h4><b>Tokens Today</b></h4>
+  <!-- <table mat-table [dataSource]="tokensData" class="mat-elevation-z8 w-100">
       
-        <!-- Time Column -->
         <ng-container matColumnDef="token">
           <th mat-header-cell *matHeaderCellDef> Token# </th>
           <td mat-cell *matCellDef="let element"> {{element.token}} </td>
         </ng-container>
       
-        <!-- Patient Column -->
         <ng-container matColumnDef="patient">
           <th mat-header-cell *matHeaderCellDef> Patient Name </th>
           <td mat-cell *matCellDef="let element"> {{element.patient}} </td>
         </ng-container>
 
-              <!-- Doctor Column -->
               <ng-container matColumnDef="doctor">
                 <th mat-header-cell *matHeaderCellDef> Doctor Name </th>
                 <td mat-cell *matCellDef="let element"> {{element.doctor}} </td>
@@ -106,7 +128,11 @@
       
         <tr mat-header-row *matHeaderRowDef="displayedTokensColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedTokensColumns"></tr>
-      </table>
-      
-      
+      </table> -->
+
+
+  <app-generic-table [data]="tokensData" [columns]="displayedTokensColumns" [showActions]="true"
+    [totalRecords]="tokneTotalRecords"></app-generic-table>
+
+
 </div>

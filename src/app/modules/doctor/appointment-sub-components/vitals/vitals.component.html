@@ -1,1 +1,156 @@
-<p>vitals works!</p>
+<div class="row justify-content-end mb-3">
+    <div class="col-4">
+        <select class="form-select" id="type" (change)="changeDates($event)">
+            <option [value]="null" selected disabled>Previous Visits</option>
+            <option *ngFor="let previousDate of previousDates" [value]="previousDate.id">{{previousDate.name}}</option>
+        </select>
+    </div>
+</div>
+<p-tabView>
+    <form (ngSubmit)="onSubmit()" [formGroup]="vitalForm">
+        <div class="d-flex flex-column">
+            <div class="row">
+                <div class="col-3">
+                    <label for="name"><small>Pulse heart rate</small></label>
+                    <input class="form-control" pInputText type="number" formControlName="pulseHeartRate" name=""
+                        id="pulseHeartRate" (click)="openMenu('pulseHeartRate')">
+                    <div *ngIf="showMenu === 'pulseHeartRate' && action ==='update'">
+                        <label for="name"><small>Reason</small></label>
+                        <input class="form-control " type="text" #phr formControlName="pulseHeartRateReason"><br>
+                        <!-- <input class="form-control " type="text" #phr (blur)="addReason('pulseHeartRate',phr.value)"><br> -->
+                        <!-- <button class="save-button" (click)="saveResion(phr.value);closeMenu()">Save</button> -->
+                    </div>
+                </div>
+                <div class="col-3">
+                    <label for="name"><small>Temperature °C To °F</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="temperature"
+                        id="temperature" (click)="openMenu('temperature')">
+                        <div *ngIf="showMenu === 'temperature' && action ==='update'">
+                            <label for="name"><small>Reason</small></label>
+                            <input class="form-control" type="text" formControlName="temperatureReason"><br>
+                            <!-- <input class="form-control " type="text" #temp (blur)="addReason('temperature',temp.value)"><br> -->
+                            <!-- <button class="save-button" (click)="saveResion(temp.value);closeMenu()">Save</button> -->
+                        </div>
+                </div>
+                <div class="col-3">
+                    <label for="name"><small>Blood pressure</small></label>
+                    <input class="form-control" pInputText type="text" name="" formControlName="bloodPressure"
+                        id="bloodPressure" (click)="openMenu('bloodPressure')">
+                        <div *ngIf="showMenu === 'bloodPressure' && action ==='update'">
+                            <label for="name"><small>Reason</small></label>
+                            <input class="form-control " type="text" formControlName="bloodPressureReason"><br>
+                            <!-- <input class="form-control " type="text" #bp (blur)="addReason('bloodPressure',bp.value)"><br> -->
+                            <!-- <button class="save-button" (click)="saveResion(bp.value);closeMenu()">Save</button> -->
+                        </div>
+                </div>
+                <div class="col-3">
+                    <label for="name"><small>Diastolic Blood Pressure</small></label>
+                    <input class="form-control" pInputText type="number" name=""
+                        formControlName="diastolicBloodPressure" id="diastolicBloodPressure" (click)="openMenu('diastolicBloodPressure')">
+                        <div *ngIf="showMenu === 'diastolicBloodPressure' && action ==='update'">
+                            <label for="name"><small>Reason</small></label>
+                            <input class="form-control " type="text" formControlName="diastolicBloodPressureReason"><br>
+                            <!-- <input class="form-control " type="text" #dbP (blur)="addReason('diastolicBloodPressure',dbP.value)"><br> -->
+                            <!-- <button class="save-button" (click)="saveResion(dbP.value);closeMenu()">Save</button> -->
+                        </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-3">
+                    <label for="respiratoryRate"><small>Respiratory Rate</small></label>
+                    <input class="form-control" pInputText type="number" formControlName="respiratoryRate" (click)="openMenu('respiratoryRate')">
+                    <div *ngIf="showMenu === 'respiratoryRate' && action ==='update'">
+                        <label for="name"><small>Reason</small></label>
+                        <input class="form-control " type="text" #rRate formControlName="respiratoryRateReason"><br>
+                        <!-- <input class="form-control " type="text" #rRate (blur)="addReason('respiratoryRate',rRate.value)"><br> -->
+                        <!-- <button class="save-button" (click)="saveResion(rRate.value);closeMenu()">Save</button> -->
+                    </div>
+                </div>
+                <div class="col-3">
+                    <label for="bloodSugar"><small>Blood Sugar</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="bloodSugar" (click)="openMenu('bloodSugar')">
+                    <div *ngIf="showMenu === 'bloodSugar' && action ==='update'">
+                        <label for="name"><small>Reason</small></label>
+                        <input class="form-control " type="text" #bS formControlName="bloodSugarReason"><br>
+                        <!-- <input class="form-control " type="text" #bS (blur)="addReason('bloodSugar',bS.value)"><br> -->
+                        <!-- <button class="save-button" (click)="saveResion(bS.value);closeMenu()">Save</button> -->
+                    </div>
+                </div>
+                <div class="col-3">
+                    <label for="weight"><small>Weight(in kg e.g:70)</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="weight" id="weight" (click)="openMenu('weight')">
+                    <div *ngIf="showMenu === 'weight' && action ==='update'">
+                        <label for="name"><small>Reason</small></label>
+                        <input class="form-control " type="text" #weight formControlName="weightReason"><br>
+                        <!-- <input class="form-control " type="text" #weight (blur)="addReason('weight',weight.value)"><br> -->
+                        <!-- <button class="save-button" (click)="saveResion(weight.value);closeMenu()">Save</button> -->
+                    </div>
+                </div>
+                <div class="col-3">
+                    <label for="height"><small>Height Feet To Cm</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="height" id="height" (click)="openMenu('height')">
+                    <div *ngIf="showMenu === 'height' && action ==='update'">
+                        <label for="name"><small>Reason</small></label>
+                        <input class="form-control " type="text" #height formControlName="heightReason"><br>
+                        <!-- <input class="form-control " type="text" #height (blur)="addReason('height',height.value)"><br> -->
+                        <!-- <button class="save-button" (click)="saveResion(height.value);closeMenu()">Save</button> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-4">
+                    <label for="bodyMassIndex"><small>Body Mass Index (BMI)</small></label>
+                    <input class="form-control" pInputText type="number" formControlName="bodyMassIndex" (click)="openMenu('bodyMassIndex')">
+                    <div *ngIf="showMenu === 'bodyMassIndex' && action ==='update'">
+                        <label for="name"><small>Reason</small></label>
+                        <input class="form-control " type="text" #bsi formControlName="bodyMassIndexReason"><br>
+                        <!-- <input class="form-control " type="text" #bsi (blur)="addReason('bodyMassIndex',bsi.value)"><br> -->
+                        <!-- <button class="save-button" (click)="saveResion(bsi.value);closeMenu()">Save</button> -->
+                    </div>
+                </div>
+                <div class="col-4">
+                    <label for="oxygenSaturation"><small>Oxygen Saturation</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="oxygenSaturation" (click)="openMenu('oxygenSaturation')">
+                    <div *ngIf="showMenu === 'oxygenSaturation' && action ==='update'">
+                        <label for="name"><small>Reason</small></label>
+                        <input class="form-control " type="text" #os formControlName="oxygenSaturationReason"><br>
+                        <!-- <input class="form-control " type="text" #os (blur)="addReason('oxygenSaturation',os.value)"><br> -->
+                        <!-- <button class="save-button" (click)="saveResion(os.value);closeMenu()">Save</button> -->
+                    </div>
+                </div>
+                <div class="col-4">
+                    <label for="bodySurfaceArea"><small>Body Surface Area (BSA)</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="bodySurfaceArea"
+                        id="bodySurfaceArea" (click)="openMenu('bodySurfaceArea')">
+                        <div *ngIf="showMenu === 'bodySurfaceArea' && action ==='update'">
+                            <label for="name"><small>Reason</small></label>
+                            <input class="form-control " type="text" #bsa formControlName="bodySurfaceAreaReason"><br>
+                            <!-- <input class="form-control " type="text" #bsa (blur)="addReason('bodySurfaceArea',bsa.value)"><br> -->
+                            <!-- <button class="save-button" (click)="saveResion(bsa.value);closeMenu()">Save</button> -->
+                        </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="bottom">
+            <div>
+                <label htmlFor="improvement">Improvement</label>
+                <div class="procedure-select-div" name="improvement">
+                    <p-treeSelect class="md:w-20rem w-full" containerStyleClass="w-full"
+                        placeholder="Select Improvement"></p-treeSelect>
+                </div>
+            </div>
+            <div class="d-flex flex-column">
+                <label htmlFor="date">Recomended Follow-up Appointment Date</label>
+                <div class="procedure-select-div" name="improvement">
+                    <p-calendar id="date" class="datePicker" [showIcon]="true"></p-calendar>
+                </div>
+            </div>
+            <div class="d-flex">
+                <button class="save-button">Save & Print</button>
+                <button class="save-button">Save</button>
+            </div>
+        </div>
+    </form>
+</p-tabView>

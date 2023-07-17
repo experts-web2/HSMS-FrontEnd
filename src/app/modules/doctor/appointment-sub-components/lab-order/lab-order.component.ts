@@ -1,4 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AlertService } from 'src/app/Services/alert/alert.service';
+import { TestService } from 'src/app/Services/test-service/test.service';
+import { TestCategoryService } from 'src/app/Services/testCategory-service/test-category.service';
+import { Roles } from 'src/app/constants/enums/Roles-Enum';
 
 @Component({
   selector: 'app-lab-order',
@@ -6,200 +11,110 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./lab-order.component.scss']
 })
 export class LabOrderComponent implements OnInit {
-  tabs:any[] = [
-    {
-      id:"1",
-      name:"Blood"
-    },
-    {
-      id:"2",
-      name:"Asitic FLuid"
-    },
-    {
-      id:"3",
-      name:"Scrap"
-    },
-    {
-      id:"4",
-      name:"Serum"
-    },
-    {
-      id:"5",
-      name:"Haematology"
-    },
-    {
-      id:"6",
-      name:"Montoux"
-    },
-    {
-      id:"7",
-      name:"CSF"
-    },
-    {
-      id:"8",
-      name:"Tissue"
-    },
-  ];
+  tabs: any[] = [];
+  roles = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.Sweeper, name: 'Sweeper' }];
+  testPriorty = [{ id: 1, name: 'Routine' }, { id: 2, name: 'Urgent' }];
 
-  testsList: any[] = [
-    {
-      categoryId:'1',
-      tests:[
-        {
-          id: '3',
-          name: 'Absolute Eosinophil Count'
-        },
-        {
-          id: '17',
-          name: 'Absolute Eosinphil Count'
-        },
-        {
-          id: '21',
-          name: 'AFB Stain (BLood)'
-        },
-        {
-          id: '22',
-          name: 'Agranulocyte Count'
-        },
-        {
-          id: '2',
-          name: 'APTT (Controll) (Blood)'
-        },
-      ]
-    },
-    {
-      categoryId:'2',
-      tests:[
-        {
-          id: '3',
-          name: 'Absolute Eosinophil Count a'
-        },
-        {
-          id: '17',
-          name: 'Absolute Eosinphil Count a'
-        },
-        {
-          id: '21',
-          name: 'AFB Stain (BLood) a'
-        },
-        {
-          id: '22',
-          name: 'Agranulocyte Count a'
-        },
-        {
-          id: '2',
-          name: 'APTT (Controll) (Blood) a'
-        },
-      ]
-    },
-    {
-      categoryId:'3',
-      tests:[
-        {
-          id: '3',
-          name: 'Absolute Eosinophil Count v'
-        },
-        {
-          id: '17',
-          name: 'Absolute Eosinphil Count v'
-        },
-        {
-          id: '21',
-          name: 'AFB Stain (BLood) v'
-        },
-        {
-          id: '22',
-          name: 'Agranulocyte Count v'
-        },
-        {
-          id: '2',
-          name: 'APTT (Controll) (Blood) v'
-        },
-      ]
-    },
-    {
-      categoryId:'4',
-      tests:[
-        {
-          id: '3',
-          name: 'Absolute Eosinophil Count h'
-        },
-        {
-          id: '17',
-          name: 'Absolute Eosinphil Count h'
-        },
-        {
-          id: '21', 
-          name: 'AFB Stain (BLood) h'
-        },
-        {
-          id: '22',
-          name: 'Agranulocyte Count h'
-        },
-        {
-          id: '2',
-          name: 'APTT (Controll) (Blood) h'
-        },
-      ]
-    },
-    {
-      categoryId:'5',
-      tests:[
-        {
-          id: '3',
-          name: 'Absolute Eosinophil Count y'
-        },
-        {
-          id: '17',
-          name: 'Absolute Eosinphil Count y'
-        },
-        {
-          id: '21',
-          name: 'AFB Stain (BLood) y'
-        },
-        {
-          id: '22',
-          name: 'Agranulocyte Count y'
-        },
-        {
-          id: '2',
-          name: 'APTT (Controll) (Blood) y'
-        },
-      ]
-    },
-  ];
+
+  testsList: any[] = [];
   tabsToView: any[] = [];
   testsListToShow: any[] = [];
 
-  constructor(){
+  checkboxForm!: FormGroup;
+  checkboxes: any[] = [];
 
+  constructor(private formBuilder: FormBuilder,
+    private readonly testCategoryService: TestCategoryService,
+    private readonly testsService: TestService,
+    private readonly alertService: AlertService,
+  ) {
+    this.checkboxForm = this.formBuilder.group({
+      checkboxes: new FormControl([]),
+    });
   }
 
   ngOnInit(): void {
-    this.transformForview();
+    
+    this.getTests()
+    this.getTestCategories();
   }
 
-  transformForview(){
-    this.tabsToView = this.tabs.map(x => {return {...x, active: false}});
-    this.tabsToView[0].active = true;
-    this.getVisibleTests(this.tabsToView[0].id);
+  getTestCategories() {
+    this.testCategoryService.getCategories().subscribe({
+      next: (x: any) => {
+        this.tabsToView = x.data.map((x: any) => { return { ...x, active: false } });
+        this.tabsToView[0].active = true;
+        this.getVisibleTests(this.tabsToView[0].id);
+      },
+      error: (err: Error) => {
+        this.alertService.error('Something went wrong while getting lab test categories', 'Error');
+      }
+    })
   }
 
-  active(id: string){
+  getTests(): void {
+    this.testsService.getTests().subscribe({
+      next: (x: any) => {
+        this.testsList = x.data;
+      },
+      error: (err: Error) => {
+        this.alertService.error('Somthing went wrong while getting Lab Tests.', 'Error');
+      }
+    })
+  }
+
+
+  active(id: string) {
     this.tabsToView.map(x => {
       x.active = false
-      if(x.id === id) x.active = true;
+      if (x.id === id) x.active = true;
     });
     this.getVisibleTests(id);
   }
-  
-  getVisibleTests(categoryId : string){
-    this.testsListToShow = this.testsList.find(x => x.categoryId === categoryId).tests;
+
+  getVisibleTests(categoryId: string) {
+    this.testsListToShow = this.testsList.filter(x => x.testCategoryId === categoryId);
   }
+
+  selectLabTest(event: any) {
+
+  }
+
+
+
+  selectAllCheckboxes(event: any): void {
+    if (event.target.checked) {
+      const selectedCheckboxes = this.checkboxes.map(checkbox => checkbox.id);
+      this.checkboxForm.get('checkboxes')?.setValue(selectedCheckboxes);
+    } else {
+      this.checkboxForm.get('checkboxes')?.setValue([]);
+    }
+
+    console.log(this.checkboxForm.value)
+  }
+
+  updateSelectedCheckboxes(event: any): void {
+    console.log('event', event);
+    const selectedCheckboxes = this.checkboxForm.get('checkboxes')?.value;
+    const checkboxValue = event.target.value;
+    if (event.target.checked) {
+        selectedCheckboxes.push(checkboxValue);
+    } else {
+      const index = selectedCheckboxes.indexOf(event.target.value);
+      if (index >= 0) {
+        selectedCheckboxes.splice(index, 1);
+      }
+    }
+    this.checkboxForm.get('checkboxes')?.setValue(selectedCheckboxes);
+
+
+    console.log(this.checkboxForm.value)
+  }
+
 
 }
 
-interface ILabtestCategories{
-  id:string;
-  name: string;  
+interface ILabtestCategories {
+  id: string;
+  name: string;
 }

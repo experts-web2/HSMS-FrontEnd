@@ -7,6 +7,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { GenericTableComponent } from 'src/app/Shared/components/generic-table/generic-table.component';
 
 
 
@@ -18,6 +19,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     CommonModule,
     DashboardRoutingModule,
     MatCardModule,
+    GenericTableComponent,
     MatSelectModule,
     MatTableModule,
     NgxEchartsModule.forRoot({
