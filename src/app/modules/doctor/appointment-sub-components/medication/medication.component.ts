@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserStateService } from 'src/app/State/user/user.service';
 import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 
@@ -9,35 +9,54 @@ import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
   styleUrls: ['./medication.component.scss']
 })
 export class MedicationComponent {
-  prescriptionForm!: FormGroup;
+  medicationForm!: FormGroup;
   // prescreptionRequest!: IPrescriptionRequest;
   loggedInDoctor!: ILogedInUser;
+  medicationItem!: FormGroup;
   improvementOptions: any[] = [];
+  suggestions: any[]= []
   constructor(private readonly fb: FormBuilder, private readonly userStateService: UserStateService) {
-
     this.userStateService.getUserState().subscribe({
       next: (x) => {
         this.loggedInDoctor = x;
       }
+    });
+
+    this.medicationItem = this.fb.group({
+      medicineId: new FormControl<string | null>(null),
+      dosage: new FormControl<string | null>(null),
+      frequency: new FormControl<string | null>(null),
+      route: new FormControl<string | null>(null),
+      duration: new FormControl<string | null>(null),
+      instruction: new FormControl<string | null>(null),
     })
 
-    this.prescriptionForm = this.fb.group({
+    this.medicationForm = this.fb.group({
+      medicationItems: this.fb.array([this.medicationItem]),
       doctorId: new FormControl<string | null>(null, [Validators.required]),
       patientId: new FormControl<string | null>(null, [Validators.required]),
-      medicalHistory: new FormControl<string | null>(null),
-      complaint: new FormControl<string | null>(null),
-      examination: new FormControl<string | null>(null),
-      diagnosis: new FormControl<string | null>(null),
-      clinicNotes: new FormControl<string | null>(null),
-      advice: new FormControl<string | null>(null),
-      investigation: new FormControl<string | null>(null),
       followUpDate: new FormControl<Date | null>(null)
-      // procedure: new FormControl<Procedure | null>(null) 
     })
+  }
+
+  get medicationItems(): FormArray{
+      return this.medicationForm.get('medicationItems') as FormArray;
   }
 
   ngOnInit(): void {
 
+  }
+
+  search(e: any){
+
+  }
+
+  removeMedicationItem(index: any){
+    this.medicationItems.removeAt(index);
+  }
+
+  addMedicationItem(){
+    this.medicationItems.push(this.medicationItem);
   }
 
   // savePrescription(print?: boolean){
