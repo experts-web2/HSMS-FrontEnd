@@ -5,6 +5,8 @@ import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { IAddOrUpdateTest } from 'src/app/models/interfaces/addOrUpdate-test';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
+import { Observable } from 'rxjs';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +37,10 @@ export class TestService extends HttpService {
 
   getTestById(id: string){
     return this.get(`${this.baseEndPoint}/byid/${id}`);
+  }
+
+  getTestDropDown(): Observable<Array<IDropDown>>{
+    return this.get(`${this.baseEndPoint}/dropdown`);
   }
 
 }

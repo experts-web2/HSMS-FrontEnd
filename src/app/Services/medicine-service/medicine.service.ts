@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { BaseEndPoints } from '../../constants/enums/base-end-points';
 import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 
 @Injectable({
   providedIn: 'root'
@@ -30,5 +31,9 @@ export class MedicineService extends HttpService{
 
   updateMedicine(id: string, medicine: IMedicinerequest){
     return this.put(`${this.baseEndPoint}/update/${id}`, medicine)
+  }
+
+  getMedicineDropDown(): Observable<Array<IDropDown>>{
+    return this.get(`${this.baseEndPoint}/dropdown`);
   }
 }
