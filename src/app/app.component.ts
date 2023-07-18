@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   userRole: string = '';
   isAdmin!: boolean;
   logedInUser!: ILogedInUser;
+  navbarShowHide = false
 
 
 
@@ -51,5 +52,9 @@ export class AppComponent implements OnInit {
 
   logOut() {
     this.authService.logOut();
+  }
+
+  navbarToggle(){
+    this.navbarShowHide = !this.navbarShowHide
   }
 }

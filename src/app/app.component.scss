@@ -80,11 +80,33 @@
     border-radius: 4px;
     padding: 8px 15px;
 }
-
+.toggle-btn{
+    display: none;
+}
 @media only screen and (max-width: 1200px) {
     .navbar {
       display: flex;
       flex-wrap: wrap;
       height: fit-content;
     }
+    .toggle-btn{
+        display: block;
+    }
   }
+
+.fixed-navbar{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    max-width: 250px;
+    background-color: white;
+}
+.hide-navbar{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: -250px;
+    max-width: 250px;
+    background-color: white;
+}

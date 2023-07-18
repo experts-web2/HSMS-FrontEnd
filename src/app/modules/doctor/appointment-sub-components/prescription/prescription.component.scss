@@ -1,7 +1,7 @@
 .prrescription-input{
     display: flex;
     flex-direction: column;
-    margin-top: 5px;
+    margin-top: 15px;
 }
 .procedure-select-div{
     display: flex;
@@ -49,11 +49,6 @@
 //     background-color: rgba(202, 29, 29, 0.286);
 // }
 
-.bottom{
-    display: flex;
-    flex-direction: row;
-}
-
 .add-procedure{
     display: flex;
     margin-top: 30px;
@@ -79,15 +74,9 @@
 }
 
 .inner-prescription, input{
-    width: 93%;
+    width: 100%;
 }
 
-.bottom{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-content: center;
-}
 .save-button{
     background-color: #11438F;
     color: #fff;
@@ -96,12 +85,17 @@
     border-radius: 3px;
     margin: 0px 5px;
     height: 35px;
+    padding: 0 10px;
 }
 
-.datePicker{
-    height: 43.99px;
+::ng-deep .datePicker{
+    height: 38px;
+    .p-calendar-w-btn{
+        width: 100% !important;
+    }
 }
 
 p-calender,.p-calendar{
     width: 315px !important;
+    
 }

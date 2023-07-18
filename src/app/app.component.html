@@ -2,6 +2,7 @@
 <nav class="p-0" [ngClass]="">
   <div class="navbar p-0" *ngIf="showNav">
     <span class="Title">HSMS</span>
+    <div class="md:flex items-center justify-between md:gap-x-20">
     <div class=" menu-items-width d-flex justify-content-between align-items-center ">
       <a class="navButton btn btn-primary" routerLink="/dashboard">Dashboard</a>
       <a class="navButton btn btn-primary" routerLink="/register">Health Records</a>
@@ -12,15 +13,15 @@
           <a mat-menu-item>Item 1</a>
           <a mat-menu-item>Item 2</a>
         </mat-menu>       
-      </div>
-      <div class="d-flex align-items-center">
+    </div>
+      <div class="d-flex align-items-center ">
         <a class="navButton btn btn-primary creat-drop text-white" [matMenuTriggerFor]="creat">Create<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #creat="matMenu">
           <a mat-menu-item (click)="addPatient()">Patient</a>
           <a mat-menu-item>Invoice</a>
           <a mat-menu-item>Health Record</a>
         </mat-menu> 
-        <div class="search-Field d-flex position-relative">
+        <div class="search-Field d-flex position-relative border">
           <mat-icon class="position-absolute search-icon">search</mat-icon> 
           <input class="search-input" placeholder="Search">
         </div>
@@ -38,6 +39,10 @@
           <button class="navButton btn btn-primary" routerLink="/sign-up">Register</button>
         </div> -->
       </div>
+    </div>
+      <!-- <div class="toggle-btn" (click)="navbarToggle()">
+        <i class="fa fa-solid fa-bars text-xl"></i>
+      </div> -->
     </div>
 </nav>
 <div  class="outlet">

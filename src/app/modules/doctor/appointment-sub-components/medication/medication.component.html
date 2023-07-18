@@ -4,7 +4,7 @@
         <div formArrayName="medicationItems">
             <div *ngFor="let medication of medicationItems.controls; let i = index" class="flex">
                 <p class="text-2xl mr-2 font-bold">{{i+1}}</p>
-                <div [formGroupName]="i" class="grid grid-cols-7 justify-content-between gap-2 p-2">
+                <div [formGroupName]="i" class="grid grid-cols-1 md:grid-cols-7 justify-content-between gap-x-8 gap-y-2 p-2 w-full">
                     <div class="d-flex flex-column">
                         <label htmlFor="name">Name</label>
                         <p-autoComplete name="name" class="name-input" [suggestions]="suggestions" (completeMethod)="search($event)" formControlName="medicineId"></p-autoComplete>
@@ -40,7 +40,7 @@
     </div>
     <div>
         <button class="btn btn-primary d-flex align-items-center mt-4 mb-2" (click)="addMedicationItem()"><i class="pi pi-plus"></i> Drug</button>
-        <textarea rows="2" cols="93" class="mb-2" placeholder="Medication Notes" id="investigation" pInputTextarea ></textarea>
+        <textarea rows="2" cols="93" class="mb-2 w-full" placeholder="Medication Notes" id="investigation" pInputTextarea ></textarea>
         <div>
             <p-checkbox  [binary]="true" inputId="reminder" ></p-checkbox><label class="m-x-2 ml-3" for="reminder">Send Reminder</label>
         </div>
