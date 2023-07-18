@@ -9,5 +9,6 @@ export enum BaseEndPoints {
     Category = 'labtestcategory',
     Appointment = 'appointment',
     Doctor = 'doctor',
-    Prescription = 'prescription'
+    Prescription = 'prescription',
+    Vitals = 'vitals'
 }

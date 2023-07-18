@@ -23,6 +23,11 @@
         <input pInputText type="number" name="" id="price" formControlName="price" required>
         <div class="text-danger" *ngIf="(testForm.controls['price'].errors && testForm.controls['price'].touched) || (testForm.controls['price'].touched && !testForm.controls['price'].valid)"><small>Please enter price.</small></div>
     </div>
+    <div class="d-flex flex-column gap-2">
+        <label for="normalValue">Normal Test Range <span class="text-danger">*</span></label>
+        <input pInputText type="text" name="" id="price" formControlName="normalValues" required>
+        <div class="text-danger" *ngIf="(testForm.controls['normalValues'].errors && testForm.controls['normalValues'].touched) || (testForm.controls['normalValues'].touched && !testForm.controls['normalValues'].valid)"><small>Please enter normal value.</small></div>
+    </div>
     <div style="text-align: end;">
         <button class="btn btn-primary" 
         type="submit" 
@@ -30,7 +35,8 @@
         (testForm.controls['name'].errors || !testForm.controls['name'].valid) && 
         (testForm.controls['description'].errors || !testForm.controls['description'].valid) && 
         (testForm.controls['testCategoryId'].errors || !testForm.controls['testCategoryId'].valid) && 
-        (testForm.controls['price'].errors || !testForm.controls['price'].valid) 
+        (testForm.controls['price'].errors || !testForm.controls['price'].valid) &&
+        (testForm.controls['normalValues'].errors || !testForm.controls['normalValues'].valid) 
         "
         >{{action === 'add'?'Add Test':'Update Test'}}</button>
     </div>

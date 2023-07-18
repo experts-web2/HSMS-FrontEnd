@@ -36,7 +36,8 @@ export class TestsFormComponent implements OnInit  {
       name: new FormControl<string>('', [Validators.required]),
       testCategoryId: new FormControl<string>('', [Validators.required]),
       description: new FormControl<string>('', [Validators.required]),
-      price: new FormControl<number | null>(null, [Validators.required])
+      price: new FormControl<number | null>(null, [Validators.required]),
+      normalValues: new FormControl<number | null>(null, [Validators.required])
     })
 
     if(this.action === 'update' && this.test){
@@ -46,6 +47,7 @@ export class TestsFormComponent implements OnInit  {
           testCategoryId: this.test.testCategoryId,
           description: this.test.description,
           price: this.test.price,
+          normalValues: this.test.normalValues,
         });
     }
   }
@@ -57,6 +59,7 @@ export class TestsFormComponent implements OnInit  {
       name: testFormValue.name,
       description: testFormValue.description,
       price: testFormValue.price,
+      normalValues: testFormValue.normalValues,
       testCategoryId: testFormValue.testCategoryId
     }
     if(this.action === 'add'){

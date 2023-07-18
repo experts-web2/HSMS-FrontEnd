@@ -15,13 +15,14 @@ export class LabOrderComponent implements OnInit {
   roles = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.Sweeper, name: 'Sweeper' }];
   testPriorty = [{ id: 1, name: 'Routine' }, { id: 2, name: 'Urgent' }];
 
-
   testsList: any[] = [];
   tabsToView: any[] = [];
   testsListToShow: any[] = [];
 
   checkboxForm!: FormGroup;
   checkboxes: any[] = [];
+  tabId: string = '';
+  selectedCategories: any[] = [];
 
   constructor(private formBuilder: FormBuilder,
     private readonly testCategoryService: TestCategoryService,
@@ -29,14 +30,14 @@ export class LabOrderComponent implements OnInit {
     private readonly alertService: AlertService,
   ) {
     this.checkboxForm = this.formBuilder.group({
-      checkboxes: new FormControl([]),
+      labTests: new FormControl([]),
     });
   }
 
   ngOnInit(): void {
-    
-    this.getTestCategories();
+
     this.getTests()
+    this.getTestCategories();
   }
 
   getTestCategories() {
@@ -65,6 +66,8 @@ export class LabOrderComponent implements OnInit {
 
 
   active(id: string) {
+    console.log('id', id)
+    this.tabId = id
     this.tabsToView.map(x => {
       x.active = false
       if (x.id === id) x.active = true;
@@ -84,39 +87,48 @@ export class LabOrderComponent implements OnInit {
 
   selectAllCheckboxes(event: any): void {
     if (event.target.checked) {
-      const selectedCheckboxes = this.checkboxes.map(checkbox => checkbox.id);
-      this.checkboxForm.get('checkboxes')?.setValue(selectedCheckboxes);
+      const selectedCheckboxes = this.testsListToShow.forEach(checkbox => {
+        if (checkbox.testCategoryId === this.tabId) {
+          checkbox.selected = true
+        }
+      });
+      console.log(selectedCheckboxes)
+      this.checkboxForm.get('labTests')?.setValue(selectedCheckboxes);
     } else {
-      this.checkboxForm.get('checkboxes')?.setValue([]);
+      
+      this.checkboxForm.get('labTests')?.setValue([]);
     }
 
     console.log(this.checkboxForm.value)
   }
 
-  updateSelectedCheckboxes(event: any ,selectedValue:any): void {
-    const checkboxValue = event.target.value;    
-    const selectedCheckboxes = this.checkboxForm.get('checkboxes')?.value;
+  updateSelectedCheckboxes(event: any, selectedValue: any): void {
+    const checkboxValue = event.target.value;
+    const selectedCheckboxes = this.checkboxForm.get('labTests')?.value;
     if (event.target.checked) {
-        selectedCheckboxes.push(checkboxValue);
-        if(event.target.value === selectedValue.id){
-          Object.assign(selectedValue ,{selected:true})
-        }
+      selectedCheckboxes.push(checkboxValue);
+      if (event.target.value === selectedValue.id) {
+        Object.assign(selectedValue, { selected: true })
+      }
     } else {
       const index = selectedCheckboxes.indexOf(event.target.value);
       if (index >= 0) {
         selectedCheckboxes.splice(index, 1);
-        Object.assign(selectedValue,{selected:false})
-        
+        Object.assign(selectedValue, { selected: false })
+
       }
     }
-    this.checkboxForm.get('checkboxes')?.setValue(selectedCheckboxes);
+    this.checkboxForm.get('labTests')?.setValue(selectedCheckboxes);
     console.log(this.checkboxForm.value)
   }
 
-  formSubmit(){
-    console.log(this.checkboxForm.value)
-  }
+  formSubmit() {
 
+    let labOrderPayload = {
+
+    }
+    console.log(this.checkboxForm.controls['labTests'].value)
+  }
 
 }
 
