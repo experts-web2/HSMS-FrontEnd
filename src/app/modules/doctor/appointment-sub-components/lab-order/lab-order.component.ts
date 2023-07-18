@@ -35,14 +35,14 @@ export class LabOrderComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.getTests()
     this.getTestCategories();
+    this.getTests()
   }
 
   getTestCategories() {
-    this.testCategoryService.getCategories().subscribe({
+    this.testCategoryService.getTestCategoryList().subscribe({
       next: (x: any) => {
-        this.tabsToView = x.data.map((x: any) => { return { ...x, active: false } });
+        this.tabsToView = x.map((x: any) => { return { ...x, active: false } });
         this.tabsToView[0].active = true;
         this.getVisibleTests(this.tabsToView[0].id);
       },
@@ -93,21 +93,27 @@ export class LabOrderComponent implements OnInit {
     console.log(this.checkboxForm.value)
   }
 
-  updateSelectedCheckboxes(event: any): void {
-    console.log('event', event);
+  updateSelectedCheckboxes(event: any ,selectedValue:any): void {
+    const checkboxValue = event.target.value;    
     const selectedCheckboxes = this.checkboxForm.get('checkboxes')?.value;
-    const checkboxValue = event.target.value;
     if (event.target.checked) {
         selectedCheckboxes.push(checkboxValue);
+        if(event.target.value === selectedValue.id){
+          Object.assign(selectedValue ,{selected:true})
+        }
     } else {
       const index = selectedCheckboxes.indexOf(event.target.value);
       if (index >= 0) {
         selectedCheckboxes.splice(index, 1);
+        Object.assign(selectedValue,{selected:false})
+        
       }
     }
     this.checkboxForm.get('checkboxes')?.setValue(selectedCheckboxes);
+    console.log(this.checkboxForm.value)
+  }
 
-
+  formSubmit(){
     console.log(this.checkboxForm.value)
   }
 

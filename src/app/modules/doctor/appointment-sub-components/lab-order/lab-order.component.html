@@ -19,6 +19,11 @@
         </select>
     </div>
 </div>
+<div *ngFor="let checkbox of testsListToShow">
+    <div *ngIf="checkbox.selected">
+        {{ checkbox.name }}
+    </div>
+</div>
 <div class="d-flex">
     <div class="col-3">
         <div class="tab" *ngFor="let tab of tabsToView" [ngClass]="tab.active ? 'activeTab': ''"
@@ -27,17 +32,25 @@
         </div>
     </div>
 
-    <form [formGroup]="checkboxForm">
-        <!-- <div>
-            <label>
-                <input type="checkbox" (change)="selectAllCheckboxes($event)"> Select All
-            </label>
-        </div> -->
-        <div *ngFor="let checkbox of testsListToShow">
-            <label>
-                <input type="checkbox" [value]="checkbox.id" (change)="updateSelectedCheckboxes($event)">
-                {{ checkbox.name }}
-            </label>
-        </div>
-    </form>
+    <div class="ms-4">
+        <form [formGroup]="checkboxForm" (ngSubmit)="formSubmit()">
+            <div>
+                <label>
+                    <input type="checkbox" (change)="selectAllCheckboxes($event)"> Select All
+                </label>
+            </div>
+            <div *ngFor="let checkbox of testsListToShow">
+                <div>
+                    <input type="checkbox" [value]="checkbox.id" (change)="updateSelectedCheckboxes($event,checkbox)">
+                    {{ checkbox.name }}
+                </div>
+            </div>
+    
+            <div class="bottom">
+                <div class="d-flex">
+                    <button class="save-button">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
