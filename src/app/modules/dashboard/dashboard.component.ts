@@ -206,9 +206,10 @@ export class DashboardComponent implements OnInit {
 
   addToken(){
     this.dialog.open(AddTokenModalComponent, {
-      maxWidth: '100vw',
-      width: 'calc(100vw - 515px)',
-      height: 'calc(100vh - 35px)',
+      // maxWidth: '100vw',
+      width: '90vw',
+      maxWidth: '',
+      height: '90vh',
       data: {},
     });    
   }

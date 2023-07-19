@@ -19,17 +19,13 @@
         width: 300px;
         border-radius: 20px;
         height: 30px;
-        padding-left: 10px;
-        border: 1px solid #cfcfcf ;
+        // border: 1px solid #cfcfcf ;
     }
     .pulse{
         height: 35px;
-        width: 115px;
+        width: 100%;
     }
     .appointmentField{
-        display: grid;
-        grid-template-columns: repeat(5,1fr);
-        grid-template-rows: auto;
         column-gap: 20px;
         row-gap: 10px;
     }
