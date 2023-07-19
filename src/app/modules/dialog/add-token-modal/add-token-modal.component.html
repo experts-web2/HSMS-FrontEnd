@@ -136,7 +136,7 @@
         <div class="w-50 mt-2 ms-auto d-flex justify-content-between align-items-center">
             <label for="total_discount">Paid: </label>
             <span>Rs. </span>
-            <input type="text" class="pulse" pInputText placeholder="1500" formControlName="amountPaid"/>
+            <input type="number" class="pulse" pInputText placeholder="1500" formControlName="amountPaid"/>
 
         </div>
         <div class="d-flex ">
@@ -144,17 +144,17 @@
                 <select class="form-select" name="description"  formControlName="paymentType">
                     <option [value]="null" [defaultSelected]="true" disabled>Select a payment Type</option>
                     <option *ngFor="let item of paymentType"
-                        [value]="item.id">{{item.label}}</option>
+                        [ngValue]="item.id">{{item.label}}</option>
                 </select>
         </div>
-        <div>
+        <!-- <div>
             <input formControlName="payment_notification" type="checkbox" name="payment_notification">
             <label for="payment_notification" class="ms-2">Send Payment Notification</label>
-        </div>
-        <div class="d-flex justify-content-end">
+        </div> -->
+        <!-- <div class="d-flex justify-content-end">
             <button class="btn btn-primary d-flex align-items-center ms-auto">Add Payment<mat-icon
                     class="ms-2">add_box</mat-icon></button>
-        </div>
+        </div> -->
 
         </div>
         <div>

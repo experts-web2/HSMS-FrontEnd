@@ -176,7 +176,7 @@ export class AddTokenModalComponent implements OnInit {
         patientId: this.addTokenForm.controls['patientId'].value,
         tokenDetails: [this.getTokenDetail()],
         doctorId: this.addTokenForm.controls['doctorId'].value,
-        patientCheckedIn: true
+        patientCheckedIn: this.addTokenForm.controls['patientCheckedIn'].value ?  false : true
       }
       this.tokenService.addToken(tokenpayload).subscribe({
         next: (x) => {
