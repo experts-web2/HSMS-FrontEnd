@@ -5,6 +5,7 @@ export enum BaseEndPoints {
     Messages = 'message',
     Account = 'account',
     Medicine = 'medicine',
+    Medication = 'medication',
     Test = 'labtest',
     Category = 'labtestcategory',
     Appointment = 'appointment',

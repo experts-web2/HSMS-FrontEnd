@@ -38,7 +38,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
     MessagesModule,
     ButtonModule,
     AddPrescriptionDialogueComponent,
-    PrimeNgModule
+    PrimeNgModule,
   ],
   providers:[DialogService,
     DynamicDialogRef,]

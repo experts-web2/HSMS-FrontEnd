@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { BaseEndPoints } from '../constants/enums/base-end-points';
 import { IAddOrUpdateDoctor, IAddOrUpdateDoctorRequest } from '../models/interfaces/addOrUpdate-Doctor';
 import { IFetchRequest } from '../models/interfaces/fetchTableRequest';
+import { IDropDown } from '../models/interfaces/Dropdown';
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,9 @@ export class DoctorService extends HttpService {
 
   isEmailInUse(email: string): Observable<boolean>{
     return super.get(`${BaseEndPoints.User}/checkemail/${email}`);
+  }
+
+  getDoctorDropDown():Observable<Array<IDropDown>>{
+    return this.get(`${this.baseEndPoints}/dropdown`)
   }
 }
