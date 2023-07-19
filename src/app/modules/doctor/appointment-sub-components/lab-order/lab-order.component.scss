@@ -52,3 +52,12 @@
   display: flex;
   flex-direction: row;
 }
+
+
+.check-box-label:has(.check-box-style:checked){
+  background-color: #2887ed;
+  color: #fff;
+}
+.check-box-label{
+  
+}
