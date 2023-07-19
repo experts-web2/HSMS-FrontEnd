@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { PatientService } from 'src/app/Services/patient/patient.service';
 import { DoctorService } from '../../../Services/doctor.service';
 import { TokenTypes } from '../../../constants/Constants/TokenTypes';
@@ -10,6 +10,7 @@ import { TestService } from '../../../Services/test-service/test.service';
 import { PaymentTypes } from 'src/app/constants/enums/PaymenTypes';
 import { TokenService } from 'src/app/Services/token.service';
 import { IAddOrUpdateToken, IInvoice, IInvoiceItem, ITokenDetail } from 'src/app/models/interfaces/addOrUpdate-Token';
+import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
 
 @Component({
   selector: 'app-add-token-modal',
@@ -62,7 +63,7 @@ export class AddTokenModalComponent implements OnInit {
 
   paymentType : Array<{id: number, label: string}> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' },{ id: PaymentTypes.Cheque, label: 'Cheque'} ]
 
-  constructor(public dialogRef: MatDialogRef<AddTokenModalComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private readonly patientService: PatientService, private readonly fb: FormBuilder, private readonly doctorService: DoctorService, private readonly testService: TestService, private readonly tokenService: TokenService) {
+  constructor(public dialogRef: MatDialogRef<AddTokenModalComponent>, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, private readonly patientService: PatientService, private readonly fb: FormBuilder, private readonly doctorService: DoctorService, private readonly testService: TestService, private readonly tokenService: TokenService) {
     this.invoiceDescriptionForm = this.fb.group({
       paidAmount: new FormControl<number | null>(null, [Validators.required]),
       discountAmount: new FormControl<number | null>(0, [Validators.required]),
@@ -77,7 +78,7 @@ export class AddTokenModalComponent implements OnInit {
       tokenTypes: new FormControl<number | null>(null, [Validators.required]),
       doctorId: new FormControl<string | null>(null, [Validators.required]),
       totalDiscount: new FormControl<number | null>(null, [Validators.required]),
-      paymentType: new FormControl<number | null>(null, [Validators.required]),
+      paymentType: new FormControl<number | null>(1, [Validators.required]),
       amountPaid: new FormControl<number | null>(null, [Validators.required]),
       grandTotal: new FormControl<number | null>(null, [Validators.required]),
       pulseHeartRate: new FormControl<number | null>(null, [Validators.required]),
@@ -91,7 +92,7 @@ export class AddTokenModalComponent implements OnInit {
       bodySurfaceArea: new FormControl<number | null>(null, [Validators.required]),
       oxygenSaturation: new FormControl<number | null>(null, [Validators.required]),
       payment_notification: new FormControl<boolean | null>(null, [Validators.required]),
-      patientCheckedIn: new FormControl<boolean | null>(null, [Validators.required]),
+      patientCheckedIn: new FormControl<boolean | null>(false, [Validators.required]),
       confirmation: new FormControl('', [Validators.required]),
       invoiceItems: this.fb.array([this.invoiceDescriptionForm]),
     });
@@ -176,7 +177,7 @@ export class AddTokenModalComponent implements OnInit {
         patientId: this.addTokenForm.controls['patientId'].value,
         tokenDetails: [this.getTokenDetail()],
         doctorId: this.addTokenForm.controls['doctorId'].value,
-        patientCheckedIn: this.addTokenForm.controls['patientCheckedIn'].value ?  false : true
+        patientCheckedIn: this.addTokenForm.controls['patientCheckedIn'].value ?  this.addTokenForm.controls['patientCheckedIn'].value : true
       }
       this.tokenService.addToken(tokenpayload).subscribe({
         next: (x) => {
@@ -290,6 +291,12 @@ export class AddTokenModalComponent implements OnInit {
     }
     totalDiscount?.setValue(totalDiscountTotal);
     grandTotal?.setValue(totalGrandTotal - totalDiscountTotal);
+  }
+
+  addPatient() {
+    const dialogRef = this.dialog.open(PatientFormComponent, {
+      width: '600px'
+    })
   }
 
 

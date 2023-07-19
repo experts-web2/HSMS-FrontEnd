@@ -4,6 +4,8 @@ import { AlertService } from 'src/app/Services/alert/alert.service';
 import { TestService } from 'src/app/Services/test-service/test.service';
 import { TestCategoryService } from 'src/app/Services/testCategory-service/test-category.service';
 import { Roles } from 'src/app/constants/enums/Roles-Enum';
+import { ILabeTest } from 'src/app/models/interfaces/labTest';
+import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 
 @Component({
   selector: 'app-lab-order',
@@ -15,23 +17,21 @@ export class LabOrderComponent implements OnInit {
   roles = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.Sweeper, name: 'Sweeper' }];
   testPriorty = [{ id: 1, name: 'Routine' }, { id: 2, name: 'Urgent' }];
 
-  testsList: any[] = [];
-  tabsToView: any[] = [];
-  testsListToShow: any[] = [];
+  testsList: ILabTestList[] = [];
+  tabsToView: ILabtestCategoriesTabs[] = [];
+  testsListToShow: ILabTestList[] = [];
+  allSelected: boolean = false;
 
-  checkboxForm!: FormGroup;
   checkboxes: any[] = [];
   tabId: string = '';
   selectedCategories: any[] = [];
+  selectedTestsIds: Array<string> = []
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
     private readonly testCategoryService: TestCategoryService,
     private readonly testsService: TestService,
     private readonly alertService: AlertService,
   ) {
-    this.checkboxForm = this.formBuilder.group({
-      labTests: new FormControl([]),
-    });
   }
 
   ngOnInit(): void {
@@ -73,6 +73,7 @@ export class LabOrderComponent implements OnInit {
       if (x.id === id) x.active = true;
     });
     this.getVisibleTests(id);
+    this.selectAllChecked();
   }
 
   getVisibleTests(categoryId: string) {
@@ -87,39 +88,28 @@ export class LabOrderComponent implements OnInit {
 
   selectAllCheckboxes(event: any): void {
     if (event.target.checked) {
-      const selectedCheckboxes = this.testsListToShow.forEach(checkbox => {
+       this.testsListToShow.forEach(checkbox => {
         if (checkbox.testCategoryId === this.tabId) {
-          checkbox.selected = true
+          checkbox.selected = true;
+          if(!this.selectedTestsIds.includes(checkbox.id))this.selectedTestsIds.push(checkbox.id);
         }
       });
-      console.log(selectedCheckboxes)
-      this.checkboxForm.get('labTests')?.setValue(selectedCheckboxes);
+      
     } else {
       
-      this.checkboxForm.get('labTests')?.setValue([]);
+      this.testsListToShow.forEach(checkbox => {
+        if (checkbox.testCategoryId === this.tabId) {
+          checkbox.selected = false;
+          if(this.selectedTestsIds.includes(checkbox.id)) this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== checkbox.id);
+        }
+      });
     }
 
-    console.log(this.checkboxForm.value)
   }
 
-  updateSelectedCheckboxes(event: any, selectedValue: any): void {
-    const checkboxValue = event.target.value;
-    const selectedCheckboxes = this.checkboxForm.get('labTests')?.value;
-    if (event.target.checked) {
-      selectedCheckboxes.push(checkboxValue);
-      if (event.target.value === selectedValue.id) {
-        Object.assign(selectedValue, { selected: true })
-      }
-    } else {
-      const index = selectedCheckboxes.indexOf(event.target.value);
-      if (index >= 0) {
-        selectedCheckboxes.splice(index, 1);
-        Object.assign(selectedValue, { selected: false })
-
-      }
-    }
-    this.checkboxForm.get('labTests')?.setValue(selectedCheckboxes);
-    console.log(this.checkboxForm.value)
+  updateSelectedCheckboxes(checked: boolean, selectedValue: ILabTestList): void {    
+    if(checked) this.selectedTestsIds.push(selectedValue.id);
+    else this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== selectedValue.id);    
   }
 
   formSubmit() {
@@ -127,12 +117,22 @@ export class LabOrderComponent implements OnInit {
     let labOrderPayload = {
 
     }
-    console.log(this.checkboxForm.controls['labTests'].value)
+  }
+
+  selectAllChecked(){
+    for(let test of this.testsListToShow){
+      let includes = this.selectedTestsIds.includes(test.id);
+      if(!includes) this.allSelected = false;
+      else { this.allSelected = true; break} 
+    }
   }
 
 }
 
-interface ILabtestCategories {
-  id: string;
-  name: string;
+interface ILabtestCategoriesTabs extends ILabTestCategory {
+  active?: boolean;
+}
+
+interface ILabTestList extends ILabeTest{
+  selected?: boolean;
 }
