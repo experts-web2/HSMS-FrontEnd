@@ -10,12 +10,15 @@ import { PrimeNgModule } from 'src/app/Shared/modules/prime-ng/prime-ng.module';
 import { LabTestReportComponent } from './lab-test-report/lab-test-report.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { LabReportListComponent } from './lab-report-list/lab-report-list.component';
+import { GenericTableComponent } from 'src/app/Shared/components/generic-table/generic-table.component';
 
 
 @NgModule({
   declarations: [
     LaboratoryRootComponent,
-    LabTestReportComponent
+    LabTestReportComponent,
+    LabReportListComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +30,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     PrimeNgModule,
     ReactiveFormsModule,
     FormsModule,
-    AngularEditorModule 
+    AngularEditorModule ,
+    GenericTableComponent
   ]
 })
 export class LaboratoryModule { }
