@@ -3,4 +3,5 @@ export interface IAddOrUpdateTest{
     name: string,
     description: string,
     price: number
+    normalValues: string
 }

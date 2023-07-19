@@ -29,6 +29,9 @@ export class PatientService extends HttpService{
   getPatients(fetchRequest: IFetchRequest = {}): Observable<any>{
     return this.post(`${this.baseEndPoint}/all`, fetchRequest);
   }
+  getPatientsDropdown(): Observable<any>{
+    return this.get(`${this.baseEndPoint}/dropdown`);
+  }
 
   getAppointments() {
     return of(patientData.getAppointments())

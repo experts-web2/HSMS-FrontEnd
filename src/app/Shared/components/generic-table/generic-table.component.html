@@ -12,7 +12,8 @@
   (onPage)="pageChange($event)"
   (onSort)="sort($event)"
   (onFilter)="filter($event)"
-  (onLazyLoad)="lazyload($event)"  
+  (onLazyLoad)="lazyload($event)" 
+  (onRowReorder)="onRowReorder($event)" 
 >
   <ng-template pTemplate="caption">
     <div class="flex">

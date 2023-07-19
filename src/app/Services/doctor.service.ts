@@ -27,6 +27,10 @@ export class DoctorService extends HttpService {
     return super.post(`${this.baseEndPoints}/all`, fetchRequest);
   }
 
+  getDoctorsDropDown(): Observable<any>{
+    return super.get(`${this.baseEndPoints}/dropdown`);
+  }
+
 
   updateDoctor(data: IAddOrUpdateDoctorRequest,id:string): Observable<any>{
     return super.put(`${this.baseEndPoints}/update/${id}`, data);

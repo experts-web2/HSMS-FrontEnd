@@ -89,6 +89,10 @@ export class GenericTableComponent {
 
     }
 
+    onRowReorder(event:any){
+        console.log(event)
+    }
+
     sort(event: any) {
         console.log(event);
 

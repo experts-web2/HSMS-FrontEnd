@@ -31,8 +31,22 @@ export class TestCategoryService extends HttpService {
   getCategories(fetchRequest: IFetchRequest = {}){
     return this.post(`${this.baseEndPoint}/all`, fetchRequest);
   }
+  getTestCategoryList(){
+    return this.get(`${this.baseEndPoint}/dropdown`);
+  }
 
   getCategoryById(id: string){
     return this.get(`${this.baseEndPoint}/byid/${id}`);
+  }
+
+
+  getdropDownData(arr: any[]) {
+    let result : any[]=[];
+    arr.forEach((element) => {
+      let temp = { id: element.id, name: element.name };
+      result.push(temp);
+    });
+
+    return result;
   }
 }

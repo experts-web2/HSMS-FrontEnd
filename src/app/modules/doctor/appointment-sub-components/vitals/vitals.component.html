@@ -1,1 +1,104 @@
-<p>vitals works!</p>
+<div class="row justify-content-end mb-3">
+    <div class="col-4">
+        <select class="form-select" id="type" (change)="changeDates($event)">
+            <option [value]="null" selected disabled>Previous Visits</option>
+            <option *ngFor="let previousDate of previousDates" [value]="previousDate.id">{{previousDate.name}}</option>
+        </select>
+    </div>
+</div>
+<p-tabView>
+    <form (ngSubmit)="onSubmit()" [formGroup]="vitalForm">
+        <div class="d-flex flex-column">
+            <div class="row">
+                <div class="col-3">
+                    <label for="name"><small>Pulse heart rate</small></label>
+                    <input class="form-control" pInputText type="number" formControlName="pulseHeartRate" name=""
+                        id="pulseHeartRate">
+    
+                </div>
+                <div class="col-3">
+                    <label for="name"><small>Temperature °C To °F</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="temperature"
+                        id="temperature">
+                </div>
+                <div class="col-3">
+                    <label for="name"><small>Blood pressure</small></label>
+                    <input class="form-control" pInputText type="text" name="" formControlName="bloodPressure"
+                        id="bloodPressure" >
+                </div>
+                <div class="col-3">
+                    <label for="name"><small>Diastolic Blood Pressure</small></label>
+                    <input class="form-control" pInputText type="number" name=""
+                        formControlName="diastolicBloodPressure" id="diastolicBloodPressure">
+
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-3">
+                    <label for="respiratoryRate"><small>Respiratory Rate</small></label>
+                    <input class="form-control" pInputText type="number" formControlName="respiratoryRate">
+                
+                </div>
+                <div class="col-3">
+                    <label for="bloodSugar"><small>Blood Sugar</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="bloodSugar" >
+                    
+                </div>
+                <div class="col-3">
+                    <label for="weight"><small>Weight(in kg e.g:70)</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="weight" id="weight">
+                    
+                </div>
+                <div class="col-3">
+                    <label for="height"><small>Height Feet To Cm</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="height" id="height" >
+                    
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-4">
+                    <label for="bodyMassIndex"><small>Body Mass Index (BMI)</small></label>
+                    <input class="form-control" pInputText type="number" formControlName="bodyMassIndex" >
+                    
+                </div>
+                <div class="col-4">
+                    <label for="oxygenSaturation"><small>Oxygen Saturation</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="oxygenSaturation">
+                    
+                </div>
+                <div class="col-4">
+                    <label for="bodySurfaceArea"><small>Body Surface Area (BSA)</small></label>
+                    <input class="form-control" pInputText type="number" name="" formControlName="bodySurfaceArea"
+                        id="bodySurfaceArea" >
+                </div>
+            </div>
+            <div>
+                <label for="reason"><small>Reason</small></label>
+                <input class="form-control" pInputText type="text" name="" formControlName="reason"
+                    id="reason" >
+            </div>
+
+        </div>
+        <div class="bottom">
+            <div>
+                <label htmlFor="improvement">Improvement</label>
+                <div class="procedure-select-div" name="improvement">
+                    <p-treeSelect class="md:w-20rem w-full" containerStyleClass="w-full"
+                        placeholder="Select Improvement"></p-treeSelect>
+                </div>
+            </div>
+            <div class="d-flex flex-column">
+                <label htmlFor="date">Recomended Follow-up Appointment Date</label>
+                <div class="procedure-select-div" name="improvement">
+                    <p-calendar id="date" class="datePicker" [showIcon]="true"></p-calendar>
+                </div>
+            </div>
+
+            <div class="d-flex">
+                <button class="save-button">Save & Print</button>
+                <button class="save-button">Save</button>
+            </div>
+        </div>
+    </form>
+</p-tabView>

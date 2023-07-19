@@ -12,6 +12,7 @@ const routes: Routes = [
   {path:'patient', loadChildren: () => import('./modules/patient/patient.module').then((m) => m.PatientModule), canActivate: [AuthGuard]},
   {path:'doctor', loadChildren: () => import('./modules/doctor/doctor.module').then((m) => m.DoctorModule), canActivate: [AuthGuard]},
   {path:'admin', loadChildren: () => import('./modules/admin/admin.module').then((m) => m.AdminModule), canActivate: [AuthGuard]},
+  {path:'laboratory', loadChildren: () => import('./modules/laboratory/laboratory.module').then((m) => m.LaboratoryModule), canActivate: [AuthGuard]},
 ];
 
 @NgModule({
