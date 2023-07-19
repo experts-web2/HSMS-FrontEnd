@@ -37,7 +37,7 @@ import { RadiologyOrderComponent } from './appointment-sub-components/radiology-
     MessagesModule,
     ButtonModule,
     AddPrescriptionDialogueComponent,
-    PrimeNgModule
+    PrimeNgModule,
   ],
   providers:[]
 })

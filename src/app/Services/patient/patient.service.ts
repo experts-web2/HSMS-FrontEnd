@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseEndPoints } from '../../constants/enums/base-end-points';
 import { IAddOrUpdatePatient } from 'src/app/models/interfaces/addOrUodate-Patient';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,9 @@ export class PatientService extends HttpService{
 
   getTokens() {
     return of(patientData.getTokenData())
+  }
+
+  getPatientDropDown(): Observable<Array<IDropDown>>{
+    return this.get(`${this.baseEndPoint}/dropdown`);
   }
 }
