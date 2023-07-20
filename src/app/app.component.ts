@@ -5,6 +5,8 @@ import { AuthService } from './Services/auth-service/auth.service';
 import { UserStateService } from './State/user/user.service';
 import { ILogedInUser } from './models/interfaces/Iloggedinuser';
 import { Roles } from './constants/enums/Roles-Enum';
+import { AddTokenModalComponent } from './modules/dialog/add-token-modal/add-token-modal.component';
+import { AddLabTestComponent } from './modules/laboratory/add-lab-test/add-lab-test.component';
 
 @Component({
   selector: 'app-root',
@@ -48,6 +50,16 @@ export class AppComponent implements OnInit {
     const dialogRef = this.dialog.open(PatientFormComponent, {
       width: '600px'
     })
+  }
+
+  addLabTest(){
+    this.dialog.open(AddLabTestComponent, {
+      // maxWidth: '100vw',
+      width: '90vw',
+      maxWidth: '',
+      height: '90vh',
+      data: {},
+    });    
   }
 
   logOut() {

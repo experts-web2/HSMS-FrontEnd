@@ -25,7 +25,13 @@ export class TestsListComponent implements OnInit {
 
   columns: Array<ITableColumns> = [
     {
-      name: 'Name',
+      name: 'Code',
+      property: 'code',
+      filter: true,
+      filterType: TableColumnFilterTypes.Text
+    },
+    {
+      name: ' Test Name',
       property: 'name',
       filter: true,
       filterType: TableColumnFilterTypes.Text
@@ -33,6 +39,18 @@ export class TestsListComponent implements OnInit {
     {
       name: 'Price',
       property: 'price',
+      filter: true,
+      filterType: TableColumnFilterTypes.Numeric
+    },
+    {
+      name: 'Sample',
+      property: 'testSample',
+      filter: true,
+      filterType: TableColumnFilterTypes.Numeric
+    },
+    {
+      name: 'Reporting Time',
+      property: 'reportTime',
       filter: true,
       filterType: TableColumnFilterTypes.Numeric
     },
@@ -99,8 +117,8 @@ export class TestsListComponent implements OnInit {
 
   addTests(test?: any, action: string = 'add') {
     this.ref = this.dialogService.open(TestsFormComponent, {
-      width: '50%',
-      height: '60%',
+      width: '80%',
+      height: '80%',
       data: {
         test: test,
         action: action

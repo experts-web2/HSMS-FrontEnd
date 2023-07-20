@@ -14,6 +14,12 @@ export class patientData {
         ];
     }
 
+
+    static getLabTest() {
+        return [
+            { lab: '1', mr: '0001',patient:'Inam',patientType:'Rich',name:'White blood cell (WBC)',price:'700',referal:'urgent',addedBy:'zohaib',createdAt:'19/07/2023' },
+        ];
+    }
     static getTokenData() {
         return [];
     }

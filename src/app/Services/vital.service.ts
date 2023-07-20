@@ -20,4 +20,12 @@ export class VitalService extends HttpService {
    addVitals(vital: IVital): Observable<any>{
     return this.post(`${this.baseEndpoint}/add`, vital);
   }
+
+   getVitals(): Observable<any>{
+    return this.get(`${this.baseEndpoint}/all`);
+  }
+
+   getPreviousVisits(): Observable<any>{
+    return this.get(`${this.baseEndpoint}/all`);
+  }
 }

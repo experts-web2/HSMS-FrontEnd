@@ -8,4 +8,7 @@ export interface ILabTestCategory {
     createdById: string;
     labTests: any[];
     name: string;
+    code:number,
+    testSample:string,
+    reportTime:string,
 }

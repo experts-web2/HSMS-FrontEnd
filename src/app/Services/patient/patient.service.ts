@@ -41,6 +41,10 @@ export class PatientService extends HttpService{
     return of(patientData.getMessages())
   }
 
+  getLabTests() {
+    return of(patientData.getLabTest())
+  }
+
   getTokens() {
     return of(patientData.getTokenData())
   }

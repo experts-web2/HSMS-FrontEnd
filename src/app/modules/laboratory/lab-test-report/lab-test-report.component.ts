@@ -73,8 +73,6 @@ export class LabTestReportComponent implements OnInit {
     this.patientsToShow = this.patients.filter((patient) =>
       patient.name.toLowerCase().includes(query.toLowerCase())
     );
-
-    console.log(this.patientsToShow)
   }
 
   

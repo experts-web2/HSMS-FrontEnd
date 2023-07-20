@@ -10,5 +10,8 @@ export interface ILabeTest {
     name: string;
     price: number;
     testCategoryId: string;
-    normalValues:string
+    normalValues:string;
+    code:number,
+    testSample:string,
+    reportTime:string,
 }
