@@ -1,7 +1,9 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { VitalService } from 'src/app/Services/vital.service';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { IToken } from 'src/app/models/interfaces/Token';
 import { IVital } from 'src/app/models/vitals';
 
 
@@ -12,9 +14,13 @@ import { IVital } from 'src/app/models/vitals';
 })
 export class VitalsComponent implements OnInit {
 
+  @Input() tokenVitals!: ITokenVitals;
+  @Input() token!: IToken;
+
   vitalForm!: FormGroup;
   showMenu: string = '';
-  action = 'update'
+  action = 'update';
+  historyDropDown: Array<IDropDown> = [];
 
   previousDates = [
     { name: '14/07/2023', id: '14/07/2023' },
@@ -23,61 +29,112 @@ export class VitalsComponent implements OnInit {
     { name: '11/07/2023', id: '11/07/2023' },
   ];
 
-  constructor(private readonly alertService: AlertService,private readonly vitalService:VitalService) {
+  constructor(private readonly alertService: AlertService, private readonly vitalService: VitalService) {
 
-  }
-  ngOnInit(): void {
     this.vitalForm = new FormGroup({
-      pulseHeartRate: new FormControl(''),
-      temperature: new FormControl(''),
-      bloodPressure: new FormControl(''),
-      diastolicBloodPressure: new FormControl(''),
-      respiratoryRate: new FormControl(''),
-      bloodSugar: new FormControl(''),
-      weight: new FormControl(''),
-      height: new FormControl(''),
-      bodyMassIndex: new FormControl(''),
-      oxygenSaturation: new FormControl(''),
-      bodySurfaceArea: new FormControl(''),
-      reason:new FormControl('')
+      pulseHeartRate: new FormControl<number | null>(null),
+      temperature: new FormControl<number | null>(null),
+      bloodPressure: new FormControl<string | null>(null),
+      diastolicBloodPressure: new FormControl<number | null>(null),
+      respiratoryRate: new FormControl<number | null>(null),
+      bloodSugar: new FormControl<number | null>(null),
+      weight: new FormControl<number | null>(null),
+      height: new FormControl<number | null>(null),
+      bodyMassIndex: new FormControl<number | null>(null),
+      oxygenSaturation: new FormControl<number | null>(null),
+      bodySurfaceArea: new FormControl<number | null>(null),
+      reason: new FormControl<string | null>(null)
     })
+  }
 
+  ngOnInit(): void {
+
+    if (this.token) {
+      this.tokenVitals = <ITokenVitals>this.token.tokenDetail;
+      console.log(this.tokenVitals);
+
+      this.setVitalsFromInput();
+    }
   }
 
   get f() { return this.vitalForm.controls; }
 
   onSubmit() {
 
-    let vitalPayLoad : IVital = {
-      pulseHeartRate : this.vitalForm.controls['pulseHeartRate'].value,
-      temperature : this.vitalForm.controls['temperature'].value,
-      bloodPressure : this.vitalForm.controls['bloodPressure'].value,
-      diastolicBloodPressure : this.vitalForm.controls['diastolicBloodPressure'].value,
-      respiratoryRate : this.vitalForm.controls['respiratoryRate'].value,
-      bloodSugar : this.vitalForm.controls['bloodSugar'].value,
-      weight : this.vitalForm.controls['weight'].value,
-      height : this.vitalForm.controls['height'].value,
-      bodyMassIndex : this.vitalForm.controls['bodyMassIndex'].value,
-      oxygenSaturation : this.vitalForm.controls['oxygenSaturation'].value,
-      bodySurfaceArea : this.vitalForm.controls['bodySurfaceArea'].value,
-      reason : this.vitalForm.controls['reason'].value,
+    let vitalPayLoad: IVital = {
+      pulseHeartRate: this.vitalForm.controls['pulseHeartRate'].value,
+      temperature: this.vitalForm.controls['temperature'].value,
+      bloodPressure: this.vitalForm.controls['bloodPressure'].value,
+      diastolicBloodPressure: this.vitalForm.controls['diastolicBloodPressure'].value,
+      respiratoryRate: this.vitalForm.controls['respiratoryRate'].value,
+      bloodSugar: this.vitalForm.controls['bloodSugar'].value,
+      weight: this.vitalForm.controls['weight'].value,
+      height: this.vitalForm.controls['height'].value,
+      bodyMassIndex: this.vitalForm.controls['bodyMassIndex'].value,
+      oxygenSaturation: this.vitalForm.controls['oxygenSaturation'].value,
+      bodySurfaceArea: this.vitalForm.controls['bodySurfaceArea'].value,
+      reason: this.vitalForm.controls['reason'].value,
+      doctorId: this.token.doctorId,
+      patientId: this.token.patientId
     }
 
     this.vitalService.addVitals(vitalPayLoad).subscribe({
-      next: (x) =>{
+      next: (x) => {
         this.alertService.success('Vitals added successfully', 'Success');
 
-      },error:(err)=>{
+      }, error: (err) => {
 
       }
     })
-    
+
     console.log(vitalPayLoad);
     console.log(this.vitalForm.value)
+  }
+
+  setVitalsFromInput() {
+    this.vitalForm.get('pulseHeartRate')?.setValue(this.tokenVitals.pulseHeartRate);
+    this.vitalForm.get('temperature')?.setValue(this.tokenVitals.temperature);
+    this.vitalForm.get('bloodPressure')?.setValue(this.tokenVitals.bloodPressure);
+    this.vitalForm.get('respiratoryRate')?.setValue(this.tokenVitals.respiratoryRate);
+    this.vitalForm.get('bloodSugar')?.setValue(this.tokenVitals.bloodSugar);
+    this.vitalForm.get('weight')?.setValue(this.tokenVitals.weight);
+    this.vitalForm.get('height')?.setValue(this.tokenVitals.height);
+    this.vitalForm.get('bodyMassIndex')?.setValue(this.tokenVitals.bodyMassIndex);
+    this.vitalForm.get('oxygenSaturation')?.setValue(this.tokenVitals.oxygenSaturation);
+    this.vitalForm.get('bodySurfaceArea')?.setValue(this.tokenVitals.bodySurfaceArea);
   }
 
 
   changeDates(event: any) {
     console.log(event.target.value)
   }
+
+  getVitalsHistoryDropDown() {
+    this.vitalService.getVitalsHistoryDropDown(this.token.patientId).subscribe({
+      next: (x) => {
+        this.historyDropDown = x;
+      }
+    })
+  }
+
+  getVitalsById(vitalsId: string){
+    this.vitalService.getVitalsById(vitalsId).subscribe({
+      next: (x)=>{
+        
+      }
+    })
+  }
+}
+
+interface ITokenVitals {
+  pulseHeartRate: number;
+  temperature: number;
+  bloodPressure: string;
+  respiratoryRate: number;
+  bloodSugar: number;
+  height: number;
+  weight: number;
+  bodyMassIndex: number;
+  bodySurfaceArea: number;
+  oxygenSaturation: number;
 }
