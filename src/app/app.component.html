@@ -9,6 +9,7 @@
       <a class="navButton btn btn-primary" [matMenuTriggerFor]="more">Laboratory<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #more="matMenu">
           <a mat-menu-item (click)="addLabTest()">Add Lab Test</a>
+          <a mat-menu-item (click)="collectionLabSample()">Collection Lab Sample</a>
           <a mat-menu-item routerLink="/laboratory/lab_report">Lab Test Report</a>
           <a mat-menu-item routerLink="/laboratory/lab_report_list">Lab Test Lists</a>
         </mat-menu> 

@@ -14,6 +14,7 @@ import { LabReportListComponent } from './lab-report-list/lab-report-list.compon
 import { GenericTableComponent } from 'src/app/Shared/components/generic-table/generic-table.component';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddLabTestComponent } from './add-lab-test/add-lab-test.component';
+import { CollectLabSampleComponent } from './collect-lab-sample/collect-lab-sample.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { AddLabTestComponent } from './add-lab-test/add-lab-test.component';
     LaboratoryRootComponent,
     LabTestReportComponent,
     LabReportListComponent,
-    AddLabTestComponent
+    AddLabTestComponent,
+    CollectLabSampleComponent
   ],
   imports: [
     CommonModule,
