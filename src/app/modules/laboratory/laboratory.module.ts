@@ -13,8 +13,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { LabReportListComponent } from './lab-report-list/lab-report-list.component';
 import { GenericTableComponent } from 'src/app/Shared/components/generic-table/generic-table.component';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { AddLabTestComponent } from './add-lab-test/add-lab-test.component';
 import { CollectLabSampleComponent } from './collect-lab-sample/collect-lab-sample.component';
+import { AddPatientTestComponent } from './add-patient-test/add-patient-test.component';
 
 
 @NgModule({
@@ -22,7 +22,7 @@ import { CollectLabSampleComponent } from './collect-lab-sample/collect-lab-samp
     LaboratoryRootComponent,
     LabTestReportComponent,
     LabReportListComponent,
-    AddLabTestComponent,
+    AddPatientTestComponent,
     CollectLabSampleComponent
   ],
   imports: [

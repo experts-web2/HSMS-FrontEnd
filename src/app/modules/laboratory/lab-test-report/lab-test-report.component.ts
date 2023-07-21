@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { PatientService } from 'src/app/Services/patient/patient.service';
 import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DoctorService } from 'src/app/Services/doctor.service';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { formatDate } from '@angular/common';
+import { TestService } from 'src/app/Services/test-service/test.service';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-lab-test-report',
@@ -14,45 +16,112 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./lab-test-report.component.scss']
 })
 export class LabTestReportComponent implements OnInit {
-  patients: IDropDown[]=[];
-  patientsToShow: IDropDown[]=[];
-  labTestForm!: FormGroup
-  doctors: IDropDown[]=[];
-  doctorsToShow: IDropDown[]=[];
-  datePlaceholder = formatDate(Date.now(), 'MM/dd/yyyy', 'en-US');
-  preview ='';
-  selectedFiles: any;
-  currentFile!: File;
+  selectedDoctor = ''
+  selectedPayment = ''
+  collectionForm!: FormGroup;
+  invoiceDescriptionForm!: FormGroup;
+  doctors: Array<IDropDown> = [];
+  tests: Array<IDropDown> = [];
+  radiology: Array<IDropDown> = [];
+  descriptions: Array<any> = [];
+  
 
-  constructor(private readonly patientServive:PatientService,
-    private dialog: MatDialog,
-     private readonly alertService: AlertService,
-     private readonly doctorService : DoctorService,
-     private fb:FormBuilder){
+  dropDown!: Array<{ id: number, label: string }>
+  patients: Array<IDropDown> = [];
+  patientsToShow: Array<IDropDown> = [];
 
-      this.labTestForm = this.fb.group({
-        patientId: [''],
-        doctorId: [''],
-        dateTime: [''],
-        report: [''],
-        remarks: [''],
-        photoPath: [''],
-      });
-     }
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+      spellcheck: true,
+      height: '15rem',
+      minHeight: '5rem',
+      maxHeight: 'auto',
+      width: 'auto',
+      minWidth: '0',
+      translate: 'yes',
+      enableToolbar: true,
+      showToolbar: true,
+      placeholder: 'Enter text here...',
+      defaultParagraphSeparator: '',
+      defaultFontName: '',
+      defaultFontSize: '',
+      fonts: [
+        {class: 'arial', name: 'Arial'},
+        {class: 'times-new-roman', name: 'Times New Roman'},
+        {class: 'calibri', name: 'Calibri'},
+        {class: 'comic-sans-ms', name: 'Comic Sans MS'}
+      ],
+      customClasses: [
+      {
+        name: 'quote',
+        class: 'quote',
+      },
+      {
+        name: 'redText',
+        class: 'redText'
+      },
+      {
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
+      },
+    ],
+    toolbarHiddenButtons: [
+      ['bold', 'italic'],
+      ['fontSize']
+    ]
+}
 
+  constructor(
+    private readonly patientService: PatientService,
+    private readonly fb: FormBuilder,
+    private readonly doctorService: DoctorService,
+    private readonly testService: TestService) {
 
-  ngOnInit(): void {
-    this.getPatientDropDownList();
-    this.getDoctorDropDownList();
+    this.invoiceDescriptionForm = this.fb.group({
+      testId: new FormControl<string | null>(null, [Validators.required]),
+      report: new FormControl<string | null>(null, [Validators.required]),
+      remarks: new FormControl<string | null>(null, [Validators.required]),
+    })
+    this.collectionForm = this.fb.group({
+      patientId: new FormControl<string | null>(null, [Validators.required]),
+      doctorId: new FormControl<string | null>(null, [Validators.required]),
+      invoiceItems: this.fb.array([this.invoiceDescriptionForm]),
+    });
+
   }
 
+  get invoiceItems(): FormArray {
+    return this.collectionForm.get('invoiceItems') as FormArray;
+  }
 
-  getPatientDropDownList(){
-    this.patientServive.getPatientsDropdown().subscribe({
+  ngOnInit(): void {
+    this.getPatients();
+    this.getTests();
+    this.getDoctorDropDownList()
+  }
+
+  getTests() {
+    this.testService.getTests().subscribe({
       next: (x) => {
-        this.patients = x
+        console.log(x);
+        this.tests = x.data;
+          this.descriptions = this.tests;
       },
       error: (err) => {
+
+      }
+    })
+  }
+
+  getPatients() {
+    this.patientService.getPatientDropDown().subscribe({
+      next: (x) => {
+        this.patients = x;
+        this.patientsToShow = x;
+      },
+      error: (err) => {
+
       }
     })
   }
@@ -67,54 +136,76 @@ export class LabTestReportComponent implements OnInit {
     })
   }
 
-  search(event:any){
-    console.log(event.query);
-    const query = event.query;
-    this.patientsToShow = this.patients.filter((patient) =>
-      patient.name.toLowerCase().includes(query.toLowerCase())
-    );
-  }
+  // onDescriptionSelect(index: number, descriptionId: string) {
+  //   let description = this.descriptions.find(x => x.id === descriptionId);
+  //   console.log('description',description);
+  //   this.invoiceItems.at(index).get('description')?.setValue(description?.description);
+  //   this.invoiceItems.at(index).get('sample')?.setValue(description?.testSample);
+  // }
 
   
-  doctorSearch(event:any){
-    console.log(event.query);
-    const query = event.query;
-    this.doctorsToShow = this.doctors.filter((patient) =>
-      patient.name.toLowerCase().includes(query.toLowerCase())
-    );
 
-    console.log(this.doctorsToShow)
+  patientSelect(patient: any) {
+    this.collectionForm.get('patientId')?.setValue(patient.id);
   }
 
-  selectFile(event: any): void {
-    this.preview = '';
-    this.selectedFiles = event.target.files;
+  searchPatient(query: string) {
+    let text = query.toLowerCase();
+    this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(text));
+  }
 
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
+  addToken() {
+    console.log(this.collectionForm.value)
+      
+      // let tokenpayload = {
+      //   patientId: this.collectionForm.controls['patientId'].value,
+      //   doctorId: this.collectionForm.controls['doctorId'].value,
+      //   patientCheckedIn: this.collectionForm.controls['patientCheckedIn'].value ? this.collectionForm.controls['patientCheckedIn'].value : true
+      // }
+      // console.log('tokenpayload',tokenpayload);
+      // this.tokenService.addToken(tokenpayload).subscribe({
+      //   next: (x) => {
+      //     console.log(x);
 
-      if (file) {
-        this.preview = '';
-        this.currentFile = file;
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.labTestForm.controls['photoPath'].setValue(e.target.result);
-          this.preview = e.target.result;
-        };
 
-        reader.readAsDataURL(this.currentFile);
-      }
+      //   },
+      //   error: (err) => {
+
+      //   }
+      // })
+
+  }
+
+  getInvoice() {
+    let invoice = {
+      invoiceItems: this.invoiceItems.value.map((x: any) => {
+        let invoiceItem = {
+          testId: x.testId,
+          report: x.report,
+          remarks: x.remarks,
+        }
+        return invoiceItem
+      }),
     }
+    return invoice;
   }
 
-  onSubmit(){
-    console.log(this.labTestForm.value)
-  }
-
-  addPatient() {
-    const dialogRef = this.dialog.open(PatientFormComponent, {
-      width: '600px'
+  addNewInvoiceItem() {
+    let newForm = this.fb.group({
+      testId: new FormControl<string | null>(null, [Validators.required]),
+      report: new FormControl<string | null>(null, [Validators.required]),
+      remarks: new FormControl<string | null>(null, [Validators.required]),
     })
+    this.invoiceItems.push(newForm)
   }
 
+  removeinvoiceItem(index: number) {
+    this.invoiceItems.removeAt(index);
+    let newForm = this.fb.group({
+      testId: new FormControl<string | null>(null, [Validators.required]),
+      report: new FormControl<number | null>(null, [Validators.required]),
+      remarks: new FormControl<string | null>(null, [Validators.required]),
+    })
+    if (this.invoiceItems.length < 1) this.invoiceItems.push(newForm);
+  }
 }

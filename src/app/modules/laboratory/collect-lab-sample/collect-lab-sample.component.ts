@@ -1,13 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
-import { AddLabTestComponent } from '../add-lab-test/add-lab-test.component';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PatientService } from 'src/app/Services/patient/patient.service';
 import { TestService } from 'src/app/Services/test-service/test.service';
 import { DoctorService } from 'src/app/Services/doctor.service';
-import { IInvoice } from 'src/app/models/interfaces/addOrUpdate-Token';
-import { PaymentTypes } from 'src/app/constants/enums/PaymenTypes';
 
 @Component({
   selector: 'app-collect-lab-sample',
@@ -31,8 +27,7 @@ export class CollectLabSampleComponent {
 
   testStatus: Array<{ value: string, label: string }> = [{ value: 'Collected', label: 'Collected' }, { value: 'Pending', label: 'Pending' }]
 
-  constructor(public dialogRef: MatDialogRef<CollectLabSampleComponent>,
-    private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any,
+  constructor(
     private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
     private readonly doctorService: DoctorService,
@@ -58,10 +53,6 @@ export class CollectLabSampleComponent {
   ngOnInit(): void {
     this.getPatients();
     this.getTests();
-  }
-
-  cancel() {
-    this.dialogRef.close();
   }
 
   getTests() {

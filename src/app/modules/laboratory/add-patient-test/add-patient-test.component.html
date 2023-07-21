@@ -1,9 +1,7 @@
-<form [formGroup]="addTokenForm">
+<form [formGroup]="addPatientTestForm">
     <div class="position-relative">
-        <!-- <button class="cursor-pointer position-absolute close-button" (click)="cancel()">cancel
-        </button> -->
-        <i class="fa-solid fa-xmark fa-2xl px-8 py-8 ml-auto w-fit  block" (click)="cancel()"></i>
-        <p class="text-center font-weight-bold"><b>Add Lab Test</b></p>
+        <i class="fa-2xl px-8 py-8 ml-auto w-fit  block" ></i>
+        <p class="text-center font-weight-bold"><b>Add Patient Test</b></p>
     </div>
     <div class="px-md-5 px-2 pb-5">
         <div>
@@ -17,7 +15,7 @@
                         <div class="d-flex justify-content-center flex-column w-full md:pr-2">
                             <label for="descriptionDetail">Lab Template</label>
                             <select id="descriptionDetail" class="form-select"
-                                [disabled]="!descriptions || !descriptions.length" formControlName="testId" #description
+                                [disabled]="!descriptions || !descriptions.length" formControlName="testId" #description 
                                 (change)="onDescriptionSelect(i, description.value)">
                                 <option [defaultSelected]="true" disabled>Select A Description</option>
                                 <option *ngFor="let drop of tests" [value]="drop.id">
@@ -45,8 +43,8 @@
                         </div>
                         <div class="w-full">
                             <label for="amount">Completion Date And Time</label>
-                            <p-calendar selectionMode="range" [readonlyInput]="true" formControlName="completionDate"
-                                [showIcon]="true" inputId="range" [hideOnDateTimeSelect]="true" [showTime]="true">
+                            <p-calendar formControlName="completionDate"
+                                [showIcon]="true" [showSeconds]="true" [showTime]="true">
                             </p-calendar>
                         </div>
                         <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
@@ -95,9 +93,9 @@
                         </div>
                 </div>
                 <div>
-                    <p>Sub- Total:Rs {{addTokenForm.controls['grandTotal'].value}}</p>
-                    <p>Discount : Rs {{addTokenForm.controls['totalDiscount'].value}}</p>
-                    <p>Grand- Total : {{addTokenForm.controls['grandTotal'].value}}</p>
+                    <p>Sub- Total:Rs {{addPatientTestForm.controls['grandTotal'].value}}</p>
+                    <p>Discount : Rs {{addPatientTestForm.controls['totalDiscount'].value}}</p>
+                    <p>Grand- Total : {{addPatientTestForm.controls['grandTotal'].value}}</p>
                     <p>Payment : <input type="number" class="pulse lg:ml-3" [readonly]="true" pInputText placeholder="1500" formControlName="grandTotal" /></p>
                     <p>Paid: <input type="number" class="pulse lg:ml-3" pInputText placeholder="0" formControlName="amountPaid" />
                     </p>

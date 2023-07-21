@@ -1,7 +1,13 @@
 export const TestsSample = [
     { value: '3-5cc Clotted Blood or Serum', label: '3-5cc Clotted Blood or Serum' },
+    { value: '8CC Clotted Blood or Serum (2 vials)', label: '8CC Clotted Blood or Serum (2 vials)' },
+    { value: '3cc EDTA BLOOD (CBC VIAL)', label: '3cc EDTA BLOOD (CBC VIAL)' },
+    { value: 'EDTA (WB) & Clotted Blood', label: 'EDTA (WB) & Clotted Blood' },
     { value: 'SKIN SCRAPING', label: 'SKIN SCRAPING' },
     { value: '24 Hrs Urine', label: '24 Hrs Urine' },
+    { value: 'Urine (Random/Spot)', label: 'Urine (Random/Spot)' },
+    { value: 'Serum and 24Hrs Urine', label: 'Serum and 24Hrs Urine' },
+    { value: ' 1 vial EDTA and 1 Vial Clotted Blood', label: ' 1 vial EDTA and 1 Vial Clotted Blood' },
   ]as const;
 
 export const TestsReportTime = [

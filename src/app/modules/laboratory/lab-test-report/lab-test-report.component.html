@@ -1,4 +1,4 @@
-<div class="p-3">
+<!-- <div class="p-3">
     <form [formGroup]="labTestForm" (ngSubmit)="onSubmit()">
         <div class="position-relative">
             <p class="font-weight-bold"><b>Add Lab Test Report</b></p>
@@ -61,4 +61,83 @@
     
         <p-button type="submit">save</p-button>
     </form>
-</div>
+</div> -->
+
+
+<form [formGroup]="collectionForm">
+    <div class="position-relative">
+        <i class="fa-2xl px-8 py-8 ml-auto w-fit  block"></i>
+        <p class="text-center font-weight-bold"><b>Patient Sample Collection</b></p>
+    </div>
+    <div class="px-md-5 px-2 pb-5">
+        <div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label for="descriptionDetail">Patients</label>
+                    <select id="descriptionDetail" class="form-select" [disabled]="!descriptions || !descriptions.length"
+                        formControlName="patientId" #patient (optionSelected)="patientSelect(patient.value)">
+                        <option [defaultSelected]="true" disabled>Select A Description</option>
+                        <option *ngFor="let drop of patientsToShow" [value]="drop.id">
+                            {{drop.name}}</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label for="descriptionDetail">Doctor</label>
+                    <select id="descriptionDetail" class="form-select"
+                        formControlName="doctorId">
+                        <option [defaultSelected]="true" disabled>Select A Description</option>
+                        <option *ngFor="let drop of doctors" [value]="drop.id">
+                            {{drop.name}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div formArrayName="invoiceItems">
+                <div class="justify-content-center">
+                    <hr class="col-12">
+                </div>
+                <div *ngFor="let item of invoiceItems.controls ; let i = index" class="my-4">
+                    <div [formGroupName]='i' class="flex justify-between items-center flex-col lg:flex-row">
+                        <div class="d-flex justify-content-center flex-column w-full md:pr-2">
+                            <label for="descriptionDetail">Lab Template</label>
+                            <select id="descriptionDetail" class="form-select"
+                                [disabled]="!descriptions || !descriptions.length" formControlName="testId" #description
+                                >
+                                <option [defaultSelected]="true" disabled>Select Lab Test</option>
+                                <option *ngFor="let drop of tests" [value]="drop.id">
+                                    {{drop.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
+                            <label for="description">Report</label>
+                            <angular-editor formControlName="report" [config]="editorConfig"></angular-editor>
+
+                            <!-- <input class="h-10" type="text" pInputText name="amount" formControlName="description"> -->
+                        </div>
+                        <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
+                            <label for="amount">Remarks</label>
+                            <angular-editor formControlName="remarks" [config]="editorConfig"></angular-editor>
+
+                            <!-- <input class="h-10" type="text" pInputText name="sample" [readonly]="true"
+                                formControlName="sample"> -->
+                        </div>
+                        <div class="ml-3">
+                            <button (click)="removeinvoiceItem(i)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button (click)="addNewInvoiceItem()"
+                class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center">Item</button>
+
+        </div>
+        <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-content-evenly align-items-center">
+            <button class="btn btn-primary" (click)="addToken()">Save</button>
+            <button class="btn btn-primary">Save & Print</button>
+        </div>
+    </div>
+</form>

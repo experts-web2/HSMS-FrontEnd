@@ -6,8 +6,8 @@ import { UserStateService } from './State/user/user.service';
 import { ILogedInUser } from './models/interfaces/Iloggedinuser';
 import { Roles } from './constants/enums/Roles-Enum';
 import { AddTokenModalComponent } from './modules/dialog/add-token-modal/add-token-modal.component';
-import { AddLabTestComponent } from './modules/laboratory/add-lab-test/add-lab-test.component';
 import { CollectLabSampleComponent } from './modules/laboratory/collect-lab-sample/collect-lab-sample.component';
+import { AddPatientTestComponent } from './modules/laboratory/add-patient-test/add-patient-test.component';
 
 @Component({
   selector: 'app-root',
@@ -53,8 +53,8 @@ export class AppComponent implements OnInit {
     })
   }
 
-  addLabTest(){
-    this.dialog.open(AddLabTestComponent, {
+  addPatientTest(){
+    this.dialog.open(AddPatientTestComponent, {
       // maxWidth: '100vw',
       width: '90vw',
       maxWidth: '',

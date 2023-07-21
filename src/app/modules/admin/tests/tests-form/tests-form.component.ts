@@ -42,7 +42,7 @@ export class TestsFormComponent implements OnInit  {
       price: new FormControl<number | null>(null, [Validators.required]),
       normalValues: new FormControl<number | null>(null, [Validators.required]),
       testSample: new FormControl<string>('', [Validators.required]),
-      reportTime: new FormControl<string>('', [Validators.required]),
+      reportingTime: new FormControl<string>('', [Validators.required]),
     })
 
     if(this.action === 'update' && this.test){
@@ -54,7 +54,7 @@ export class TestsFormComponent implements OnInit  {
           price: this.test.price,
           normalValues: this.test.normalValues,
           testSample: this.test.testSample,
-          reportTime: this.test.reportTime,
+          reportingTime: this.test.reportingTime,
         });
     }
   }
@@ -69,7 +69,7 @@ export class TestsFormComponent implements OnInit  {
       normalValues: testFormValue.normalValues,
       testCategoryId: testFormValue.testCategoryId,
       testSample: testFormValue.testSample,
-      reportTime: testFormValue.reportTime,
+      reportingTime: testFormValue.reportingTime,
     }
     if(this.action === 'add'){
       this.testsService.addTest(testToAdd).subscribe({

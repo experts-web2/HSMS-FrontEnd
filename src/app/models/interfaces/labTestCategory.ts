@@ -10,5 +10,5 @@ export interface ILabTestCategory {
     name: string;
     code:number,
     testSample:string,
-    reportTime:string,
+    reportingTime:string,
 }

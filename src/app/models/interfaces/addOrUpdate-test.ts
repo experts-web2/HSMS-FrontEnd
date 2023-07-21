@@ -1,6 +1,6 @@
 export interface IAddOrUpdateTest{
     testSample:string,
-    reportTime:string,
+    reportingTime:string,
     testCategoryId: string,
     name: string,
     description: string,

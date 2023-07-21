@@ -13,5 +13,5 @@ export interface ILabeTest {
     normalValues:string;
     code:number,
     testSample:string,
-    reportTime:string,
+    reportingTime:string,
 }

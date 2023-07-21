@@ -9,14 +9,14 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IInvoice, IInvoiceItem } from 'src/app/models/interfaces/addOrUpdate-Token';
 
 @Component({
-  selector: 'app-add-lab-test',
-  templateUrl: './add-lab-test.component.html',
-  styleUrls: ['./add-lab-test.component.scss']
+  selector: 'app-add-patient-test',
+  templateUrl: './add-patient-test.component.html',
+  styleUrls: ['./add-patient-test.component.scss']
 })
-export class AddLabTestComponent implements OnInit {
+export class AddPatientTestComponent implements OnInit {
   selectedDoctor = ''
   selectedPayment = ''
-  addTokenForm!: FormGroup;
+  addPatientTestForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
   doctors: Array<IDropDown> = [];
   tests: Array<IDropDown> = [];
@@ -39,8 +39,7 @@ export class AddLabTestComponent implements OnInit {
   paymentType: Array<{ id: number, label: string }> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' }, { id: PaymentTypes.Cheque, label: 'Cheque' }]
   testPriority: Array<{ value: string, label: string }> = [{ value: 'Routine', label: 'Routine' }, { value: 'Urgent', label: 'Urgent' }]
 
-  constructor(public dialogRef: MatDialogRef<AddLabTestComponent>,
-    private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any,
+  constructor(
     private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
     private readonly doctorService: DoctorService,
@@ -57,7 +56,7 @@ export class AddLabTestComponent implements OnInit {
       othersType: new FormControl<number | null>(null),
       othersName: new FormControl<string | null>(null)
     })
-    this.addTokenForm = this.fb.group({
+    this.addPatientTestForm = this.fb.group({
       doctorId: new FormControl<string | null>(null, [Validators.required]),
       totalDiscount: new FormControl<number | null>(0, [Validators.required]),
       paymentType: new FormControl<number | null>(1, [Validators.required]),
@@ -71,17 +70,13 @@ export class AddLabTestComponent implements OnInit {
   }
 
   get invoiceItems(): FormArray {
-    return this.addTokenForm.get('invoiceItems') as FormArray;
+    return this.addPatientTestForm.get('invoiceItems') as FormArray;
   }
 
   ngOnInit(): void {
     this.getDoctors();
     this.getPatients();
     this.getTests();
-  }
-
-  cancel() {
-    this.dialogRef.close();
   }
 
   getDoctors() {
@@ -134,8 +129,8 @@ export class AddLabTestComponent implements OnInit {
     console.log('patient',patient);
     // this.invoiceItems.at(index).get('patientId')?.setValue(description?.price);
 
-    this.addTokenForm.get('patientId')?.setValue(patient.id);
-    this.addTokenForm.get('patientName')?.setValue(patient.name);
+    this.addPatientTestForm.get('patientId')?.setValue(patient.id);
+    this.addPatientTestForm.get('patientName')?.setValue(patient.name);
   }
 
   searchPatient(query: string) {
@@ -144,13 +139,13 @@ export class AddLabTestComponent implements OnInit {
   }
 
   addToken() {
-    console.log(this.addTokenForm.value)
-    if (this.addTokenForm.controls['amountPaid']?.value !== null && this.invoiceItems.valid) {
+    console.log(this.addPatientTestForm.value)
+    if (this.addPatientTestForm.controls['amountPaid']?.value && this.invoiceItems.valid) {
       
       // let tokenpayload = {
-      //   patientId: this.addTokenForm.controls['patientId'].value,
-      //   doctorId: this.addTokenForm.controls['doctorId'].value,
-      //   patientCheckedIn: this.addTokenForm.controls['patientCheckedIn'].value ? this.addTokenForm.controls['patientCheckedIn'].value : true
+      //   patientId: this.addPatientTestForm.controls['patientId'].value,
+      //   doctorId: this.addPatientTestForm.controls['doctorId'].value,
+      //   patientCheckedIn: this.addPatientTestForm.controls['patientCheckedIn'].value ? this.addPatientTestForm.controls['patientCheckedIn'].value : true
       // }
       // console.log('tokenpayload',tokenpayload);
       // this.tokenService.addToken(tokenpayload).subscribe({
@@ -171,8 +166,8 @@ export class AddLabTestComponent implements OnInit {
 
   getInvoice(): IInvoice {
     let invoice: IInvoice = {
-      amountPaid: this.addTokenForm.controls['amountPaid'].value,
-      paymentType: this.addTokenForm.controls['paymentType'].value,
+      amountPaid: this.addPatientTestForm.controls['amountPaid'].value,
+      paymentType: this.addPatientTestForm.controls['paymentType'].value,
       invoiceItems: this.invoiceItems.value.map((x: any) => {
         let invoiceItem = {
           testId: x.testId,
@@ -187,8 +182,8 @@ export class AddLabTestComponent implements OnInit {
         }
         return invoiceItem
       }),
-      totalDiscount: this.addTokenForm.controls['totalDiscount'].value,
-      grandTotal: this.addTokenForm.controls['grandTotal'].value
+      totalDiscount: this.addPatientTestForm.controls['totalDiscount'].value,
+      grandTotal: this.addPatientTestForm.controls['grandTotal'].value
     }
     return invoice;
   }
@@ -226,9 +221,9 @@ export class AddLabTestComponent implements OnInit {
   }
 
   calculate(index?: number) {
-    let totalDiscount = this.addTokenForm.get('totalDiscount');
-    let amountPaid = this.addTokenForm.get('amountPaid');
-    let grandTotal = this.addTokenForm.get('grandTotal');
+    let totalDiscount = this.addPatientTestForm.get('totalDiscount');
+    let amountPaid = this.addPatientTestForm.get('amountPaid');
+    let grandTotal = this.addPatientTestForm.get('grandTotal');
     let totalGrandTotal = 0;
     let totalDiscountTotal = 0;
     for (let invItem of this.invoiceItems.controls) {
