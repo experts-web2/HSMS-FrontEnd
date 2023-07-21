@@ -9,5 +9,6 @@ export interface ITableColumns{
     filterType?: TableColumnFilterTypes,
     columnType?: DataTypesEnum,
     enum?: any,
-    valueToShow?: Function;
+    sortable?: boolean,
+    valueToShow?: Function
 }

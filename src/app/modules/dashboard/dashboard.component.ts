@@ -14,6 +14,7 @@ import { IFetchRequest } from '../../models/interfaces/fetchTableRequest';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { TableColumnFilterTypes } from 'src/app/constants/enums/table-column-filterTypes';
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
+import { TokenService } from 'src/app/Services/token.service';
 
 
 
@@ -69,60 +70,44 @@ export class DashboardComponent implements OnInit {
     {
       name: 'Patient Name',
       property: 'name',
-      filter: true,
-      filterType: TableColumnFilterTypes.Text
     },
     {
       name: 'Appointment Time',
       property: 'time',
-      filter: true,
-      filterType: TableColumnFilterTypes.Numeric
     },
     {
       name: 'Doctor Name',
       property: 'doctor',
-      filter: true,
-      filterType: TableColumnFilterTypes.Numeric
     }
   ];
   displayedMessageColumns: Array<ITableColumns> = [
     {
       name: 'Send At#',
       property: 'sendAt',
-      filter: true,
-      filterType: TableColumnFilterTypes.Text
     },
     {
       name: 'Message',
       property: 'message',
-      filter: true,
-      filterType: TableColumnFilterTypes.Numeric
     }
   ];
   displayedTokensColumns: Array<ITableColumns> = [
     {
       name: 'Token#',
       property: 'token',
-      filter: true,
-      filterType: TableColumnFilterTypes.Text
     },
     {
       name: 'Patient Name',
       property: 'patient',
-      filter: true,
-      filterType: TableColumnFilterTypes.Numeric
     },
     {
       name: 'Doctor Name',
       property: 'doctor',
-      filter: true,
-      filterType: TableColumnFilterTypes.Numeric
     }
   ];
  
 
 
-  constructor(private patientService: PatientService,private dialog: MatDialog, private readonly userStateService: UserStateService, private readonly appointmentService: AppointmentService) { }
+  constructor(private patientService: PatientService,private dialog: MatDialog, private readonly userStateService: UserStateService, private readonly appointmentService: AppointmentService, private readonly tokenService: TokenService) { }
 
   filter: any = [
     {
@@ -145,6 +130,30 @@ export class DashboardComponent implements OnInit {
     // this.getTokensData();
     this.chartOption = this.createChartOption([17, 22, 31, 46, 12, 40, 33, 16])
 
+  }
+
+  getViewdTokens(){
+    this.tokenService.getTokensByViewd(true).subscribe({
+      next: (x) => {
+        console.log(x);
+        
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  getUnViewdTokens(){
+    this.tokenService.getTokensByViewd(false).subscribe({
+      next: (x) => {
+        console.log(x);
+        
+      },
+      error: (err) => {
+        
+      }
+    })
   }
 
   private createChartOption(data: number[]): EChartOption {

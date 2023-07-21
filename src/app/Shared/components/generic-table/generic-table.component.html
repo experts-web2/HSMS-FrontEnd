@@ -15,7 +15,7 @@
   (onLazyLoad)="lazyload($event)" 
   (onRowReorder)="onRowReorder($event)" 
 >
-  <ng-template pTemplate="caption">
+  <!-- <ng-template  pTemplate="caption">
     <div class="flex">
       <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
       <span class="p-input-icon-left ml-auto">
@@ -23,21 +23,36 @@
         <input pInputText type="text" #search (input)="dt.filterGlobal(search.value, 'contains')" placeholder="Search keyword" />
       </span>
     </div>
-  </ng-template>
+  </ng-template> -->
   <ng-template pTemplate="header">
     <tr>
-      <th *ngFor="let column of columns" style="min-width:15rem" [pSortableColumn]="column.property">
-        <div class="flex align-items-center">
-          {{ column.name }}<p-sortIcon [field]="column.property"></p-sortIcon>
-          <p-columnFilter
-            *ngIf="column.filter"
-            [type]="column.filterType || 'text'"
-            [field]="column.property"
-            display="menu"
-            (filterFunction)="filterFunction($event)"
-          ></p-columnFilter>
-        </div>
-      </th>
+      <ng-container *ngFor="let column of columns">
+        <th  *ngIf="column.sortable" style="min-width:15rem"  [pSortableColumn]="column.property">
+          <div class="flex align-items-center">
+            {{ column.name }}<p-sortIcon [field]="column.property"></p-sortIcon>
+            <p-columnFilter
+              *ngIf="column.filter"
+              [type]="column.filterType || 'text'"
+              [field]="column.property"
+              display="menu"
+              (filterFunction)="filterFunction($event)"
+            ></p-columnFilter>
+          </div>
+        </th>
+        <th  *ngIf="!column.sortable" style="min-width:15rem"  >
+          <div class="flex align-items-center">
+            {{ column.name }}
+            <p-columnFilter
+              *ngIf="column.filter"
+              [type]="column.filterType || 'text'"
+              [field]="column.property"
+              display="menu"
+              (filterFunction)="filterFunction($event)"
+            ></p-columnFilter>
+          </div>
+        </th>
+        
+      </ng-container>
       <th  style="min-width:15rem" *ngIf="showActions">
         <div class="flex align-items-center">Actions</div>
       </th>
