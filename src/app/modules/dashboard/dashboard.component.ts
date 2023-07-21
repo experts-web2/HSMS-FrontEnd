@@ -1,42 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-// import { FormControl } from '@angular/forms';
 import * as echarts from 'echarts';
-// import { EChartOption } from 'echarts';
-// import { appointmentModel } from '../models/patient-model';
 import { PatientService } from '../../Services/patient/patient.service';
-// import { ChartColors } from '@app/types/chart'
 import EChartOption = echarts.EChartsOption
 import { AddTokenModalComponent } from '../dialog/add-token-modal/add-token-modal.component';
 import { UserStateService } from '../../State/user/user.service';
 import { AppointmentService } from '../../Services/appointment.service';
 import { IFetchRequest } from '../../models/interfaces/fetchTableRequest';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
-import { TableColumnFilterTypes } from 'src/app/constants/enums/table-column-filterTypes';
-import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
 import { TokenService } from 'src/app/Services/token.service';
-
-
-
-
-
-// const APPOINTMENTS_DATA: any[] = [
-//   {name: '', time: 'There Are No Tokens For Today', doctor: ''},
-// ];
-
-// const MESSAGES_DATA: any[] = [
-//   {sendAt: '12 Days Ago', message: 'Dear Anwar, welcome to MedicaZon Hospital Multan, Thank you for choosing us.'},
-//   {sendAt: '12 Days Ago', message: 'Dear Zohaib, welcome to MedicaZon Hospital Multan, Thank you for choosing us.'},
-//   {sendAt: '12 Days Ago', message: 'Dear Abdullah, welcome to MedicaZon Hospital Multan, Thank you for choosing us.'},
-//   {sendAt: '12 Days Ago', message: 'Dear Waqas, welcome to MedicaZon Hospital Multan, Thank you for choosing us.'},
-//   {sendAt: '12 Days Ago', message: 'Dear Mohsin, welcome to MedicaZon Hospital Multan, Thank you for choosing us.'},
-//   {sendAt: '', message: 'There Are No Tokens For Today'},
-// ];
-
-
-// const TOKENS_DATA: any[] = [
-//   {token: '', patient: 'There Are No Tokens For Today', doctor: ''},
-// ]
+import { IToken } from 'src/app/models/interfaces/Token';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,20 +18,13 @@ import { TokenService } from 'src/app/Services/token.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-
-  // grid: EChartOption.Grid = {
-  //   top: 5,
-  //   bottom: 5,
-  //   left: -10,
-  //   right: 0,
-  // }
   chartOption: any = {}
 
-  // displayedAppointmentColumns: string[] = ['name', 'time', 'doctor'];
-  // displayedMessageColumns: string[] = ['sendAt', 'message'];
-  // displayedTokensColumns: string[] = ['token', 'patient', 'doctor'];
   appointmentsData!: Array<any>;
+  newTokens: Array<IToken> = [];
+  viewdTokens: Array<IToken> = [];
   appointmentsTotalRecords: number = 0;
+  roClickAction: Function = this.rowClick.bind(this);
 
   tokensData!: Array<any>;
   tokneTotalRecords: number = 0;
@@ -80,6 +47,7 @@ export class DashboardComponent implements OnInit {
       property: 'doctor',
     }
   ];
+
   displayedMessageColumns: Array<ITableColumns> = [
     {
       name: 'Send At#',
@@ -90,25 +58,22 @@ export class DashboardComponent implements OnInit {
       property: 'message',
     }
   ];
+
   displayedTokensColumns: Array<ITableColumns> = [
     {
       name: 'Token#',
-      property: 'token',
+      property: 'tokenNo',
     },
     {
       name: 'Patient Name',
-      property: 'patient',
+      property: 'patientName',
     },
     {
       name: 'Doctor Name',
-      property: 'doctor',
+      property: 'doctorName',
     }
   ];
  
-
-
-  constructor(private patientService: PatientService,private dialog: MatDialog, private readonly userStateService: UserStateService, private readonly appointmentService: AppointmentService, private readonly tokenService: TokenService) { }
-
   filter: any = [
     {
       id: "week",
@@ -124,10 +89,22 @@ export class DashboardComponent implements OnInit {
     }
   ];
 
+
+  constructor(
+    private patientService: PatientService,
+    private dialog: MatDialog, 
+    private readonly userStateService: UserStateService, 
+    private readonly appointmentService: AppointmentService, 
+    private readonly tokenService: TokenService,
+    private readonly router: Router
+    ) { }
+
+
   ngOnInit(): void {
     this.getAppointments();
     this.getMessagesData();
-    // this.getTokensData();
+    this.getUnViewdTokens();
+    this.getViewdTokens();
     this.chartOption = this.createChartOption([17, 22, 31, 46, 12, 40, 33, 16])
 
   }
@@ -135,7 +112,7 @@ export class DashboardComponent implements OnInit {
   getViewdTokens(){
     this.tokenService.getTokensByViewd(true).subscribe({
       next: (x) => {
-        console.log(x);
+        this.viewdTokens = x;
         
       },
       error: (err) => {
@@ -147,7 +124,7 @@ export class DashboardComponent implements OnInit {
   getUnViewdTokens(){
     this.tokenService.getTokensByViewd(false).subscribe({
       next: (x) => {
-        console.log(x);
+        this.newTokens = x;
         
       },
       error: (err) => {
@@ -155,6 +132,12 @@ export class DashboardComponent implements OnInit {
       }
     })
   }
+
+  rowClick(rowData: IToken){    
+    this.router.navigate([`doctor/appointment/${rowData.id}`]);    
+  }
+
+
 
   private createChartOption(data: number[]): EChartOption {
     return {

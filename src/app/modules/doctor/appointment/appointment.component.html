@@ -2,15 +2,15 @@
   <div>
     <h1 class="first-title">Current Appointment</h1>
   </div>
-  <div class="grid grid-cols-1 xl:grid-cols-3 xl:gap-x-4 gap-y-4 justify-between">
+  <div class="grid grid-cols-1 xl:grid-cols-3 xl:gap-x-4 gap-y-4 justify-between" *ngIf="patient">
     <section class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 xl:order-2 gap-x-3 gap-y-3 justify-between">
       <div class="d-flex flex-column bg-white align-items-center p-3 rounded-3">
         <img src="https://example.com/profile-picture.jpg" alt="Profile Picture"
           class="profile-picture rounded-5 bg-dark">
         <div class="profile-details">
-          <h1 class="profile-name my-2">John Doe</h1>
-          <p class="profile-info"><b>Male:</b> 35 years</p>
-          <p class="profile-location my-2">New York, USA</p>
+          <h1 class="profile-name my-2">{{patient.name}}</h1>
+          <p class="profile-info"><b>{{getGender(patient.gender)}}:</b> {{patient.age.split('-').at(0)}}</p>
+          <p class="profile-location my-2">{{''}}</p>
         </div>
         <button class="btn btn-success">Update</button>
       </div>
@@ -18,17 +18,17 @@
       <p-panel header="Summary" [toggleable]="true" aria-expanded="false">
         <div class="medical-info d-flex flex-column bg-white align-items-center">
           <h2 class="section-title">Vitals</h2>
-          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-heart-pulse mr-3"></i>Pulse Heart Rate:</span><span></span></div>
-          <div class="history-item-div"><span class="patient-info-labels"><i class="fa fas w-5 fa-regular fa-temperature-high mr-3"></i>Temprature:</span><span></span></div>
-          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-light fa-ruler-vertical mr-3"></i>height:</span><span></span></div>
-          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-weight-scale mr-3"></i>Weight (in kg e.g: 70):</span><span></span></div>
-          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-child mr-3"></i>Body Mass Index (BMI):</span><span></span></div>
-          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-heart mr-3"></i>Blood Pressure:</span><span></span></div>
-          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-lungs mr-3"></i>Oxygen Saturation:</span><span></span></div>
-          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-lungs mr-3"></i>Respiratory Rate:</span><span></span></div>
-          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-lungs mr-3"></i>Blood Sugar:</span><span></span></div>
-          <div class="history-item-div"><span class="patient-info-labels">Last
-              Visit:</span><span>{{'11/2/2023'|date}}</span></div>
+          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-heart-pulse mr-3"></i>Pulse Heart Rate:</span><span>{{token.tokenDetail?.pulseHeartRate ?? 'N/A'}}</span></div>
+          <div class="history-item-div"><span class="patient-info-labels"><i class="fa fas w-5 fa-regular fa-temperature-high mr-3"></i>Temprature:</span><span>{{token.tokenDetail?.temperature ?? 'N/A'}}</span></div>
+          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-light fa-ruler-vertical mr-3"></i>height:</span><span>{{token.tokenDetail?.height ?? 'N/A'}}</span></div>
+          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-weight-scale mr-3"></i>Weight (in kg e.g: 70):</span><span>{{token.tokenDetail?.weight ?? 'N/A'}}</span></div>
+          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-child mr-3"></i>Body Mass Index (BMI):</span><span>{{token.tokenDetail?.bodyMassIndex ?? 'N/A'}}</span></div>
+          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-heart mr-3"></i>Blood Pressure:</span><span>{{token.tokenDetail?.bloodPressure ?? 'N/A'}}</span></div>
+          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-lungs mr-3"></i>Oxygen Saturation:</span><span>{{token.tokenDetail?.oxygenSaturation ?? 'N/A'}}</span></div>
+          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-lungs mr-3"></i>Respiratory Rate:</span><span>{{token.tokenDetail?.respiratoryRate ?? 'N/A'}}</span></div>
+          <div class="history-item-div"><span class="patient-info-labels"><i class="fa-solid w-5 fa-lungs mr-3"></i>Blood Sugar:</span><span>{{token.tokenDetail?.bloodSugar ?? 'N/A'}}</span></div>
+          <!-- <div class="history-item-div"><span class="patient-info-labels">Last
+              Visit:</span><span>{{'11/2/2023'|date}}</span></div> -->
           <!-- More history items here -->
         </div>
     </p-panel>
@@ -102,16 +102,16 @@
         <div>
           <p-tabView>
             <p-tabPanel header="Prescription">
-              <app-prescription></app-prescription>
+              <app-prescription [token]="token"></app-prescription>
             </p-tabPanel>
             <p-tabPanel header="Vitals">
-                <app-vitals></app-vitals>
+                <app-vitals [token]="token" ></app-vitals>
             </p-tabPanel>
             <p-tabPanel header="Medication">
-                <app-medication></app-medication>
+                <app-medication [token]="token"></app-medication>
             </p-tabPanel>
             <p-tabPanel header="Lab Order">
-              <app-lab-order></app-lab-order>
+              <app-lab-order [token]="token"></app-lab-order>
             </p-tabPanel>
             <p-tabPanel header="Radiology Order">
                 <p>
@@ -150,6 +150,6 @@
       </div>
     </section>
   </div>
-  <app-add-prescription-dialogue (show)="showDialogueMethod=$event"></app-add-prescription-dialogue>
+  <!-- <app-add-prescription-dialogue (show)="showDialogueMethod=$event"></app-add-prescription-dialogue> -->
   <!-- <button (click)="showDialogueMethod()">open dialogue</button> -->
 </div>

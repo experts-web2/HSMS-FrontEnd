@@ -6,7 +6,9 @@ import { DoctorDashboardComponent } from './doctor-dashboard/doctor-dashboard.co
 
 const routes: Routes = [
   {path:'', component: DoctorRootComponent, children:[
-    {path:'', component: AppointmentComponent},
+    {path:'', redirectTo: 'health_record', pathMatch: 'full'},
+    {path:'appointment/:tokenId', component: AppointmentComponent},
+    {path:'health_record', component: AppointmentComponent},
   ]}
 ];
 

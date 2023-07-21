@@ -61,10 +61,20 @@
   <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
     <tr>
       <ng-container *ngFor="let column of columns">
-        <td >
-          {{column.columnType !== 'innerHtml' ? resolveField(rowData, column): ''}}
-          <div *ngIf="column.columnType === 'innerHtml'" [innerHTML]="resolveField(rowData, column)"></div>
-        </td>
+        <ng-container *ngIf="clickableRow; else notClickable">
+          <td (click)="rowClickAction(rowData)">
+            {{column.columnType !== 'innerHtml' ? resolveField(rowData, column): ''}}
+            <div *ngIf="column.columnType === 'innerHtml'" [innerHTML]="resolveField(rowData, column)"></div>
+          </td>
+
+        </ng-container>
+        <ng-template #notClickable>
+          <td >
+            {{column.columnType !== 'innerHtml' ? resolveField(rowData, column): ''}}
+            <div *ngIf="column.columnType === 'innerHtml'" [innerHTML]="resolveField(rowData, column)"></div>
+          </td>
+
+        </ng-template>
 
       </ng-container>
       <td *ngIf="showActions">

@@ -22,11 +22,11 @@ export class TokenService extends HttpService{
     return this.post(`${this.baseEndPoint}/add`, token);
   }
 
-  getTokensByViewd(isViewd: boolean): Observable<IToken>{
+  getTokensByViewd(isViewd: boolean): Observable<Array<IToken>>{
     return this.get(`${this.baseEndPoint}/getbyisviewed/${isViewd}`);
   }
 
-  getTokenById(tokenId: string): Observable<any>{
+  getTokenById(tokenId: string): Observable<IToken>{
     return this.get(`${this.baseEndPoint}/byid/${tokenId}`)
   }
 
