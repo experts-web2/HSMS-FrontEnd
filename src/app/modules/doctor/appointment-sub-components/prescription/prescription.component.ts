@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserStateService } from 'src/app/State/user/user.service';
 import { Procedure } from 'src/app/constants/enums/Procedures';
 import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequest';
 import { PrescriptionService } from '../../../../Services/prescription.service';
+import { IToken } from 'src/app/models/interfaces/Token';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { AlertService } from 'src/app/Services/alert/alert.service';
 
 @Component({
   selector: 'app-prescription',
@@ -12,11 +15,17 @@ import { PrescriptionService } from '../../../../Services/prescription.service';
   styleUrls: ['./prescription.component.scss']
 })
 export class PrescriptionComponent implements OnInit {
+  @Input() token!: IToken;
+  
+  doctorId!: string;
+  patientId!: string;
   prescriptionForm!: FormGroup;
   prescreptionRequest!: IPrescriptionRequest;
   loggedInDoctor!: ILogedInUser;
-  improvementOptions: any[] = []; 
-  constructor(private readonly fb: FormBuilder, private readonly userStateService: UserStateService, private readonly prescriptionService: PrescriptionService){
+  improvementOptions: any[] = [];
+  historyDropDown: Array<IDropDown> = [];
+  
+  constructor(private readonly fb: FormBuilder, private readonly userStateService: UserStateService, private readonly prescriptionService: PrescriptionService, private readonly alertService: AlertService){
 
     this.userStateService.getUserState().subscribe({
       next: (x) => {
@@ -40,15 +49,38 @@ export class PrescriptionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    if(this.token) {
+      this.patientId = this.token.patientId;
+      this.doctorId = this.token.doctorId;
+    }
+  }
+
+  getPrescriptionHistoryDropDown(){
+    this.prescriptionService.getPrescriptionHistoryDropDown(this.token.patientId).subscribe({
+      next: (x)=>{
+        this.historyDropDown = x;
+      }
+    })
+  }
+
+  getPrescription(prescriptionId: string){
+    this.prescriptionService.getPrescriptionById(prescriptionId).subscribe({
+      next: (x)=>{
+
+      }
+    })
+  }
+
+  onHistorySelection(prescriptionId: string){
+
   }
 
   savePrescription(print?: boolean){
     console.log(this.prescriptionForm.value);
     let values = this.prescriptionForm.value
     let prescription: IPrescriptionRequest = {
-      doctorId: '20afc768-c778-4578-b5cd-0371c66647f6',
-      patientId: 'a4b96ae6-4101-4fdf-ae8c-b146a34b6aaa',
+      doctorId: this.doctorId,
+      patientId: this.patientId,
       medicalHistory: values['medicalHistory'],
       complaint: values['complaint'], 
       examination: values['examination'],
@@ -61,6 +93,7 @@ export class PrescriptionComponent implements OnInit {
     this.prescriptionService.addPrescription(prescription).subscribe({
       next: (x)=>{
         console.log(x);
+        this.alertService.success('Prescription Saved Successfully.')
         
       },
       error: (err) =>{

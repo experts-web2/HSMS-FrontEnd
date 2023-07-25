@@ -139,21 +139,26 @@
                 </div>
 
             </div>
-            <button (click)="addNewInvoiceItem()"
-                class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center">Item<mat-icon
-                    class="ml-3">add_box</mat-icon></button>
-            <div class="lg:w-2/4 ml-auto flex items-start flex-col lg:flex-row">
-                <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
-                <input class="h-10 w-full lg:ml-3" type="number" pInputText name="totalDiscount"
-                    formControlName="totalDiscount">
-            </div>
-            <div class="lg:w-2/4 ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
-                <label for="total_discount" class="min-w-fit">Grand Total: Rs. </label>
-                <input type="text" class="pulse lg:ml-3" pInputText placeholder="1500" formControlName="grandTotal" />
-            </div>
-            <div class="lg:w-2/4 ms-auto flex-col lg:flex-row d-flex justify-content-between items-start">
-                <label for="total_discount" class="min-w-fit">Paid: Rs.</label>
-                <input type="number" class="pulse lg:ml-3" pInputText placeholder="1500" formControlName="amountPaid" />
+            <button (click)="addNewInvoiceItem()" class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center" *ngIf="addTokenForm.controls['tokenTypes'].value !== 1">Item<mat-icon
+                class="ml-3">add_box</mat-icon></button>
+                <div class="lg:w-2/4 ml-auto flex items-start flex-col lg:flex-row">
+                    <label for="dicountType">Discount Type</label>
+                    <select id="dicountType" class="w-full rounded h-10 border" formControlName="totalDiscountType" (change)="calculate(true)">
+                        <option *ngFor="let discType of discountTypes" [ngValue]="discType.value"
+                            >{{discType.label}}</option>
+                    </select>
+                </div>
+        <div class="lg:w-2/4 ml-auto flex items-start flex-col lg:flex-row">
+            <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
+            <input class="h-10 w-full lg:ml-3" type="number" pInputText name="totalDiscount"  formControlName="totalDiscount" (input)="calculate(true)">
+        </div>
+        <div class="lg:w-2/4 ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
+            <label for="total_discount" class="min-w-fit">Grand Total: Rs. </label>
+            <input type="text" class="pulse lg:ml-3" pInputText placeholder="1500" formControlName="grandTotal"/>
+        </div>
+        <div class="lg:w-2/4 ms-auto flex-col lg:flex-row d-flex justify-content-between items-start">
+            <label for="total_discount" class="min-w-fit">Paid: Rs.</label>
+            <input type="number" class="pulse lg:ml-3" pInputText placeholder="1500" formControlName="amountPaid"/>
 
             </div>
             <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">

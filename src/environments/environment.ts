@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   // backendurl: 'http://192.168.18.22/',
-  backendurl: 'http://192.168.18.115:8070/',
-  // backendurl: 'https://localhost:44357/',
+  // backendurl: 'https://localhost:7173/',
+  backendurl: 'https://hsms-api.conceptrik.com/',
   encryptionKey: '554cf1e2d65d36f28a7b87066f337171'
 };
 

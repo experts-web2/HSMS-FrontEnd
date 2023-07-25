@@ -22,6 +22,7 @@ export class AddTokenModalComponent implements OnInit {
   selectedPayment = ''
   addTokenForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
+  totalDiscountType: number = 1;
   doctors: Array<IDropDown> = [];
   tests: Array<IDropDown> = [];
   radiology: Array<IDropDown> = [];
@@ -104,6 +105,7 @@ export class AddTokenModalComponent implements OnInit {
       payment_notification: new FormControl<boolean | null>(null, [Validators.required]),
       patientCheckedIn: new FormControl<boolean | null>(false, [Validators.required]),
       confirmation: new FormControl('', [Validators.required]),
+      totalDiscountType: new FormControl<number | null>(1),
       invoiceItems: this.fb.array([this.invoiceDescriptionForm]),
     });
 
@@ -156,6 +158,7 @@ export class AddTokenModalComponent implements OnInit {
 
   onDescriptionSelect(index: number, descriptionId: string) {
     let description = this.descriptions.find(x => x.id === descriptionId);
+    this.addTokenForm.controls['doctorId'].setValue(description?.id);
     this.invoiceItems.at(index).get('paidAmount')?.setValue(description?.price);
     this.calculate()
 
@@ -288,22 +291,33 @@ export class AddTokenModalComponent implements OnInit {
     }
   }
 
-  calculate(index?: number) {
+  calculate(totalInput?: boolean){
+    let totalDiscountType = this.addTokenForm.get('totalDiscountType')
     let totalDiscount = this.addTokenForm.get('totalDiscount');
+    if(totalDiscount?.value && totalDiscount.value > 0 && totalInput) {
+      
+      for(let invItem of this.invoiceItems.controls){
+        invItem.get('discountAmount')?.setValue(0);
+      }
+    }
     let amountPaid = this.addTokenForm.get('amountPaid');
     let grandTotal = this.addTokenForm.get('grandTotal');
     let totalGrandTotal = 0;
     let totalDiscountTotal = 0;
-    for (let invItem of this.invoiceItems.controls) {
-      let amount = invItem.get('paidAmount')?.value;
-      let discountType = invItem.get('discountType')?.value;
-      console.log(discountType);
-      let discount = !invItem.get('discountAmount')?.value || invItem.get('discountAmount')?.value === 0 ? 0 : discountType === 1 ? invItem.get('discountAmount')?.value : (invItem.get('discountAmount')?.value / 100) * amount;
-      totalGrandTotal += amount;
-      totalDiscountTotal += discount;
-    }
+     for(let invItem of this.invoiceItems.controls){
+       let amount = invItem.get('paidAmount')?.value;
+       let discountType = invItem.get('discountType')?.value;
+       let discount = !invItem.get('discountAmount')?.value || invItem.get('discountAmount')?.value === 0 ? 0 : discountType === 1 ? invItem.get('discountAmount')?.value  : (invItem.get('discountAmount')?.value / 100) * amount;
+       totalGrandTotal += amount;
+       totalDiscountTotal += discount;
+       
+     }
+     console.log(totalDiscount?.value * ( totalGrandTotal / 100));
+     
+     if(totalDiscount?.value && totalDiscount.value > 0 && totalInput) totalDiscountTotal = totalDiscount.value;
+
     totalDiscount?.setValue(totalDiscountTotal);
-    grandTotal?.setValue(totalGrandTotal - totalDiscountTotal);
+    grandTotal?.setValue(totalGrandTotal - (totalDiscountType?.value === 2 ? ((totalDiscountTotal / 100) * totalDiscount?.value) : totalDiscountTotal));
   }
 
   addPatient() {

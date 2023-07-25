@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseEndPoints } from '../constants/enums/base-end-points';
 import { IMedicationRequest } from '../models/interfaces/MedicationRequest';
 import { Observable } from 'rxjs';
+import { IDropDown } from '../models/interfaces/Dropdown';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +21,13 @@ export class MedicationService extends HttpService {
     return this.post(`${this.baseEndPoint}/add`, medication);
   }
 
-  // getMedicine(fetchRequest: IFetchRequest = {}){
-  //   return this.post(`${this.baseEndPoint}/all`, fetchRequest)
-  // }
+  getMedicationHistoryDropDown(patientId: string): Observable<Array<IDropDown>>{
+    return this.get(`${this.baseEndPoint}/dropdownbypatientid/${patientId}`);
+  }
+
+  getMedicationById(medicationId: string): Observable<any>{
+    return this.get(`${this.baseEndPoint}/byid/${medicationId}`)
+  }
 
   // deleteMedicine(deleteMedicine: any){
   //   return this.delete(`${this.baseEndPoint}/delete/${deleteMedicine.id}`)
