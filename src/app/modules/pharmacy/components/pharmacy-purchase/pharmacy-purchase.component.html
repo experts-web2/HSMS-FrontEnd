@@ -1,1 +1,89 @@
-<p>pharmacy-purchase works!</p>
+<div class="flex flex-col">
+    <div class="flex justify-center mt-6">
+        <h1>Pharmacy Purchase</h1>
+    </div>
+    <div class="mt-5">
+        <div class="p-5">
+            <form [formGroup]="purchaseMedicineForm">
+                <div class="mb-5">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Vendor: </label>
+                    <select
+                        class="block appearance-none border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-1/6"
+                        name="" id="" formControlName="vendorId">
+                        <option [value]="null" [defaultSelected]="true" disabled>Select a Vendor</option>
+                    </select>
+                </div>
+                <div class="flex flex-column" formArrayName="medicines">
+                    <div *ngFor="let form of medicines.controls; let i = index" class="flex mb-3">
+                        <p class="text-2xl mr-2 font-bold mr-5">{{i+1}}</p>
+                        <div [formGroupName]="i" class="flex">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine Name</label>
+                                <input
+                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    type="text" formControlName="medicineId">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine Packs</label>
+                                <input
+                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    type="number" formControlName="packsQty">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">#Units Per/Pak</label>
+                                <input
+                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    type="number" formControlName="unitsPerPack">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A pack</label>
+                                <input
+                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    type="number" formControlName="packPrice">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A Unit</label>
+                                <input
+                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    type="number" formControlName="unitPrice">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">MFG: Date</label>
+                                    <p-calendar  [showIcon]="true" formControlName="mfgDate"></p-calendar>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">EXP: Date</label>
+                                    <p-calendar [showIcon]="true" formControlName="expDate"></p-calendar>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">Brand</label>
+                                <input
+                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    type="text" formControlName="brandId">
+                            </div>
+                            <div>
+                                <button (click)="removeMedicine(i)"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="mt-4 mb-4">
+
+                <button
+                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                    (click)="addMedicine()">+
+                    Add a medicine</button>
+            </div>
+            <div class="flex justify-end">
+                <button
+                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
+                    Save
+                </button>
+                <button
+                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Save
+                    & Print</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  backendurl: 'http://192.168.18.22/',
-  // backendurl: 'https://localhost:44357/',
+  // backendurl: 'http://192.168.18.22/',
+  backendurl: 'https://localhost:7173/',
   encryptionKey: '554cf1e2d65d36f28a7b87066f337171'
 };
 
