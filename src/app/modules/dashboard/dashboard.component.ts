@@ -202,7 +202,7 @@ export class DashboardComponent implements OnInit {
       width: '90vw',
       maxWidth: '',
       height: '90vh',
-      data: {},
+      data: {display:true},
     });    
   }
 

@@ -22,6 +22,13 @@ export class VitalService extends HttpService {
     return this.post(`${this.baseEndpoint}/add`, vital);
   }
 
+   getVitals(): Observable<any>{
+    return this.get(`${this.baseEndpoint}/all`);
+  }
+
+   getPreviousVisits(): Observable<any>{
+    return this.get(`${this.baseEndpoint}/all`);
+   }
   getVitalsHistoryDropDown(patientId: string): Observable<Array<IDropDown>>{
     return this.get(`${BaseEndPoints.Prescription}/dropdownbypatientid/${patientId}`);
   }

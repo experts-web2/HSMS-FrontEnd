@@ -19,6 +19,14 @@
         <div class="text-danger" *ngIf="(testForm.controls['testCategoryId'].errors && testForm.controls['testCategoryId'].touched) || (testForm.controls['testCategoryId'].touched && !testForm.controls['testCategoryId'].valid)"><small>Please select a test category.</small></div>
     </div>
     <div class="d-flex flex-column gap-2">
+        <label for="category">Test Sample <span class="text-danger">*</span></label>
+        <select class="form-select h-100" name="" id="testSample" formControlName="testSample">
+            <option [value]="''" selected disabled>Select Test Sample</option>
+            <option *ngFor="let category of testsSample" [value]="category.value" >{{category.label}}</option>
+        </select>
+        <div class="text-danger" *ngIf="(testForm.controls['testSample'].errors && testForm.controls['testSample'].touched) || (testForm.controls['testSample'].touched && !testForm.controls['testSample'].valid)"><small>Please select test sample.</small></div>
+    </div>
+    <div class="d-flex flex-column gap-2">
         <label for="price">Price <span class="text-danger">*</span></label>
         <input pInputText type="number" name="" id="price" formControlName="price" required>
         <div class="text-danger" *ngIf="(testForm.controls['price'].errors && testForm.controls['price'].touched) || (testForm.controls['price'].touched && !testForm.controls['price'].valid)"><small>Please enter price.</small></div>
@@ -28,7 +36,16 @@
         <input pInputText type="text" name="" id="price" formControlName="normalValues" required>
         <div class="text-danger" *ngIf="(testForm.controls['normalValues'].errors && testForm.controls['normalValues'].touched) || (testForm.controls['normalValues'].touched && !testForm.controls['normalValues'].valid)"><small>Please enter normal value.</small></div>
     </div>
-    <div style="text-align: end;">
+
+
+    <div class="d-flex flex-column gap-2">
+        <label for="reportingTime">Report Time <span class="text-danger">*</span></label>
+        <input pInputText type="number" name="" id="reportingTime" placeholder="reporting hour i.e 8,12,72" formControlName="reportingTime" required>
+        <div class="text-danger" *ngIf="(testForm.controls['reportingTime'].errors && testForm.controls['reportingTime'].touched) || (testForm.controls['reportingTime'].touched && !testForm.controls['reportingTime'].valid)"><small>Please enter reporting time.</small></div>
+    </div>
+    
+    
+    <div class="button-wrapper">
         <button class="btn btn-primary" 
         type="submit" 
         [disabled]="
@@ -36,7 +53,9 @@
         (testForm.controls['description'].errors || !testForm.controls['description'].valid) && 
         (testForm.controls['testCategoryId'].errors || !testForm.controls['testCategoryId'].valid) && 
         (testForm.controls['price'].errors || !testForm.controls['price'].valid) &&
-        (testForm.controls['normalValues'].errors || !testForm.controls['normalValues'].valid) 
+        (testForm.controls['normalValues'].errors || !testForm.controls['normalValues'].valid) &&
+        (testForm.controls['testSample'].errors || !testForm.controls['testSample'].valid) && 
+        (testForm.controls['reportingTime'].errors || !testForm.controls['reportingTime'].valid)
         "
         >{{action === 'add'?'Add Test':'Update Test'}}</button>
     </div>

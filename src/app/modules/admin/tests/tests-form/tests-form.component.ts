@@ -7,6 +7,7 @@ import { IAddOrUpdateTest } from 'src/app/models/interfaces/addOrUpdate-test';
 import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
+import { TestsReportTime, TestsSample } from 'src/app/constants/Constants/testsConsts';
 
 
 @Component({
@@ -17,6 +18,8 @@ import { ILabeTest } from 'src/app/models/interfaces/labTest';
 export class TestsFormComponent implements OnInit  {
   testForm!: FormGroup;
   categories!: Array<ILabTestCategory>;
+  testsSample = TestsSample;
+  TestsReportTime = TestsReportTime
   test: ILabeTest;
   action: string;
 
@@ -37,7 +40,9 @@ export class TestsFormComponent implements OnInit  {
       testCategoryId: new FormControl<string>('', [Validators.required]),
       description: new FormControl<string>('', [Validators.required]),
       price: new FormControl<number | null>(null, [Validators.required]),
-      normalValues: new FormControl<number | null>(null, [Validators.required])
+      normalValues: new FormControl<number | null>(null, [Validators.required]),
+      testSample: new FormControl<string>('', [Validators.required]),
+      reportingTime: new FormControl<string>('', [Validators.required]),
     })
 
     if(this.action === 'update' && this.test){
@@ -48,6 +53,8 @@ export class TestsFormComponent implements OnInit  {
           description: this.test.description,
           price: this.test.price,
           normalValues: this.test.normalValues,
+          testSample: this.test.testSample,
+          reportingTime: this.test.reportingTime,
         });
     }
   }
@@ -60,7 +67,9 @@ export class TestsFormComponent implements OnInit  {
       description: testFormValue.description,
       price: testFormValue.price,
       normalValues: testFormValue.normalValues,
-      testCategoryId: testFormValue.testCategoryId
+      testCategoryId: testFormValue.testCategoryId,
+      testSample: testFormValue.testSample,
+      reportingTime: testFormValue.reportingTime,
     }
     if(this.action === 'add'){
       this.testsService.addTest(testToAdd).subscribe({

@@ -21,6 +21,9 @@ export class TokenService extends HttpService{
   addToken(token: IAddOrUpdateToken): Observable<IToken>{
     return this.post(`${this.baseEndPoint}/add`, token);
   }
+  addPatientTest(token: any): Observable<IToken>{
+    return this.post(`${this.baseEndPoint}/add`, token);
+  }
 
   getTokensByViewd(isViewd: boolean): Observable<Array<IToken>>{
     return this.get(`${this.baseEndPoint}/getbyisviewed/${isViewd}`);

@@ -52,6 +52,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 ::-webkit-scrollbar{
   width:7px;
+  height:5px;
 }
 ::-webkit-scrollbar-track {
 box-shadow: none;
@@ -87,4 +88,14 @@ outline: 1px solid rgba(112, 128, 144, 0);
   &:hover{
     background-color: #11438F;
   }
+}
+
+p-autocomplete{
+  width: 100%;
+  display: grid;
+}
+.p-button{
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
 }

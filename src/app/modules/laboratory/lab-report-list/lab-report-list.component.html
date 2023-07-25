@@ -1,82 +1,105 @@
+<div class="text-center inside-header">
+    <h1></h1> <button class="btn btn-primary" (click)="addTests()"><i class="pi pi-plus me-2"></i> Add Test</button>
+</div>
+
 <div class=" flex-column bg-white align-items-center p-3 rounded-3 m-md-3">
     <div>
-      <p-tabView>
-        <div class="d-flex align-items-center justify-content-between">
-            <div>
-                <p-autoComplete [suggestions]="[]"
-                    [dropdown]="true" field="name" placeholder="Search Test" dropdownIcon="pi pi-search" [minLength]="1">
-                </p-autoComplete>
-            </div>
-            <div class="ms-3">
-                <p-autoComplete [suggestions]="[]"
-                    [dropdown]="true" field="name" placeholder="Search by Lab Location" dropdownIcon="pi pi-search" [minLength]="1">
-                </p-autoComplete>
-            </div>
-            <div class="p-fluid p-grid p-formgrid">
-                <div class="p-field p-col-12 p-md-4">
-                  <p-calendar selectionMode="range" [readonlyInput]="true" [showIcon]="true" inputId="range" [showTime]="true">
-                  </p-calendar>
-                </div>
-              </div>
-
-              <div class="ms-3">
-                <p-autoComplete [suggestions]="[]"
-                    [dropdown]="true" field="name" placeholder="Search Added By" dropdownIcon="pi pi-search" [minLength]="1">
-                </p-autoComplete>
-            </div>
-        </div>
-        <div class="d-flex align-items-center justify-content-between mb-3">
-            <div>
-                <p-autoComplete [suggestions]="[]"
-                    [dropdown]="true" field="name" placeholder="Search By Collection Center" dropdownIcon="pi pi-search" [minLength]="1">
-                </p-autoComplete>
-            </div>
-            <div >
-                <select class="form-select" aria-label="Default select example"
-                    >
-                    <option selected [value]="null" disabled>Select Type</option>
+        <div class="row lab-department-dropdown">
+            <div class="col-6">
+                <select class="form-select" aria-label="Default select example">
+                    <option selected [value]="null" disabled>All</option>
                     <option *ngFor="let selectType of selectTypes" [value]="selectType.id">{{
                         selectType.name }}</option>
                 </select>
-
-                <!-- <p-dropdown [options]="selectTypes" (onChange)="selctData($event)" [editable]="true" optionLabel="name" ></p-dropdown> -->
-            </div>
-
-            <div>
-                <select class="form-select" aria-label="Default select example">
-                    <option selected [value]="null" disabled>Select Report Type</option>
-                    <option *ngFor="let selectReport of selectReportType" [value]="selectReport.id">{{
-                        selectReport.name }}</option>
-                </select>
-            </div>
-
-              <div class="ms-3">
-                <p-autoComplete [suggestions]="[]"
-                    [dropdown]="true" field="name" placeholder="Search Lab#..." dropdownIcon="pi pi-search" [minLength]="1">
-                </p-autoComplete>
             </div>
         </div>
+        <p-tabView (onChange)="handleChange($event.index)" [activeIndex]="selectedIndex">
+            <div class="mb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10 align-items-center justify-content-between">
 
-        <p-tabPanel header="Collect Sample(0)">
-            <div>
-                <app-generic-table [data]="[]" [columns]="[]" [actionsToShow]="actionsToShow" [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
+                <div>
+                    <p-autoComplete [suggestions]="testsToShow" [dropdown]="true" field="name"
+                        (completeMethod)="search($event)" placeholder="Search Test" dropdownIcon="pi pi-search"
+                        [minLength]="1">
+                    </p-autoComplete>
+
+                </div>
+                <div>
+                    <p-autoComplete [suggestions]="[]" [dropdown]="true" field="name"
+                        placeholder="Search by Lab Location" dropdownIcon="pi pi-search" [minLength]="1">
+                    </p-autoComplete>
+                </div>
+                <div class="p-fluid p-grid p-formgrid">
+                    <div>
+                        <p-calendar selectionMode="range" [readonlyInput]="true" [placeholder]="datePlaceholder"
+                            [showIcon]="true" inputId="range" [showTime]="true">
+                        </p-calendar>
+                    </div>
+                </div>
+
+                <div >
+                    <p-autoComplete [suggestions]="[]" [dropdown]="true" field="name" placeholder="Search Added By"
+                        dropdownIcon="pi pi-search" [minLength]="1">
+                    </p-autoComplete>
+                </div>
             </div>
-        </p-tabPanel>
-        <p-tabPanel header="Pending Test(0)">
-            <div>
-                <app-generic-table [data]="[]" [columns]="[]" [actionsToShow]="actionsToShow" [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10 mb-3">
+
+                <div>
+                    <p-autoComplete [suggestions]="[]" [dropdown]="true" field="name"
+                        placeholder="Search By Collection Center" dropdownIcon="pi pi-search" [minLength]="1">
+                    </p-autoComplete>
+                </div>
+                <div>
+                    <select class="form-select h-full" aria-label="Default select example">
+                        <option selected [value]="null" disabled>Select Type</option>
+                        <option *ngFor="let selectType of selectTypes" [value]="selectType.id">{{
+                            selectType.name }}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <select class="form-select h-full" aria-label="Default select example">
+                        <option selected [value]="null" disabled>Select Report Type</option>
+                        <option *ngFor="let selectReport of selectReportType" [value]="selectReport.id">{{
+                            selectReport.name }}</option>
+                    </select>
+                </div>
+
+                <div>
+                    <p-autoComplete [suggestions]="[]" [dropdown]="true" field="name" placeholder="Search Lab#..."
+                        dropdownIcon="pi pi-search" [minLength]="1">
+                    </p-autoComplete>
+                </div>
             </div>
-        </p-tabPanel>
-        <p-tabPanel header="Test Validation(0)">
-            <div>
-                <app-generic-table [data]="[]" [columns]="[]" [actionsToShow]="actionsToShow" [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
-            </div>
-        </p-tabPanel>
-        <p-tabPanel header="Completed Test(0)">
-            <div>
-                <app-generic-table [data]="[]" [columns]="[]" [actionsToShow]="actionsToShow" [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
-            </div>
-        </p-tabPanel>
-      </p-tabView>
+
+            <p-tabPanel header="Collect Sample(0)">
+                1
+                <div>
+                    <app-generic-table [data]="labTests" [columns]="columns" [actionsToShow]="actionsToShow"
+                        [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Pending Test(0)">
+                2
+                <div>
+                    <app-generic-table [data]="labTests" [columns]="columns" [actionsToShow]="actionsToShow"
+                        [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Test Validation(0)">
+                3
+                <div>
+                    <app-generic-table [data]="labTests" [columns]="columns" [actionsToShow]="actionsToShow"
+                        [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Completed Test(0)">
+                4
+                <div>
+                    <app-generic-table [data]="labTests" [columns]="columns" [actionsToShow]="actionsToShow"
+                        [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
     </div>
-  </div>
+</div>

@@ -5,8 +5,9 @@ import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { IAddOrUpdateTest } from 'src/app/models/interfaces/addOrUpdate-test';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { patientData } from 'src/data';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,9 @@ export class TestService extends HttpService {
 
   addTest(test: IAddOrUpdateTest){
     return this.post(`${this.baseEndPoint}/add`, test);
+  }
+  addPatientTest(test:any){
+    return this.post(`${BaseEndPoints.Patienttestinvoice}/add`, test);
   }
 
   deleteTest(test: ILabeTest){
@@ -41,6 +45,11 @@ export class TestService extends HttpService {
 
   getTestDropDown(): Observable<Array<IDropDown>>{
     return this.get(`${this.baseEndPoint}/dropdown`);
+  }
+
+
+  getPatientTests() {
+    return of(patientData.getPatientTests())
   }
 
 }

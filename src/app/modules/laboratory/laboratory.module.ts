@@ -12,13 +12,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { LabReportListComponent } from './lab-report-list/lab-report-list.component';
 import { GenericTableComponent } from 'src/app/Shared/components/generic-table/generic-table.component';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { CollectLabSampleComponent } from './collect-lab-sample/collect-lab-sample.component';
+import { AddPatientTestComponent } from './add-patient-test/add-patient-test.component';
 
 
 @NgModule({
   declarations: [
     LaboratoryRootComponent,
     LabTestReportComponent,
-    LabReportListComponent
+    LabReportListComponent,
+    AddPatientTestComponent,
+    CollectLabSampleComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +36,14 @@ import { GenericTableComponent } from 'src/app/Shared/components/generic-table/g
     ReactiveFormsModule,
     FormsModule,
     AngularEditorModule ,
-    GenericTableComponent
+    GenericTableComponent,
+    ReactiveFormsModule,
+    
+  ],
+  providers: [
+    DialogService,
+        DynamicDialogRef,
+        DynamicDialogConfig
   ]
 })
 export class LaboratoryModule { }

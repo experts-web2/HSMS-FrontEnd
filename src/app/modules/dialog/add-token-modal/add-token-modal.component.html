@@ -2,88 +2,101 @@
     <div class="position-relative">
         <mat-icon class="cursor-pointer position-absolute close-button" (click)="cancel()">cancel
         </mat-icon>
-        <p class="text-center font-weight-bold"><b>Add Token</b></p>
+        <p class="text-center font-weight-bold" *ngIf="display"><b>Add Token</b></p>
     </div>
     <mat-divider></mat-divider>
     <div class="px-md-5 px-2 pb-5">
-        <div class="mb-5 mt-3 d-flex flex-col md:flex-row justify-content-between justify-items-center position-relative">
-            <label for="patient">Patient</label>
-            <div class="position-relative mt-1 md:mt-0 mb-3 md:mb-0 search-field">
-                <input [matAutocomplete]="auto" placeholder="Search by Name" class="border pl-3 rounded-full w-full h-full" type="text"
-                    name="patient" #patientSearch (input)="searchPatient(patientSearch.value)" formControlName="patientName">
-                <mat-icon class="cursor-pointer position-absolute search-icon">search</mat-icon>
+        <!-- <ng-template *ngIf="display"> -->
+            <div *ngIf="display"
+                class="mb-5 mt-3 d-flex flex-col md:flex-row justify-content-between justify-items-center position-relative">
+                <label for="patient">Patient</label>
+                <div class="position-relative mt-1 md:mt-0 mb-3 md:mb-0 search-field">
+                    <input [matAutocomplete]="auto" placeholder="Search by Name"
+                        class="border pl-3 rounded-full w-full h-full" type="text" name="patient" #patientSearch
+                        (input)="searchPatient(patientSearch.value)" formControlName="patientName">
+                    <mat-icon class="cursor-pointer position-absolute search-icon">search</mat-icon>
+                </div>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="patientSelect($event.option.value)">
+                    <mat-option *ngFor="let patient of patientsToShow" [value]="patient">
+                        {{patient.name }}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-icon (click)="addPatient()">add_box</mat-icon>
             </div>
-            <mat-autocomplete #auto="matAutocomplete"  (optionSelected)="patientSelect($event.option.value)">
-                <mat-option *ngFor="let patient of patientsToShow" [value]="patient">
-                    {{patient.name }}
-                </mat-option>
-            </mat-autocomplete>
-            <mat-icon (click)="addPatient()">add_box</mat-icon>
-        </div>
+        <!-- </ng-template> -->
         <div>
-            <p><b>Appointment fields</b></p>
-            <div class="d-flex justify-content-between mt-4 flex-col md:flex-row">
-                <label for="token">Token Type</label>
-                <select class="md:w-3/4 rounded h-10 border" name="" id="token" formControlName="tokenTypes" #tokenType (change)="tokenTypeChange(tokenType.value)">
-                    <option [value]="null" [defaultSelected]="true" disabled>Select a token type...</option>
-                    <option *ngFor="let tokenType of tokentypes" [ngValue]="tokenType.value">{{tokenType.label}}</option>
-                </select>
-            </div>
-            <!-- <div class="d-flex justify-content-between mt-4 " *ngIf="addTokenForm.controls['tokenTypes'].value == 1">
-                <label for="doctor">Doctor</label>
-                <select class="w-75 pulse form-select" name="" id="doctor" formControlName="doctorId" >
-                    <option [value]="null" selected disabled>Select a doctor...</option> -->
+            <!-- <ng-template > -->
+                <div *ngIf="display">
+
+                    <p><b>Appointment fields</b></p>
+                    <div class="d-flex justify-content-between mt-4 flex-col md:flex-row">
+                        <label for="token">Token Type</label>
+                        <select class="md:w-3/4 rounded h-10 border" name="" id="token" formControlName="tokenTypes" #tokenType
+                            (change)="tokenTypeChange(tokenType.value)">
+                            <option [value]="null" [defaultSelected]="true" disabled>Select a token type...</option>
+                            <option *ngFor="let tokenType of tokentypes" [ngValue]="tokenType.value">{{tokenType.label}}
+                            </option>
+                        </select>
+                    </div>
+                    <!-- <div class="d-flex justify-content-between mt-4 " *ngIf="addTokenForm.controls['tokenTypes'].value == 1">
+                        <label for="doctor">Doctor</label>
+                        <select class="w-75 pulse form-select" name="" id="doctor" formControlName="doctorId" >
+                            <option [value]="null" selected disabled>Select a doctor...</option> -->
                     <!-- <option #otherDoctor><input #otherDoctorInp  (input)="otherDoctor.value = otherDoctorInp.value" (click)="otherDoctor.selected = true" placeholder="Add other doctor"/><option> -->
                     <!-- <option *ngFor="let doctor of doctors" [value]="doctor.id">{{doctor.name}}</option>
-                </select>
-            </div> -->
-            <div class="my-6 appointmentField grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
-                <div class="d-flex flex-column">
-                    <label for="pulse">Pulse heart rate</label>
-                    <input formControlName="pulseHeartRate" pInputText class="pulse" type="number" name="pulse">
+                        </select>
+                    </div> -->
+                    <div class="my-6 appointmentField grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
+                        <div class="d-flex flex-column">
+                            <label for="pulse">Pulse heart rate</label>
+                            <input formControlName="pulseHeartRate" pInputText class="pulse" type="number" name="pulse">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="temp">Temperature</label>
+                            <input formControlName="temperature" pInputText class="pulse" type="number" name="temp">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="bp">Blood Pressure</label>
+                            <input formControlName="bloodPressure" pInputText class="pulse" type="text" name="bp">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="respiratory">Respiratory rate</label>
+                            <input formControlName="respiratoryRate" pInputText class="pulse" type="number" name="respiratory">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="sugar">Blood sugar</label>
+                            <input formControlName="bloodSugar" pInputText class="pulse" type="number" name="sugar">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="weigth">Weight</label>
+                            <input formControlName="weight" pInputText class="pulse" type="number" name="weight">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="height">Heigth (cm)</label>
+                            <input formControlName="height" pInputText class="pulse" type="number" name="height">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="bmi">Body mass index</label>
+                            <input formControlName="bodyMassIndex" pInputText class="pulse" type="number" name="bmi">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="bsa">Body surface area</label>
+                            <input formControlName="bodySurfaceArea" pInputText class="pulse" type="number"
+                                name="bodySurfaceArea">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="saturation">Oxygen saturation</label>
+                            <input formControlName="oxygenSaturation" pInputText class="pulse" type="number"
+                                name="oxygenSaturation">
+                        </div>
+                    </div>
                 </div>
-                <div class="d-flex flex-column">
-                    <label for="temp">Temperature</label>
-                    <input formControlName="temperature" pInputText class="pulse" type="number" name="temp">
-                </div>
-                <div class="d-flex flex-column">
-                    <label for="bp">Blood Pressure</label>
-                    <input formControlName="bloodPressure" pInputText class="pulse" type="text" name="bp">
-                </div>
-                <div class="d-flex flex-column">
-                    <label for="respiratory">Respiratory rate</label>
-                    <input formControlName="respiratoryRate" pInputText class="pulse" type="number" name="respiratory">
-                </div>
-                <div class="d-flex flex-column">
-                    <label for="sugar">Blood sugar</label>
-                    <input formControlName="bloodSugar" pInputText class="pulse" type="number" name="sugar">
-                </div>
-                <div class="d-flex flex-column">
-                    <label for="weigth">Weight</label>
-                    <input formControlName="weight" pInputText class="pulse" type="number" name="weight">
-                </div>
-                <div class="d-flex flex-column">
-                    <label for="height">Heigth (cm)</label>
-                    <input formControlName="height" pInputText class="pulse" type="number" name="height">
-                </div>
-                <div class="d-flex flex-column">
-                    <label for="bmi">Body mass index</label>
-                    <input formControlName="bodyMassIndex" pInputText class="pulse" type="number" name="bmi">
-                </div>
-                <div class="d-flex flex-column">
-                    <label for="bsa">Body surface area</label>
-                    <input formControlName="bodySurfaceArea" pInputText class="pulse" type="number" name="bodySurfaceArea">
-                </div>
-                <div class="d-flex flex-column">
-                    <label for="saturation">Oxygen saturation</label>
-                    <input formControlName="oxygenSaturation" pInputText class="pulse" type="number" name="oxygenSaturation">
-                </div>
-            </div>
+            <!-- </ng-template> -->
             <!-- <div class="mt-3 d-flex mb-4">
                 <label class="me-4" for="invoice">Add invoice</label>
                 <input type="checkbox" id="invoice" #addInvoiceInp (change)="addInvoice(addInvoiceInp.checked)">
             </div> -->
-            
+
             <div formArrayName="invoiceItems">
                 <div class="justify-content-center">
                     <hr class="col-12">
@@ -91,8 +104,10 @@
                 <div *ngFor="let item of invoiceItems.controls ; let i = index" class="my-4">
                     <div [formGroupName]='i' class="flex justify-between items-center flex-col lg:flex-row">
                         <div class="d-flex justify-content-center flex-column w-full md:pr-2">
-                            <label for="descriptionDetail">Description</label>
-                            <select id="descriptionDetail" class="form-select" [disabled]="!descriptions || !descriptions.length" formControlName="treatmentId" #description (change)="onDescriptionSelect(i, description.value)">
+                            <label for="descriptionDetail">{{!display ? 'Lab Template +': 'Description'}}</label>
+                            <select id="descriptionDetail" class="form-select"
+                                [disabled]="!descriptions || !descriptions.length" formControlName="treatmentId"
+                                #description (change)="onDescriptionSelect(i, description.value)">
                                 <option [defaultSelected]="true" disabled>Select A Description</option>
                                 <option *ngFor="let drop of descriptions" [value]="drop.id">
                                     {{drop.name}}</option>
@@ -100,15 +115,17 @@
                         </div>
                         <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
                             <label for="amount">Amount</label>
-                            <input  class="h-10" type="number" pInputText name="amount" formControlName="paidAmount">
+                            <input class="h-10" type="number" pInputText name="amount" formControlName="paidAmount">
                         </div>
                         <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
                             <label for="discount">Discount</label>
-                            <input  class="h-10" type="number" pInputText name="discount" formControlName="discountAmount" (input)="calculate()">
+                            <input class="h-10" type="number" pInputText name="discount"
+                                formControlName="discountAmount" (input)="calculate()">
                         </div>
                         <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full my-3 md:my-0 flex-column">
                             <label for="dicountType">Discount Type</label>
-                            <select id="dicountType" class="w-full rounded h-10 border" formControlName="discountType" (change)="calculate()">
+                            <select id="dicountType" class="w-full rounded h-10 border" formControlName="discountType"
+                                (change)="calculate()">
                                 <option *ngFor="let discType of discountTypes" [ngValue]="discType.value"
                                     [selected]="discType.value === 1">{{discType.label}}</option>
                             </select>
@@ -143,20 +160,19 @@
             <label for="total_discount" class="min-w-fit">Paid: Rs.</label>
             <input type="number" class="pulse lg:ml-3" pInputText placeholder="1500" formControlName="amountPaid"/>
 
-        </div>
-        <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
-            <input type="text" class="md:mr-3 pl-2 border mb-4 md:mb-0 rounded h-10" value="10/10/2022 14:14 PM">
-                <select class="h-10 border rounded" name="description"  formControlName="paymentType">
+            </div>
+            <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
+                <input type="text" class="md:mr-3 pl-2 border mb-4 md:mb-0 rounded h-10" value="10/10/2022 14:14 PM">
+                <select class="h-10 border rounded" name="description" formControlName="paymentType">
                     <option [value]="null" [defaultSelected]="true" disabled>Select a payment Type</option>
-                    <option *ngFor="let item of paymentType"
-                        [ngValue]="item.id">{{item.label}}</option>
+                    <option *ngFor="let item of paymentType" [ngValue]="item.id">{{item.label}}</option>
                 </select>
-        </div>
-        <!-- <div>
+            </div>
+            <!-- <div>
             <input formControlName="payment_notification" type="checkbox" name="payment_notification">
             <label for="payment_notification" class="ms-2">Send Payment Notification</label>
         </div> -->
-        <!-- <div class="d-flex justify-content-end">
+            <!-- <div class="d-flex justify-content-end">
             <button class="btn btn-primary d-flex items-start ms-auto">Add Payment<mat-icon
                     class="ms-2">add_box</mat-icon></button>
         </div> -->

@@ -1,0 +1,88 @@
+<form [formGroup]="collectionForm">
+    <div class="position-relative">
+        <i class="fa-2xl px-8 py-8 ml-auto w-fit  block"></i>
+        <p class="text-center font-weight-bold"><b>Patient Sample Collection</b></p>
+    </div>
+    <div class="px-md-5 px-2 pb-5">
+        <div>
+            <div class="d-flex justify-content-center flex-column md:pr-2">
+                <label for="descriptionDetail">Patients</label>
+                <select id="descriptionDetail" class="form-select" [disabled]="!descriptions || !descriptions.length"
+                    formControlName="patientId" #patient (change)="patientSelect(patient.value)" required>
+                    <option [defaultSelected]="true" disabled>Select A Description</option>
+                    <option *ngFor="let drop of patientsToShow" [value]="drop.id">
+                        {{drop.name}}</option>
+                </select>
+                <div *ngIf="submitted && f['patientId'].errors" class="invalid-feedback">
+                    <div *ngIf="f['patientId'].errors['required']">Patient Id is required</div>
+                </div>
+            </div>
+
+            <div formArrayName="testItems">
+                <div class="justify-content-center">
+                    <hr class="col-12">
+                </div>
+                <div *ngFor="let item of testItems.controls ; let i = index" class="my-4">
+                    <div [formGroupName]='i' class="flex justify-between items-center flex-col lg:flex-row">
+                        <div class="d-flex justify-content-center flex-column w-full md:pr-2">
+                            <label for="descriptionDetail">Lab Template</label>
+                            <select id="descriptionDetail" class="form-select"
+                                [disabled]="!descriptions || !descriptions.length" formControlName="testId" #description
+                                (change)="onDescriptionSelect(i, description.value)" required>
+                                <option [defaultSelected]="true" disabled>Select A Description</option>
+                                <option *ngFor="let drop of tests" [value]="drop.id">
+                                    {{drop.name}}</option>
+                            </select>
+                            <!-- <div *ngIf="submitted && f['testId'].errors" class="invalid-feedback">
+                                <div *ngIf="f['testId'].errors['required']">Doctor Id is required</div>
+                            </div> -->
+                            <div class="text-danger" *ngIf="(invoiceDescriptionForm.controls['testId'].errors && invoiceDescriptionForm.controls['testId'].touched) || (invoiceDescriptionForm.controls['testId'].touched && !invoiceDescriptionForm.controls['testId'].valid)"><small>patient Id required.</small></div>
+                        </div>
+
+
+                        <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
+                            <label for="description">Description</label>
+                            <input class="h-10" type="text" pInputText name="amount" formControlName="description">
+                        </div>
+                        <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
+                            <label for="amount">Sample</label>
+                            <input class="h-10" type="text" pInputText name="sample" [readonly]="true"
+                                formControlName="sample">
+                        </div>
+                        <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
+                            <label for="sample">Sample Id</label>
+                            <input class="h-10" type="text" pInputText name="sample" 
+                                formControlName="sampleId" required>
+                        </div>
+                        <div class="text-danger" *ngIf="(invoiceDescriptionForm.controls['sampleId'].errors && invoiceDescriptionForm.controls['sampleId'].touched) || (invoiceDescriptionForm.controls['sampleId'].touched && !invoiceDescriptionForm.controls['sampleId'].valid)"><small>sample Id is required.</small></div>
+
+                        <div class="d-flex justify-content-center w-full flex-column">
+                            <label for="status">Sample Status</label>
+                            <select id="status" class="form-select"
+                                formControlName="status" required>
+                                <option [defaultSelected]="true" disabled>Select A Description</option>
+                                <option *ngFor="let drop of testStatus" [value]="drop.value">
+                                    {{drop.label}}</option>
+                            </select>
+                        </div>
+                        <div class="text-danger" *ngIf="(invoiceDescriptionForm.controls['status'].errors && invoiceDescriptionForm.controls['status'].touched) || (invoiceDescriptionForm.controls['status'].touched && !invoiceDescriptionForm.controls['status'].valid)"><small>status is required.</small></div>
+
+                        <div class="ml-3">
+                            <button (click)="removeinvoiceItem(i)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button (click)="addNewInvoiceItem()"
+                class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center">Item</button>
+
+        </div>
+        <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-content-evenly align-items-center">
+            <button class="btn btn-primary" (click)="addToken()">Save</button>
+            <button class="btn btn-primary">Save & Print</button>
+        </div>
+    </div>
+</form>

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AlertService } from 'src/app/Services/alert/alert.service';
+import { LoaderService } from 'src/app/Services/loader/loader.service';
 import { VitalService } from 'src/app/Services/vital.service';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IToken } from 'src/app/models/interfaces/Token';
@@ -29,7 +30,7 @@ export class VitalsComponent implements OnInit {
     { name: '11/07/2023', id: '11/07/2023' },
   ];
 
-  constructor(private readonly alertService: AlertService, private readonly vitalService: VitalService) {
+  constructor(private readonly alertService: AlertService, private readonly vitalService: VitalService,private readonly loaderService:LoaderService) {
 
     this.vitalForm = new FormGroup({
       pulseHeartRate: new FormControl<number | null>(null),
@@ -77,7 +78,7 @@ export class VitalsComponent implements OnInit {
       doctorId: this.token.doctorId,
       patientId: this.token.patientId
     }
-
+    this.loaderService.show();
     this.vitalService.addVitals(vitalPayLoad).subscribe({
       next: (x) => {
         this.alertService.success('Vitals added successfully', 'Success');
@@ -106,7 +107,11 @@ export class VitalsComponent implements OnInit {
 
 
   changeDates(event: any) {
-    console.log(event.target.value)
+    this.vitalService.getPreviousVisits().subscribe({
+      next: (x)=>{
+
+      }
+    })
   }
 
   getVitalsHistoryDropDown() {
