@@ -26,6 +26,7 @@ export class CollectLabSampleComponent {
   patientsToShow: Array<IDropDown> = [];
 
   testStatus: Array<{ value: string, label: string }> = [{ value: 'Collected', label: 'Collected' }, { value: 'Pending', label: 'Pending' }]
+  submitted = false;
 
   constructor(
     private readonly patientService: PatientService,
@@ -36,19 +37,22 @@ export class CollectLabSampleComponent {
     this.invoiceDescriptionForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
       description: new FormControl<number | null>(null, [Validators.required]),
-      sample: new FormControl<number | null>(null, [Validators.required]),
+      sample: new FormControl<number | null>(null),
       status: new FormControl<string | null>(null, [Validators.required]),
+      sampleId: new FormControl<string | null>(null, [Validators.required]),
     })
     this.collectionForm = this.fb.group({
       patientId: new FormControl<string | null>(null, [Validators.required]),
-      invoiceItems: this.fb.array([this.invoiceDescriptionForm]),
+      testItems: this.fb.array([this.invoiceDescriptionForm],Validators.required),
     });
 
   }
 
-  get invoiceItems(): FormArray {
-    return this.collectionForm.get('invoiceItems') as FormArray;
+  get testItems(): FormArray {
+    return this.collectionForm.get('testItems') as FormArray;
   }
+
+
 
   ngOnInit(): void {
     this.getPatients();
@@ -56,11 +60,12 @@ export class CollectLabSampleComponent {
   }
 
   getTests() {
-    this.testService.getTests().subscribe({
+    this.testService.getPatientTests().subscribe({
       next: (x) => {
         console.log(x);
-        this.tests = x.data;
-          this.descriptions = this.tests;
+        // this.tests = x;
+        console.log('this.tests',this.tests);
+          this.descriptions = x;
       },
       error: (err) => {
 
@@ -82,15 +87,17 @@ export class CollectLabSampleComponent {
 
   onDescriptionSelect(index: number, descriptionId: string) {
     let description = this.descriptions.find(x => x.id === descriptionId);
-    console.log('description',description);
-    this.invoiceItems.at(index).get('description')?.setValue(description?.description);
-    this.invoiceItems.at(index).get('sample')?.setValue(description?.testSample);
+    this.testItems.at(index).get('description')?.setValue(description?.description);
+    this.testItems.at(index).get('sample')?.setValue(description?.testSample);
   }
 
   
 
   patientSelect(patient: any) {
-    this.collectionForm.get('patientId')?.setValue(patient.id);
+    console.log('patient',patient,this.descriptions);
+    // this.collectionForm.get('patientId')?.setValue(patient.id);
+    this.tests = this.descriptions.filter(x => x.patientId == patient);
+    console.log('this.tests',this.tests);
   }
 
   searchPatient(query: string) {
@@ -98,9 +105,15 @@ export class CollectLabSampleComponent {
     this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(text));
   }
 
+  
+  get f() { return this.collectionForm.controls; }
+
   addToken() {
+    this.submitted = true;
     console.log(this.collectionForm.value)
-      
+    if(this.collectionForm.invalid){
+   return    
+   }
       // let tokenpayload = {
       //   patientId: this.collectionForm.controls['patientId'].value,
       //   doctorId: this.collectionForm.controls['doctorId'].value,
@@ -122,12 +135,13 @@ export class CollectLabSampleComponent {
 
   getInvoice() {
     let invoice = {
-      invoiceItems: this.invoiceItems.value.map((x: any) => {
+      testItems: this.testItems.value.map((x: any) => {
         let invoiceItem = {
           testId: x.testId,
           description: x.description,
           status: x.status,
           sample: x.sample,
+          sampleId: x.sampleId,
         }
         return invoiceItem
       }),
@@ -140,19 +154,21 @@ export class CollectLabSampleComponent {
       description: new FormControl<string | null>(null, [Validators.required]),
       status: new FormControl<string | null>(null, [Validators.required]),
       sample: new FormControl<string | null>(null, [Validators.required]),
+      sampleId: new FormControl<string | null>(null, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
     })
-    this.invoiceItems.push(newForm)
+    this.testItems.push(newForm)
   }
 
   removeinvoiceItem(index: number) {
-    this.invoiceItems.removeAt(index);
+    this.testItems.removeAt(index);
     let newForm = this.fb.group({
       description: new FormControl<number | null>(null, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
       status: new FormControl<string | null>(null, [Validators.required]),
       sample: new FormControl<string | null>(null, [Validators.required]),
+      sampleId: new FormControl<string | null>(null, [Validators.required]),
     })
-    if (this.invoiceItems.length < 1) this.invoiceItems.push(newForm);
+    if (this.testItems.length < 1) this.testItems.push(newForm);
   }
 }

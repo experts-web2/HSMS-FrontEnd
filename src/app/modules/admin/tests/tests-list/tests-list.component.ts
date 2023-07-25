@@ -50,7 +50,7 @@ export class TestsListComponent implements OnInit {
     },
     {
       name: 'Reporting Time',
-      property: 'reportTime',
+      property: 'reportingTime',
       filter: true,
       filterType: TableColumnFilterTypes.Numeric
     },

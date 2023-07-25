@@ -18,7 +18,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 export class LabTestReportComponent implements OnInit {
   selectedDoctor = ''
   selectedPayment = ''
-  collectionForm!: FormGroup;
+  labReportForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
   doctors: Array<IDropDown> = [];
   tests: Array<IDropDown> = [];
@@ -71,6 +71,8 @@ export class LabTestReportComponent implements OnInit {
       ['fontSize']
     ]
 }
+submitted = false;
+
 
   constructor(
     private readonly patientService: PatientService,
@@ -80,20 +82,24 @@ export class LabTestReportComponent implements OnInit {
 
     this.invoiceDescriptionForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
+      normalValues: new FormControl<string | null>(null, [Validators.required]),
+      testValue: new FormControl<string | null>(null, [Validators.required]),
       report: new FormControl<string | null>(null, [Validators.required]),
       remarks: new FormControl<string | null>(null, [Validators.required]),
     })
-    this.collectionForm = this.fb.group({
+    this.labReportForm = this.fb.group({
       patientId: new FormControl<string | null>(null, [Validators.required]),
       doctorId: new FormControl<string | null>(null, [Validators.required]),
-      invoiceItems: this.fb.array([this.invoiceDescriptionForm]),
+      testReport: this.fb.array([this.invoiceDescriptionForm]),
     });
 
   }
 
-  get invoiceItems(): FormArray {
-    return this.collectionForm.get('invoiceItems') as FormArray;
+  get testReport(): FormArray {
+    return this.labReportForm.get('testReport') as FormArray;
   }
+
+
 
   ngOnInit(): void {
     this.getPatients();
@@ -136,17 +142,20 @@ export class LabTestReportComponent implements OnInit {
     })
   }
 
-  // onDescriptionSelect(index: number, descriptionId: string) {
-  //   let description = this.descriptions.find(x => x.id === descriptionId);
-  //   console.log('description',description);
-  //   this.invoiceItems.at(index).get('description')?.setValue(description?.description);
-  //   this.invoiceItems.at(index).get('sample')?.setValue(description?.testSample);
-  // }
+  onDescriptionSelect(index: number, descriptionId: string) {
+    let description = this.descriptions.find(x => x.id === descriptionId);
+    console.log('description',description);
+    this.testReport.at(index).get('normalValues')?.setValue(description?.normalValues);
+  }
+
+
+  get f() { return this.labReportForm.controls; }
+
 
   
 
   patientSelect(patient: any) {
-    this.collectionForm.get('patientId')?.setValue(patient.id);
+    this.labReportForm.get('patientId')?.setValue(patient.id);
   }
 
   searchPatient(query: string) {
@@ -155,12 +164,18 @@ export class LabTestReportComponent implements OnInit {
   }
 
   addToken() {
-    console.log(this.collectionForm.value)
+    this.submitted = true;
+
+    if (this.labReportForm.invalid) {
+      return;
+  }
+
+    console.log(this.labReportForm.value)
       
       // let tokenpayload = {
-      //   patientId: this.collectionForm.controls['patientId'].value,
-      //   doctorId: this.collectionForm.controls['doctorId'].value,
-      //   patientCheckedIn: this.collectionForm.controls['patientCheckedIn'].value ? this.collectionForm.controls['patientCheckedIn'].value : true
+      //   patientId: this.labReportForm.controls['patientId'].value,
+      //   doctorId: this.labReportForm.controls['doctorId'].value,
+      //   patientCheckedIn: this.labReportForm.controls['patientCheckedIn'].value ? this.labReportForm.controls['patientCheckedIn'].value : true
       // }
       // console.log('tokenpayload',tokenpayload);
       // this.tokenService.addToken(tokenpayload).subscribe({
@@ -178,9 +193,11 @@ export class LabTestReportComponent implements OnInit {
 
   getInvoice() {
     let invoice = {
-      invoiceItems: this.invoiceItems.value.map((x: any) => {
+      testReport: this.testReport.value.map((x: any) => {
         let invoiceItem = {
           testId: x.testId,
+          normalValues: x.normalValues,
+          testValue: x.testValue,
           report: x.report,
           remarks: x.remarks,
         }
@@ -193,19 +210,23 @@ export class LabTestReportComponent implements OnInit {
   addNewInvoiceItem() {
     let newForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
+      normalValues: new FormControl<string | null>(null, [Validators.required]),
+      testValue: new FormControl<string | null>(null, [Validators.required]),
       report: new FormControl<string | null>(null, [Validators.required]),
       remarks: new FormControl<string | null>(null, [Validators.required]),
     })
-    this.invoiceItems.push(newForm)
+    this.testReport.push(newForm)
   }
 
   removeinvoiceItem(index: number) {
-    this.invoiceItems.removeAt(index);
+    this.testReport.removeAt(index);
     let newForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
-      report: new FormControl<number | null>(null, [Validators.required]),
+      normalValues: new FormControl<string | null>(null, [Validators.required]),
+      testValue: new FormControl<string | null>(null, [Validators.required]),
+      report: new FormControl<string | null>(null, [Validators.required]),
       remarks: new FormControl<string | null>(null, [Validators.required]),
     })
-    if (this.invoiceItems.length < 1) this.invoiceItems.push(newForm);
+    if (this.testReport.length < 1) this.testReport.push(newForm);
   }
 }

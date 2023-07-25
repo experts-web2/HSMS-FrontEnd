@@ -97,8 +97,11 @@
                     <p>Discount : Rs {{addPatientTestForm.controls['totalDiscount'].value}}</p>
                     <p>Grand- Total : {{addPatientTestForm.controls['grandTotal'].value}}</p>
                     <p>Payment : <input type="number" class="pulse lg:ml-3" [readonly]="true" pInputText placeholder="1500" formControlName="grandTotal" /></p>
-                    <p>Paid: <input type="number" class="pulse lg:ml-3" pInputText placeholder="0" formControlName="amountPaid" />
+                    <p>Paid: <input type="number" class="pulse lg:ml-3" pInputText placeholder="0" formControlName="amountPaid" required/>
                     </p>
+                    <div class="text-danger" *ngIf="(addPatientTestForm.controls['amountPaid'].errors && addPatientTestForm.controls['amountPaid'].touched) || (addPatientTestForm.controls['amountPaid'].touched && !addPatientTestForm.controls['amountPaid'].valid)"><small>Please add test amount.</small></div>
+
+                    <!-- <div class="text-danger" *ngIf="(addPatientTestForm.controls['amountPaid'].errors && !addPatientTestForm.controls['amountPaid'].valid)"><small>Please select test sample.</small></div> -->
                 </div>
                 
             </div>

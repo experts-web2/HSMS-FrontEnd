@@ -1,70 +1,4 @@
-<!-- <div class="p-3">
-    <form [formGroup]="labTestForm" (ngSubmit)="onSubmit()">
-        <div class="position-relative">
-            <p class="font-weight-bold"><b>Add Lab Test Report</b></p>
-        </div>
-        <div class="row d-flex">
-            <div class="col-6 d-flex align-items-center justify-content-between">
-                <div>
-                    <label for="patient">Patient</label><br>
-                    <p-autoComplete formControlName="patientId" [suggestions]="patientsToShow"
-                        (completeMethod)="search($event)" [dropdown]="true" field="name" dropdownIcon="pi pi-search" [minLength]="1">
-                    </p-autoComplete>
-                </div>
-                <button class="btn btn-primary" (click)="addPatient()">+ Add Patient</button>
-    
-            </div>
-            <div class="col-6 d-flex align-items-center justify-content-between">
-                <div>
-                    <label for="doctor">Doctors</label><br>
-                    <p-autoComplete name="name" class="name-input" [suggestions]="doctorsToShow" [minLength]="1"
-                        (completeMethod)="doctorSearch($event)" dropdownIcon="pi pi-search" formControlName="doctorId" field="name"
-                        [dropdown]="true"></p-autoComplete>
-                </div>
-                <div>
-                    <label for="date">Date</label><br>
-                    <p-calendar formControlName="dateTime" [placeholder]="datePlaceholder" [showTime]="true"
-                        [showSeconds]="true"></p-calendar>
-                </div>
-            </div>
-    
-        </div>
-        <div class="row d-flex justify-content-between mt-4">
-    
-            <div class="col-6">
-                <label for="doctor">Tests</label>
-                <select class="form-select" name="" id="doctor" formControlName="doctorId" >
-                    <option [value]="null" selected disabled>Select Test</option>
-                    <option *ngFor="let doctor of doctors" [value]="doctor.id">{{doctor.name}}</option>
-                </select>
-            </div>
-            <div class="col-6">
-                    <label class="btn btn-default p-0 me-4">
-                        Upload File
-                        <button><input type="file" class="form-control" accept="image/file*"
-                                (change)="selectFile($event)" /></button>
-                    </label>
-                    <div *ngIf="preview">
-                        <img width="50px" [src]="preview" class="preview" />
-                    </div>
-            </div>
-        </div>
-        <div class="row">
-            <label for="report">Report</label>
-            <angular-editor formControlName="report"></angular-editor>
-        </div>
-    
-        <div class="row">
-            <label for="remarks">Remarks</label>
-            <angular-editor formControlName="remarks"></angular-editor>
-        </div>
-    
-        <p-button type="submit">save</p-button>
-    </form>
-</div> -->
-
-
-<form [formGroup]="collectionForm">
+<form [formGroup]="labReportForm">
     <div class="position-relative">
         <i class="fa-2xl px-8 py-8 ml-auto w-fit  block"></i>
         <p class="text-center font-weight-bold"><b>Patient Sample Collection</b></p>
@@ -75,34 +9,40 @@
                 <div class="col-6">
                     <label for="descriptionDetail">Patients</label>
                     <select id="descriptionDetail" class="form-select" [disabled]="!descriptions || !descriptions.length"
-                        formControlName="patientId" #patient (optionSelected)="patientSelect(patient.value)">
+                        formControlName="patientId" #patient (optionSelected)="patientSelect(patient.value)" required>
                         <option [defaultSelected]="true" disabled>Select A Description</option>
                         <option *ngFor="let drop of patientsToShow" [value]="drop.id">
                             {{drop.name}}</option>
                     </select>
+                    <div *ngIf="submitted && f['patientId'].errors" class="invalid-feedback">
+                        <div *ngIf="f['patientId'].errors['required']">Patient Id is required</div>
+                    </div>
                 </div>
                 <div class="col-6">
                     <label for="descriptionDetail">Doctor</label>
                     <select id="descriptionDetail" class="form-select"
-                        formControlName="doctorId">
+                        formControlName="doctorId" required>
                         <option [defaultSelected]="true" disabled>Select A Description</option>
                         <option *ngFor="let drop of doctors" [value]="drop.id">
                             {{drop.name}}</option>
                     </select>
+                    <div *ngIf="submitted && f['doctorId'].errors" class="invalid-feedback">
+                        <div *ngIf="f['doctorId'].errors['required']">Doctor Id is required</div>
+                    </div>
                 </div>
             </div>
 
-            <div formArrayName="invoiceItems">
+            <div formArrayName="testReport">
                 <div class="justify-content-center">
                     <hr class="col-12">
                 </div>
-                <div *ngFor="let item of invoiceItems.controls ; let i = index" class="my-4">
-                    <div [formGroupName]='i' class="flex justify-between items-center flex-col lg:flex-row">
+                <div *ngFor="let item of testReport.controls ; let i = index" class="my-4" [formGroupName]='i' >
+                    <div class="flex justify-between items-center flex-col lg:flex-row">
                         <div class="d-flex justify-content-center flex-column w-full md:pr-2">
                             <label for="descriptionDetail">Lab Template</label>
                             <select id="descriptionDetail" class="form-select"
                                 [disabled]="!descriptions || !descriptions.length" formControlName="testId" #description
-                                >
+                                (change)="onDescriptionSelect(i, description.value)">
                                 <option [defaultSelected]="true" disabled>Select Lab Test</option>
                                 <option *ngFor="let drop of tests" [value]="drop.id">
                                     {{drop.name}}</option>
@@ -110,22 +50,28 @@
                         </div>
 
                         <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
-                            <label for="description">Report</label>
-                            <angular-editor formControlName="report" [config]="editorConfig"></angular-editor>
-
-                            <!-- <input class="h-10" type="text" pInputText name="amount" formControlName="description"> -->
+                            <label for="normalValues">Normal Value</label>
+                            <input class="h-10" type="text" pInputText name="normalValues" formControlName="normalValues">
                         </div>
                         <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
-                            <label for="amount">Remarks</label>
-                            <angular-editor formControlName="remarks" [config]="editorConfig"></angular-editor>
-
-                            <!-- <input class="h-10" type="text" pInputText name="sample" [readonly]="true"
-                                formControlName="sample"> -->
+                            <label for="testValue">Test Value</label>
+                            <input class="h-10" type="text" pInputText name="testValue" formControlName="testValue">
                         </div>
+                        
                         <div class="ml-3">
                             <button (click)="removeinvoiceItem(i)">
                                 <i class="fa fa-trash"></i>
                             </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center flex-col lg:flex-row">
+                        <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
+                            <label for="description">Report</label>
+                            <angular-editor formControlName="report" [config]="editorConfig"></angular-editor>
+                        </div>
+                        <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
+                            <label for="amount">Remarks</label>
+                            <angular-editor formControlName="remarks" [config]="editorConfig"></angular-editor>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AlertService } from 'src/app/Services/alert/alert.service';
 import { DoctorService } from 'src/app/Services/doctor.service';
 import { PatientService } from 'src/app/Services/patient/patient.service';
 import { TestService } from 'src/app/Services/test-service/test.service';
@@ -43,6 +44,7 @@ export class AddPatientTestComponent implements OnInit {
     private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
     private readonly doctorService: DoctorService,
+    private readonly alertService: AlertService,
     private readonly testService: TestService) {
 
     this.invoiceDescriptionForm = this.fb.group({
@@ -139,27 +141,22 @@ export class AddPatientTestComponent implements OnInit {
   }
 
   addToken() {
-    console.log(this.addPatientTestForm.value)
-    if (this.addPatientTestForm.controls['amountPaid']?.value && this.invoiceItems.valid) {
-      
-      // let tokenpayload = {
-      //   patientId: this.addPatientTestForm.controls['patientId'].value,
-      //   doctorId: this.addPatientTestForm.controls['doctorId'].value,
-      //   patientCheckedIn: this.addPatientTestForm.controls['patientCheckedIn'].value ? this.addPatientTestForm.controls['patientCheckedIn'].value : true
-      // }
-      // console.log('tokenpayload',tokenpayload);
-      // this.tokenService.addToken(tokenpayload).subscribe({
-      //   next: (x) => {
-      //     console.log(x);
-
-
-      //   },
-      //   error: (err) => {
-
-      //   }
-      // })
+    if(this.addPatientTestForm.controls['amountPaid']?.value >= this.addPatientTestForm.controls['grandTotal'].value){
+      if (this.addPatientTestForm.controls['amountPaid']?.value && this.invoiceItems.valid) {
+        
+        this.testService.addPatientTest(this.addPatientTestForm.value).subscribe({
+          next: (x) => {
+            console.log(x);
+            this.alertService.success('Patient Test add successfully', 'Success');
+          },
+          error: (err) => {
+            this.alertService.error('Something went wrong while adding patient Test.', 'Error');
+          }
+        })
+      }
     }else{
-      console.log('please add paid amount')
+      this.alertService.error('add payment greater than total', 'Error');
+
     }
 
   }
