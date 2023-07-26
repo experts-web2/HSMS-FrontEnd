@@ -25,23 +25,19 @@
             </div>
         <!-- </ng-template> -->
         <div>
-            <!-- <ng-template > -->
-                <div *ngIf="display">
-
-                    <p><b>Appointment fields</b></p>
-                    <div class="d-flex justify-content-between mt-4 flex-col md:flex-row">
-                        <label for="token">Token Type</label>
-                        <select class="md:w-3/4 rounded h-10 border" name="" id="token" formControlName="tokenTypes" #tokenType
-                            (change)="tokenTypeChange(tokenType.value)">
-                            <option [value]="null" [defaultSelected]="true" disabled>Select a token type...</option>
-                            <option *ngFor="let tokenType of tokentypes" [ngValue]="tokenType.value">{{tokenType.label}}
-                            </option>
-                        </select>
-                    </div>
-                    <!-- <div class="d-flex justify-content-between mt-4 " *ngIf="addTokenForm.controls['tokenTypes'].value == 1">
-                        <label for="doctor">Doctor</label>
-                        <select class="w-75 pulse form-select" name="" id="doctor" formControlName="doctorId" >
-                            <option [value]="null" selected disabled>Select a doctor...</option> -->
+            <div *ngIf="display">
+            <p><b>Appointment fields</b></p>
+            <div class="d-flex justify-content-between mt-4 flex-col md:flex-row">
+                <label for="token">Token Type</label>
+                <select class="md:w-3/4 rounded h-10 border" name="" id="token" formControlName="tokenTypes" #tokenType (change)="tokenTypeChange(tokenType.value)">
+                    <option [value]="null" [defaultSelected]="true" disabled>Select a token type...</option>
+                    <option *ngFor="let tokenType of tokentypes" [ngValue]="tokenType.value" >{{tokenType.label}}</option>
+                </select>
+            </div>
+            <!-- <div class="d-flex justify-content-between mt-4 " *ngIf="addTokenForm.controls['tokenTypes'].value == 1">
+                <label for="doctor">Doctor</label>
+                <select class="w-75 pulse form-select" name="" id="doctor" formControlName="doctorId" >
+                    <option [value]="null" selected disabled>Select a doctor...</option> -->
                     <!-- <option #otherDoctor><input #otherDoctorInp  (input)="otherDoctor.value = otherDoctorInp.value" (click)="otherDoctor.selected = true" placeholder="Add other doctor"/><option> -->
                     <!-- <option *ngFor="let doctor of doctors" [value]="doctor.id">{{doctor.name}}</option>
                         </select>
@@ -141,16 +137,16 @@
             </div>
             <button (click)="addNewInvoiceItem()" class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center" *ngIf="addTokenForm.controls['tokenTypes'].value !== 1">Item<mat-icon
                 class="ml-3">add_box</mat-icon></button>
-                <div class="lg:w-2/4 ml-auto flex items-start flex-col lg:flex-row">
+                <!-- <div class="lg:w-2/4 ml-auto flex items-start flex-col lg:flex-row">
                     <label for="dicountType">Discount Type</label>
                     <select id="dicountType" class="w-full rounded h-10 border" formControlName="totalDiscountType" (change)="calculate(true)">
                         <option *ngFor="let discType of discountTypes" [ngValue]="discType.value"
                             >{{discType.label}}</option>
                     </select>
-                </div>
-        <div class="lg:w-2/4 ml-auto flex items-start flex-col lg:flex-row">
+                </div> -->
+        <div class="lg:w-2/4 ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
             <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
-            <input class="h-10 w-full lg:ml-3" type="number" pInputText name="totalDiscount"  formControlName="totalDiscount" (input)="calculate(true)">
+            <input class="pulse h-10 lg:ml-3" type="number" pInputText name="totalDiscount"  formControlName="totalDiscount" (input)="calculate(true)">
         </div>
         <div class="lg:w-2/4 ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
             <label for="total_discount" class="min-w-fit">Grand Total: Rs. </label>
@@ -158,7 +154,7 @@
         </div>
         <div class="lg:w-2/4 ms-auto flex-col lg:flex-row d-flex justify-content-between items-start">
             <label for="total_discount" class="min-w-fit">Paid: Rs.</label>
-            <input type="number" class="pulse lg:ml-3" pInputText placeholder="1500" formControlName="amountPaid"/>
+            <input type="number" class="pulse lg:ml-3 " pInputText placeholder="1500" formControlName="amountPaid"/>
 
             </div>
             <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">

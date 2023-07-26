@@ -1,8 +1,8 @@
 <div class="row justify-content-end mb-3">
     <div class="col-4">
-        <select class="form-select" id="type" (change)="changeDates($event)">
+        <select class="form-select" id="type" #historyVital (change)="changeDates(historyVital.value)">
             <option [value]="null" selected disabled>Previous Visits</option>
-            <option *ngFor="let previousDate of previousDates" [value]="previousDate.id">{{previousDate.name}}</option>
+            <option *ngFor="let previousDate of historyDropDown" [value]="previousDate.id">{{previousDate.name | date: 'EEE MMM, dd/yyyy'}}</option>
         </select>
     </div>
 </div>

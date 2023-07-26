@@ -49,6 +49,7 @@ export class PrescriptionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getPrescriptionHistoryDropDown();
     if(this.token) {
       this.patientId = this.token.patientId;
       this.doctorId = this.token.doctorId;
@@ -100,5 +101,10 @@ export class PrescriptionComponent implements OnInit {
 
       }
     })
+  }
+
+  onSelectHistory(prescriptionId: string){
+    this.getPrescription(prescriptionId);
+    
   }
 }

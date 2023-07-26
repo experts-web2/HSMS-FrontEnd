@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { LabOrderService } from 'src/app/Services/lab-order.service';
 import { TestService } from 'src/app/Services/test-service/test.service';
@@ -133,8 +132,8 @@ export class LabOrderComponent implements OnInit {
         console.log(x);
         this.alertService.success('Lab Order Added Successfully.')
       },
-      error: (err) => {
-
+      error: (err) => {        
+        this.alertService.error('Something went wrong while adding laborder.')
       }
     })
   }
