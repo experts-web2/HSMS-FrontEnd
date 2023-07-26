@@ -56,6 +56,7 @@ export class VitalsComponent implements OnInit {
 
       this.setVitalsFromInput();
     }
+    this.getVitalsHistoryDropDown();
   }
 
   get f() { return this.vitalForm.controls; }
@@ -106,12 +107,8 @@ export class VitalsComponent implements OnInit {
   }
 
 
-  changeDates(event: any) {
-    this.vitalService.getPreviousVisits().subscribe({
-      next: (x)=>{
-
-      }
-    })
+  changeDates(vitalId: string) {
+    this.getVitalsById(vitalId);
   }
 
   getVitalsHistoryDropDown() {
@@ -122,10 +119,10 @@ export class VitalsComponent implements OnInit {
     })
   }
 
-  getVitalsById(vitalsId: string){
+  getVitalsById(vitalsId: string) {
     this.vitalService.getVitalsById(vitalsId).subscribe({
-      next: (x)=>{
-        
+      next: (x) => {
+
       }
     })
   }

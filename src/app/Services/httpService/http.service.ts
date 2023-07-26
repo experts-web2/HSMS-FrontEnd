@@ -24,6 +24,10 @@ export  abstract class HttpService {
    return this.httpClient.put(this.baseUrl + `/${url}`, data);
  }  
  
+ protected patch(url: string, data: any): Observable<any>{
+   return this.httpClient.patch(this.baseUrl + `/${url}`, data);
+ }  
+ 
  protected delete(url: string): Observable<any>{
    return this.httpClient.delete(this.baseUrl + `/${url}`);
  }}

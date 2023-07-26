@@ -33,4 +33,8 @@ export class TokenService extends HttpService{
     return this.get(`${this.baseEndPoint}/byid/${tokenId}`)
   }
 
+  markTokenAsViewd(tokenId: string): Observable<void>{
+    return this.patch(`${this.baseEndPoint}/${tokenId}/viewed`, {})
+  }
+
 }

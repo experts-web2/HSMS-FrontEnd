@@ -23,7 +23,8 @@ export class AppComponent implements OnInit {
   userRole: string = '';
   isAdmin!: boolean;
   logedInUser!: ILogedInUser;
-  navbarShowHide = false
+  navbarShowHide = false;
+  isDoctor: boolean = false;
 
 
 
@@ -41,6 +42,9 @@ export class AppComponent implements OnInit {
         this.userName = `${x?.firstName} ${x?.lastName}`;
         this.logedInUser = x;
         this.isAdmin = x?.roles.includes('Admin');
+        this.isDoctor = x?.roles.includes("Doctor");
+        console.log(x);
+        
 
       },
       error: (err: Error) => { }

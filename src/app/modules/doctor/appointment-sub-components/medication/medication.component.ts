@@ -105,6 +105,7 @@ export class MedicationComponent {
   }
 
   onHistorySelection(medicationId: string){
+        
     this.getMedicationById(medicationId);
   }
 

@@ -33,6 +33,15 @@ getToken(){
     next: (x) =>{
       this.token = x;
       this.getPatient(x.patientId);
+      this.markTokenAsViewd(x.id);
+    }
+  })
+}
+
+markTokenAsViewd(tokenId: string){
+  this.tokenService.markTokenAsViewd(tokenId).subscribe({
+    next: (x) => {
+      console.log(x);
       
     }
   })

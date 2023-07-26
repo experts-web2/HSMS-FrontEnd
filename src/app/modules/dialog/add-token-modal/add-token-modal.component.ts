@@ -11,6 +11,7 @@ import { PaymentTypes } from 'src/app/constants/enums/PaymenTypes';
 import { TokenService } from 'src/app/Services/token.service';
 import { IAddOrUpdateToken, IInvoice, IInvoiceItem, ITokenDetail } from 'src/app/models/interfaces/addOrUpdate-Token';
 import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
+import { AlertService } from 'src/app/Services/alert/alert.service';
 
 @Component({
   selector: 'app-add-token-modal',
@@ -48,7 +49,8 @@ export class AddTokenModalComponent implements OnInit {
       label: 'Therapy',
       value: TokenTypes.Therapy
     },
-  ]
+  ];
+
   discountTypes = [
     {
       label: 'Amount',
@@ -57,7 +59,8 @@ export class AddTokenModalComponent implements OnInit {
       label: '%',
       value: 2
     }
-  ]
+  ];
+
   dropDown!: Array<{ id: number, label: string }>
   patients: Array<IDropDown> = [];
   patientsToShow: Array<IDropDown> = [];
@@ -71,7 +74,8 @@ export class AddTokenModalComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly doctorService: DoctorService,
     private readonly testService: TestService,
-    private readonly tokenService: TokenService) {
+    private readonly tokenService: TokenService,
+    private readonly alertService: AlertService) {
 
       this.display =  this.data.display
 
@@ -108,6 +112,8 @@ export class AddTokenModalComponent implements OnInit {
       totalDiscountType: new FormControl<number | null>(1),
       invoiceItems: this.fb.array([this.invoiceDescriptionForm]),
     });
+
+    // this.addTokenForm.get('tokenTypes')?.setValue(1);
 
   }
 
@@ -197,11 +203,12 @@ export class AddTokenModalComponent implements OnInit {
       }
       this.tokenService.addToken(tokenpayload).subscribe({
         next: (x) => {
-          console.log(x);
-
-
+          this.alertService.success('Token added successfully.')
+          this.dialogRef.close();
+          
         },
         error: (err) => {
+          this.alertService.error('An error accourd while adding token.')
 
         }
       })
@@ -274,14 +281,10 @@ export class AddTokenModalComponent implements OnInit {
   }
 
   tokenTypeChange(e: any) {
-    console.log(e);
-    let tokentype = 1;
-
+    let tokentype = this.addTokenForm.get('tokenTypes')?.value;
     switch (tokentype) {
       case TokenTypes.Doctor:
         this.descriptions = this.doctors;
-        console.log(this.descriptions);
-
         break;
       case TokenTypes.Lab:
         this.descriptions = this.tests;
@@ -323,6 +326,12 @@ export class AddTokenModalComponent implements OnInit {
   addPatient() {
     const dialogRef = this.dialog.open(PatientFormComponent, {
       width: '600px'
+    })
+
+    dialogRef.afterClosed().subscribe({
+      next: (x) => {
+        this.getPatients();
+      }
     })
   }
 
