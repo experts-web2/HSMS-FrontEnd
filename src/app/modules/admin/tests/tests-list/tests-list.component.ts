@@ -9,6 +9,8 @@ import { TestCategoryService } from '../../../../Services/testCategory-service/t
 import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 import { TestsFormComponent } from '../tests-form/tests-form.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 
 @Component({
@@ -16,7 +18,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
   templateUrl: './tests-list.component.html',
   styleUrls: ['./tests-list.component.scss']
 })
-export class TestsListComponent implements OnInit {
+export class TestsListComponent extends SubscriptionManagmentDirective implements OnInit {
   testsList!: Array<ILabeTest>;
   categories!: Array<ILabTestCategory>;
   totalRecords: number = 0;
@@ -78,7 +80,7 @@ export class TestsListComponent implements OnInit {
     private readonly testsService: TestService,
     private readonly alertService: AlertService,
     private readonly testCategoryService: TestCategoryService,
-    public readonly dialogService: DialogService) { }
+    public readonly dialogService: DialogService) { super();}
 
   ngOnInit(): void {
     this.getTests();
@@ -86,7 +88,7 @@ export class TestsListComponent implements OnInit {
   }
 
   getTests(): void {
-    this.testsService.getTests().subscribe({
+    this.testsService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x: any) => {
         this.testsList = x.data;
         this.totalRecords = x.total;
@@ -98,7 +100,7 @@ export class TestsListComponent implements OnInit {
   }
 
   getCategories() {
-    this.testCategoryService.getCategories().subscribe({
+    this.testCategoryService.getCategories().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x: any) => {
         this.categories = x.data;
       },
@@ -136,7 +138,7 @@ export class TestsListComponent implements OnInit {
   }
 
   deleteTest(test: ILabeTest): void {
-    this.testsService.deleteTest(test).subscribe({
+    this.testsService.deleteTest(test).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.alertService.success('Success', 'Test delete successfully');
         this.getTests();

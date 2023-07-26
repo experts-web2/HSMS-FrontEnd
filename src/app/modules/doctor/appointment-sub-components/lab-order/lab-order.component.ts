@@ -1,8 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { takeUntil } from 'rxjs';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { LabOrderService } from 'src/app/Services/lab-order.service';
 import { TestService } from 'src/app/Services/test-service/test.service';
 import { TestCategoryService } from 'src/app/Services/testCategory-service/test-category.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { Roles } from 'src/app/constants/enums/Roles-Enum';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
@@ -13,7 +16,7 @@ import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
   templateUrl: './lab-order.component.html',
   styleUrls: ['./lab-order.component.scss']
 })
-export class LabOrderComponent implements OnInit {
+export class LabOrderComponent extends SubscriptionManagmentDirective implements OnInit {
   @Input() token!: IToken;
   tabs: any[] = [];
   roles = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.Sweeper, name: 'Sweeper' }];
@@ -35,6 +38,7 @@ export class LabOrderComponent implements OnInit {
     private readonly alertService: AlertService,
     private readonly laborderService: LabOrderService
   ) {
+    super();
   }
 
   ngOnInit(): void {
@@ -44,7 +48,7 @@ export class LabOrderComponent implements OnInit {
   }
 
   getTestCategories() {
-    this.testCategoryService.getTestCategoryList().subscribe({
+    this.testCategoryService.getTestCategoryList().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x: any) => {
         this.tabsToView = x.map((x: any) => { return { ...x, active: false } });
         this.tabsToView[0].active = true;
@@ -57,7 +61,7 @@ export class LabOrderComponent implements OnInit {
   }
 
   getTests(): void {
-    this.testsService.getTests().subscribe({
+    this.testsService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x: any) => {
         this.testsList = x.data;
       },
@@ -127,7 +131,7 @@ export class LabOrderComponent implements OnInit {
       labTestIds: this.selectedTestsIds
     }
 
-    this.laborderService.addMedication(labOrderPayload).subscribe({
+    this.laborderService.addMedication(labOrderPayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         console.log(x);
         this.alertService.success('Lab Order Added Successfully.')

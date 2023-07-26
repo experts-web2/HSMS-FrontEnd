@@ -6,6 +6,8 @@ import { DoctorService } from 'src/app/Services/doctor.service';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { TableColumnFilterTypes } from 'src/app/constants/enums/table-column-filterTypes';
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 
 @Component({
@@ -13,7 +15,7 @@ import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
   templateUrl: './doctor-list.component.html',
   styleUrls: ['./doctor-list.component.scss']
 })
-export class DoctorListComponent {
+export class DoctorListComponent extends SubscriptionManagmentDirective {
 
   visible: boolean = false
   totalRecords: number = 0;
@@ -75,6 +77,7 @@ export class DoctorListComponent {
     public dialogService: DialogService,
     private readonly doctorService: DoctorService,
     private readonly alertService: AlertService){
+      super();
   }
 
   ngOnInit(): void {
@@ -82,7 +85,7 @@ export class DoctorListComponent {
   }
 
   getDoctors(){
-    this.doctorService.getDoctors().subscribe({
+    this.doctorService.getDoctors().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.doctorsList = x.data;
         this.totalRecords = x.total;
@@ -98,7 +101,7 @@ export class DoctorListComponent {
   }
 
   deleteUser(deleteDoctor:any){
-    this.doctorService.deleteDoctor(deleteDoctor).subscribe({
+    this.doctorService.deleteDoctor(deleteDoctor).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.alertService.success('Success', 'Doctor delete successfully');
         this.getDoctors()

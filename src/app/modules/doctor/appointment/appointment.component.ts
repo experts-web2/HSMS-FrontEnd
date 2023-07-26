@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { takeUntil } from 'rxjs';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { PatientService } from 'src/app/Services/patient/patient.service';
 import { TokenService } from 'src/app/Services/token.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { Genders } from 'src/app/constants/enums/Gender-enum';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { IPatient } from 'src/app/models/interfaces/patient-model';
@@ -12,12 +14,13 @@ import { IPatient } from 'src/app/models/interfaces/patient-model';
   templateUrl: './appointment.component.html',
   styleUrls: ['./appointment.component.scss'],
 })
-export class AppointmentComponent implements OnInit {
+export class AppointmentComponent extends SubscriptionManagmentDirective implements OnInit {
 tokenId!: string;
 patient!: IPatient;
 token!: IToken;
 constructor(private alertService: AlertService, private readonly route: ActivatedRoute, private readonly tokenService: TokenService, private readonly patientService: PatientService){
-  this.route.params.subscribe({
+  super();
+  this.route.params.pipe(takeUntil(this.componetDestroyed)).subscribe({
     next: (x) => {
       this.tokenId = x["tokenId"];      
     }
@@ -29,7 +32,7 @@ ngOnInit(): void{
 }
 
 getToken(){
-  this.tokenService.getTokenById(this.tokenId).subscribe({
+  this.tokenService.getTokenById(this.tokenId).pipe(takeUntil(this.componetDestroyed)).subscribe({
     next: (x) =>{
       this.token = x;
       this.getPatient(x.patientId);
@@ -48,7 +51,7 @@ markTokenAsViewd(tokenId: string){
 }
 
 getPatient(patientId: string){
-  this.patientService.getPatientById(patientId).subscribe({
+  this.patientService.getPatientById(patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
     next: (x)=>{
       console.log(x);
       this.patient = x;      

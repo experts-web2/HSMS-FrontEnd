@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { takeUntil } from 'rxjs';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { DoctorService } from 'src/app/Services/doctor.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { IAddOrUpdateDoctorRequest } from 'src/app/models/interfaces/addOrUpdate-Doctor';
 
 
@@ -11,7 +13,7 @@ import { IAddOrUpdateDoctorRequest } from 'src/app/models/interfaces/addOrUpdate
   templateUrl: './doctor-form.component.html',
   styleUrls: ['./doctor-form.component.scss']
 })
-export class DoctorFormComponent implements OnInit {
+export class DoctorFormComponent extends SubscriptionManagmentDirective implements OnInit {
 
   category = [{
     id: 'Child Specialist',
@@ -35,6 +37,7 @@ export class DoctorFormComponent implements OnInit {
     private readonly doctorService: DoctorService,
     private readonly alertService: AlertService,
     public config: DynamicDialogConfig) {
+      super();
     this.doctor = this.config.data.doctor;
     this.action = this.config.data.action
 
@@ -57,7 +60,7 @@ export class DoctorFormComponent implements OnInit {
       lastName: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z, A-Z]{2,3}')]),
       password: new FormControl('', [Validators.required, Validators.minLength(6),]),
-      phoneNumber: new FormControl(''),
+      phoneNumber: new FormControl('',[Validators.required]),
       photoPath: new FormControl(''),
       active: new FormControl(true),
       roles: new FormControl(['Doctor'])
@@ -125,7 +128,7 @@ export class DoctorFormComponent implements OnInit {
 
 isEmailAlreadyInUse(email:string):any{
   let test = false;
-  this.doctorService.isEmailInUse(email).subscribe(
+  this.doctorService.isEmailInUse(email).pipe(takeUntil(this.componetDestroyed)).subscribe(
     (data: boolean) => {
       const pe = this.addDoctorForm.get('email');
       if (data) {
@@ -166,7 +169,7 @@ isEmailAlreadyInUse(email:string):any{
         },
       }
       if (this.action === 'add') {
-        this.doctorService.addDoctor(requestPayLoad).subscribe({
+        this.doctorService.addDoctor(requestPayLoad).pipe(takeUntil(this.componetDestroyed)).subscribe({
           next: (x: any) => {
             this.alertService.success('Success', 'Doctor added successfully');
             this.ref.close(true);
@@ -176,7 +179,7 @@ isEmailAlreadyInUse(email:string):any{
           }
         })
       } else {
-        this.doctorService.updateDoctor(requestPayLoad, this.doctor.id).subscribe({
+        this.doctorService.updateDoctor(requestPayLoad, this.doctor.id).pipe(takeUntil(this.componetDestroyed)).subscribe({
           next: (x: any) => {
             this.alertService.success('Success', 'Doctor update successfully');
             this.ref.close(true);

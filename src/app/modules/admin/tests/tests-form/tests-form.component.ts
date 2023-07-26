@@ -8,6 +8,8 @@ import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { TestsReportTime, TestsSample } from 'src/app/constants/Constants/testsConsts';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 
 @Component({
@@ -15,7 +17,7 @@ import { TestsReportTime, TestsSample } from 'src/app/constants/Constants/testsC
   templateUrl: './tests-form.component.html',
   styleUrls: ['./tests-form.component.scss']
 })
-export class TestsFormComponent implements OnInit  {
+export class TestsFormComponent extends SubscriptionManagmentDirective implements OnInit  {
   testForm!: FormGroup;
   categories!: Array<ILabTestCategory>;
   testsSample = TestsSample;
@@ -30,6 +32,7 @@ export class TestsFormComponent implements OnInit  {
     public readonly config: DynamicDialogConfig,
     public readonly ref: DynamicDialogRef,
   ) {
+    super();
     this.test = this.config.data.test;
     this.action = this.config.data.action
     this.getTestCategories();
@@ -72,7 +75,7 @@ export class TestsFormComponent implements OnInit  {
       reportingTime: testFormValue.reportingTime,
     }
     if(this.action === 'add'){
-      this.testsService.addTest(testToAdd).subscribe({
+      this.testsService.addTest(testToAdd).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x: any) => {
           this.alertService.success('Test added successfully', 'Success');
           this.testForm.reset();
@@ -83,7 +86,7 @@ export class TestsFormComponent implements OnInit  {
         }
       })
     }else{
-      this.testsService.updateTest(this.test.id,testToAdd).subscribe({
+      this.testsService.updateTest(this.test.id,testToAdd).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x: any) => {
           this.alertService.success('Test update successfully', 'Success');
           this.testForm.reset();
@@ -97,7 +100,7 @@ export class TestsFormComponent implements OnInit  {
   }
 
   getTestCategories() {
-    this.testCategoryService.getCategories().subscribe({
+    this.testCategoryService.getCategories().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x: any) => {
         this.categories = x.data
       },

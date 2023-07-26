@@ -14,13 +14,15 @@ import { MedicationService } from 'src/app/Services/medication.service';
 import { IMedicinerequest } from '../../../../models/interfaces/medicine-Request';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { IToken } from 'src/app/models/interfaces/Token';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-medication',
   templateUrl: './medication.component.html',
   styleUrls: ['./medication.component.scss']
 })
-export class MedicationComponent {
+export class MedicationComponent extends SubscriptionManagmentDirective {
   @Input() token!: IToken;
 
   historyDropDown: Array<IDropDown> = [];
@@ -38,7 +40,8 @@ export class MedicationComponent {
   medicationDurations = MedicationDurations;
   medicationInstructions = MedicationInstructions;
   constructor(private readonly fb: FormBuilder, private readonly userStateService: UserStateService, private readonly medicineService: MedicineService, private readonly medicationService: MedicationService, private readonly alertService: AlertService) {
-    this.userStateService.getUserState().subscribe({
+    super();
+    this.userStateService.getUserState().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.loggedInDoctor = x;
       }
@@ -89,7 +92,7 @@ export class MedicationComponent {
   }
 
   getMedicineHistoryDropDown(){
-    this.medicationService.getMedicationHistoryDropDown(this.token.patientId).subscribe({
+    this.medicationService.getMedicationHistoryDropDown(this.token.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.historyDropDown = x;
       }
@@ -97,7 +100,7 @@ export class MedicationComponent {
   }
 
   getMedicationById(medicationId: string){
-    this.medicationService.getMedicationById(medicationId).subscribe({
+    this.medicationService.getMedicationById(medicationId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
 
       }
@@ -110,7 +113,7 @@ export class MedicationComponent {
   }
 
   getMedicine(){
-    this.medicineService.getMedicineDropDown().subscribe({
+    this.medicineService.getMedicineDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.medicines = x;
         this.medicinesToShow = x;
@@ -210,7 +213,7 @@ export class MedicationComponent {
         })
       };
 
-      this.medicationService.addMedication(medicationRequest).subscribe({
+      this.medicationService.addMedication(medicationRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
           
           this.alertService.success('Medication Saved.')

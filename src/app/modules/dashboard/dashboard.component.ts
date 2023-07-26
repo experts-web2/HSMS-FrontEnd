@@ -11,13 +11,15 @@ import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { TokenService } from 'src/app/Services/token.service';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { Router } from '@angular/router';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent extends SubscriptionManagmentDirective implements OnInit {
   chartOption: any = {}
 
   appointmentsData!: Array<any>;
@@ -97,7 +99,7 @@ export class DashboardComponent implements OnInit {
     private readonly appointmentService: AppointmentService, 
     private readonly tokenService: TokenService,
     private readonly router: Router
-    ) { }
+    ) { super(); }
 
 
   ngOnInit(): void {
@@ -110,7 +112,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getViewdTokens(){
-    this.tokenService.getTokensByViewd(true).subscribe({
+    this.tokenService.getTokensByViewd(true).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.viewdTokens = x;
         
@@ -122,7 +124,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getUnViewdTokens(){
-    this.tokenService.getTokensByViewd(false).subscribe({
+    this.tokenService.getTokensByViewd(false).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.newTokens = x;
         
@@ -169,7 +171,7 @@ export class DashboardComponent implements OnInit {
   selectedFilter: string = "Last 7 Days";
 
   getAppointments(fetchRequest: IFetchRequest = {}) {
-    this.appointmentService.getAppointments(fetchRequest).subscribe({
+    this.appointmentService.getAppointments(fetchRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x: any) => {
         console.log(x);
         
@@ -178,13 +180,13 @@ export class DashboardComponent implements OnInit {
 
       }
     })
-    this.patientService.getAppointments().subscribe((res: any) => {
+    this.patientService.getAppointments().pipe(takeUntil(this.componetDestroyed)).subscribe((res: any) => {
       this.appointmentsData = res.appointments
     })
   }
 
   getMessagesData() {
-    this.patientService.getMessages().subscribe((res: any) => {
+    this.patientService.getMessages().pipe(takeUntil(this.componetDestroyed)).subscribe((res: any) => {
       this.messagesData = res
       this.messageTotalRecords = res.length
     })
