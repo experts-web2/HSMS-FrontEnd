@@ -1,10 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { takeUntil } from 'rxjs';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { DoctorService } from 'src/app/Services/doctor.service';
 import { PatientService } from 'src/app/Services/patient/patient.service';
 import { TestService } from 'src/app/Services/test-service/test.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { PaymentTypes } from 'src/app/constants/enums/PaymenTypes';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IInvoice, IInvoiceItem } from 'src/app/models/interfaces/addOrUpdate-Token';
@@ -14,7 +16,7 @@ import { IInvoice, IInvoiceItem } from 'src/app/models/interfaces/addOrUpdate-To
   templateUrl: './add-patient-test.component.html',
   styleUrls: ['./add-patient-test.component.scss']
 })
-export class AddPatientTestComponent implements OnInit {
+export class AddPatientTestComponent extends SubscriptionManagmentDirective implements OnInit {
   selectedDoctor = ''
   selectedPayment = ''
   addPatientTestForm!: FormGroup;
@@ -23,7 +25,7 @@ export class AddPatientTestComponent implements OnInit {
   tests: Array<IDropDown> = [];
   radiology: Array<IDropDown> = [];
   descriptions: Array<any> = [];
-  
+
   discountTypes = [
     {
       label: 'Amount',
@@ -46,24 +48,25 @@ export class AddPatientTestComponent implements OnInit {
     private readonly doctorService: DoctorService,
     private readonly alertService: AlertService,
     private readonly testService: TestService) {
-
+    super();
     this.invoiceDescriptionForm = this.fb.group({
       paidAmount: new FormControl<number | null>(null, [Validators.required]),
       description: new FormControl<number | null>(null, [Validators.required]),
       discountAmount: new FormControl<number | null>(0, [Validators.required]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
-      patientId: new FormControl<string | null>(null, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
-      completionDate: new FormControl<string | null>(null, [Validators.required]),
+      reportingHours: new FormControl<string | null>(null, [Validators.required]),
       othersType: new FormControl<number | null>(null),
       othersName: new FormControl<string | null>(null)
     })
     this.addPatientTestForm = this.fb.group({
       doctorId: new FormControl<string | null>(null, [Validators.required]),
+      patientId: new FormControl<string | null>(null, [Validators.required]),
       totalDiscount: new FormControl<number | null>(0, [Validators.required]),
       paymentType: new FormControl<number | null>(1, [Validators.required]),
       amountPaid: new FormControl<number | null>(null, [Validators.required]),
       grandTotal: new FormControl<number | null>(0.00, [Validators.required]),
+      completionDate: new FormControl<number | null>(0.00, [Validators.required]),
       priority: new FormControl<string | null>('Routine', [Validators.required]),
       invoiceNote: new FormControl<string | null>(null, [Validators.required]),
       invoiceItems: this.fb.array([this.invoiceDescriptionForm]),
@@ -82,7 +85,7 @@ export class AddPatientTestComponent implements OnInit {
   }
 
   getDoctors() {
-    this.doctorService.getDoctorDropDown().subscribe({
+    this.doctorService.getDoctorDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.doctors = x;
       },
@@ -93,11 +96,11 @@ export class AddPatientTestComponent implements OnInit {
   }
 
   getTests() {
-    this.testService.getTests().subscribe({
+    this.testService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         console.log(x);
         this.tests = x.data;
-          this.descriptions = this.tests;
+        this.descriptions = this.tests;
       },
       error: (err) => {
 
@@ -106,7 +109,7 @@ export class AddPatientTestComponent implements OnInit {
   }
 
   getPatients() {
-    this.patientService.getPatientDropDown().subscribe({
+    this.patientService.getPatientDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.patients = x;
         this.patientsToShow = x;
@@ -121,14 +124,15 @@ export class AddPatientTestComponent implements OnInit {
     let description = this.descriptions.find(x => x.id === descriptionId);
     this.invoiceItems.at(index).get('paidAmount')?.setValue(description?.price);
     this.invoiceItems.at(index).get('description')?.setValue(description?.description);
+    this.invoiceItems.at(index).get('reportingHours')?.setValue(description?.reportingTime);
     this.calculate()
 
   }
 
-  
 
-  patientSelect(index:number,patient: any) {
-    console.log('patient',patient);
+
+  patientSelect(index: number, patient: any) {
+    console.log('patient', patient);
     // this.invoiceItems.at(index).get('patientId')?.setValue(description?.price);
 
     this.addPatientTestForm.get('patientId')?.setValue(patient.id);
@@ -141,10 +145,10 @@ export class AddPatientTestComponent implements OnInit {
   }
 
   addToken() {
-    if(this.addPatientTestForm.controls['amountPaid']?.value >= this.addPatientTestForm.controls['grandTotal'].value){
+    if (this.addPatientTestForm.controls['amountPaid']?.value >= this.addPatientTestForm.controls['grandTotal'].value) {
       if (this.addPatientTestForm.controls['amountPaid']?.value && this.invoiceItems.valid) {
-        
-        this.testService.addPatientTest(this.addPatientTestForm.value).subscribe({
+        console.log('this.addPatientTestForm.value', this.addPatientTestForm.value);
+        this.testService.addPatientTest(this.addPatientTestForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe({
           next: (x) => {
             console.log(x);
             this.alertService.success('Patient Test add successfully', 'Success');
@@ -154,7 +158,7 @@ export class AddPatientTestComponent implements OnInit {
           }
         })
       }
-    }else{
+    } else {
       this.alertService.error('add payment greater than total', 'Error');
 
     }
@@ -168,8 +172,7 @@ export class AddPatientTestComponent implements OnInit {
       invoiceItems: this.invoiceItems.value.map((x: any) => {
         let invoiceItem = {
           testId: x.testId,
-          completionDate: x.completionDate,
-          patientId: x.patientId,
+          reportingHours: x.reportingHours,
           paidAmount: x.paidAmount,
           description: x.description,
           discountAmount: x.discountAmount,
@@ -192,8 +195,7 @@ export class AddPatientTestComponent implements OnInit {
       discountAmount: new FormControl<number | null>(null, [Validators.required]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
-      completionDate: new FormControl<string | null>(null, [Validators.required]),
-      patientId: new FormControl<string | null>(null, [Validators.required]),
+      reportingHours: new FormControl<string | null>(null, [Validators.required]),
       othersType: new FormControl<number | null>(null),
       othersName: new FormControl<string | null>(null)
     })
@@ -208,8 +210,7 @@ export class AddPatientTestComponent implements OnInit {
       discountAmount: new FormControl<number | null>(null, [Validators.required]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
-      completionDate: new FormControl<string | null>(null, [Validators.required]),
-      patientId: new FormControl<string | null>(null, [Validators.required]),
+      reportingHours: new FormControl<string | null>(null, [Validators.required]),
       othersType: new FormControl<number | null>(null),
       othersName: new FormControl<string | null>(null)
     })

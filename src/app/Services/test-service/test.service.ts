@@ -26,6 +26,9 @@ export class TestService extends HttpService {
   addPatientTest(test:any){
     return this.post(`${BaseEndPoints.Patienttestinvoice}/add`, test);
   }
+  getTestPatientDropdown(): Observable<Array<any>>{
+    return this.get(`${BaseEndPoints.Patienttestinvoiceitem}/gettodaypatienttest`);
+  }
 
   deleteTest(test: ILabeTest){
     return this.delete(`${this.baseEndPoint}/delete/${test.id}`);

@@ -8,13 +8,15 @@ import { PatientService } from '../../../Services/patient/patient.service';
 import { IAddOrUpdatePatient } from 'src/app/models/interfaces/addOrUodate-Patient';
 import { AlertService } from '../../../Services/alert/alert.service';
 import { Relations } from 'src/app/constants/Constants/PatientRelatons';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-patient-form',
   templateUrl: './patient-form.component.html',
   styleUrls: ['./patient-form.component.scss']
 })
-export class PatientFormComponent implements OnInit {
+export class PatientFormComponent extends SubscriptionManagmentDirective implements OnInit {
   patientForm!: FormGroup;
   relations:any[] = [{label:'Father', value: Relations.Parent},{label:'Mother', value: Relations.Parent},{label:'Sister', value: Relations.Sibling},{label:'Brother', value: Relations.Sibling},{label:'Son', value: Relations.Child},{label:'Daughter', value: Relations.Child},{label:'Wife', value: Relations.Spouse}, {label:'Husband', value: Relations.Spouse}];
   addOnBlur = true;
@@ -23,7 +25,7 @@ export class PatientFormComponent implements OnInit {
   tags: any[] = [];
 
   constructor(private fb:FormBuilder, private dialog: MatDialog, private readonly patientService: PatientService, private readonly alertService: AlertService) { 
-
+    super();
     this.patientForm = this.fb.group({
       mrNum: [null],
       name: [null, Validators.required],
@@ -38,11 +40,11 @@ export class PatientFormComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.patientService.getData().subscribe(data=>{
+    this.patientService.getData().pipe(takeUntil(this.componetDestroyed)).subscribe(data=>{
       console.log(data);
       
     })
-    this.patientService.getPatients().subscribe({
+    this.patientService.getPatients().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x)=> {
         console.log(x);
         
@@ -62,7 +64,7 @@ export class PatientFormComponent implements OnInit {
       relation: values['relation'],
       registrationDate: new Date(values['registrationDate']),
     }
-    this.patientService.addPatient(patient).subscribe({
+    this.patientService.addPatient(patient).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.alertService.success('Patient Added');
         this.patientForm.reset();

@@ -12,13 +12,15 @@ import { TokenService } from 'src/app/Services/token.service';
 import { IAddOrUpdateToken, IInvoice, IInvoiceItem, ITokenDetail } from 'src/app/models/interfaces/addOrUpdate-Token';
 import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
 import { AlertService } from 'src/app/Services/alert/alert.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-token-modal',
   templateUrl: './add-token-modal.component.html',
   styleUrls: ['./add-token-modal.component.scss']
 })
-export class AddTokenModalComponent implements OnInit {
+export class AddTokenModalComponent extends SubscriptionManagmentDirective implements OnInit {
   selectedDoctor = ''
   selectedPayment = ''
   addTokenForm!: FormGroup;
@@ -76,7 +78,7 @@ export class AddTokenModalComponent implements OnInit {
     private readonly testService: TestService,
     private readonly tokenService: TokenService,
     private readonly alertService: AlertService) {
-
+      super();
       this.display =  this.data.display
 
     this.invoiceDescriptionForm = this.fb.group({
@@ -136,7 +138,7 @@ export class AddTokenModalComponent implements OnInit {
   }
 
   getDoctors() {
-    this.doctorService.getDoctorDropDown().subscribe({
+    this.doctorService.getDoctorDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         console.log(x);
         this.doctors = x;
@@ -148,7 +150,7 @@ export class AddTokenModalComponent implements OnInit {
   }
 
   getTests() {
-    this.testService.getTestDropDown().subscribe({
+    this.testService.getTestDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         console.log(x);
         this.tests = x;
@@ -171,7 +173,7 @@ export class AddTokenModalComponent implements OnInit {
   }
 
   getPatients() {
-    this.patientService.getPatientDropDown().subscribe({
+    this.patientService.getPatientDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.patients = x;
         this.patientsToShow = x;
@@ -201,7 +203,7 @@ export class AddTokenModalComponent implements OnInit {
         doctorId: this.addTokenForm.controls['doctorId'].value,
         patientCheckedIn: this.addTokenForm.controls['patientCheckedIn'].value ? this.addTokenForm.controls['patientCheckedIn'].value : true
       }
-      this.tokenService.addToken(tokenpayload).subscribe({
+      this.tokenService.addToken(tokenpayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
           this.alertService.success('Token added successfully.')
           this.dialogRef.close();
