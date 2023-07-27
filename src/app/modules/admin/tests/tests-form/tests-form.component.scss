@@ -6,3 +6,10 @@
         grid-template-columns: 100%;
     }
 }
+
+.button-wrapper{
+    align-items: end;
+    text-align: end;
+    display: flex;
+    justify-content: end
+}

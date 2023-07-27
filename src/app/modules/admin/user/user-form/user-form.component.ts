@@ -9,6 +9,8 @@ import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IAddOrUpdateUser } from 'src/app/models/interfaces/addOrUpdate-User';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DoctorService } from 'src/app/Services/doctor.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 
 @Component({
@@ -16,7 +18,7 @@ import { DoctorService } from 'src/app/Services/doctor.service';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent extends SubscriptionManagmentDirective implements OnInit {
   userForm!: FormGroup;
   roles: RolesDisplay[] = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.Sweeper, name: 'Sweeper' }];
   user: any;
@@ -28,7 +30,7 @@ export class UserFormComponent implements OnInit {
     private readonly doctorService: DoctorService,
     public readonly config: DynamicDialogConfig,
     public readonly ref: DynamicDialogRef) {
-
+    super();
     this.user = this.config.data.user;
     this.action = this.config.data.action
   }
@@ -73,7 +75,7 @@ export class UserFormComponent implements OnInit {
 
   isEmailAlreadyInUse(email: string): any {
     let test = false;
-    this.doctorService.isEmailInUse(email).subscribe(
+    this.doctorService.isEmailInUse(email).pipe(takeUntil(this.componetDestroyed)).subscribe(
       (data: boolean) => {
         const pe = this.userForm.get('email');
         if (data) {
@@ -91,7 +93,7 @@ export class UserFormComponent implements OnInit {
   formSubmit(e: any) {
     let value = this.userForm.value;
     let accountId: string = '';
-    this.userStateService.User_State.subscribe({ next: (x: ILogedInUser) => { accountId = x.accountId } })
+    this.userStateService.User_State.pipe(takeUntil(this.componetDestroyed)).subscribe({ next: (x: ILogedInUser) => { accountId = x.accountId } })
     let userToAdd: IAddOrUpdateUser = {
       firstName: value.firstName,
       lastName: value.lastName,
@@ -104,7 +106,7 @@ export class UserFormComponent implements OnInit {
       accountId: accountId
     }
     if (this.action === 'add') {
-      this.userService.addUser(userToAdd).subscribe({
+      this.userService.addUser(userToAdd).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x: any) => {
           this.alertService.success('Success', 'User was added successfully');
           this.userForm.reset();
@@ -117,7 +119,7 @@ export class UserFormComponent implements OnInit {
     } else {
       // const data = userToAdd;
       // const { password, roles, ...rest } = data;
-      this.userService.updateUser(this.user.id, userToAdd).subscribe({
+      this.userService.updateUser(this.user.id, userToAdd).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x: any) => {
           this.alertService.success('Success', 'User was update successfully');
           this.userForm.reset();

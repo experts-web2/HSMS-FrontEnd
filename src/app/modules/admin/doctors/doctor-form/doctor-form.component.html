@@ -43,8 +43,11 @@
                         characters</div>
                 </div>
                 <div class="col-4">
-                    <label for="phone">Phone<span class="text-danger">*</span></label>
+                    <label for="phone">Phone No<span class="text-danger">*</span></label>
                     <input class="form-control" type="text" name="" formControlName="phoneNumber" id="phone">
+                    <div class="text-danger"
+                        *ngIf="(f['phoneNumber'].errors && f['phoneNumber'].touched) || (f['phoneNumber'].dirty && f['phoneNumber'].errors)">
+                        Phone Number is required.</div>
                 </div>
             </div>
 
@@ -115,11 +118,13 @@
             <div class="row mt-3">
                 <div class="col-6">
                     <label for="speciality">Speciality<span class="text-danger">*</span></label>
-                    <select class="form-select" aria-label="Default select example" formControlName="speciality"
+                    <input class="form-control" type="text" formControlName="speciality" name="" id="speciality" required>
+
+                    <!-- <select class="form-select" aria-label="Default select example" formControlName="speciality"
                         required>
                         <option selected [value]="null" disabled>Select Speciality</option>
                         <option *ngFor="let status of category" [value]="status.id">{{ status.label }}</option>
-                    </select>
+                    </select> -->
                     <div class="text-danger"
                         *ngIf="(f['speciality'].errors && f['speciality'].touched) || (f['speciality'].dirty && f['speciality'].errors)">
                         Speciality is required.</div>
@@ -127,12 +132,14 @@
 
                 <div class="col-6">
                     <label for="speciality">Qualification<span class="text-danger">*</span></label>
-                    <select class="form-select" aria-label="Default select example" formControlName="qualification"
+                    <input class="form-control" type="text" formControlName="qualification" name="" id="qualification" required>
+
+                    <!-- <select class="form-select" aria-label="Default select example" formControlName="qualification"
                         required>
                         <option selected [value]="null" disabled>Select Qualification</option>
                         <option *ngFor="let qualification of qualifications" [value]="qualification.id">{{
                             qualification.label }}</option>
-                    </select>
+                    </select> -->
                     <div class="text-danger"
                         *ngIf="(f['qualification'].errors && f['qualification'].touched) || (f['qualification'].dirty && f['qualification'].errors)">
                         Qualification is required.</div>

@@ -30,6 +30,8 @@ export class GenericTableComponent {
     @Input() totalRecords: number = 0;
     @Input() actionsToShow: Array<string> = [];
     @Input() additionalActions: Array<ICustomActions> = [];
+    @Input() clickableRow: boolean = false;
+    @Input() rowClickAction!: Function;
 
     @Output() edit: EventEmitter<any> = new EventEmitter<any>();
     @Output() delete: EventEmitter<any> = new EventEmitter<any>();

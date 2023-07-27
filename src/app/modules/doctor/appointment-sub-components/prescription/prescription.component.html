@@ -1,8 +1,14 @@
 <div [formGroup]="prescriptionForm">
+    <div class="flex">
+        <select class="form-select w-1/3" name="" id="" #prescriptionHistory (change)="onSelectHistory(prescriptionHistory.value)">
+            <option [value]="null" [defaultSelected]="true" disabled>Prescriptions History</option>
+            <option *ngFor="let his of historyDropDown" [value]="his.id">{{his.name | date: 'EEE MMM, dd/yyyy'}}</option>
+        </select>
+    </div>
     <div class="prrescription-input">
         <label htmlFor="medicalHistory">Medical History</label>
         <div class="inner-prescription">
-            <textarea rows="1" cols="93" class="col-11" id="medicalHistory" pInputTextarea formControlName="medicalHistory"></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
+            <textarea rows="1" cols="93" class="col-11" id="medicalHistory" pInputTextarea formControlName="medicalHistory" ></textarea> <button class="template-btn"><i class="pi pi-file"></i></button>
         </div>
     </div>
     <div class="prrescription-input">

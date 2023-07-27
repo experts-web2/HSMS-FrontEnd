@@ -5,6 +5,8 @@ import { AlertService } from 'src/app/Services/alert/alert.service';
 import { TestCategoryService } from 'src/app/Services/testCategory-service/test-category.service';
 import { IAddOrUpdateCategory } from 'src/app/models/interfaces/addOrUpdate-Category';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 
 @Component({
@@ -12,7 +14,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
   templateUrl: './categories-form.component.html',
   styleUrls: ['./categories-form.component.scss']
 })
-export class CategoriesFormComponent implements OnInit {
+export class CategoriesFormComponent extends SubscriptionManagmentDirective implements OnInit {
   categoryForm!: FormGroup;
   testCategoryId!: string;
   category: any;
@@ -23,6 +25,7 @@ export class CategoriesFormComponent implements OnInit {
     private readonly alertService: AlertService,
     public config: DynamicDialogConfig,
     public ref: DynamicDialogRef,) {
+      super();
     this.category = this.config?.data?.category;
     this.action = this.config?.data?.action
   }
@@ -46,7 +49,7 @@ export class CategoriesFormComponent implements OnInit {
       name: value.name
     }
     if (this.action === 'add') {
-      this.labTestCategoryService.addCategory(categorypayLoad).subscribe({
+      this.labTestCategoryService.addCategory(categorypayLoad).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x: any) => {
           this.alertService.success('Success', 'Lab Test Category was added successfully');
           this.categoryForm.reset();
@@ -57,7 +60,7 @@ export class CategoriesFormComponent implements OnInit {
         }
       })
     } else {
-      this.labTestCategoryService.updateCategory(this.category.id, categorypayLoad).subscribe({
+      this.labTestCategoryService.updateCategory(this.category.id, categorypayLoad).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x: any) => {
           this.alertService.success('Success', 'Lab Test Category was update successfully');
           this.categoryForm.reset();

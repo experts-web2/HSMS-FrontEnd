@@ -1,5 +1,10 @@
 <div class="d-flex col-12 flex-column">
-    
+    <div class="flex">
+        <select class="form-select w-1/3" name="" id="" #medicationHistory (change)="onHistorySelection(medicationHistory.value)" >
+            <option [value]="null" [defaultSelected]="true" disabled>Selct Mediaction History</option>
+            <option *ngFor="let medication of historyDropDown" [value]="medication.id">{{medication.name | date: 'EEE MMM, dd/yyyy'}}</option>
+        </select>
+    </div>
     <div class="d-flex flex-column col-12 border border-secondary rounded p-1" [formGroup]="medicationForm">
         <div formArrayName="medicationItems">
             <div *ngFor="let form of medicationItems.controls; let i = index" class="flex">
@@ -95,7 +100,6 @@
         <textarea rows="2" cols="93" class="mb-2" placeholder="Medication Notes" id="investigation" pInputTextarea formControlName="medicationNotes"></textarea>
     </div>
     <div>
-        <button class="btn btn-primary d-flex align-items-center mt-4 mb-2" (click)="addMedicationItem()"><i class="pi pi-plus"></i> Drug</button>
         <textarea rows="2" cols="93" class="mb-2 w-full" placeholder="Medication Notes" id="investigation" pInputTextarea ></textarea>
         <div>
             <p-checkbox  [binary]="true" inputId="reminder" ></p-checkbox><label class="m-x-2 ml-3" for="reminder">Send Reminder</label>

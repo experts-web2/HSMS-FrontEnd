@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { PatientService } from 'src/app/Services/patient/patient.service';
 import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
@@ -7,58 +7,135 @@ import { MatDialog } from '@angular/material/dialog';
 import { DoctorService } from 'src/app/Services/doctor.service';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { formatDate } from '@angular/common';
+import { TestService } from 'src/app/Services/test-service/test.service';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-lab-test-report',
   templateUrl: './lab-test-report.component.html',
   styleUrls: ['./lab-test-report.component.scss']
 })
-export class LabTestReportComponent implements OnInit {
-  patients: IDropDown[]=[];
-  patientsToShow: IDropDown[]=[];
-  labTestForm!: FormGroup
-  doctors: IDropDown[]=[];
-  doctorsToShow: IDropDown[]=[];
-  datePlaceholder = formatDate(Date.now(), 'MM/dd/yyyy', 'en-US');
-  preview ='';
-  selectedFiles: any;
-  currentFile!: File;
-
-  constructor(private readonly patientServive:PatientService,
-    private dialog: MatDialog,
-     private readonly alertService: AlertService,
-     private readonly doctorService : DoctorService,
-     private fb:FormBuilder){
-
-      this.labTestForm = this.fb.group({
-        patientId: [''],
-        doctorId: [''],
-        dateTime: [''],
-        report: [''],
-        remarks: [''],
-        photoPath: [''],
-      });
-     }
+export class LabTestReportComponent extends SubscriptionManagmentDirective implements OnInit {
+  selectedDoctor = ''
+  selectedPayment = ''
+  labReportForm!: FormGroup;
+  invoiceDescriptionForm!: FormGroup;
+  doctors: Array<IDropDown> = [];
+  tests: Array<IDropDown> = [];
+  radiology: Array<IDropDown> = [];
+  descriptions: Array<any> = [];
 
 
-  ngOnInit(): void {
-    this.getPatientDropDownList();
-    this.getDoctorDropDownList();
+  dropDown!: Array<{ id: number, label: string }>
+  patients: Array<IDropDown> = [];
+  patientsToShow: Array<IDropDown> = [];
+
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '15rem',
+    minHeight: '5rem',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: 'Enter text here...',
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    defaultFontSize: '',
+    fonts: [
+      { class: 'arial', name: 'Arial' },
+      { class: 'times-new-roman', name: 'Times New Roman' },
+      { class: 'calibri', name: 'Calibri' },
+      { class: 'comic-sans-ms', name: 'Comic Sans MS' }
+    ],
+    customClasses: [
+      {
+        name: 'quote',
+        class: 'quote',
+      },
+      {
+        name: 'redText',
+        class: 'redText'
+      },
+      {
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
+      },
+    ],
+    toolbarHiddenButtons: [
+      ['bold', 'italic'],
+      ['fontSize']
+    ]
+  }
+  submitted = false;
+
+
+  constructor(
+    private readonly patientService: PatientService,
+    private readonly fb: FormBuilder,
+    private readonly doctorService: DoctorService,
+    private readonly testService: TestService) {
+    super();
+    this.invoiceDescriptionForm = this.fb.group({
+      testId: new FormControl<string | null>(null, [Validators.required]),
+      normalValues: new FormControl<string | null>(null, [Validators.required]),
+      testValue: new FormControl<string | null>(null, [Validators.required]),
+      report: new FormControl<string | null>(null, [Validators.required]),
+      remarks: new FormControl<string | null>(null, [Validators.required]),
+    })
+    this.labReportForm = this.fb.group({
+      patientId: new FormControl<string | null>(null, [Validators.required]),
+      doctorId: new FormControl<string | null>(null, [Validators.required]),
+      testReport: this.fb.array([this.invoiceDescriptionForm]),
+    });
+
+  }
+
+  get testReport(): FormArray {
+    return this.labReportForm.get('testReport') as FormArray;
   }
 
 
-  getPatientDropDownList(){
-    this.patientServive.getPatientsDropdown().subscribe({
+
+  ngOnInit(): void {
+    this.getPatients();
+    this.getTests();
+    this.getDoctorDropDownList()
+  }
+
+  getTests() {
+    this.testService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
-        this.patients = x
+        console.log(x);
+        this.tests = x.data;
+        this.descriptions = this.tests;
       },
       error: (err) => {
+
       }
     })
   }
 
-  getDoctorDropDownList(){
-    this.doctorService.getDoctorsDropDown().subscribe({
+  getPatients() {
+    this.patientService.getPatientDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.patients = x;
+        this.patientsToShow = x;
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  getDoctorDropDownList() {
+    this.doctorService.getDoctorsDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.doctors = x
       },
@@ -67,56 +144,91 @@ export class LabTestReportComponent implements OnInit {
     })
   }
 
-  search(event:any){
-    console.log(event.query);
-    const query = event.query;
-    this.patientsToShow = this.patients.filter((patient) =>
-      patient.name.toLowerCase().includes(query.toLowerCase())
-    );
-
-    console.log(this.patientsToShow)
+  onDescriptionSelect(index: number, descriptionId: string) {
+    let description = this.descriptions.find(x => x.id === descriptionId);
+    console.log('description', description);
+    this.testReport.at(index).get('normalValues')?.setValue(description?.normalValues);
   }
 
-  
-  doctorSearch(event:any){
-    console.log(event.query);
-    const query = event.query;
-    this.doctorsToShow = this.doctors.filter((patient) =>
-      patient.name.toLowerCase().includes(query.toLowerCase())
-    );
 
-    console.log(this.doctorsToShow)
+  get f() { return this.labReportForm.controls; }
+
+
+
+
+  patientSelect(patient: any) {
+    this.labReportForm.get('patientId')?.setValue(patient.id);
   }
 
-  selectFile(event: any): void {
-    this.preview = '';
-    this.selectedFiles = event.target.files;
+  searchPatient(query: string) {
+    let text = query.toLowerCase();
+    this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(text));
+  }
 
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
+  addToken() {
+    this.submitted = true;
 
-      if (file) {
-        this.preview = '';
-        this.currentFile = file;
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.labTestForm.controls['photoPath'].setValue(e.target.result);
-          this.preview = e.target.result;
-        };
-
-        reader.readAsDataURL(this.currentFile);
-      }
+    if (this.labReportForm.invalid) {
+      return;
     }
+
+    console.log(this.labReportForm.value)
+
+    // let tokenpayload = {
+    //   patientId: this.labReportForm.controls['patientId'].value,
+    //   doctorId: this.labReportForm.controls['doctorId'].value,
+    //   patientCheckedIn: this.labReportForm.controls['patientCheckedIn'].value ? this.labReportForm.controls['patientCheckedIn'].value : true
+    // }
+    // console.log('tokenpayload',tokenpayload);
+    // this.tokenService.addToken(tokenpayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    //   next: (x) => {
+    //     console.log(x);
+
+
+    //   },
+    //   error: (err) => {
+
+    //   }
+    // })
+
   }
 
-  onSubmit(){
-    console.log(this.labTestForm.value)
+  getInvoice() {
+    let invoice = {
+      testReport: this.testReport.value.map((x: any) => {
+        let invoiceItem = {
+          testId: x.testId,
+          normalValues: x.normalValues,
+          testValue: x.testValue,
+          report: x.report,
+          remarks: x.remarks,
+        }
+        return invoiceItem
+      }),
+    }
+    return invoice;
   }
 
-  addPatient() {
-    const dialogRef = this.dialog.open(PatientFormComponent, {
-      width: '600px'
+  addNewInvoiceItem() {
+    let newForm = this.fb.group({
+      testId: new FormControl<string | null>(null, [Validators.required]),
+      normalValues: new FormControl<string | null>(null, [Validators.required]),
+      testValue: new FormControl<string | null>(null, [Validators.required]),
+      report: new FormControl<string | null>(null, [Validators.required]),
+      remarks: new FormControl<string | null>(null, [Validators.required]),
     })
+    this.testReport.push(newForm)
   }
 
+  removeinvoiceItem(index: number) {
+    this.testReport.removeAt(index);
+    let newForm = this.fb.group({
+      testId: new FormControl<string | null>(null, [Validators.required]),
+      normalValues: new FormControl<string | null>(null, [Validators.required]),
+      testValue: new FormControl<string | null>(null, [Validators.required]),
+      report: new FormControl<string | null>(null, [Validators.required]),
+      remarks: new FormControl<string | null>(null, [Validators.required]),
+    })
+    if (this.testReport.length < 1) this.testReport.push(newForm);
+  }
 }

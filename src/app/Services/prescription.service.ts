@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { IPrescriptionRequest } from '../models/interfaces/PrescriptionRequest';
 import { Observable } from 'rxjs';
 import { BaseEndPoints } from '../constants/enums/base-end-points';
+import { IDropDown } from '../models/interfaces/Dropdown';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +20,14 @@ export class PrescriptionService extends HttpService {
   }
 
   getPrescriptionById(id: string): Observable<any>{
-    return this.get(`${BaseEndPoints.Prescription}/${id}`)
+    return this.get(`${BaseEndPoints.Prescription}/byid/${id}`)
   }
 
   updatePrescriptionById(id: string, prescription: IPrescriptionRequest): Observable<any>{
     return this.post(`${BaseEndPoints.Prescription}/${id}`, prescription)
+  }
+  
+  getPrescriptionHistoryDropDown(patientId: string): Observable<Array<IDropDown>>{
+    return this.get(`${BaseEndPoints.Prescription}/dropdownbypatientid/${patientId}`);
   }
 }

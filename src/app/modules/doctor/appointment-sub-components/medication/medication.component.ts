@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserStateService } from 'src/app/State/user/user.service';
 import { MedicationDosageEnum, MedicationDosages } from 'src/app/constants/Constants/MedicationDosage';
@@ -13,15 +13,20 @@ import { IMedicationDetail, IMedicationRequest } from 'src/app/models/interfaces
 import { MedicationService } from 'src/app/Services/medication.service';
 import { IMedicinerequest } from '../../../../models/interfaces/medicine-Request';
 import { AlertService } from 'src/app/Services/alert/alert.service';
+import { IToken } from 'src/app/models/interfaces/Token';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-medication',
   templateUrl: './medication.component.html',
   styleUrls: ['./medication.component.scss']
 })
-export class MedicationComponent {
+export class MedicationComponent extends SubscriptionManagmentDirective {
+  @Input() token!: IToken;
+
+  historyDropDown: Array<IDropDown> = [];
   medicationForm!: FormGroup;
-  // prescreptionRequest!: IPrescriptionRequest;
   loggedInDoctor!: ILogedInUser;
   medicines: Array<IDropDown> = [];
   medicinesToShow: Array<IDropDown> = [];
@@ -35,7 +40,8 @@ export class MedicationComponent {
   medicationDurations = MedicationDurations;
   medicationInstructions = MedicationInstructions;
   constructor(private readonly fb: FormBuilder, private readonly userStateService: UserStateService, private readonly medicineService: MedicineService, private readonly medicationService: MedicationService, private readonly alertService: AlertService) {
-    this.userStateService.getUserState().subscribe({
+    super();
+    this.userStateService.getUserState().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.loggedInDoctor = x;
       }
@@ -67,9 +73,10 @@ export class MedicationComponent {
   }
 
   ngOnInit(): void {
-    this.getMedicine()
-    this.medicationForm.get('doctorId')?.setValue('20afc768-c778-4578-b5cd-0371c66647f6')
-    this.medicationForm.get('patientId')?.setValue('a4b96ae6-4101-4fdf-ae8c-b146a34b6aaa')
+    this.getMedicine();
+    this.getMedicineHistoryDropDown();
+    this.medicationForm.get('doctorId')?.setValue(this.token.doctorId);
+    this.medicationForm.get('patientId')?.setValue(this.token.patientId);
   }
 
   search(e: string){
@@ -80,15 +87,34 @@ export class MedicationComponent {
   }
 
   onMedicineSelect(index: number, medicine: IDropDown){
-    console.log({index, medicine});
     this.medicationItems.at(index).get('medicineName')?.setValue(medicine.name);
-    this.medicationItems.at(index).get('medicineId')?.setValue(medicine.id);
-    
+    this.medicationItems.at(index).get('medicineId')?.setValue(medicine.id);    
+  }
+
+  getMedicineHistoryDropDown(){
+    this.medicationService.getMedicationHistoryDropDown(this.token.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.historyDropDown = x;
+      }
+    })
+  }
+
+  getMedicationById(medicationId: string){
+    this.medicationService.getMedicationById(medicationId).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+
+      }
+    })
+  }
+
+  onHistorySelection(medicationId: string){
+        
+    this.getMedicationById(medicationId);
   }
 
   getMedicine(){
-    this.medicineService.getMedicineDropDown().subscribe({
-      next: (x)=>{
+    this.medicineService.getMedicineDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
         this.medicines = x;
         this.medicinesToShow = x;
 
@@ -185,8 +211,9 @@ export class MedicationComponent {
 
           return medicationDetail;
         })
-      }
-      this.medicationService.addMedication(medicationRequest).subscribe({
+      };
+
+      this.medicationService.addMedication(medicationRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
           
           this.alertService.success('Medication Saved.')

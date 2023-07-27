@@ -1,9 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { takeUntil } from 'rxjs';
 import { AlertService } from 'src/app/Services/alert/alert.service';
+import { LabOrderService } from 'src/app/Services/lab-order.service';
 import { TestService } from 'src/app/Services/test-service/test.service';
 import { TestCategoryService } from 'src/app/Services/testCategory-service/test-category.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { Roles } from 'src/app/constants/enums/Roles-Enum';
+import { IToken } from 'src/app/models/interfaces/Token';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 
@@ -12,7 +16,8 @@ import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
   templateUrl: './lab-order.component.html',
   styleUrls: ['./lab-order.component.scss']
 })
-export class LabOrderComponent implements OnInit {
+export class LabOrderComponent extends SubscriptionManagmentDirective implements OnInit {
+  @Input() token!: IToken;
   tabs: any[] = [];
   roles = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.Sweeper, name: 'Sweeper' }];
   testPriorty = [{ id: 1, name: 'Routine' }, { id: 2, name: 'Urgent' }];
@@ -31,7 +36,9 @@ export class LabOrderComponent implements OnInit {
     private readonly testCategoryService: TestCategoryService,
     private readonly testsService: TestService,
     private readonly alertService: AlertService,
+    private readonly laborderService: LabOrderService
   ) {
+    super();
   }
 
   ngOnInit(): void {
@@ -41,7 +48,7 @@ export class LabOrderComponent implements OnInit {
   }
 
   getTestCategories() {
-    this.testCategoryService.getTestCategoryList().subscribe({
+    this.testCategoryService.getTestCategoryList().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x: any) => {
         this.tabsToView = x.map((x: any) => { return { ...x, active: false } });
         this.tabsToView[0].active = true;
@@ -54,7 +61,7 @@ export class LabOrderComponent implements OnInit {
   }
 
   getTests(): void {
-    this.testsService.getTests().subscribe({
+    this.testsService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x: any) => {
         this.testsList = x.data;
       },
@@ -66,18 +73,17 @@ export class LabOrderComponent implements OnInit {
 
 
   active(id: string) {
-    console.log('id', id)
     this.tabId = id
     this.tabsToView.map(x => {
       x.active = false
       if (x.id === id) x.active = true;
     });
     this.getVisibleTests(id);
-    this.selectAllChecked();
   }
-
+  
   getVisibleTests(categoryId: string) {
     this.testsListToShow = this.testsList.filter(x => x.testCategoryId === categoryId);
+    this.selectAllChecked();
   }
 
   selectLabTest(event: any) {
@@ -91,7 +97,7 @@ export class LabOrderComponent implements OnInit {
        this.testsListToShow.forEach(checkbox => {
         if (checkbox.testCategoryId === this.tabId) {
           checkbox.selected = true;
-          if(!this.selectedTestsIds.includes(checkbox.id))this.selectedTestsIds.push(checkbox.id);
+          if(!this.selectedTestsIds.includes(checkbox.id)) this.selectedTestsIds.push(checkbox.id);
         }
       });
       
@@ -104,26 +110,46 @@ export class LabOrderComponent implements OnInit {
         }
       });
     }
+  this.selectAllChecked()    
 
   }
 
   updateSelectedCheckboxes(checked: boolean, selectedValue: ILabTestList): void {    
-    if(checked) this.selectedTestsIds.push(selectedValue.id);
-    else this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== selectedValue.id);    
+    if(checked) {
+      this.selectedTestsIds.push(selectedValue.id);      
+    }
+    else this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== selectedValue.id);   
+    this.selectAllChecked();
+ 
   }
 
-  formSubmit() {
+  addLabOrder() {
 
-    let labOrderPayload = {
-
+    let labOrderPayload: {doctorId: string, patientId: string, labTestIds: Array<string>} = {
+      doctorId: this.token.doctorId,
+      patientId: this.token.patientId,
+      labTestIds: this.selectedTestsIds
     }
+
+    this.laborderService.addMedication(labOrderPayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        console.log(x);
+        this.alertService.success('Lab Order Added Successfully.')
+      },
+      error: (err) => {        
+        this.alertService.error('Something went wrong while adding laborder.')
+      }
+    })
   }
 
   selectAllChecked(){
-    for(let test of this.testsListToShow){
+    for(let test of this.testsListToShow.filter(x => x.testCategoryId === this.tabId)){
       let includes = this.selectedTestsIds.includes(test.id);
-      if(!includes) this.allSelected = false;
-      else { this.allSelected = true; break} 
+      if(includes) this.allSelected = true;
+      else { 
+        this.allSelected = false; 
+        break;
+      } 
     }
   }
 

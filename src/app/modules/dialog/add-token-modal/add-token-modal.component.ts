@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { PatientService } from 'src/app/Services/patient/patient.service';
 import { DoctorService } from '../../../Services/doctor.service';
@@ -11,22 +11,27 @@ import { PaymentTypes } from 'src/app/constants/enums/PaymenTypes';
 import { TokenService } from 'src/app/Services/token.service';
 import { IAddOrUpdateToken, IInvoice, IInvoiceItem, ITokenDetail } from 'src/app/models/interfaces/addOrUpdate-Token';
 import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
+import { AlertService } from 'src/app/Services/alert/alert.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-token-modal',
   templateUrl: './add-token-modal.component.html',
   styleUrls: ['./add-token-modal.component.scss']
 })
-export class AddTokenModalComponent implements OnInit {
+export class AddTokenModalComponent extends SubscriptionManagmentDirective implements OnInit {
   selectedDoctor = ''
+  currentDate: Date = new Date();
   selectedPayment = ''
   addTokenForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
+  totalDiscountType: number = 1;
   doctors: Array<IDropDown> = [];
   tests: Array<IDropDown> = [];
   radiology: Array<IDropDown> = [];
   descriptions: Array<IDropDown> = [];
-  tokentypes: Array<{value: number, label: string}> = [
+  tokentypes: Array<{ value: number, label: string }> = [
     {
       label: 'Doctor',
       value: TokenTypes.Doctor
@@ -47,7 +52,8 @@ export class AddTokenModalComponent implements OnInit {
       label: 'Therapy',
       value: TokenTypes.Therapy
     },
-  ]
+  ];
+
   discountTypes = [
     {
       label: 'Amount',
@@ -56,19 +62,31 @@ export class AddTokenModalComponent implements OnInit {
       label: '%',
       value: 2
     }
-  ]
+  ];
+
   dropDown!: Array<{ id: number, label: string }>
   patients: Array<IDropDown> = [];
   patientsToShow: Array<IDropDown> = [];
 
-  paymentType : Array<{id: number, label: string}> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' },{ id: PaymentTypes.Cheque, label: 'Cheque'} ]
+  paymentTypes: Array<{ id: number, label: string }> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' }, { id: PaymentTypes.Cheque, label: 'Cheque' }]
+  display = true;
 
-  constructor(public dialogRef: MatDialogRef<AddTokenModalComponent>, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, private readonly patientService: PatientService, private readonly fb: FormBuilder, private readonly doctorService: DoctorService, private readonly testService: TestService, private readonly tokenService: TokenService) {
+  constructor(public dialogRef: MatDialogRef<AddTokenModalComponent>,
+    private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any,
+    private readonly patientService: PatientService,
+    private readonly fb: FormBuilder,
+    private readonly doctorService: DoctorService,
+    private readonly testService: TestService,
+    private readonly tokenService: TokenService,
+    private readonly alertService: AlertService) {
+      super();
+      this.display =  this.data.display
+
     this.invoiceDescriptionForm = this.fb.group({
       paidAmount: new FormControl<number | null>(null, [Validators.required]),
       discountAmount: new FormControl<number | null>(0, [Validators.required]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
-      treatmentId: new FormControl<string| null>(null, [Validators.required]),
+      treatmentId: new FormControl<string | null>(null, [Validators.required]),
       othersType: new FormControl<number | null>(null),
       othersName: new FormControl<string | null>(null)
     })
@@ -84,7 +102,7 @@ export class AddTokenModalComponent implements OnInit {
       pulseHeartRate: new FormControl<number | null>(null, [Validators.required]),
       temperature: new FormControl<number | null>(null, [Validators.required]),
       bloodPressure: new FormControl<string | null>(null, [Validators.required]),
-      respiratoryRate: new FormControl<number  | null>(null, [Validators.required]),
+      respiratoryRate: new FormControl<number | null>(null, [Validators.required]),
       bloodSugar: new FormControl<number | null>(null, [Validators.required]),
       weight: new FormControl<number | null>(null, [Validators.required]),
       height: new FormControl<number | null>(null, [Validators.required]),
@@ -94,8 +112,11 @@ export class AddTokenModalComponent implements OnInit {
       payment_notification: new FormControl<boolean | null>(null, [Validators.required]),
       patientCheckedIn: new FormControl<boolean | null>(false, [Validators.required]),
       confirmation: new FormControl('', [Validators.required]),
+      totalDiscountType: new FormControl<number | null>(1),
       invoiceItems: this.fb.array([this.invoiceDescriptionForm]),
     });
+
+    // this.addTokenForm.get('tokenTypes')?.setValue(1);
 
   }
 
@@ -103,11 +124,27 @@ export class AddTokenModalComponent implements OnInit {
     return this.addTokenForm.get('invoiceItems') as FormArray;
   }
 
-  get tokenTypes(){
-    return this.addTokenForm.get('tokenTypes');
+  get doctorId(): AbstractControl {
+    return this.addTokenForm.get('doctorId') as AbstractControl;
   }
 
-  ngOnInit(): void { 
+  get tokenTypes(): AbstractControl {
+    return this.addTokenForm.get('tokenTypes') as AbstractControl;
+  }
+
+  get patientId(): AbstractControl {
+    return this.addTokenForm.get('patientId') as AbstractControl;
+  }
+
+  get amountPaid(): AbstractControl {
+    return this.addTokenForm.get('amountPaid') as AbstractControl;
+  }
+
+  get paymentType(): AbstractControl {
+    return this.addTokenForm.get('paymentType') as AbstractControl;
+  }
+
+  ngOnInit(): void {
     this.getDoctors();
     this.getPatients();
     this.getTests();
@@ -117,39 +154,43 @@ export class AddTokenModalComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  getDoctors(){
-    this.doctorService.getDoctorDropDown().subscribe({
+  getDoctors() {
+    this.doctorService.getDoctorDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
-        console.log(x);        
+        console.log(x);
         this.doctors = x;
       },
       error: (err) => {
-        
+
       }
     })
   }
 
-  getTests(){
-    this.testService.getTestDropDown().subscribe({
+  getTests() {
+    this.testService.getTestDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
-        console.log(x);        
+        console.log(x);
         this.tests = x;
+        if(!this.display){
+          this.descriptions = this.tests;
+        }
       },
       error: (err) => {
-        
+
       }
     })
   }
 
-  onDescriptionSelect(index: number, descriptionId: string){
+  onDescriptionSelect(index: number, descriptionId: string) {
     let description = this.descriptions.find(x => x.id === descriptionId);
+    this.addTokenForm.controls['doctorId'].setValue(description?.id);
     this.invoiceItems.at(index).get('paidAmount')?.setValue(description?.price);
     this.calculate()
 
   }
 
-  getPatients(){
-    this.patientService.getPatientDropDown().subscribe({
+  getPatients() {
+    this.patientService.getPatientDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.patients = x;
         this.patientsToShow = x;
@@ -160,32 +201,33 @@ export class AddTokenModalComponent implements OnInit {
     })
   }
 
-  patientSelect(patient: IDropDown){
+  patientSelect(patient: IDropDown) {
     this.addTokenForm.get('patientId')?.setValue(patient.id);
     this.addTokenForm.get('patientName')?.setValue(patient.name);
   }
 
-  searchPatient(query: string){
+  searchPatient(query: string) {
     let text = query.toLowerCase();
-    this.patientsToShow = this.patients.filter( x => x.name.toLowerCase().includes(text));
+    this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(text));
   }
 
   addToken() {
     console.log(this.addTokenForm.value)
-    if(this.addTokenForm.controls['patientId']?.valid && this.invoiceItems.valid){
+    if (this.addTokenForm.controls['patientId']?.valid && this.invoiceItems.valid) {
       let tokenpayload: IAddOrUpdateToken = {
         patientId: this.addTokenForm.controls['patientId'].value,
         tokenDetails: [this.getTokenDetail()],
         doctorId: this.addTokenForm.controls['doctorId'].value,
-        patientCheckedIn: this.addTokenForm.controls['patientCheckedIn'].value ?  this.addTokenForm.controls['patientCheckedIn'].value : true
+        patientCheckedIn: this.addTokenForm.controls['patientCheckedIn'].value ? this.addTokenForm.controls['patientCheckedIn'].value : true
       }
-      this.tokenService.addToken(tokenpayload).subscribe({
+      this.tokenService.addToken(tokenpayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
-          console.log(x);
-          
+          this.alertService.success('Token added successfully.')
+          this.dialogRef.close();
           
         },
         error: (err) => {
+          this.alertService.error('An error accourd while adding token.')
 
         }
       })
@@ -193,7 +235,7 @@ export class AddTokenModalComponent implements OnInit {
 
   }
 
-  getTokenDetail(): ITokenDetail{
+  getTokenDetail(): ITokenDetail {
     let tokenDetail: ITokenDetail = {
       invoice: this.getInvoice(),
       tokenTypes: this.addTokenForm.controls['tokenTypes'].value,
@@ -202,7 +244,7 @@ export class AddTokenModalComponent implements OnInit {
       bloodPressure: this.addTokenForm.controls['bloodPressure'].value,
       respiratoryRate: this.addTokenForm.controls['respiratoryRate'].value,
       bloodSugar: this.addTokenForm.controls['bloodSugar'].value,
-      height:  this.addTokenForm.controls['height'].value,
+      height: this.addTokenForm.controls['height'].value,
       weight: this.addTokenForm.controls['weight'].value,
       bodyMassIndex: this.addTokenForm.controls['bodyMassIndex'].value,
       bodySurfaceArea: this.addTokenForm.controls['bodySurfaceArea'].value,
@@ -211,8 +253,8 @@ export class AddTokenModalComponent implements OnInit {
     return tokenDetail;
   }
 
-  getInvoice(): IInvoice{
-    let invoice: IInvoice ={
+  getInvoice(): IInvoice {
+    let invoice: IInvoice = {
       amountPaid: this.addTokenForm.controls['amountPaid'].value,
       paymentType: this.addTokenForm.controls['paymentType'].value,
       invoiceItems: this.invoiceItems.value.map((x: any) => {
@@ -228,7 +270,7 @@ export class AddTokenModalComponent implements OnInit {
       }),
       totalDiscount: this.addTokenForm.controls['totalDiscount'].value,
       grandTotal: this.addTokenForm.controls['grandTotal'].value
-    } 
+    }
     return invoice;
   }
 
@@ -237,7 +279,7 @@ export class AddTokenModalComponent implements OnInit {
       paidAmount: new FormControl<number | null>(null, [Validators.required]),
       discountAmount: new FormControl<number | null>(null, [Validators.required]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
-      treatmentId: new FormControl<string| null>(null, [Validators.required]),
+      treatmentId: new FormControl<string | null>(null, [Validators.required]),
       othersType: new FormControl<number | null>(null),
       othersName: new FormControl<string | null>(null)
     })
@@ -250,23 +292,19 @@ export class AddTokenModalComponent implements OnInit {
       paidAmount: new FormControl<number | null>(null, [Validators.required]),
       discountAmount: new FormControl<number | null>(null, [Validators.required]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
-      treatmentId: new FormControl<string| null>(null, [Validators.required]),
+      treatmentId: new FormControl<string | null>(null, [Validators.required]),
       othersType: new FormControl<number | null>(null),
       othersName: new FormControl<string | null>(null)
     })
-    if(this.invoiceItems.length < 1) this.invoiceItems.push(newForm)
+    if (this.invoiceItems.length < 1) this.invoiceItems.push(newForm)
   }
 
-  tokenTypeChange(e: any){
-    console.log(e);
-    let tokentype = 1;
-    
-    switch (tokentype){
+  tokenTypeChange(e: any) {
+    let tokentype = this.addTokenForm.get('tokenTypes')?.value;
+    switch (tokentype) {
       case TokenTypes.Doctor:
         this.descriptions = this.doctors;
-        console.log(this.descriptions);
-        
-      break;
+        break;
       case TokenTypes.Lab:
         this.descriptions = this.tests;
         break;
@@ -275,27 +313,44 @@ export class AddTokenModalComponent implements OnInit {
     }
   }
 
-  calculate(index?: number){
+  calculate(totalInput?: boolean){
+    let totalDiscountType = this.addTokenForm.get('totalDiscountType')
     let totalDiscount = this.addTokenForm.get('totalDiscount');
+    if(totalDiscount?.value && totalDiscount.value > 0 && totalInput) {
+      
+      for(let invItem of this.invoiceItems.controls){
+        invItem.get('discountAmount')?.setValue(0);
+      }
+    }
     let amountPaid = this.addTokenForm.get('amountPaid');
     let grandTotal = this.addTokenForm.get('grandTotal');
     let totalGrandTotal = 0;
     let totalDiscountTotal = 0;
-    for(let invItem of this.invoiceItems.controls){
-      let amount = invItem.get('paidAmount')?.value;
-      let discountType = invItem.get('discountType')?.value;
-      console.log(discountType);
-      let discount = !invItem.get('discountAmount')?.value || invItem.get('discountAmount')?.value === 0 ? 0 : discountType === 1 ? invItem.get('discountAmount')?.value  : (invItem.get('discountAmount')?.value / 100) * amount;
-      totalGrandTotal += amount;
-      totalDiscountTotal += discount;
-    }
+     for(let invItem of this.invoiceItems.controls){
+       let amount = invItem.get('paidAmount')?.value;
+       let discountType = invItem.get('discountType')?.value;
+       let discount = !invItem.get('discountAmount')?.value || invItem.get('discountAmount')?.value === 0 ? 0 : discountType === 1 ? invItem.get('discountAmount')?.value  : (invItem.get('discountAmount')?.value / 100) * amount;
+       totalGrandTotal += amount;
+       totalDiscountTotal += discount;
+       
+     }
+     console.log(totalDiscount?.value * ( totalGrandTotal / 100));
+     
+     if(totalDiscount?.value && totalDiscount.value > 0 && totalInput) totalDiscountTotal = totalDiscount.value;
+
     totalDiscount?.setValue(totalDiscountTotal);
-    grandTotal?.setValue(totalGrandTotal - totalDiscountTotal);
+    grandTotal?.setValue(totalGrandTotal - (totalDiscountType?.value === 2 ? ((totalDiscountTotal / 100) * totalDiscount?.value) : totalDiscountTotal));
   }
 
   addPatient() {
     const dialogRef = this.dialog.open(PatientFormComponent, {
       width: '600px'
+    })
+
+    dialogRef.afterClosed().subscribe({
+      next: (x) => {
+        this.getPatients();
+      }
     })
   }
 
