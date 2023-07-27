@@ -9,6 +9,8 @@ import { TestService } from 'src/app/Services/test-service/test.service';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { PatientService } from 'src/app/Services/patient/patient.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 
 
@@ -17,7 +19,7 @@ import { PatientService } from 'src/app/Services/patient/patient.service';
   templateUrl: './lab-report-list.component.html',
   styleUrls: ['./lab-report-list.component.scss']
 })
-export class LabReportListComponent implements OnInit {
+export class LabReportListComponent extends SubscriptionManagmentDirective implements OnInit {
   actionsToShow: Array<string> = ['edit', 'delete'];
   totalRecords: number = 0;
   selectedIndex = 0;
@@ -93,6 +95,7 @@ constructor(public readonly dialogService: DialogService,
   private readonly alertService: AlertService,
   private patientService: PatientService
   ){
+    super();
   console.log(this.startDatePlaceholder,this.endDatePlaceholder)
 }
   ngOnInit(): void {
@@ -111,7 +114,7 @@ handleChange(tabIndex:number){
 }
 
 getTests(): void {
-  this.testsService.getTests().subscribe({
+  this.testsService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
     next: (x: any) => {
       this.testsList = x.data;
     },
@@ -123,7 +126,7 @@ getTests(): void {
 
 
 getLabTestData() {
-  this.patientService.getLabTests().subscribe((res: any) => {
+  this.patientService.getLabTests().pipe(takeUntil(this.componetDestroyed)).subscribe((res: any) => {
     console.log(res)
     this.labTests = res
     this.totalRecords = res.length

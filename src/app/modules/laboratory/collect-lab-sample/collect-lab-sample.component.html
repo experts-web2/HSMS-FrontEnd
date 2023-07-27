@@ -5,10 +5,10 @@
     </div>
     <div class="px-md-5 px-2 pb-5">
         <div>
-            <div class="d-flex justify-content-center flex-column md:pr-2">
+            <div class="col-6">
                 <label for="descriptionDetail">Patients</label>
                 <select id="descriptionDetail" class="form-select" [disabled]="!descriptions || !descriptions.length"
-                    formControlName="patientId" #patient (change)="patientSelect(patient.value)" required>
+                    formControlName="patientId" #patient (change)="patientSelect(patient.value)" required [ngClass]="{ 'is-invalid': submitted && f['patientId'].errors }">
                     <option [defaultSelected]="true" disabled>Select A Description</option>
                     <option *ngFor="let drop of patientsToShow" [value]="drop.id">
                         {{drop.name}}</option>
@@ -46,15 +46,15 @@
                         </div>
                         <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
                             <label for="amount">Sample</label>
-                            <input class="h-10" type="text" pInputText name="sample" [readonly]="true"
+                            <input class="h-10" type="text" pInputText name="sample"
                                 formControlName="sample">
                         </div>
                         <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
                             <label for="sample">Sample Id</label>
                             <input class="h-10" type="text" pInputText name="sample" 
                                 formControlName="sampleId" required>
+                                <div class="text-danger" *ngIf="(invoiceDescriptionForm.controls['sampleId'].errors && invoiceDescriptionForm.controls['sampleId'].touched) || (invoiceDescriptionForm.controls['sampleId'].touched && !invoiceDescriptionForm.controls['sampleId'].valid)"><small>sample Id is required.</small></div>
                         </div>
-                        <div class="text-danger" *ngIf="(invoiceDescriptionForm.controls['sampleId'].errors && invoiceDescriptionForm.controls['sampleId'].touched) || (invoiceDescriptionForm.controls['sampleId'].touched && !invoiceDescriptionForm.controls['sampleId'].valid)"><small>sample Id is required.</small></div>
 
                         <div class="d-flex justify-content-center w-full flex-column">
                             <label for="status">Sample Status</label>
@@ -64,8 +64,8 @@
                                 <option *ngFor="let drop of testStatus" [value]="drop.value">
                                     {{drop.label}}</option>
                             </select>
+                            <div class="text-danger" *ngIf="(invoiceDescriptionForm.controls['status'].errors && invoiceDescriptionForm.controls['status'].touched) || (invoiceDescriptionForm.controls['status'].touched && !invoiceDescriptionForm.controls['status'].valid)"><small>status is required.</small></div>
                         </div>
-                        <div class="text-danger" *ngIf="(invoiceDescriptionForm.controls['status'].errors && invoiceDescriptionForm.controls['status'].touched) || (invoiceDescriptionForm.controls['status'].touched && !invoiceDescriptionForm.controls['status'].valid)"><small>status is required.</small></div>
 
                         <div class="ml-3">
                             <button (click)="removeinvoiceItem(i)">
@@ -81,7 +81,7 @@
 
         </div>
         <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-content-evenly align-items-center">
-            <button class="btn btn-primary" (click)="addToken()">Save</button>
+            <button class="btn btn-primary" (click)="addTestSample()">Save</button>
             <button class="btn btn-primary">Save & Print</button>
         </div>
     </div>

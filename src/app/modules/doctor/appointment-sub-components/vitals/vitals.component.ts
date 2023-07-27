@@ -1,8 +1,10 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { takeUntil } from 'rxjs';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { LoaderService } from 'src/app/Services/loader/loader.service';
 import { VitalService } from 'src/app/Services/vital.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { IVitalRequest } from 'src/app/models/interfaces/vitalsRequest';
@@ -14,7 +16,7 @@ import { IVital } from 'src/app/models/vitals';
   templateUrl: './vitals.component.html',
   styleUrls: ['./vitals.component.scss']
 })
-export class VitalsComponent implements OnInit {
+export class VitalsComponent extends SubscriptionManagmentDirective implements OnInit {
 
   @Input() tokenVitals!: ITokenVitals;
   @Input() token!: IToken;
@@ -33,7 +35,7 @@ export class VitalsComponent implements OnInit {
   ];
 
   constructor(private readonly alertService: AlertService, private readonly vitalService: VitalService,private readonly loaderService:LoaderService) {
-
+    super();
     this.vitalForm = new FormGroup({
       pulseHeartRate: new FormControl<number | null>(null),
       temperature: new FormControl<number | null>(null),
@@ -83,7 +85,7 @@ export class VitalsComponent implements OnInit {
     }
     
     this.loaderService.show();
-    this.vitalService.addVitals(vitalPayLoad).subscribe({
+    this.vitalService.addVitals(vitalPayLoad).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.alertService.success('Vitals added successfully', 'Success');
 
@@ -110,22 +112,26 @@ export class VitalsComponent implements OnInit {
   }
 
 
-  changeDates(vitalId: string) {
-    this.getVitalsById(vitalId);
+  changeDates(event: any) {
+    this.vitalService.getPreviousVisits().pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x)=>{
+
+      }
+    })
   }
 
   getVitalsHistoryDropDown() {
-    this.vitalService.getVitalsHistoryDropDown(this.token.patientId).subscribe({
+    this.vitalService.getVitalsHistoryDropDown(this.token.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.historyDropDown = x;
       }
     })
   }
 
-  getVitalsById(vitalsId: string) {
-    this.vitalService.getVitalsById(vitalsId).subscribe({
-      next: (x) => {
-
+  getVitalsById(vitalsId: string){
+    this.vitalService.getVitalsById(vitalsId).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x)=>{
+        
       }
     })
   }

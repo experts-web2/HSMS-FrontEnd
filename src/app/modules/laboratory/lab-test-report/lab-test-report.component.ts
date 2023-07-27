@@ -9,13 +9,15 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { formatDate } from '@angular/common';
 import { TestService } from 'src/app/Services/test-service/test.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-lab-test-report',
   templateUrl: './lab-test-report.component.html',
   styleUrls: ['./lab-test-report.component.scss']
 })
-export class LabTestReportComponent implements OnInit {
+export class LabTestReportComponent extends SubscriptionManagmentDirective implements OnInit {
   selectedDoctor = ''
   selectedPayment = ''
   labReportForm!: FormGroup;
@@ -24,7 +26,7 @@ export class LabTestReportComponent implements OnInit {
   tests: Array<IDropDown> = [];
   radiology: Array<IDropDown> = [];
   descriptions: Array<any> = [];
-  
+
 
   dropDown!: Array<{ id: number, label: string }>
   patients: Array<IDropDown> = [];
@@ -32,26 +34,26 @@ export class LabTestReportComponent implements OnInit {
 
   editorConfig: AngularEditorConfig = {
     editable: true,
-      spellcheck: true,
-      height: '15rem',
-      minHeight: '5rem',
-      maxHeight: 'auto',
-      width: 'auto',
-      minWidth: '0',
-      translate: 'yes',
-      enableToolbar: true,
-      showToolbar: true,
-      placeholder: 'Enter text here...',
-      defaultParagraphSeparator: '',
-      defaultFontName: '',
-      defaultFontSize: '',
-      fonts: [
-        {class: 'arial', name: 'Arial'},
-        {class: 'times-new-roman', name: 'Times New Roman'},
-        {class: 'calibri', name: 'Calibri'},
-        {class: 'comic-sans-ms', name: 'Comic Sans MS'}
-      ],
-      customClasses: [
+    spellcheck: true,
+    height: '15rem',
+    minHeight: '5rem',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: 'Enter text here...',
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    defaultFontSize: '',
+    fonts: [
+      { class: 'arial', name: 'Arial' },
+      { class: 'times-new-roman', name: 'Times New Roman' },
+      { class: 'calibri', name: 'Calibri' },
+      { class: 'comic-sans-ms', name: 'Comic Sans MS' }
+    ],
+    customClasses: [
       {
         name: 'quote',
         class: 'quote',
@@ -70,8 +72,8 @@ export class LabTestReportComponent implements OnInit {
       ['bold', 'italic'],
       ['fontSize']
     ]
-}
-submitted = false;
+  }
+  submitted = false;
 
 
   constructor(
@@ -79,7 +81,7 @@ submitted = false;
     private readonly fb: FormBuilder,
     private readonly doctorService: DoctorService,
     private readonly testService: TestService) {
-
+    super();
     this.invoiceDescriptionForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
       normalValues: new FormControl<string | null>(null, [Validators.required]),
@@ -108,11 +110,11 @@ submitted = false;
   }
 
   getTests() {
-    this.testService.getTests().subscribe({
+    this.testService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         console.log(x);
         this.tests = x.data;
-          this.descriptions = this.tests;
+        this.descriptions = this.tests;
       },
       error: (err) => {
 
@@ -121,7 +123,7 @@ submitted = false;
   }
 
   getPatients() {
-    this.patientService.getPatientDropDown().subscribe({
+    this.patientService.getPatientDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.patients = x;
         this.patientsToShow = x;
@@ -132,8 +134,8 @@ submitted = false;
     })
   }
 
-  getDoctorDropDownList(){
-    this.doctorService.getDoctorsDropDown().subscribe({
+  getDoctorDropDownList() {
+    this.doctorService.getDoctorsDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.doctors = x
       },
@@ -144,7 +146,7 @@ submitted = false;
 
   onDescriptionSelect(index: number, descriptionId: string) {
     let description = this.descriptions.find(x => x.id === descriptionId);
-    console.log('description',description);
+    console.log('description', description);
     this.testReport.at(index).get('normalValues')?.setValue(description?.normalValues);
   }
 
@@ -152,7 +154,7 @@ submitted = false;
   get f() { return this.labReportForm.controls; }
 
 
-  
+
 
   patientSelect(patient: any) {
     this.labReportForm.get('patientId')?.setValue(patient.id);
@@ -168,26 +170,26 @@ submitted = false;
 
     if (this.labReportForm.invalid) {
       return;
-  }
+    }
 
     console.log(this.labReportForm.value)
-      
-      // let tokenpayload = {
-      //   patientId: this.labReportForm.controls['patientId'].value,
-      //   doctorId: this.labReportForm.controls['doctorId'].value,
-      //   patientCheckedIn: this.labReportForm.controls['patientCheckedIn'].value ? this.labReportForm.controls['patientCheckedIn'].value : true
-      // }
-      // console.log('tokenpayload',tokenpayload);
-      // this.tokenService.addToken(tokenpayload).subscribe({
-      //   next: (x) => {
-      //     console.log(x);
+
+    // let tokenpayload = {
+    //   patientId: this.labReportForm.controls['patientId'].value,
+    //   doctorId: this.labReportForm.controls['doctorId'].value,
+    //   patientCheckedIn: this.labReportForm.controls['patientCheckedIn'].value ? this.labReportForm.controls['patientCheckedIn'].value : true
+    // }
+    // console.log('tokenpayload',tokenpayload);
+    // this.tokenService.addToken(tokenpayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    //   next: (x) => {
+    //     console.log(x);
 
 
-      //   },
-      //   error: (err) => {
+    //   },
+    //   error: (err) => {
 
-      //   }
-      // })
+    //   }
+    // })
 
   }
 

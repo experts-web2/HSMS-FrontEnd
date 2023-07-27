@@ -6,6 +6,8 @@ import { MedicineService } from '../../../../Services/medicine-service/medicine.
 import { AlertService } from '../../../../Services/alert/alert.service';
 import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 
 @Component({
@@ -13,7 +15,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
   templateUrl: './medicine-form.component.html',
   styleUrls: ['./medicine-form.component.scss']
 })
-export class MedicineFormComponent implements OnInit {
+export class MedicineFormComponent extends SubscriptionManagmentDirective implements OnInit {
   medicineForm!: FormGroup;
 
   medicineTypes = [
@@ -41,10 +43,11 @@ export class MedicineFormComponent implements OnInit {
     public config: DynamicDialogConfig,
     public ref: DynamicDialogRef,
   ) {
+    super();
     this.medicine = this.config.data.medicine;
     this.action = this.config.data.action
 
-    this.medicineService.getMedicine().subscribe({
+    this.medicineService.getMedicine().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x: any) => { console.log(x); },
       error: (err: Error) => { }
     })
@@ -84,7 +87,7 @@ export class MedicineFormComponent implements OnInit {
     }
 
     if (this.action === 'add') {
-      this.medicineService.addMedicine(medicineToAdd).subscribe({
+      this.medicineService.addMedicine(medicineToAdd).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x: any) => {
           this.alertService.success('Medicine added successfully', 'Success');
           this.medicineForm.reset();
@@ -95,7 +98,7 @@ export class MedicineFormComponent implements OnInit {
         }
       })
     } else {
-      this.medicineService.updateMedicine(this.medicine.id, medicineToAdd).subscribe({
+      this.medicineService.updateMedicine(this.medicine.id, medicineToAdd).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x: any) => {
           this.alertService.success('Medicine added successfully', 'Success');
           this.medicineForm.reset();

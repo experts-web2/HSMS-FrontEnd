@@ -10,6 +10,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { CategoriesFormComponent } from '../categories-form/categories-form.component';
 import { IAddOrUpdateCategoryRequest } from 'src/app/models/interfaces/addOrUpdate-Category';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 
 @Component({
@@ -17,7 +19,7 @@ import { IAddOrUpdateCategoryRequest } from 'src/app/models/interfaces/addOrUpda
   templateUrl: './categories-list.component.html',
   styleUrls: ['./categories-list.component.scss']
 })
-export class CategoriesListComponent {
+export class CategoriesListComponent extends SubscriptionManagmentDirective {
   labTestCategoryList: Array<ILabTestCategory> = [];
   totalRecords: number = 0;
   actionsToShow: Array<string> = ['edit', 'delete'];
@@ -45,7 +47,7 @@ export class CategoriesListComponent {
 
   constructor(private readonly testCategoryService: TestCategoryService,
     public dialogService: DialogService,private readonly alertService: AlertService,){
-
+      super();
   }
 
   ngOnInit(): void {
@@ -53,7 +55,7 @@ export class CategoriesListComponent {
   }
 
   getCategory(filterRequest: IFetchRequest = {}){
-    this.testCategoryService.getCategories(filterRequest).subscribe(x => {
+    this.testCategoryService.getCategories(filterRequest).pipe(takeUntil(this.componetDestroyed)).subscribe(x => {
       this.labTestCategoryList = x.data;
       this.totalRecords = x.total      
     })
@@ -69,7 +71,7 @@ export class CategoriesListComponent {
       }
     });
     this.ref.onClose.subscribe((medicine) => {
-      if (medicine === true) {
+      if (medicine) {
         this.getCategory();
       }
   });
@@ -80,7 +82,7 @@ export class CategoriesListComponent {
   }
 
   delete(deleteCategory: IAddOrUpdateCategoryRequest){
-    this.testCategoryService.deleteCategory(deleteCategory).subscribe({
+    this.testCategoryService.deleteCategory(deleteCategory).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.alertService.success('Success', 'Category delete successfully');
         this.getCategory();

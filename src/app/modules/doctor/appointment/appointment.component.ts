@@ -5,6 +5,7 @@ import { Observable, of, takeUntil } from 'rxjs';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { PatientService } from 'src/app/Services/patient/patient.service';
 import { TokenService } from 'src/app/Services/token.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { Genders } from 'src/app/constants/enums/Gender-enum';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IToken } from 'src/app/models/interfaces/Token';

@@ -31,6 +31,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { TagModule } from 'primeng/tag';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { PanelModule } from 'primeng/panel';
+import { AutoFocusModule } from 'primeng/autofocus';
 
 @NgModule({
   declarations: [],
@@ -67,7 +68,8 @@ import { PanelModule } from 'primeng/panel';
     MultiSelectModule,
     TagModule,
     ProgressBarModule,
-    PanelModule
+    PanelModule,
+    AutoFocusModule
   ],
   providers:[
     MessageService

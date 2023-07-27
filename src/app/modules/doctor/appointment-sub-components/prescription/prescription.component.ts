@@ -8,13 +8,15 @@ import { PrescriptionService } from '../../../../Services/prescription.service';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { AlertService } from 'src/app/Services/alert/alert.service';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-prescription',
   templateUrl: './prescription.component.html',
   styleUrls: ['./prescription.component.scss']
 })
-export class PrescriptionComponent implements OnInit {
+export class PrescriptionComponent extends SubscriptionManagmentDirective implements OnInit {
   @Input() token!: IToken;
   
   doctorId!: string;
@@ -26,8 +28,8 @@ export class PrescriptionComponent implements OnInit {
   historyDropDown: Array<IDropDown> = [];
   
   constructor(private readonly fb: FormBuilder, private readonly userStateService: UserStateService, private readonly prescriptionService: PrescriptionService, private readonly alertService: AlertService){
-
-    this.userStateService.getUserState().subscribe({
+    super();
+    this.userStateService.getUserState().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.loggedInDoctor = x;
       }
@@ -57,7 +59,7 @@ export class PrescriptionComponent implements OnInit {
   }
 
   getPrescriptionHistoryDropDown(){
-    this.prescriptionService.getPrescriptionHistoryDropDown(this.token.patientId).subscribe({
+    this.prescriptionService.getPrescriptionHistoryDropDown(this.token.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x)=>{
         this.historyDropDown = x;
       }
@@ -65,7 +67,7 @@ export class PrescriptionComponent implements OnInit {
   }
 
   getPrescription(prescriptionId: string){
-    this.prescriptionService.getPrescriptionById(prescriptionId).subscribe({
+    this.prescriptionService.getPrescriptionById(prescriptionId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x)=>{
 
       }
@@ -91,7 +93,7 @@ export class PrescriptionComponent implements OnInit {
       investigation: values['investigation'],
       followUpDate: values['followUpDate']
     }
-    this.prescriptionService.addPrescription(prescription).subscribe({
+    this.prescriptionService.addPrescription(prescription).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x)=>{
         console.log(x);
         this.alertService.success('Prescription Saved Successfully.')

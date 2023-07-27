@@ -10,6 +10,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MedicineFormComponent } from '../medicine-form/medicine-form.component';
 import { AlertService } from 'src/app/Services/alert/alert.service';
 import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
+import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { takeUntil } from 'rxjs';
 
 
 @Component({
@@ -17,7 +19,7 @@ import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
   templateUrl: './medicine-list.component.html',
   styleUrls: ['./medicine-list.component.scss']
 })
-export class MedicineListComponent implements OnInit {
+export class MedicineListComponent extends SubscriptionManagmentDirective implements OnInit {
   medicineList: Array<any> = [];
   totalRecords: number = 0;
   ref!: DynamicDialogRef;
@@ -70,7 +72,7 @@ export class MedicineListComponent implements OnInit {
 
   constructor(private readonly medicineService: MedicineService,
     public dialogService: DialogService,private readonly alertService: AlertService,){
-
+      super();
   }
 
   ngOnInit(): void {
@@ -78,7 +80,7 @@ export class MedicineListComponent implements OnInit {
   }
 
   getMedicine(fetchRequest: IFetchRequest = {}){
-    this.medicineService.getMedicine(fetchRequest).subscribe(x => {
+    this.medicineService.getMedicine(fetchRequest).pipe(takeUntil(this.componetDestroyed)).subscribe(x => {
       this.medicineList = x.data; 
       this.totalRecords = x.total;     
     })
@@ -105,7 +107,7 @@ export class MedicineListComponent implements OnInit {
   }
 
   delete(deleteMedicine: any){
-    this.medicineService.deleteMedicine(deleteMedicine).subscribe({
+    this.medicineService.deleteMedicine(deleteMedicine).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.alertService.success('Success', 'Medicine delete successfully');
         this.getMedicine();
