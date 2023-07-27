@@ -1,25 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AlertService } from 'src/app/Services/alert/alert.service';
-import { PatientService } from 'src/app/Services/patient/patient.service';
-import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
-import { MatDialog } from '@angular/material/dialog';
-import { DoctorService } from 'src/app/Services/doctor.service';
-import { IDropDown } from 'src/app/models/interfaces/Dropdown';
-import { formatDate } from '@angular/common';
-import { TestService } from 'src/app/Services/test-service/test.service';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { takeUntil } from 'rxjs';
+import { PatientService } from 'src/app/services';
+import { TestService, DoctorService } from 'src/app/services';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 
 @Component({
   selector: 'app-lab-test-report',
   templateUrl: './lab-test-report.component.html',
-  styleUrls: ['./lab-test-report.component.scss']
+  styleUrls: ['./lab-test-report.component.scss'],
 })
-export class LabTestReportComponent extends SubscriptionManagmentDirective implements OnInit {
-  selectedDoctor = ''
-  selectedPayment = ''
+export class LabTestReportComponent
+  extends SubscriptionManagmentDirective
+  implements OnInit
+{
+  selectedDoctor = '';
+  selectedPayment = '';
   labReportForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
   doctors: Array<IDropDown> = [];
@@ -27,8 +31,7 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
   radiology: Array<IDropDown> = [];
   descriptions: Array<any> = [];
 
-
-  dropDown!: Array<{ id: number, label: string }>
+  dropDown!: Array<{ id: number; label: string }>;
   patients: Array<IDropDown> = [];
   patientsToShow: Array<IDropDown> = [];
 
@@ -51,7 +54,7 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
       { class: 'arial', name: 'Arial' },
       { class: 'times-new-roman', name: 'Times New Roman' },
       { class: 'calibri', name: 'Calibri' },
-      { class: 'comic-sans-ms', name: 'Comic Sans MS' }
+      { class: 'comic-sans-ms', name: 'Comic Sans MS' },
     ],
     customClasses: [
       {
@@ -60,7 +63,7 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
       },
       {
         name: 'redText',
-        class: 'redText'
+        class: 'redText',
       },
       {
         name: 'titleText',
@@ -68,19 +71,16 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
         tag: 'h1',
       },
     ],
-    toolbarHiddenButtons: [
-      ['bold', 'italic'],
-      ['fontSize']
-    ]
-  }
+    toolbarHiddenButtons: [['bold', 'italic'], ['fontSize']],
+  };
   submitted = false;
-
 
   constructor(
     private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
     private readonly doctorService: DoctorService,
-    private readonly testService: TestService) {
+    private readonly testService: TestService
+  ) {
     super();
     this.invoiceDescriptionForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
@@ -88,73 +88,75 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
       testValue: new FormControl<string | null>(null, [Validators.required]),
       report: new FormControl<string | null>(null, [Validators.required]),
       remarks: new FormControl<string | null>(null, [Validators.required]),
-    })
+    });
     this.labReportForm = this.fb.group({
       patientId: new FormControl<string | null>(null, [Validators.required]),
       doctorId: new FormControl<string | null>(null, [Validators.required]),
       testReport: this.fb.array([this.invoiceDescriptionForm]),
     });
-
   }
 
   get testReport(): FormArray {
     return this.labReportForm.get('testReport') as FormArray;
   }
 
-
-
   ngOnInit(): void {
     this.getPatients();
     this.getTests();
-    this.getDoctorDropDownList()
+    this.getDoctorDropDownList();
   }
 
   getTests() {
-    this.testService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        console.log(x);
-        this.tests = x.data;
-        this.descriptions = this.tests;
-      },
-      error: (err) => {
-
-      }
-    })
+    this.testService
+      .getTests()
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe({
+        next: (x) => {
+          console.log(x);
+          this.tests = x.data;
+          this.descriptions = this.tests;
+        },
+        error: (err) => {},
+      });
   }
 
   getPatients() {
-    this.patientService.getPatientDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.patients = x;
-        this.patientsToShow = x;
-      },
-      error: (err) => {
-
-      }
-    })
+    this.patientService
+      .getPatientDropDown()
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe({
+        next: (x) => {
+          this.patients = x;
+          this.patientsToShow = x;
+        },
+        error: (err) => {},
+      });
   }
 
   getDoctorDropDownList() {
-    this.doctorService.getDoctorsDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.doctors = x
-      },
-      error: (err) => {
-      }
-    })
+    this.doctorService
+      .getDoctorsDropDown()
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe({
+        next: (x) => {
+          this.doctors = x;
+        },
+        error: (err) => {},
+      });
   }
 
   onDescriptionSelect(index: number, descriptionId: string) {
-    let description = this.descriptions.find(x => x.id === descriptionId);
+    let description = this.descriptions.find((x) => x.id === descriptionId);
     console.log('description', description);
-    this.testReport.at(index).get('normalValues')?.setValue(description?.normalValues);
+    this.testReport
+      .at(index)
+      .get('normalValues')
+      ?.setValue(description?.normalValues);
   }
 
-
-  get f() { return this.labReportForm.controls; }
-
-
-
+  get f() {
+    return this.labReportForm.controls;
+  }
 
   patientSelect(patient: any) {
     this.labReportForm.get('patientId')?.setValue(patient.id);
@@ -162,7 +164,9 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
 
   searchPatient(query: string) {
     let text = query.toLowerCase();
-    this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(text));
+    this.patientsToShow = this.patients.filter((x) =>
+      x.name.toLowerCase().includes(text)
+    );
   }
 
   addToken() {
@@ -172,7 +176,7 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
       return;
     }
 
-    console.log(this.labReportForm.value)
+    console.log(this.labReportForm.value);
 
     // let tokenpayload = {
     //   patientId: this.labReportForm.controls['patientId'].value,
@@ -184,13 +188,11 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
     //   next: (x) => {
     //     console.log(x);
 
-
     //   },
     //   error: (err) => {
 
     //   }
     // })
-
   }
 
   getInvoice() {
@@ -202,10 +204,10 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
           testValue: x.testValue,
           report: x.report,
           remarks: x.remarks,
-        }
-        return invoiceItem
+        };
+        return invoiceItem;
       }),
-    }
+    };
     return invoice;
   }
 
@@ -216,8 +218,8 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
       testValue: new FormControl<string | null>(null, [Validators.required]),
       report: new FormControl<string | null>(null, [Validators.required]),
       remarks: new FormControl<string | null>(null, [Validators.required]),
-    })
-    this.testReport.push(newForm)
+    });
+    this.testReport.push(newForm);
   }
 
   removeinvoiceItem(index: number) {
@@ -228,7 +230,7 @@ export class LabTestReportComponent extends SubscriptionManagmentDirective imple
       testValue: new FormControl<string | null>(null, [Validators.required]),
       report: new FormControl<string | null>(null, [Validators.required]),
       remarks: new FormControl<string | null>(null, [Validators.required]),
-    })
+    });
     if (this.testReport.length < 1) this.testReport.push(newForm);
   }
 }

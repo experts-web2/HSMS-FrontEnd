@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { EncryptionService } from 'src/app/Services/encryption-service/encryption.service';
+import { EncryptionService } from 'src/app/services';
 import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 
 @Injectable({

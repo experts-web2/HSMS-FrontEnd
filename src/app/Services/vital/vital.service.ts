@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BaseEndPoints } from '../constants/enums/base-end-points';
+import { BaseEndPoints } from '../../constants/enums/base-end-points';
 import { HttpClient } from '@angular/common/http';
-import { HttpService } from './httpService/http.service';
-import { IVital } from '../models/vitals';
+import { HttpService } from 'src/app/services';
+import { IVital } from '../../models/vitals';
 import { Observable } from 'rxjs';
-import { IDropDown } from '../models/interfaces/Dropdown';
-import { IVitalRequest } from '../models/interfaces/vitalsRequest';
+import { IDropDown } from '../../models/interfaces/Dropdown';
+import { IVitalRequest } from '../../models/interfaces/vitalsRequest';
 
 @Injectable({
   providedIn: 'root'

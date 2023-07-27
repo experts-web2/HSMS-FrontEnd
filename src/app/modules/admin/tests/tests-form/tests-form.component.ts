@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AlertService } from 'src/app/Services/alert/alert.service';
-import { TestService } from 'src/app/Services/test-service/test.service';
-import { TestCategoryService } from 'src/app/Services/testCategory-service/test-category.service';
+import { AlertService,TestCategoryService,TestService } from 'src/app/services';
 import { IAddOrUpdateTest } from 'src/app/models/interfaces/addOrUpdate-test';
 import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { TestsReportTime, TestsSample } from 'src/app/constants/Constants/testsConsts';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { takeUntil } from 'rxjs';
 
 

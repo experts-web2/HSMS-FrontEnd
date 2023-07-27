@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoaderService } from '../../../Services/loader/loader.service';
+import { LoaderService } from 'src/app/services';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -7,12 +7,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './loader.component.html',
   styleUrls: ['./loader.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule
-  ]
+  imports: [CommonModule],
 })
 export class LoaderComponent {
-  constructor(public readonly loaderService:LoaderService){
-    this.loaderService.getStatus
-  }  
+  constructor(public readonly loaderService: LoaderService) {
+    this.loaderService.getStatus;
+  }
 }

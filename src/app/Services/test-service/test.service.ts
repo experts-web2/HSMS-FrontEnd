@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from '../httpService/http.service';
+import { HttpService } from 'src/app/services';
 import { HttpClient } from '@angular/common/http';
 import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { IAddOrUpdateTest } from 'src/app/models/interfaces/addOrUpdate-test';
@@ -51,8 +51,12 @@ export class TestService extends HttpService {
   }
 
 
-  getPatientTests() {
-    return of(patientData.getPatientTests())
+  getPatients() {
+    return of(patientData.getPatients())
+  }
+  
+  getTestByPatientid(id: string){
+    return this.get(`${this.baseEndPoint}/getbypatientid/${id}`);
   }
 
 }

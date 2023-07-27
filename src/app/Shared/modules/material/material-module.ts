@@ -29,10 +29,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-
 @NgModule({
   declarations: [],
-  exports:[
+  exports: [
     MatAutocompleteModule,
     MatButtonModule,
     MatDialogModule,
@@ -61,10 +60,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatNativeDateModule,
     MatChipsModule,
     ReactiveFormsModule,
-    FormsModule      
+    FormsModule,
   ],
-  imports: [
-    CommonModule
-  ]
+  imports: [CommonModule],
 })
-export class SharedModule { }
+export class MaterialModule {}

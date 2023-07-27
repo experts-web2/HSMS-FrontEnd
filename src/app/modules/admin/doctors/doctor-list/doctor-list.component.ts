@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DoctorFormComponent } from '../doctor-form/doctor-form.component';
-import { DoctorService } from 'src/app/Services/doctor.service';
-import { AlertService } from 'src/app/Services/alert/alert.service';
+import { DoctorService,AlertService } from 'src/app/services';
 import { TableColumnFilterTypes } from 'src/app/constants/enums/table-column-filterTypes';
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { takeUntil } from 'rxjs';
 
 

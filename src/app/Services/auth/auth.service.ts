@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from '../httpService/http.service';
+import { HttpService } from '../http/http.service';
 import { HttpClient } from '@angular/common/http';
 import { BaseEndPoints } from '../../constants/enums/base-end-points';
 import { ILoginUser } from 'src/app/models/interfaces/login-user';

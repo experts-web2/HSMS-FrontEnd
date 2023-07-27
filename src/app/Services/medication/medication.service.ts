@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from './httpService/http.service';
+import { HttpService } from 'src/app/services';
 import { HttpClient } from '@angular/common/http';
-import { BaseEndPoints } from '../constants/enums/base-end-points';
-import { IMedicationRequest } from '../models/interfaces/MedicationRequest';
 import { Observable } from 'rxjs';
-import { IDropDown } from '../models/interfaces/Dropdown';
+import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { IMedicationRequest } from 'src/app/models/interfaces/MedicationRequest';
 
 @Injectable({
   providedIn: 'root'

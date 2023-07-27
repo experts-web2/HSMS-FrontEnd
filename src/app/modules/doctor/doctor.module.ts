@@ -1,23 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { DoctorRoutingModule } from './doctor-routing.module';
 import { DoctorRootComponent } from './doctor-root/doctor-root.component';
 import { AppointmentComponent } from './appointment/appointment.component';
-import { SharedModule } from 'src/app/shared-module/shared-module';
+import { MaterialModule, PrimeNgModule } from 'src/app/shared/modules';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 import { ButtonModule } from 'primeng/button';
-import { AddPrescriptionDialogueComponent } from 'src/app/Shared/components/add-prescription-dialogue/add-prescription-dialogue.component';
+import { AddPrescriptionDialogueComponent } from 'src/app/shared/components';
 import { DoctorDashboardComponent } from './doctor-dashboard/doctor-dashboard.component';
-import { PrimeNgModule } from 'src/app/Shared/modules/prime-ng/prime-ng.module';
 import { PrescriptionComponent } from './appointment-sub-components/prescription/prescription.component';
 import { VitalsComponent } from './appointment-sub-components/vitals/vitals.component';
 import { MedicationComponent } from './appointment-sub-components/medication/medication.component';
 import { LabOrderComponent } from './appointment-sub-components/lab-order/lab-order.component';
 import { RadiologyOrderComponent } from './appointment-sub-components/radiology-order/radiology-order.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-
 
 @NgModule({
   declarations: [
@@ -28,19 +25,18 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
     VitalsComponent,
     MedicationComponent,
     LabOrderComponent,
-    RadiologyOrderComponent,    
+    RadiologyOrderComponent,
   ],
   imports: [
     CommonModule,
     DoctorRoutingModule,
-    SharedModule,
+    MaterialModule,
     ToastModule,
     MessagesModule,
     ButtonModule,
     AddPrescriptionDialogueComponent,
     PrimeNgModule,
   ],
-  providers:[DialogService,
-    DynamicDialogRef,]
+  providers: [DialogService, DynamicDialogRef],
 })
-export class DoctorModule { }
+export class DoctorModule {}

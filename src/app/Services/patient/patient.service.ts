@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
 import { patientData } from 'src/data'
-import { HttpService } from '../httpService/http.service';
+import { HttpService } from 'src/app/services';
 import { HttpClient } from '@angular/common/http';
 import { BaseEndPoints } from '../../constants/enums/base-end-points';
 import { IAddOrUpdatePatient } from 'src/app/models/interfaces/addOrUodate-Patient';
@@ -18,10 +18,6 @@ export class PatientService extends HttpService{
     super(http)
   }
   baseEndPoint: string = BaseEndPoints.Patient
-
-  getData(): Observable<any>{
-    return this.get('https://jsonplaceholder.typicode.com/todos');
-  }
 
   addPatient(data: IAddOrUpdatePatient): Observable<IPatient>{
    return this.post(`${this.baseEndPoint}/add`, data);
