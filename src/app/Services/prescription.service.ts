@@ -20,7 +20,7 @@ export class PrescriptionService extends HttpService {
   }
 
   getPrescriptionById(id: string): Observable<any>{
-    return this.get(`${BaseEndPoints.Prescription}/${id}`)
+    return this.get(`${BaseEndPoints.Prescription}/byid/${id}`)
   }
 
   updatePrescriptionById(id: string, prescription: IPrescriptionRequest): Observable<any>{

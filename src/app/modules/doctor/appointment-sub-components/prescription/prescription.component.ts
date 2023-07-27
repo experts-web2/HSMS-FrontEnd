@@ -45,7 +45,7 @@ export class PrescriptionComponent implements OnInit {
       investigation: new FormControl<string|null>(null),
       followUpDate: new FormControl<Date|null>(null)
       // procedure: new FormControl<Procedure | null>(null) 
-    })
+    });
   }
 
   ngOnInit(): void {

@@ -83,4 +83,14 @@ export class AppComponent implements OnInit {
   navbarToggle(){
     this.navbarShowHide = !this.navbarShowHide
   }
+
+  addToken(){
+    this.dialog.open(AddTokenModalComponent, {
+      // maxWidth: '100vw',
+      width: '90vw',
+      maxWidth: '',
+      height: '90vh',
+      data: {display:true},
+    });    
+  }
 }
