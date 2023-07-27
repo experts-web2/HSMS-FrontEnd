@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { takeUntil } from 'rxjs';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
 import { PotencyUnits } from 'src/app/constants/enums/potency-units';
-import { MedicineService } from '../../../../Services/medicine-service/medicine.service';
-import { AlertService } from '../../../../Services/alert/alert.service';
 import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
-import { takeUntil } from 'rxjs';
+import { AlertService, MedicineService } from 'src/app/services';
 
 
 @Component({

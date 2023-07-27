@@ -1,15 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from '@microsoft/signalr';
 import { Observable, of, takeUntil } from 'rxjs';
-import { AlertService } from 'src/app/Services/alert/alert.service';
-import { PatientService } from 'src/app/Services/patient/patient.service';
-import { TokenService } from 'src/app/Services/token.service';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { Genders } from 'src/app/constants/enums/Gender-enum';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { IPatient } from 'src/app/models/interfaces/patient-model';
+import { AlertService, TokenService, PatientService } from 'src/app/services';
 
 @Component({
   selector: 'app-appointment',
@@ -26,12 +22,17 @@ export class AppointmentComponent implements OnInit {
   patientHistoryVisits!: Array<IDropDown>;
   $unsubscribe: Observable<any> = of(null);
 
-  constructor(private alertService: AlertService, private readonly route: ActivatedRoute, private readonly tokenService: TokenService, private readonly patientService: PatientService) {
+  constructor(
+    private alertService: AlertService,
+    private readonly route: ActivatedRoute,
+    private readonly tokenService: TokenService,
+    private readonly patientService: PatientService
+  ) {
     this.route.params.subscribe({
       next: (x) => {
-        this.tokenId = x["tokenId"];
-      }
-    })
+        this.tokenId = x['tokenId'];
+      },
+    });
   }
 
   ngOnInit(): void {
@@ -39,36 +40,29 @@ export class AppointmentComponent implements OnInit {
     else {
       this.getPatientDropDown();
     }
-
   }
 
   getPatientDropDown() {
-    this.patientService.getPatientDropDown().subscribe(
-      {
-        next: (x) => {
-          this.patients = x;
-        },
-        error: (err) => {
-
-        }
-      }
-    )
+    this.patientService.getPatientDropDown().subscribe({
+      next: (x) => {
+        this.patients = x;
+      },
+      error: (err) => {},
+    });
   }
 
   selectPatientHistoryVisit(visitId: any) {
-    console.log({visitId});
-    
+    console.log({ visitId });
   }
 
   getPatientHistorvisits(patientId: string) {
-    this.tokenService.addPatientTest('').pipe(takeUntil(this.$unsubscribe)).subscribe({
-      next: (x) => {
-
-      },
-      error: (err) => {
-
-      }
-    })
+    this.tokenService
+      .addPatientTest('')
+      .pipe(takeUntil(this.$unsubscribe))
+      .subscribe({
+        next: (x) => {},
+        error: (err) => {},
+      });
   }
 
   getToken() {
@@ -77,17 +71,16 @@ export class AppointmentComponent implements OnInit {
         this.token = x;
         this.getPatient(x.patientId);
         this.markTokenAsViewd(x.id);
-      }
-    })
+      },
+    });
   }
 
   markTokenAsViewd(tokenId: string) {
     this.tokenService.markTokenAsViewd(tokenId).subscribe({
       next: (x) => {
         console.log(x);
-
-      }
-    })
+      },
+    });
   }
 
   getPatient(patientId: string) {
@@ -95,15 +88,13 @@ export class AppointmentComponent implements OnInit {
       next: (x) => {
         console.log(x);
         this.patient = x;
-      }
-    })
+      },
+    });
   }
 
   getGender(gender: Genders): string {
     return Genders[gender];
   }
-
-
 
   searchPatient(queryObj: any) {
     console.log(queryObj.inputValue);
@@ -121,10 +112,7 @@ export class AppointmentComponent implements OnInit {
 
   getPatientVisits(visitId: string) {
     this.tokenService.getTokenById('').subscribe({
-      next: (x) => {
-
-      }
-    })
+      next: (x) => {},
+    });
   }
-
 }

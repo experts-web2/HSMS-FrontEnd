@@ -1,15 +1,14 @@
-import { Injectable } from '@angular/core';
 import {
-  HttpRequest,
-  HttpHandler,
+  HttpErrorResponse,
   HttpEvent,
+  HttpHandler,
   HttpInterceptor,
-  HttpErrorResponse
+  HttpRequest
 } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
-import { EncryptionService } from 'src/app/Services/encryption-service/encryption.service';
-import { UserStateService } from '../../State/user/user.service';
-import { AuthService } from 'src/app/Services/auth-service/auth.service';
+import { EncryptionService } from 'src/app/services';
+import { AuthService } from 'src/app/services';
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {

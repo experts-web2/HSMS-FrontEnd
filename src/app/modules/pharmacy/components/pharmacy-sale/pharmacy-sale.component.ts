@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { VendorService } from 'src/app/Services/vendor.service';
+import { VendorService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 
 @Component({

@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { SharedModule } from './shared-module/shared-module';
 import { AddTokenModalComponent } from './modules/dialog/add-token-modal/add-token-modal.component';
 import { RegistrationModule } from './modules/registration/registration.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -13,53 +12,53 @@ import { createCustomElement } from '@angular/elements';
 import { PrimeNGConfig, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
-import { GenericTableComponent } from "./Shared/components/generic-table/generic-table.component";
-import { LoaderComponent } from './Shared/components/loader/loader.component';
+import { LoaderComponent, GenericTableComponent } from './shared/components';
 import { AppHttpInterceptor } from './auth/interceptor/app-http.interceptor';
-import { PrimeNgModule } from './Shared/modules/prime-ng/prime-ng.module';
+import { PrimeNgModule, MaterialModule } from 'src/app/shared/modules';
+
 @NgModule({
-    declarations: [
-        AppComponent,
-        AddTokenModalComponent,
-    ],
-    providers: [MessageService, 
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: AppHttpInterceptor,
-        multi: true
-      },
-      AppHttpInterceptor
-    ],
-    bootstrap: [AppComponent],
-    entryComponents: [AppComponent],
-    imports: [
-        BrowserModule.withServerTransition({ appId: 'serverApp' }),
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        RegistrationModule,
-        ReactiveFormsModule,
-        MatAutocompleteModule,
-        SharedModule,
-        HttpClientModule,
-        ToastModule,
-        MessagesModule,
-        GenericTableComponent,
-        LoaderComponent,
-        PrimeNgModule
-    ]
+  declarations: [AppComponent, AddTokenModalComponent],
+  providers: [
+    MessageService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppHttpInterceptor,
+      multi: true,
+    },
+    AppHttpInterceptor,
+  ],
+  bootstrap: [AppComponent],
+  entryComponents: [AppComponent],
+  imports: [
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    RegistrationModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MaterialModule,
+    HttpClientModule,
+    ToastModule,
+    MessagesModule,
+    GenericTableComponent,
+    LoaderComponent,
+    PrimeNgModule,
+  ],
 })
-export class AppModule implements OnInit { 
-  constructor(private injector: Injector, private primengConfig: PrimeNGConfig){}
-  
+export class AppModule implements OnInit {
+  constructor(
+    private injector: Injector,
+    private primengConfig: PrimeNGConfig
+  ) {}
+
   ngOnInit() {
-      this.primengConfig.ripple = true;
+    this.primengConfig.ripple = true;
   }
 
-  ngDoBootstrap(){
-    const el= createCustomElement(AppComponent, {
-      injector: this.injector
+  ngDoBootstrap() {
+    const el = createCustomElement(AppComponent, {
+      injector: this.injector,
     });
     customElements.define('app-component', el);
   }
-
 }

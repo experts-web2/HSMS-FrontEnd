@@ -1,16 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CameraComponent } from './camera.component';
-import { SharedModule } from '../../shared-module/shared-module';
-import {WebcamModule} from 'ngx-webcam';
+import { MaterialModule } from 'src/app/shared/modules';
+import { WebcamModule } from 'ngx-webcam';
 @NgModule({
-  declarations: [
-    CameraComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    WebcamModule
-  ]
+  declarations: [CameraComponent],
+  imports: [CommonModule, MaterialModule, WebcamModule],
 })
-export class CameraModule { }
+export class CameraModule {}

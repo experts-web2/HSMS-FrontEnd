@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { AlertService } from 'src/app/Services/alert/alert.service';
-import { TestCategoryService } from 'src/app/Services/testCategory-service/test-category.service';
-import { IAddOrUpdateCategory } from 'src/app/models/interfaces/addOrUpdate-Category';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { takeUntil } from 'rxjs';
+import { AlertService,TestCategoryService } from 'src/app/services';
+import { IAddOrUpdateCategory } from 'src/app/models/interfaces/addOrUpdate-Category';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 
 
 @Component({

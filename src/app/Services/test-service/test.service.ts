@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from '../httpService/http.service';
+import { HttpService } from 'src/app/services';
 import { HttpClient } from '@angular/common/http';
 import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { IAddOrUpdateTest } from 'src/app/models/interfaces/addOrUpdate-test';

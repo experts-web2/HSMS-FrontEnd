@@ -6,8 +6,7 @@ import { PharmacyPurchaseComponent } from './components/pharmacy-purchase/pharma
 import { PharmacyRootComponent } from './components/pharmacy-root/pharmacy-root.component';
 import { PharmacySaleComponent } from './components/pharmacy-sale/pharmacy-sale.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PrimeNgModule } from '../../Shared/modules/prime-ng/prime-ng.module';
-
+import {  PrimeNgModule } from 'src/app/shared/modules';
 
 @NgModule({
   declarations: [
@@ -20,7 +19,7 @@ import { PrimeNgModule } from '../../Shared/modules/prime-ng/prime-ng.module';
     PharmacyRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    PrimeNgModule
-  ]
+    PrimeNgModule,
+  ],
 })
-export class PharmacyModule { }
+export class PharmacyModule {}

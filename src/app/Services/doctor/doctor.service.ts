@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpService } from './httpService/http.service';
+import { HttpService } from 'src/app/services';
 import { Observable } from 'rxjs';
-import { BaseEndPoints } from '../constants/enums/base-end-points';
-import { IAddOrUpdateDoctor, IAddOrUpdateDoctorRequest } from '../models/interfaces/addOrUpdate-Doctor';
-import { IFetchRequest } from '../models/interfaces/fetchTableRequest';
-import { IDropDown } from '../models/interfaces/Dropdown';
+import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { IAddOrUpdateDoctorRequest } from 'src/app/models/interfaces/addOrUpdate-Doctor';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 
 @Injectable({
   providedIn: 'root'

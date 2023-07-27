@@ -6,9 +6,8 @@ import { AdminRootComponent } from './admin-root/admin-root.component';
 import { AdminSideNavComponent } from './admin-side-nav/admin-side-nav.component';
 import { UserFormComponent } from './user/user-form/user-form.component';
 import { UserListComponent } from './user/user-list/user-list.component';
-import { PrimeNgModule } from 'src/app/Shared/modules/prime-ng/prime-ng.module';
+import { PrimeNgModule } from 'src/app/shared/modules';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RadioButtonModule } from 'primeng/radiobutton';
 import { WardListComponent } from './wards/ward-list/ward-list.component';
 import { WardFormComponent } from './wards/ward-form/ward-form.component';
 import { MedicineListComponent } from './medicine/medicine-list/medicine-list.component';
@@ -21,50 +20,50 @@ import { BedsComponent } from './beds/beds/beds.component';
 import { BedFormComponent } from './beds/bed-form/bed-form.component';
 import { HumanRecourcesComponent } from './human-resources/human-recources/human-recources.component';
 import { ShiftsComponent } from './Shifts/shifts/shifts.component';
-import { DataImpExpComponent } from './import-export/data-imp-exp/data-imp-exp.component'
-import { GenericTableComponent } from "../../Shared/components/generic-table/generic-table.component";
+import { DataImpExpComponent } from './import-export/data-imp-exp/data-imp-exp.component';
+import { GenericTableComponent } from 'src/app/shared/components';
 import { DoctorFormComponent } from './doctors/doctor-form/doctor-form.component';
 import { DoctorListComponent } from './doctors/doctor-list/doctor-list.component';
-import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import {
+  DialogService,
+  DynamicDialogConfig,
+  DynamicDialogRef,
+} from 'primeng/dynamicdialog';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
-
 @NgModule({
-    declarations: [
-        AdminRootComponent,
-        AdminSideNavComponent,
-        UserFormComponent,
-        UserListComponent,
-        WardListComponent,
-        WardFormComponent,
-        MedicineListComponent,
-        MedicineFormComponent,
-        CategoriesListComponent,
-        CategoriesFormComponent,
-        TestsListComponent,
-        TestsFormComponent,
-        BedsComponent,
-        BedFormComponent,
-        HumanRecourcesComponent,
-        ShiftsComponent,
-        DataImpExpComponent,
-        DoctorFormComponent,
-        DoctorListComponent
-    ],
-    imports: [
-        CommonModule,
-        AdminRoutingModule,
-        PrimeNgModule,
-        FormsModule,
-        ReactiveFormsModule,
-        GenericTableComponent,
-        DialogModule,
-        ConfirmDialogModule
-    ], providers:[
-        DialogService,
-        DynamicDialogRef,
-        DynamicDialogConfig
-    ]
+  declarations: [
+    AdminRootComponent,
+    AdminSideNavComponent,
+    UserFormComponent,
+    UserListComponent,
+    WardListComponent,
+    WardFormComponent,
+    MedicineListComponent,
+    MedicineFormComponent,
+    CategoriesListComponent,
+    CategoriesFormComponent,
+    TestsListComponent,
+    TestsFormComponent,
+    BedsComponent,
+    BedFormComponent,
+    HumanRecourcesComponent,
+    ShiftsComponent,
+    DataImpExpComponent,
+    DoctorFormComponent,
+    DoctorListComponent,
+  ],
+  imports: [
+    CommonModule,
+    AdminRoutingModule,
+    PrimeNgModule,
+    FormsModule,
+    ReactiveFormsModule,
+    GenericTableComponent,
+    DialogModule,
+    ConfirmDialogModule,
+  ],
+  providers: [DialogService, DynamicDialogRef, DynamicDialogConfig],
 })
-export class AdminModule { }
+export class AdminModule {}

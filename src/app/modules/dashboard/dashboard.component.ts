@@ -1,26 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as echarts from 'echarts';
-import { PatientService } from '../../Services/patient/patient.service';
-import EChartOption = echarts.EChartsOption
+import {
+  PatientService,
+  AppointmentService,
+  TokenService,
+} from 'src/app/services';
+import EChartOption = echarts.EChartsOption;
 import { AddTokenModalComponent } from '../dialog/add-token-modal/add-token-modal.component';
 import { UserStateService } from '../../State/user/user.service';
-import { AppointmentService } from '../../Services/appointment.service';
 import { IFetchRequest } from '../../models/interfaces/fetchTableRequest';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
-import { TokenService } from 'src/app/Services/token.service';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { Router } from '@angular/router';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent extends SubscriptionManagmentDirective implements OnInit {
-  chartOption: any = {}
+export class DashboardComponent
+  extends SubscriptionManagmentDirective
+  implements OnInit
+{
+  chartOption: any = {};
 
   appointmentsData!: Array<any>;
   newTokens: Array<IToken> = [];
@@ -34,7 +39,6 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
   messagesData!: Array<any>;
   messageTotalRecords: number = 0;
 
-
   displayedAppointmentColumns: Array<ITableColumns> = [
     {
       name: 'Patient Name',
@@ -47,7 +51,7 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
     {
       name: 'Doctor Name',
       property: 'doctor',
-    }
+    },
   ];
 
   displayedMessageColumns: Array<ITableColumns> = [
@@ -58,7 +62,7 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
     {
       name: 'Message',
       property: 'message',
-    }
+    },
   ];
 
   displayedTokensColumns: Array<ITableColumns> = [
@@ -73,73 +77,70 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
     {
       name: 'Doctor Name',
       property: 'doctorName',
-    }
-  ];
- 
-  filter: any = [
-    {
-      id: "week",
-      label: "Last 7 Days"
     },
-    {
-      id: "month",
-      label: "Last 30 Days"
-    },
-    {
-      id: "cutom",
-      label: "Custom Range"
-    }
   ];
 
+  filter: any = [
+    {
+      id: 'week',
+      label: 'Last 7 Days',
+    },
+    {
+      id: 'month',
+      label: 'Last 30 Days',
+    },
+    {
+      id: 'cutom',
+      label: 'Custom Range',
+    },
+  ];
 
   constructor(
     private patientService: PatientService,
-    private dialog: MatDialog, 
-    private readonly userStateService: UserStateService, 
-    private readonly appointmentService: AppointmentService, 
+    private dialog: MatDialog,
+    private readonly userStateService: UserStateService,
+    private readonly appointmentService: AppointmentService,
     private readonly tokenService: TokenService,
     private readonly router: Router
-    ) { super(); }
-
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.getAppointments();
     this.getMessagesData();
     this.getUnViewdTokens();
     this.getViewdTokens();
-    this.chartOption = this.createChartOption([17, 22, 31, 46, 12, 40, 33, 16])
-
+    this.chartOption = this.createChartOption([17, 22, 31, 46, 12, 40, 33, 16]);
   }
 
-  getViewdTokens(){
-    this.tokenService.getTokensByViewd(true).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.viewdTokens = x;
-        
-      },
-      error: (err) => {
-
-      }
-    })
+  getViewdTokens() {
+    this.tokenService
+      .getTokensByViewd(true)
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe({
+        next: (x) => {
+          this.viewdTokens = x;
+        },
+        error: (err) => {},
+      });
   }
 
-  getUnViewdTokens(){
-    this.tokenService.getTokensByViewd(false).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.newTokens = x;
-        
-      },
-      error: (err) => {
-        
-      }
-    })
+  getUnViewdTokens() {
+    this.tokenService
+      .getTokensByViewd(false)
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe({
+        next: (x) => {
+          this.newTokens = x;
+        },
+        error: (err) => {},
+      });
   }
 
-  rowClick(rowData: IToken){    
-    this.router.navigate([`doctor/appointment/${rowData.id}`]);    
+  rowClick(rowData: IToken) {
+    this.router.navigate([`doctor/appointment/${rowData.id}`]);
   }
-
-
 
   private createChartOption(data: number[]): EChartOption {
     return {
@@ -147,7 +148,20 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        data: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
         show: true,
       },
       yAxis: {
@@ -162,34 +176,40 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
         {
           data,
           type: 'line',
-          symbol: 'circle'
+          symbol: 'circle',
         },
       ],
-    }
+    };
   }
 
-  selectedFilter: string = "Last 7 Days";
+  selectedFilter: string = 'Last 7 Days';
 
   getAppointments(fetchRequest: IFetchRequest = {}) {
-    this.appointmentService.getAppointments(fetchRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x: any) => {
-        console.log(x);
-        
-      },
-      error: (err: Error) => {
-
-      }
-    })
-    this.patientService.getAppointments().pipe(takeUntil(this.componetDestroyed)).subscribe((res: any) => {
-      this.appointmentsData = res.appointments
-    })
+    this.appointmentService
+      .getAppointments(fetchRequest)
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe({
+        next: (x: any) => {
+          console.log(x);
+        },
+        error: (err: Error) => {},
+      });
+    this.patientService
+      .getAppointments()
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe((res: any) => {
+        this.appointmentsData = res.appointments;
+      });
   }
 
   getMessagesData() {
-    this.patientService.getMessages().pipe(takeUntil(this.componetDestroyed)).subscribe((res: any) => {
-      this.messagesData = res
-      this.messageTotalRecords = res.length
-    })
+    this.patientService
+      .getMessages()
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe((res: any) => {
+        this.messagesData = res;
+        this.messageTotalRecords = res.length;
+      });
   }
 
   // getTokensData() {
@@ -198,14 +218,13 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
   //   })
   // }
 
-  addToken(){
+  addToken() {
     this.dialog.open(AddTokenModalComponent, {
       // maxWidth: '100vw',
       width: '90vw',
       maxWidth: '',
       height: '90vh',
-      data: {display:true},
-    });    
+      data: { display: true },
+    });
   }
-
 }

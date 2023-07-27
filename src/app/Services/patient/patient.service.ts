@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
 import { patientData } from 'src/data'
-import { HttpService } from '../httpService/http.service';
+import { HttpService } from 'src/app/services';
 import { HttpClient } from '@angular/common/http';
 import { BaseEndPoints } from '../../constants/enums/base-end-points';
 import { IAddOrUpdatePatient } from 'src/app/models/interfaces/addOrUodate-Patient';
