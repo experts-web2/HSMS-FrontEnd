@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { PatientService } from 'src/app/Services/patient/patient.service';
 import { DoctorService } from '../../../Services/doctor.service';
@@ -22,6 +22,7 @@ import { takeUntil } from 'rxjs';
 })
 export class AddTokenModalComponent extends SubscriptionManagmentDirective implements OnInit {
   selectedDoctor = ''
+  currentDate: Date = new Date();
   selectedPayment = ''
   addTokenForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
@@ -67,7 +68,7 @@ export class AddTokenModalComponent extends SubscriptionManagmentDirective imple
   patients: Array<IDropDown> = [];
   patientsToShow: Array<IDropDown> = [];
 
-  paymentType: Array<{ id: number, label: string }> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' }, { id: PaymentTypes.Cheque, label: 'Cheque' }]
+  paymentTypes: Array<{ id: number, label: string }> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' }, { id: PaymentTypes.Cheque, label: 'Cheque' }]
   display = true;
 
   constructor(public dialogRef: MatDialogRef<AddTokenModalComponent>,
@@ -123,8 +124,24 @@ export class AddTokenModalComponent extends SubscriptionManagmentDirective imple
     return this.addTokenForm.get('invoiceItems') as FormArray;
   }
 
-  get tokenTypes() {
-    return this.addTokenForm.get('tokenTypes');
+  get doctorId(): AbstractControl {
+    return this.addTokenForm.get('doctorId') as AbstractControl;
+  }
+
+  get tokenTypes(): AbstractControl {
+    return this.addTokenForm.get('tokenTypes') as AbstractControl;
+  }
+
+  get patientId(): AbstractControl {
+    return this.addTokenForm.get('patientId') as AbstractControl;
+  }
+
+  get amountPaid(): AbstractControl {
+    return this.addTokenForm.get('amountPaid') as AbstractControl;
+  }
+
+  get paymentType(): AbstractControl {
+    return this.addTokenForm.get('paymentType') as AbstractControl;
   }
 
   ngOnInit(): void {

@@ -5,6 +5,7 @@ import { HttpService } from './httpService/http.service';
 import { IVital } from '../models/vitals';
 import { Observable } from 'rxjs';
 import { IDropDown } from '../models/interfaces/Dropdown';
+import { IVitalRequest } from '../models/interfaces/vitalsRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class VitalService extends HttpService {
    }  
 
 
-   addVitals(vital: IVital): Observable<any>{
+   addVitals(vital: IVitalRequest): Observable<IVital>{
     return this.post(`${this.baseEndpoint}/add`, vital);
   }
 
@@ -30,10 +31,10 @@ export class VitalService extends HttpService {
     return this.get(`${this.baseEndpoint}/all`);
    }
   getVitalsHistoryDropDown(patientId: string): Observable<Array<IDropDown>>{
-    return this.get(`${BaseEndPoints.Prescription}/dropdownbypatientid/${patientId}`);
+    return this.get(`${this.baseEndpoint}/dropdownbypatientid/${patientId}`);
   }
 
   getVitalsById(vitalsId: string): Observable<any>{
-    return this.get(`${BaseEndPoints.Prescription}/byid/${vitalsId}`);
+    return this.get(`${this.baseEndpoint}/byid/${vitalsId}`);
   }
 }

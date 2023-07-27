@@ -5,7 +5,7 @@
     <div class="md:flex items-center justify-between md:gap-x-20">
     <div class=" menu-items-width d-flex justify-content-between align-items-center ">
       <a class="navButton btn btn-primary" routerLink="/dashboard">Dashboard</a>
-      <a class="navButton btn btn-primary" routerLink="/register" *ngIf="!isDoctor">Health Records</a>
+      <a class="navButton btn btn-primary" routerLink="doctor/health_records" >Health Records</a>
       <a class="navButton btn btn-primary" [matMenuTriggerFor]="more">Laboratory<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #more="matMenu">
           <a mat-menu-item routerLink="/laboratory/add_patient_test">Add Patient Test</a>
@@ -27,6 +27,7 @@
         <a class="navButton btn btn-primary creat-drop text-white" [matMenuTriggerFor]="creat">Create<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #creat="matMenu">
           <a mat-menu-item (click)="addPatient()">Patient</a>
+          <a mat-menu-item (click)="addToken()">Token</a>
           <a mat-menu-item>Invoice</a>
           <a mat-menu-item>Health Record</a>
         </mat-menu> 

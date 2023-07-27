@@ -8,7 +8,7 @@ const routes: Routes = [
   {path:'', component: DoctorRootComponent, children:[
     {path:'', redirectTo: 'health_record', pathMatch: 'full'},
     {path:'appointment/:tokenId', component: AppointmentComponent},
-    {path:'health_record', component: AppointmentComponent},
+    {path:'health_records', component: AppointmentComponent},
   ]}
 ];
 

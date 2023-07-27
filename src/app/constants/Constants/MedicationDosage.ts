@@ -34,4 +34,4 @@ export const MedicationDosages: Array<{label: string, value: MedicationDosageEnu
     { label: 'Dropper', value: MedicationDosageEnum.Dropper },
     { label: 'ml/h', value: MedicationDosageEnum.MlPerH },
     { label: 'Units/kg', value: MedicationDosageEnum.UnitsPerKg },
-] ;
+];

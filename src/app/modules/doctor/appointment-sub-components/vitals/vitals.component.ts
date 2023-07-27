@@ -7,6 +7,7 @@ import { VitalService } from 'src/app/Services/vital.service';
 import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IToken } from 'src/app/models/interfaces/Token';
+import { IVitalRequest } from 'src/app/models/interfaces/vitalsRequest';
 import { IVital } from 'src/app/models/vitals';
 
 
@@ -24,7 +25,8 @@ export class VitalsComponent extends SubscriptionManagmentDirective implements O
   showMenu: string = '';
   action = 'update';
   historyDropDown: Array<IDropDown> = [];
-
+  historyVital!: IVital;
+  currentVital!: IVital
   previousDates = [
     { name: '14/07/2023', id: '14/07/2023' },
     { name: '13/07/2023', id: '13/07/2023' },
@@ -65,7 +67,7 @@ export class VitalsComponent extends SubscriptionManagmentDirective implements O
 
   onSubmit() {
 
-    let vitalPayLoad: IVital = {
+    let vitalPayLoad: IVitalRequest = {
       pulseHeartRate: this.vitalForm.controls['pulseHeartRate'].value,
       temperature: this.vitalForm.controls['temperature'].value,
       bloodPressure: this.vitalForm.controls['bloodPressure'].value,
@@ -81,6 +83,7 @@ export class VitalsComponent extends SubscriptionManagmentDirective implements O
       doctorId: this.token.doctorId,
       patientId: this.token.patientId
     }
+    
     this.loaderService.show();
     this.vitalService.addVitals(vitalPayLoad).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {

@@ -1,8 +1,9 @@
 <form [formGroup]="addTokenForm">
-    <div class="position-relative">
-        <mat-icon class="cursor-pointer position-absolute close-button" (click)="cancel()">cancel
-        </mat-icon>
-        <p class="text-center font-weight-bold" *ngIf="display"><b>Add Token</b></p>
+    <div class="position-relative h-20">
+        <button class="cursor-pointer close_button p-4" (click)="cancel()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="flex justify-center h-full items-end">
+            <h2 class="h-10 m-0">Add Token</h2>
+        </div>
     </div>
     <mat-divider></mat-divider>
     <div class="px-md-5 px-2 pb-5">
@@ -21,7 +22,9 @@
                         {{patient.name }}
                     </mat-option>
                 </mat-autocomplete>
-                <mat-icon (click)="addPatient()">add_box</mat-icon>
+                <div>
+                    <p-button label="Add patient" icon="pi pi-plus" (click)="addPatient()"></p-button>
+                </div>
             </div>
         <!-- </ng-template> -->
         <div>
@@ -137,13 +140,13 @@
             </div>
             <button (click)="addNewInvoiceItem()" class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center" *ngIf="addTokenForm.controls['tokenTypes'].value !== 1">Item<mat-icon
                 class="ml-3">add_box</mat-icon></button>
-                <!-- <div class="lg:w-2/4 ml-auto flex items-start flex-col lg:flex-row">
+                <div class="lg:w-2/4 ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
                     <label for="dicountType">Discount Type</label>
-                    <select id="dicountType" class="w-full rounded h-10 border" formControlName="totalDiscountType" (change)="calculate(true)">
+                    <select id="dicountType" class="pulse rounded h-10 border" formControlName="totalDiscountType" (change)="calculate(true)">
                         <option *ngFor="let discType of discountTypes" [ngValue]="discType.value"
                             >{{discType.label}}</option>
                     </select>
-                </div> -->
+                </div>
         <div class="lg:w-2/4 ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
             <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
             <input class="pulse h-10 lg:ml-3" type="number" pInputText name="totalDiscount"  formControlName="totalDiscount" (input)="calculate(true)">
@@ -158,10 +161,10 @@
 
             </div>
             <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
-                <input type="text" class="md:mr-3 pl-2 border mb-4 md:mb-0 rounded h-10" value="10/10/2022 14:14 PM">
+                <input type="text" class="md:mr-3 pl-2 border mb-4 md:mb-0 rounded h-10" [value]="currentDate | date: 'EEE MM, dd/yyyy  hh:mm'" disabled>
                 <select class="h-10 border rounded" name="description" formControlName="paymentType">
                     <option [value]="null" [defaultSelected]="true" disabled>Select a payment Type</option>
-                    <option *ngFor="let item of paymentType" [ngValue]="item.id">{{item.label}}</option>
+                    <option *ngFor="let item of paymentTypes" [ngValue]="item.id">{{item.label}}</option>
                 </select>
             </div>
             <!-- <div>
@@ -184,9 +187,9 @@
                 <label for="confirmation">Send Confirmation</label>
             </div>
         </div>
-        <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-content-evenly align-items-center">
-            <button class="btn btn-primary" (click)="addToken()">Save</button>
-            <button class="btn btn-primary">Save & Print</button>
+        <div class="md:w-2/4 ms-auto mt-5 md:mt-0 flex  justify-end">
+            <button class="btn btn-primary mr-4" (click)="addToken()" [disabled]="!invoiceItems.length || invoiceItems.invalid || doctorId.invalid || patientId.invalid || tokenTypes.invalid || amountPaid.invalid || paymentType.invalid">Save</button>
+            <button class="btn btn-primary" (click)="addToken()" [disabled]="!invoiceItems.length || invoiceItems.invalid || doctorId.invalid || patientId.invalid || tokenTypes.invalid || amountPaid.invalid || paymentType.invalid">Save & Print</button>
         </div>
     </div>
 </form>
