@@ -12,7 +12,7 @@ import { IVitalRequest } from '../models/interfaces/vitalsRequest';
 })
 export class VitalService extends HttpService {
 
-  private baseEndpoint = BaseEndPoints.Vital;
+  private baseEndpoint = BaseEndPoints.Vitals;
 
   constructor(private http: HttpClient) {
     super(http)

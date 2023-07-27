@@ -13,6 +13,7 @@ export enum BaseEndPoints {
     Appointment = 'appointment',
     Doctor = 'doctor',
     Prescription = 'prescription',
-    Vital = 'vital',
+    Vitals = 'vitals',
+    Vendor = 'vendor',
     LabOrder = 'laborder'
 }
