@@ -5,14 +5,14 @@
             <div class="row">
                 <div class="col-6">
                     <label for="name">First Name<span class="text-danger">*</span></label>
-                    <input class="form-control" type="text" formControlName="firstName" name="" required id="firstName">
+                    <input class="form-control" pInputText type="text" formControlName="firstName" name="" required id="firstName">
                     <div class="text-danger"
                         *ngIf="(f['firstName'].errors && f['firstName'].touched) || (f['firstName'].dirty && f['firstName'].errors)">
                         First Name is required.</div>
                 </div>
                 <div class="col-6">
                     <label for="name">Last Name<span class="text-danger">*</span></label>
-                    <input class="form-control" type="text" name="" formControlName="lastName" required id="lastName">
+                    <input class="form-control" pInputText type="text" name="" formControlName="lastName" required id="lastName">
                     <div class="text-danger"
                         *ngIf="(f['lastName'].errors && f['lastName'].touched) || (f['lastName'].dirty && f['lastName'].errors)">
                         Last Name is required.</div>
@@ -21,7 +21,7 @@
             <div class="row mt-3">
                 <div class="col-4">
                     <label for="email">Email<span class="text-danger">*</span></label>
-                    <input class="form-control" type="email"  formControlName="email" (blur)="isEmailExist()" required autocomplete="off">
+                    <input class="form-control" pInputText type="email"  formControlName="email" (blur)="isEmailExist()" required autocomplete="off">
                     <div class="text-danger"
                         *ngIf="(f['email'].errors && f['email'].touched) || (f['email'].dirty && f['email'].errors)">
                         Email is required.</div>
@@ -34,7 +34,7 @@
 
                 <div *ngIf="action !== 'update'" class="col-4">
                     <label for="password">Password<span class="text-danger">*</span></label>
-                    <input class="form-control" type="password" name="" formControlName="password" autocomplete="off">
+                    <input class="form-control" pInputText type="password" name="" formControlName="password" autocomplete="off">
 
                     <div class="text-danger"
                         *ngIf="(f['password'].errors && f['password'].touched) || (f['password'].dirty && f['password'].errors)">
@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-4">
                     <label for="phone">Phone No<span class="text-danger">*</span></label>
-                    <input class="form-control" type="text" name="" formControlName="phoneNumber" id="phone">
+                    <input class="form-control" pInputText type="text" name="" formControlName="phoneNumber" id="phone">
                     <div class="text-danger"
                         *ngIf="(f['phoneNumber'].errors && f['phoneNumber'].touched) || (f['phoneNumber'].dirty && f['phoneNumber'].errors)">
                         Phone Number is required.</div>
@@ -89,7 +89,7 @@
             <div class="row mt-3">
                 <div class="col-4">
                     <label for="consultationFee">Consultation Fee<span class="text-danger">*</span></label>
-                    <input class="form-control" type="number" required name="" formControlName="consultationFee"
+                    <input class="form-control" pInputText type="number" required name="" formControlName="consultationFee"
                         id="consultationFee">
                     <div class="text-danger"
                         *ngIf="(f['consultationFee'].errors && f['consultationFee'].touched) || (f['consultationFee'].dirty && f['consultationFee'].errors)">
@@ -98,7 +98,7 @@
                 </div>
                 <div class="col-4">
                     <label for="sharePrice">Share Price<span class="text-danger">*</span></label>
-                    <input class="form-control" type="number" name="" formControlName="sharePrice" required
+                    <input class="form-control" pInputText type="number" name="" formControlName="sharePrice" required
                         id="sharePrice" placeholder="please enter share price in % ">
                     <div class="text-danger"
                         *ngIf="(f['sharePrice'].errors && f['sharePrice'].touched) || (f['sharePrice'].dirty && f['sharePrice'].errors)">
@@ -106,7 +106,7 @@
                 </div>
                 <div class="col-4">
                     <label for="timings">Timings</label>
-                    <input class="form-control" type="text" formControlName="timings" name="" id="timings" required>
+                    <input class="form-control" pInputText type="text" formControlName="timings" name="" id="timings" required>
                     <div class="text-danger"
                         *ngIf="(f['timings'].errors && f['timings'].touched) || (f['timings'].dirty && f['timings'].errors)">
                         Timing is required.</div>
@@ -118,13 +118,7 @@
             <div class="row mt-3">
                 <div class="col-6">
                     <label for="speciality">Speciality<span class="text-danger">*</span></label>
-                    <input class="form-control" type="text" formControlName="speciality" name="" id="speciality" required>
-
-                    <!-- <select class="form-select" aria-label="Default select example" formControlName="speciality"
-                        required>
-                        <option selected [value]="null" disabled>Select Speciality</option>
-                        <option *ngFor="let status of category" [value]="status.id">{{ status.label }}</option>
-                    </select> -->
+                    <input class="form-control" pInputText type="text" formControlName="speciality" name="" id="speciality" required>
                     <div class="text-danger"
                         *ngIf="(f['speciality'].errors && f['speciality'].touched) || (f['speciality'].dirty && f['speciality'].errors)">
                         Speciality is required.</div>
@@ -132,14 +126,7 @@
 
                 <div class="col-6">
                     <label for="speciality">Qualification<span class="text-danger">*</span></label>
-                    <input class="form-control" type="text" formControlName="qualification" name="" id="qualification" required>
-
-                    <!-- <select class="form-select" aria-label="Default select example" formControlName="qualification"
-                        required>
-                        <option selected [value]="null" disabled>Select Qualification</option>
-                        <option *ngFor="let qualification of qualifications" [value]="qualification.id">{{
-                            qualification.label }}</option>
-                    </select> -->
+                    <input class="form-control" pInputText type="text" formControlName="qualification" name="" id="qualification" required>
                     <div class="text-danger"
                         *ngIf="(f['qualification'].errors && f['qualification'].touched) || (f['qualification'].dirty && f['qualification'].errors)">
                         Qualification is required.</div>
@@ -148,13 +135,13 @@
 
             <div class="form-outline mt-3">
                 <label class="form-label" for="biography">Biography</label>
-                <textarea class="form-control" id="biography" formControlName="biography" rows="4"></textarea>
+                <textarea class="form-control" pInputTextarea id="biography" formControlName="biography" rows="4"></textarea>
             </div>
 
             <div class="mt-3 
             d-flex flex-column gap-2">
                 <label for="service">Service<span class="text-danger">*</span></label>
-                <input class="form-control" type="text" name="" id="service" formControlName="service"
+                <input class="form-control" pInputText type="text" name="" id="service" formControlName="service"
                     placeholder="service years" required>
 
                 <div class="text-danger"

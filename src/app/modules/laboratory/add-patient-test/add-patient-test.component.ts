@@ -22,7 +22,7 @@ export class AddPatientTestComponent extends SubscriptionManagmentDirective impl
   addPatientTestForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
   doctors: Array<IDropDown> = [];
-  tests: Array<IDropDown> = [];
+  tests: Array<any> = [];
   radiology: Array<IDropDown> = [];
   descriptions: Array<any> = [];
 
@@ -41,6 +41,7 @@ export class AddPatientTestComponent extends SubscriptionManagmentDirective impl
 
   paymentType: Array<{ id: number, label: string }> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' }, { id: PaymentTypes.Cheque, label: 'Cheque' }]
   testPriority: Array<{ value: string, label: string }> = [{ value: 'Routine', label: 'Routine' }, { value: 'Urgent', label: 'Urgent' }]
+  doctorsToView: Array<IDropDown>=[];
 
   constructor(
     private readonly patientService: PatientService,
@@ -88,6 +89,7 @@ export class AddPatientTestComponent extends SubscriptionManagmentDirective impl
     this.doctorService.getDoctorDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.doctors = x;
+        this.doctorsToView = x;
       },
       error: (err) => {
 
@@ -109,10 +111,9 @@ export class AddPatientTestComponent extends SubscriptionManagmentDirective impl
   }
 
   getPatients() {
-    this.patientService.getPatientDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
+    this.patientService.getPatientsDropdown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.patients = x;
-        this.patientsToShow = x;
       },
       error: (err) => {
 
@@ -120,13 +121,50 @@ export class AddPatientTestComponent extends SubscriptionManagmentDirective impl
     })
   }
 
-  onDescriptionSelect(index: number, descriptionId: string) {
-    let description = this.descriptions.find(x => x.id === descriptionId);
+  onSearch(event: { query: string }): void {
+    const searchTerm = event.query.trim();
+    // if (searchTerm.length >= 3) {
+    this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(searchTerm));
+    // }
+  }
+
+  search(event:any){
+    console.log(event.query);
+    const query = event.query.trim().toLowerCase();
+    this.descriptions = this.tests.filter(
+      (test) =>
+        test.name.toLowerCase().includes(query) || // Filter by name
+        test.code.toString().includes(query) // Filter by code
+    );
+  }
+
+  searchDoctor(event:any){
+    console.log(event.query);
+    const query = event.query.trim().toLowerCase();
+    this.doctorsToView = this.doctors.filter(
+      (doctor) =>
+        doctor.name.toLowerCase().includes(query)
+    );
+  }
+
+  onDescriptionSelect(index: number, labTest: any) {
+console.log({index,labTest})
+    let description = this.descriptions.find(x => x.id === labTest.id);
+    this.invoiceItems.at(index).get('testId')?.setValue(description?.id);
     this.invoiceItems.at(index).get('paidAmount')?.setValue(description?.price);
     this.invoiceItems.at(index).get('description')?.setValue(description?.description);
     this.invoiceItems.at(index).get('reportingHours')?.setValue(description?.reportingTime);
     this.calculate()
 
+  }
+
+  onPatientSelection(selectPatient:IDropDown){
+    console.log('selectPatient',selectPatient);
+    this.testService.getTestByPatientid(selectPatient.id).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next:(x)=>{
+        console.log({x});
+      }
+    })
   }
 
 
@@ -146,17 +184,17 @@ export class AddPatientTestComponent extends SubscriptionManagmentDirective impl
 
   addToken() {
     if (this.addPatientTestForm.controls['amountPaid']?.value >= this.addPatientTestForm.controls['grandTotal'].value) {
-      if (this.addPatientTestForm.controls['amountPaid']?.value && this.invoiceItems.valid) {
+      if (this.addPatientTestForm.controls['amountPaid']?.value) {
         console.log('this.addPatientTestForm.value', this.addPatientTestForm.value);
-        this.testService.addPatientTest(this.addPatientTestForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe({
-          next: (x) => {
-            console.log(x);
-            this.alertService.success('Patient Test add successfully', 'Success');
-          },
-          error: (err) => {
-            this.alertService.error('Something went wrong while adding patient Test.', 'Error');
-          }
-        })
+        // this.testService.addPatientTest(this.addPatientTestForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe({
+        //   next: (x) => {
+        //     console.log(x);
+        //     this.alertService.success('Patient Test add successfully', 'Success');
+        //   },
+        //   error: (err) => {
+        //     this.alertService.error('Something went wrong while adding patient Test.', 'Error');
+        //   }
+        // })
       }
     } else {
       this.alertService.error('add payment greater than total', 'Error');
@@ -192,7 +230,7 @@ export class AddPatientTestComponent extends SubscriptionManagmentDirective impl
     let newForm = this.fb.group({
       paidAmount: new FormControl<number | null>(null, [Validators.required]),
       description: new FormControl<number | null>(null, [Validators.required]),
-      discountAmount: new FormControl<number | null>(null, [Validators.required]),
+      discountAmount: new FormControl<number | null>(0, [Validators.required]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
       reportingHours: new FormControl<string | null>(null, [Validators.required]),
@@ -207,7 +245,7 @@ export class AddPatientTestComponent extends SubscriptionManagmentDirective impl
     let newForm = this.fb.group({
       paidAmount: new FormControl<number | null>(null, [Validators.required]),
       description: new FormControl<number | null>(null, [Validators.required]),
-      discountAmount: new FormControl<number | null>(null, [Validators.required]),
+      discountAmount: new FormControl<number | null>(0, [Validators.required]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
       reportingHours: new FormControl<string | null>(null, [Validators.required]),

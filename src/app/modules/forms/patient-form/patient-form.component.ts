@@ -31,7 +31,7 @@ export class PatientFormComponent extends SubscriptionManagmentDirective impleme
       name: [null, Validators.required],
       phoneNum: [null,Validators.required],
       relation: [null],
-      gender: [null],
+      gender: ['Male'],
       age: [null],
       registrationDate: [null],
       addTags: [this.tags],
@@ -40,16 +40,6 @@ export class PatientFormComponent extends SubscriptionManagmentDirective impleme
   }
   
   ngOnInit(): void {
-    this.patientService.getData().pipe(takeUntil(this.componetDestroyed)).subscribe(data=>{
-      console.log(data);
-      
-    })
-    this.patientService.getPatients().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x)=> {
-        console.log(x);
-        
-      }
-    })
   }
 
   onSubmit(){
@@ -92,11 +82,9 @@ export class PatientFormComponent extends SubscriptionManagmentDirective impleme
     event.chipInput!.clear();
   }
 
-  concatDate(years:string, months:string, days:string){
+  concatDate(years:string, months?:string, days?:string){
     console.log({years,months,days});
-    let age;
-    let date = `${years} Years-${months} Months-${days} Days`;
-    
+    let date = `${years}`;
     this.patientForm.patchValue({'age': date}); 
   }
 

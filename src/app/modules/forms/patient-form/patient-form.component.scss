@@ -1,92 +1,77 @@
-.dialog-title{
+.dialog-title {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-.close-btn{
-    height: 25px;
-    width: 25px;   
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: none; 
-    outline: none;
-    background: none;
-    color: rgba(184, 71, 71, 0.681);
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  .close-btn:hover{
-    height: 25px;
-    width: 25px;   
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: none; 
-    outline: none;
-    color: black;
-    background: rgba(184, 71, 71, 0.681);
-    rotate: 180deg;
-    transition: .6s;
-  }
-.inpt-Field1{
+
+
+.inpt-Field1 {
     width: 75%
 }
-.input_Divs{
+
+.input_Divs {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    
-}
-.inpt-FieldPic{
-    width: 50%
-}
-.inpt-Fieldcam{
-    width: 40%
-}
-.matDialogContent::-webkit-scrollbar{
-    width:5px;
+
 }
 
-   
- 
+.inpt-FieldPic {
+    width: 50%
+}
+
+.inpt-Fieldcam {
+    width: 40%
+}
+
+.matDialogContent::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+
 .matDialogContent::-webkit-scrollbar-track {
-  box-shadow: none;
+    box-shadow: none;
 }
- 
+
 .matDialogContent::-webkit-scrollbar-thumb {
-  background-color: #4545df41;
-  border-radius: 8px;
-  outline: 1px solid rgba(112, 128, 144, 0);
+    background-color: #4545df41;
+    border-radius: 8px;
+    outline: 1px solid rgba(112, 128, 144, 0);
 }
-.inpt-Date{
+
+.inpt-Date {
     width: 90%;
     height: 36px;
     border: none;
 }
-.inpt-Ph-rel{
+
+.inpt-Ph-rel {
     width: 45%;
 }
-.inpt-phone{
+
+.inpt-phone {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 75%
 }
-.inpt-radio{
+
+.inpt-radio {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 
 }
-.inpt-age{
+
+.inpt-age {
     width: 30%
 }
-.date-div{
+
+.date-div {
     padding: none;
     display: flex;
     align-items: center;
@@ -99,40 +84,73 @@
     -moz-appearance: none;
     appearance: none;
     border-radius: .375rem;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
-.datepickerIcon{
+
+.datepickerIcon {
     line-height: 38px;
 }
-.inpt-Date:focus{
+
+.inpt-Date:focus {
     outline: none;
     border: none;
 }
-.mat-icon-button{
+
+.mat-icon-button {
     height: 36px !important;
     line-height: 36px !important;
     width: 36px !important;
 }
-.plus-sign{
+
+.plus-sign {
     font-weight: 600;
     font-size: 23px;
     color: #4545df;
 }
-.inpt-chips{
+
+.inpt-chips {
     width: 90%;
     height: 36px;
     border: none;
 }
-.inpt-chips:focus{
+
+.inpt-chips:focus {
     outline: none;
     border: none;
 }
-.patient-btn{
+
+.patient-btn {
     display: flex;
     flex-direction: row-reverse;
 }
-.slash{
+
+.slash {
     font-size: 38px;
     display: flex;
     align-items: center;
+}
+
+
+.close-button{
+    top:-9px;
+    right:-11px;
+    &:focus {
+        outline: none;
+    }
+  }
+  
+  .close-icon {
+    transition: 0.5s ease-in-out;
+  }
+  
+  .close-icon:hover {
+    transform: rotate(180deg);
+  }
+  
+  ::ng-deep{
+     .icon-outside .close-button{
+    float: right;
+    top:-52px;
+    right:-52px;
+  }
 }

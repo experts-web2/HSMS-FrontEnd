@@ -8,6 +8,7 @@ import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { SharedModule } from 'src/app/shared-module/shared-module';
 import { CameraModule } from '../camera/camera.module';
 import { PatientService } from '../../Services/patient/patient.service';
+import { PrimeNgModule } from 'src/app/Shared/modules/prime-ng/prime-ng.module';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { PatientService } from '../../Services/patient/patient.service';
     FormRoutingModule,
     SharedModule,
     CameraModule,
+    PrimeNgModule
     
   ],
   providers: [{
