@@ -11,7 +11,8 @@
 
             <div formArrayName="invoiceItems">
                 <div *ngFor="let item of invoiceItems.controls ; let i = index" class="my-4">
-                    <div [formGroupName]='i' class="flex justify-between items-center flex-col lg:flex-row">
+                    <div [formGroupName]='i' class="flex flex-col md:flex-row">
+                        <div class="grid md:grid-cols-6 gap-x-5 gap-y-5 justify-between items-end">
                         <div class="d-flex justify-content-center flex-column w-full md:pr-2">
                             <p-autoComplete [suggestions]="descriptions" #description [dropdown]="true" field="name"
                             (completeMethod)="search($event)" (onSelect)="onDescriptionSelect(i, description.value)"
@@ -20,24 +21,24 @@
                         </div>
                         <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
                             <label for="description">Description</label>
-                            <input class="h-10" type="text" pInputText name="amount" formControlName="description">
+                            <input type="text" pInputText name="amount" formControlName="description">
                         </div>
-                        <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
+                        <div class="d-flex justify-content-center lg:px-2 w-full md:my-0 flex-column">
                             <label for="amount">Amount</label>
-                            <input class="h-10" type="number" pInputText name="amount" [readonly]="true"
+                            <input type="number" pInputText name="amount" [readonly]="true"
                                 formControlName="paidAmount">
                         </div>
-                        <div class="d-flex justify-content-center lg:px-2 w-full my-3 md:my-0 flex-column">
+                        <div class="d-flex justify-content-center lg:px-2 w-full md:my-0 flex-column">
                             <label for="amount">Completion Time (Hours)</label>
-                            <input class="h-10" type="number" pInputText name="reportingHours"
+                            <input type="number" pInputText name="reportingHours"
                                 formControlName="reportingHours">
                         </div>
                         <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
                             <label for="discount">Discount</label>
-                            <input class="h-10" type="number" pInputText name="discount"
+                            <input type="number" pInputText name="discount"
                                 formControlName="discountAmount" (input)="calculate()">
                         </div>
-                        <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full my-3 md:my-0 flex-column">
+                        <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full md:my-0 flex-column">
                             <label for="dicountType">Discount Type</label>
                             <select id="dicountType" class="w-full rounded h-10 border" formControlName="discountType"
                                 (change)="calculate()">
@@ -45,7 +46,8 @@
                                     [selected]="discType.value === 1">{{discType.label}}</option>
                             </select>
                         </div>
-                        <div class="">
+                        </div>
+                        <div class="flex items-center">
                             <button (click)="removeinvoiceItem(i)">
                                 <i class="fa fa-trash"></i>
                             </button>
