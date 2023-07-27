@@ -7,6 +7,7 @@ import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { CameraModule } from '../camera/camera.module';
 import { PatientService } from 'src/app/services';
 import { MaterialModule } from 'src/app/shared/modules';
+import { PrimeNgModule } from 'src/app/shared/modules';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { MaterialModule } from 'src/app/shared/modules';
     FormRoutingModule,
     MaterialModule,
     CameraModule,
+    PrimeNgModule
     
   ],
   providers: [{

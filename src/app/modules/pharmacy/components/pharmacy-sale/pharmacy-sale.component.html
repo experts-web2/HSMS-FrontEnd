@@ -3,7 +3,7 @@
         <h1>Pharmacy Sale</h1>
     </div>
     <div class="mt-5">
-        <div class="p-5">
+        <div class="px-5 pb-5">
             <form [formGroup]="purchaseMedicineForm">
                 <!-- <div class="mb-5">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">Vendor: </label>
@@ -14,9 +14,10 @@
                     </select>
                 </div> -->
                 <div class="flex flex-column" formArrayName="medicines">
-                    <div *ngFor="let form of medicines.controls; let i = index" class="flex mb-3">
+                    <div *ngFor="let form of medicines.controls; let i = index" class="flex pt-5 pb-2" [ngClass]="i === 0 ?'pt-5':'pt-16 border-t'">
                         <p class="text-2xl mr-2 font-bold mr-5">{{i+1}}</p>
-                        <div [formGroupName]="i" class="flex">
+                        <div [formGroupName]="i" class="flex w-full">
+                            <div class="grid md:grid-cols-4 gap-4 w-full px-2 md:px-8">
                             <div>
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine Name</label>
                                 <input
@@ -61,6 +62,7 @@
                                     class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     type="text" formControlName="brandId">
                             </div>
+                        </div>
                             <div>
                                 <button (click)="removeMedicine(i)"><i class="fa fa-trash"></i></button>
                             </div>
@@ -71,17 +73,17 @@
             <div class="mt-4 mb-4">
 
                 <button
-                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                    class="shadow btn btn-primary focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                     (click)="addMedicine()">+
                     Add a medicine</button>
             </div>
             <div class="flex justify-end">
                 <button
-                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
+                    class="mr-4 shadow btn btn-primary focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
                     Save
                 </button>
                 <button
-                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Save
+                    class="shadow btn btn-primary focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Save
                     & Print</button>
             </div>
         </div>

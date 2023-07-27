@@ -1,12 +1,12 @@
 <p-toast></p-toast>
 <nav class="p-0" [ngClass]="">
   <div class="navbar p-0" *ngIf="showNav">
-    <span class="Title">HSMS</span>
+    <div class="Title">HSMS</div>
     <div class="md:flex items-center justify-between md:gap-x-20">
     <div class=" menu-items-width d-flex justify-content-between align-items-center ">
-      <a class="navButton btn btn-primary" routerLink="/dashboard">Dashboard</a>
-      <a class="navButton btn btn-primary" routerLink="doctor/health_records" >Health Records</a>
-      <a class="navButton btn btn-primary" [matMenuTriggerFor]="more">Laboratory<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+      <a class="navButton px-8 cursor-pointer" routerLink="/dashboard" [routerLinkActive]="['menu-active']">Dashboard</a>
+      <a class="navButton px-8 cursor-pointer" routerLink="doctor/health_records" [routerLinkActive]="['menu-active']">Health Records</a>
+      <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="more">Laboratory<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #more="matMenu">
           <a mat-menu-item routerLink="/laboratory/add_patient_test">Add Patient Test</a>
           <a mat-menu-item routerLink="/laboratory/collect_lab_sample">Collection Lab Sample</a>
@@ -14,39 +14,39 @@
           <a mat-menu-item routerLink="/laboratory/lab_report_list">Lab Test Lists</a>
         </mat-menu> 
 
-        <a class="navButton btn btn-primary" routerLink="/register" *ngIf="!isDoctor">Messages</a>
-      <a class="navButton btn btn-primary" [matMenuTriggerFor]="lab" *ngIf="!isDoctor">More<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <a class="navButton px-8 cursor-pointer" routerLink="/register" [routerLinkActive]="['menu-active']" *ngIf="!isDoctor">Messages</a>
+      <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="lab" *ngIf="!isDoctor">More<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
       <mat-menu #lab="matMenu">
         <a mat-menu-item>Item 1</a>
         <a mat-menu-item>Item 2</a>
       </mat-menu> 
-      <!-- <a class="navButton btn btn-primary" routerLink="/laboratory">Laboratory</a> -->
+      <!-- <a class="navButton" routerLink="/laboratory">Laboratory</a> -->
             
     </div>
       <div class="d-flex align-items-center ">
-        <a class="navButton btn btn-primary creat-drop text-white" [matMenuTriggerFor]="creat">Create<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <a class="creat-drop cursor-pointer text-white" [matMenuTriggerFor]="creat">Create<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #creat="matMenu">
           <a mat-menu-item (click)="addPatient()">Patient</a>
           <a mat-menu-item (click)="addToken()">Token</a>
           <a mat-menu-item>Invoice</a>
           <a mat-menu-item>Health Record</a>
         </mat-menu> 
-        <div class="search-Field d-flex position-relative border">
+        <div class="search-Field d-flex position-relative">
           <mat-icon class="position-absolute search-icon">search</mat-icon> 
           <input class="search-input" placeholder="Search">
         </div>
-        <a class="navButton btn btn-primary blub-icon"><mat-icon >lightbulb_on</mat-icon></a>
-        <a class="navButton btn btn-primary notification-icon"><mat-icon style="rotate: 45deg;">notifications</mat-icon></a>
-        <a class="navButton btn btn-primary " [matMenuTriggerFor]="User"><span class="span-elpis user-name">{{logedInUser.firstName.substring(0, 1).toUpperCase() + logedInUser.lastName.substring(0, 1).toUpperCase()}}</span><mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <a class="navButton cursor-pointer blub-icon"><mat-icon >lightbulb_on</mat-icon></a>
+        <a class="navButton cursor-pointer notification-icon mr-4"><mat-icon style="rotate: 45deg;">notifications</mat-icon></a>
+        <a class="navButton cursor-pointer" [matMenuTriggerFor]="User"><span class="span-elpis user-name">{{logedInUser.firstName.substring(0, 1).toUpperCase() + logedInUser.lastName.substring(0, 1).toUpperCase()}}</span><mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #User="matMenu">
           <a mat-menu-item *ngIf="isAdmin" routerLink="/admin">Admin</a>
           <a mat-menu-item>Option 2</a>
           <a mat-menu-item (click)="logOut()">Log Out</a>
         </mat-menu>
-        <div *ngFor="let h of [1,2,3]">{{h}}</div>
+        <!-- <div *ngFor="let h of [1,2,3]">{{h}}</div> -->
         <!-- <div>
-          <button class="navButton btn btn-primary" routerLink="/home">Home</button>
-          <button class="navButton btn btn-primary" routerLink="/sign-up">Register</button>
+          <button class="navButton" routerLink="/home">Home</button>
+          <button class="navButton" routerLink="/sign-up">Register</button>
         </div> -->
       </div>
     </div>

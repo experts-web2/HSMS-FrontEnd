@@ -19,10 +19,6 @@ export class PatientService extends HttpService{
   }
   baseEndPoint: string = BaseEndPoints.Patient
 
-  getData(): Observable<any>{
-    return this.get('https://jsonplaceholder.typicode.com/todos');
-  }
-
   addPatient(data: IAddOrUpdatePatient): Observable<IPatient>{
    return this.post(`${this.baseEndPoint}/add`, data);
   }

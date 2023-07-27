@@ -48,30 +48,17 @@ export class PatientFormComponent
       name: [null, Validators.required],
       phoneNum: [null, Validators.required],
       relation: [null],
-      gender: [null],
+      gender: ['Male'],
       age: [null],
       registrationDate: [null],
       addTags: [this.tags],
-      addPhoto: [this.base64ImagStr],
-    });
+      addPhoto: [this.base64ImagStr]
+    });    
+  }
+  
+  ngOnInit(): void {
   }
 
-  ngOnInit(): void {
-    this.patientService
-      .getData()
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe((data) => {
-        console.log(data);
-      });
-    this.patientService
-      .getPatients()
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe({
-        next: (x) => {
-          console.log(x);
-        },
-      });
-  }
 
   onSubmit() {
     console.log(this.patientForm.value);
@@ -114,12 +101,10 @@ export class PatientFormComponent
     event.chipInput!.clear();
   }
 
-  concatDate(years: string, months: string, days: string) {
-    console.log({ years, months, days });
-    let age;
-    let date = `${years} Years-${months} Months-${days} Days`;
-
-    this.patientForm.patchValue({ age: date });
+  concatDate(years:string, months?:string, days?:string){
+    console.log({years,months,days});
+    let date = `${years}`;
+    this.patientForm.patchValue({'age': date}); 
   }
 
   remove(tag: any): void {

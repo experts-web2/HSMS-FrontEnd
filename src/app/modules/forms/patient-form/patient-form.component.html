@@ -1,26 +1,27 @@
+
+<button mat-icon-button mat-dialog-close class="close-button">
+    <mat-icon class="close-icon" color="warn">close</mat-icon>
+  </button>
  <div mat-dialog-title class="dialog-title">
-     <div style="width:100% ; display:flex; flex-direction: row-reverse;">
-         <!-- <input class="close-btn" value="x" mat-dialog-close > -->
-         <button class="close-btn" mat-dialog-close>x</button>
-     </div>
     <div>
         <span>Add Patient</span>
     </div>
  </div>
 <div mat-dialog-content class="matDialogContent">
+    <p-tabView>
     <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
         <div class="input_Divs">
             <mat-label>MR#</mat-label>
-            <input class="form-control inpt-Field1 " matInput type="number"  placeholder="MR#" formControlName="mrNum">
+            <input class="form-control inpt-Field1 " pInputText type="number"  placeholder="MR#" formControlName="mrNum">
         </div>
          <div class="input_Divs">
             <mat-label>Name<span class="text-danger">*</span></mat-label>
-            <input class="form-control inpt-Field1" matInput placeholder="Name" formControlName="name">
+            <input class="form-control inpt-Field1" pInputText placeholder="Name" formControlName="name">
         </div>
         <div class="input_Divs">
             <mat-label>Phone#<span class="text-danger">*</span></mat-label>
             <div class="inpt-phone">
-                <input class="form-control inpt-Ph-rel" matInput placeholder="Phone#" formControlName="phoneNum">
+                <input class="form-control inpt-Ph-rel" pInputText placeholder="Phone#" formControlName="phoneNum">
                     <span class="plus-sign">+</span>
                     <mat-select class="form-control inpt-Ph-rel"  placeholder="Select Relation" formControlName="relation">
                     <mat-option *ngFor="let relation of relations" [value]="relation.value">
@@ -45,19 +46,20 @@
         <div class="input_Divs">
             <mat-label>Age</mat-label>
             <div class="inpt-phone">
-                <input class="form-control inpt-age" matInput placeholder="Years" #years (input)="concatDate(years.value, months.value, days.value)">
-                <input class="form-control inpt-age" matInput placeholder="Months" #months (input)="concatDate(years.value, months.value, days.value)">
-                <input class="form-control inpt-age" matInput placeholder="Days" #days (input)="concatDate(years.value, months.value, days.value)">
+                <input class="form-control inpt-age" pInputText placeholder="Years" #years (input)="concatDate(years.value)">
+                <!-- <input class="form-control inpt-age" pInputText placeholder="Months" #months (input)="concatDate(years.value, months.value, days.value)"> -->
+                <!-- <input class="form-control inpt-age" pInputText placeholder="Days" #days (input)="concatDate(years.value, months.value, days.value)"> -->
                 <input hidden class="" formControlName="age">
             </div>
         </div>
         <div class="input_Divs">
             <mat-label>Registration Date</mat-label>
             <div class="date-div">
-
-                <input readonly class=" inpt-Date" matInput [matDatepicker]="picker" formControlName="registrationDate">
+                <p-calendar formControlName="completionDate" [showButtonBar]="true" [showIcon]="true" formControlName="registrationDate">
+            </p-calendar>
+                <!-- <input readonly class=" inpt-Date" matInput [matDatepicker]="picker" formControlName="registrationDate">
                 <mat-datepicker-toggle class="datepickerIcon" matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+                <mat-datepicker #picker></mat-datepicker> -->
             </div>
         </div>
         <div class="input_Divs">
@@ -97,5 +99,6 @@
             <input class="btn btn-primary " type="submit" value="Add Patient +">
         </div>        
     </form>
+    </p-tabView>
 </div> 
 

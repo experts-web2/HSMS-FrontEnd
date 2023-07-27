@@ -51,8 +51,12 @@ export class TestService extends HttpService {
   }
 
 
-  getPatientTests() {
-    return of(patientData.getPatientTests())
+  getPatients() {
+    return of(patientData.getPatients())
+  }
+  
+  getTestByPatientid(id: string){
+    return this.get(`${this.baseEndPoint}/getbypatientid/${id}`);
   }
 
 }
