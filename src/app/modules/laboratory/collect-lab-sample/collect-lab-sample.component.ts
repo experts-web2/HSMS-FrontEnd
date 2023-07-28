@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { takeUntil } from 'rxjs';
-import { PatientService } from 'src/app/services';
+import { PatientService, TestCategoryService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { TestService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -24,6 +24,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   tests: Array<ILabTest> = [];
   testToView: Array<ILabTest> = [];
   patients: Array<IDropDown> = [];
+  testCategory: Array<IDropDown> = [];
   patientsToShow: Array<IDropDown> = [];
 
   testStatus: Array<{ value: string; label: string }> = [
@@ -31,11 +32,14 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     { value: 'Pending', label: 'Pending' },
   ];
   submitted = false;
+  category='';
+  testCategoryToShow: Array<IDropDown>=[];
 
   constructor(
     private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
-    private readonly testService: TestService
+    private readonly testService: TestService,
+    private readonly testCategoryService:TestCategoryService
   ) {
     super();
     this.invoiceDescriptionForm = this.fb.group({
@@ -60,6 +64,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
   ngOnInit(): void {
     this.getPatients();
+    this.getTestCategory();
   }
 
 
@@ -73,6 +78,31 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
       }
     })
+  }
+  
+  getTestCategory() {
+    this.testCategoryService.getTestCategoryList().pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.testCategory = x;
+        console.log('this.patients',this.testCategory);
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  selectCategory(categoryId:string){
+    console.log({categoryId})
+    this.category = categoryId;
+  }
+
+  GenerateSampleID(){
+    let payload = {
+      patientId: this.collectionForm.controls['patientId'].value,
+      category: this.category
+    }
+    console.log(payload)
   }
 
 
@@ -108,6 +138,12 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     const searchTerm = event.query.trim();
     // if (searchTerm.length >= 3) {
     this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(searchTerm));
+    // }
+  }
+  onSearchCategory(event: { query: string }): void {
+    const searchTerm = event.query.trim();
+    // if (searchTerm.length >= 3) {
+    this.testCategoryToShow = this.testCategory.filter(x => x.name.toLowerCase().includes(searchTerm));
     // }
   }
 

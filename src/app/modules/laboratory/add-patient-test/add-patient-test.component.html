@@ -9,125 +9,132 @@
 
             <div class="d-flex w-1/2 justify-content-center flex-column">
                 <p-autoComplete [suggestions]="patientsToShow" #patient [dropdown]="true" field="name"
-                (completeMethod)="onSearch($event)" (onSelect)="onPatientSelection(patient.value.id)"
-                placeholder="Search Patient" dropdownIcon="pi pi-search" [minLength]="1">
-            </p-autoComplete>
+                    (completeMethod)="onSearch($event)" (onSelect)="onPatientSelection(patient.value.id)"
+                    placeholder="Search Patient" dropdownIcon="pi pi-search" [minLength]="1">
+                </p-autoComplete>
             </div>
-            
+
 
             <div formArrayName="invoiceItems">
                 <div *ngFor="let item of invoiceItems.controls ; let i = index" class="my-4">
                     <div [formGroupName]='i' class="flex flex-col md:flex-row">
                         <div class="grid md:grid-cols-6 gap-x-5 gap-y-5 justify-between items-end">
-                        <div class="d-flex justify-content-center flex-column w-full md:pr-2">
-                            <p-autoComplete [suggestions]="testToView" #description [dropdown]="true" field="name"
-                            (completeMethod)="search($event)" (onSelect)="onDescriptionSelect(i, description.value)"
-                            placeholder="Test Name/Code" dropdownIcon="pi pi-search" [minLength]="1">
-                        </p-autoComplete>
+                            <div class="d-flex justify-content-center flex-column w-full md:pr-2">
+                                <p-autoComplete [suggestions]="testToView" #description [dropdown]="true" field="name"
+                                    (completeMethod)="search($event)"
+                                    (onSelect)="onDescriptionSelect(i, description.value)" placeholder="Test Name/Code"
+                                    dropdownIcon="pi pi-search" [minLength]="1">
+                                </p-autoComplete>
+                            </div>
+                            <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
+                                <label for="description">Description</label>
+                                <input type="text" pInputText name="amount" formControlName="description">
+                            </div>
+                            <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
+                                <label for="amount">Amount</label>
+                                <input type="number" pInputText name="amount" [readonly]="true"
+                                    formControlName="paidAmount">
+                            </div>
+                            <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
+                                <label for="amount">Completion Time (Hours)</label>
+                                <input type="number" pInputText name="reportingHours" formControlName="reportingHours">
+                            </div>
+                            <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
+                                <label for="discount">Discount</label>
+                                <input type="number" pInputText name="discount" formControlName="discountAmount"
+                                    (input)="calculate()">
+                            </div>
+                            <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full flex-column">
+                                <label for="dicountType">Discount Type</label>
+                                <select id="dicountType" class="w-full rounded h-10 border"
+                                    formControlName="discountType" (change)="calculate()">
+                                    <option *ngFor="let discType of discountTypes" [ngValue]="discType.value"
+                                        [selected]="discType.value === 1">{{discType.label}}</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="cursor-pointer" (click)="removeinvoiceItem(i)">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
-                            <label for="description">Description</label>
-                            <input type="text" pInputText name="amount" formControlName="description">
+                    </div>
+
+                </div>
+                <button (click)="addNewInvoiceItem()" class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center"><i
+                        class="fa-solid fa-plus me-2"></i>Item</button>
+                <div class="lg:w-2/4 ml-auto flex items-start flex-col lg:flex-row">
+                    <div>
+                        <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full flex-col">
+                            <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total
+                                Discount:</label>
+                            <input class="pulse h-10 lg:ml-3" type="number" pInputText name="totalDiscount"
+                                formControlName="totalDiscount" (input)="calculate(true)">
+
+                            <!-- <input class="h-10 w-full md:mr-3" type="number" pInputText
+                            name="totalDiscount" formControlName="totalDiscount" (input)="calculate()"> -->
                         </div>
-                        <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
-                            <label for="amount">Amount</label>
-                            <input type="number" pInputText name="amount" [readonly]="true"
-                                formControlName="paidAmount">
-                        </div>
-                        <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
-                            <label for="amount">Completion Time (Hours)</label>
-                            <input type="number" pInputText name="reportingHours"
-                                formControlName="reportingHours">
-                        </div>
-                        <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
-                            <label for="discount">Discount</label>
-                            <input type="number" pInputText name="discount"
-                                formControlName="discountAmount" (input)="calculate()">
-                        </div>
-                        <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full flex-column">
-                            <label for="dicountType">Discount Type</label>
-                            <select id="dicountType" class="w-full rounded h-10 border" formControlName="discountType"
-                                (change)="calculate()">
-                                <option *ngFor="let discType of discountTypes" [ngValue]="discType.value"
-                                    [selected]="discType.value === 1">{{discType.label}}</option>
+                        <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full flex-col">
+                            <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Payment
+                                Types:</label>
+                            <select class="h-10 border rounded" name="description" formControlName="paymentType">
+                                <option [value]="null" [defaultSelected]="true" disabled>Select a payment Type</option>
+                                <option *ngFor="let item of paymentType" [ngValue]="item.id">{{item.label}}</option>
                             </select>
                         </div>
-                        <div class="flex items-center">
-                            <span class="cursor-pointer" (click)="removeinvoiceItem(i)">
-                                <i class="fa fa-trash"></i>
-                            </span>
+                        <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full flex-col">
+                            <label class="d-flex align-items-center min-w-fit" for="completionDate">Test Report
+                                Date:</label>
+                            <p-calendar formControlName="completionDate" [showIcon]="true" [showSeconds]="true"
+                                [showTime]="true">
+                            </p-calendar>
                         </div>
                     </div>
-                </div>
-
-            </div>
-            <button (click)="addNewInvoiceItem()" class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center"><i
-                    class="fa-solid fa-plus me-2"></i>Item</button>
-            <div class="lg:w-2/4 ml-auto flex items-start flex-col lg:flex-row">
-                <div>
-                    <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full flex-col">
-                        <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
-                        <input class="pulse h-10 lg:ml-3" type="number" pInputText name="totalDiscount"  formControlName="totalDiscount" (input)="calculate(true)">
-
-                        <!-- <input class="h-10 w-full md:mr-3" type="number" pInputText
-                            name="totalDiscount" formControlName="totalDiscount" (input)="calculate()"> -->
-                    </div>
-                    <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full flex-col">
-                        <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Payment Types:</label>
-                        <select class="h-10 border rounded" name="description" formControlName="paymentType">
-                            <option [value]="null" [defaultSelected]="true" disabled>Select a payment Type</option>
-                            <option *ngFor="let item of paymentType" [ngValue]="item.id">{{item.label}}</option>
-                        </select>
-                    </div>
-                    <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full flex-col">
-                        <label class="d-flex align-items-center min-w-fit" for="completionDate">Test Report Date:</label>
-                        <p-calendar formControlName="completionDate" [showIcon]="true" [showSeconds]="true"
-                            [showTime]="true">
-                        </p-calendar>
-                    </div>
-                </div>
-                <div>
-                    <p>Sub- Total:Rs {{addPatientTestForm.controls['grandTotal'].value}}</p>
-                    <p>Discount : Rs {{addPatientTestForm.controls['totalDiscount'].value}}</p>
-                    <p>Grand- Total : {{addPatientTestForm.controls['grandTotal'].value}}</p>
-                    <!-- <p>Payment : <input type="number" class="pulse lg:ml-3" [readonly]="true" pInputText
+                    <div>
+                        <p>Sub- Total:Rs {{addPatientTestForm.controls['grandTotal'].value}}</p>
+                        <p>Discount : Rs {{addPatientTestForm.controls['totalDiscount'].value}}</p>
+                        <p>Grand- Total : {{addPatientTestForm.controls['grandTotal'].value}}</p>
+                        <!-- <p>Payment : <input type="number" class="pulse lg:ml-3" [readonly]="true" pInputText
                             placeholder="1500" formControlName="grandTotal" /></p> -->
-                    <p>Paid: <input type="number" class="pulse lg:ml-3" pInputText placeholder="0"
-                            formControlName="amountPaid" required />
-                    </p>
-                    <div class="text-danger"
-                        *ngIf="(addPatientTestForm.controls['amountPaid'].errors && addPatientTestForm.controls['amountPaid'].touched) || (addPatientTestForm.controls['amountPaid'].touched && !addPatientTestForm.controls['amountPaid'].valid)">
-                        <small>Please add test amount.</small>
+                        <p>Paid: <input type="number" class="pulse lg:ml-3" pInputText placeholder="0"
+                                formControlName="amountPaid" required />
+                        </p>
+                        <div class="text-danger"
+                            *ngIf="(addPatientTestForm.controls['amountPaid'].errors && addPatientTestForm.controls['amountPaid'].touched) || (addPatientTestForm.controls['amountPaid'].touched && !addPatientTestForm.controls['amountPaid'].valid)">
+                            <small>Please add test amount.</small>
+                        </div>
+
                     </div>
 
                 </div>
 
             </div>
 
-        </div>
-
-        <div class="w-1/2">
-            <div class="flex  flex-col md:flex-row my-4 flex-col lg:flex-row">
-                <label for="category" class="w-full">Priority :</label>
-                <select class="h-10 border w-full rounded" name="description" formControlName="priority">
-                    <option [value]="null" [defaultSelected]="true" disabled>Select a payment Type</option>
-                    <option *ngFor="let item of testPriority" [ngValue]="item.value">{{item.label}}</option>
-                </select>
+            <div class="w-1/2">
+                <div class="flex  flex-col md:flex-row my-4 flex-col lg:flex-row">
+                    <label for="category" class="w-full">Priority :</label>
+                    <select class="h-10 border w-full rounded" name="description" formControlName="priority">
+                        <option [value]="null" [defaultSelected]="true" disabled>Select a payment Type</option>
+                        <option *ngFor="let item of testPriority" [ngValue]="item.value">{{item.label}}</option>
+                    </select>
+                </div>
+                <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
+                    <label class="w-full" for="category">Referral :<span class="text-danger"></span></label>
+                    <p-autoComplete [suggestions]="doctorsToView" #doctor dropdownIcon="pi pi-search"
+                        (completeMethod)="onSearchDoctor($event)" [dropdown]="true"
+                        (onSelect)="onDoctorSelection(doctor.value.id)" field="name" dropdownIcon="pi pi-search"
+                        [minLength]="3"></p-autoComplete>
+                </div>
+                <div>
+                    <label for="invoiceNote">Invoice Note</label>
+                    <textarea rows="2" cols="93" class="mb-2 w-full" placeholder="Medication Notes" id="investigation"
+                        pInputTextarea formControlName="invoiceNote"></textarea>
+                </div>
             </div>
-            <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
-                <label class="w-full" for="category">Referral :<span class="text-danger"></span></label>
-                <p-autoComplete [suggestions]="doctorsToView" #doctor dropdownIcon="pi pi-search"
-                (completeMethod)="onSearchDoctor($event)" [dropdown]="true" (onSelect)="onDoctorSelection(doctor.value.id)" field="name" dropdownIcon="pi pi-search" [minLength]="3"></p-autoComplete>
+            <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-content-evenly align-items-center">
+                <button class="btn btn-primary" (click)="addToken()">Save</button>
+                <button class="btn btn-primary">Save & Print</button>
             </div>
-            <div>
-                <label for="invoiceNote">Invoice Note</label>
-                <textarea rows="2" cols="93" class="mb-2 w-full" placeholder="Medication Notes" id="investigation"
-                    pInputTextarea formControlName="invoiceNote"></textarea>
-            </div>
-        </div>
-        <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-content-evenly align-items-center">
-            <button class="btn btn-primary" (click)="addToken()">Save</button>
-            <button class="btn btn-primary">Save & Print</button>
         </div>
     </div>
 </form>

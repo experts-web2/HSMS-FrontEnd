@@ -17,20 +17,20 @@
                     <div *ngIf="f['patientId'].errors['required']">Patient Id is required</div>
                 </div>
             </div>
-
+            <div class="col-6 d-flex mtt-3">
+                <label for="descriptionDetail">Test Category</label>
+                <p-autoComplete [suggestions]="testCategoryToShow" #category [dropdown]="true" field="name"
+                    (completeMethod)="onSearchCategory($event)" (onSelect)="selectCategory(category.value.name)"
+                    placeholder="Search Test Category" dropdownIcon="pi pi-search" [minLength]="1">
+                </p-autoComplete>
+                <button class="btn btn-primary" [disabled]="!category.value" (click)="GenerateSampleID()">Generate Sample Id</button>
+            </div>
             <div formArrayName="testItems">
                 
                 <div *ngFor="let item of testItems.controls ; let i = index" class="my-4">
                     <div [formGroupName]='i' class="flex justify-between items-center flex-col lg:flex-row">
                         <div class="d-flex justify-content-center flex-column w-full md:pr-2">
-                            <label for="descriptionDetail">Lab Template</label>
-                            <!-- <select id="descriptionDetail" class="form-select"
-                                [disabled]="!descriptions || !descriptions.length" formControlName="testId" #description
-                                (change)="onDescriptionSelect(i, description.value)" required>
-                                <option [defaultSelected]="true" disabled>Select A Description</option>
-                                <option *ngFor="let drop of tests" [value]="drop.id">
-                                    {{drop.name}}</option>
-                            </select> -->
+                            <label for="descriptionDetail">Lab Test</label>
                             <div class="d-flex justify-content-center flex-column w-full md:pr-2">
                                 <p-autoComplete [suggestions]="testToView" #description [dropdown]="true" field="name"
                                 (completeMethod)="search($event)" (onSelect)="onDescriptionSelect(i, description.value)"
