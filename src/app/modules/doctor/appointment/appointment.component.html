@@ -1,24 +1,14 @@
 <div class="flex" *ngIf="!tokenId">
-  <div class="mb-5 mt-3 d-flex flex-col md:flex-row justify-content-between justify-items-center position-relative">
+  <div class="mb-5 mt-3 flex flex-col md:flex-row justify-content-between justify-items-center position-relative">
     <label for="patient">Patient</label>
-    <!-- <input [matAutocomplete]="auto" placeholder="Search by Name" class="border pl-3 rounded-full w-full h-full"
-      type="text" name="patient" #patientSearch (input)="searchPatient(patientSearch.value)">
-    <mat-autocomplete #auto="matAutocomplete"
-      (optionSelected)="patientSelect($event.option.value); patientSearch.value = $event.option.value.name">
-      <mat-option *ngFor="let patient of (!patientSearch.value || patientSearch.value!='' ? patientsToShow : patients)"
-        [value]="patient">
-        {{patient.name }}
-      </mat-option>
-    </mat-autocomplete> -->
-    <p-autoComplete #autoComplete [suggestions]="( !autoComplete || autoComplete.inputValue === '' ? patients: patientsToShow)" (completeMethod)="searchPatient(autoComplete)" field="name"></p-autoComplete>
-    {{autoComplete}}
-    <select class="w-2/3 rounded" name="" id="" #patientHistory
-      (change)="selectPatientHistoryVisit(patientHistory.value)">
-      <option [value]="null" [defaultSelected]="true" disabled>Select a history visit</option>
-      <option *ngForr="let visit of patientHistoryVisits" [value]="visit.id">{{visit.name}}</option>
-    </select>
-
+    <p-autoComplete #autoComplete [suggestions]="( !autoComplete || autoComplete.inputValue === '' ? patients: patientsToShow)" (completeMethod)="searchPatient(autoComplete)" (onSelect)="patientSelect(autoComplete.value.id)" field="name"></p-autoComplete>
+    
   </div>
+  <select class="w-1/5 rounded border-solid border-2 h-10 mb-5 mt-3 flex flex-col md:flex-row justify-content-between justify-items-center position-relative" name="" id="" #patientHistory
+    (change)="selectPatientHistoryVisit(patientHistory.value)" [disabled]="!patientHistoryVisits">
+    <option [value]="null" [defaultSelected]="true" disabled>Select a history visit</option>
+    <option *ngFor="let visit of patientHistoryVisits" [value]="visit.id">{{visit.createdAt | date: 'EEE MMM, dd/yyyy'}}</option>
+  </select>
   <div>
 
   </div>
@@ -27,10 +17,10 @@
   <div>
     <h1 class="first-title">Current Appointment</h1>
   </div>
-  <div class="grid grid-cols-1 xl:grid-cols-3 xl:gap-x-4 gap-y-4 justify-between" *ngIf="patient">
+  <div class="grid grid-cols-1 xl:grid-cols-3 xl:gap-x-4 gap-y-4 justify-between" *ngIf="patient && token">
     <section class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 xl:order-2 gap-x-3 gap-y-3 justify-between">
       <div class="d-flex flex-column bg-white align-items-center p-3 rounded-3">
-        <img src="https://example.com/profile-picture.jpg" alt="Profile Picture"
+        <img src="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg" alt="Profile Picture"
           class="profile-picture rounded-5 bg-dark">
         <div class="profile-details">
           <h1 class="profile-name my-2">{{patient.name}}</h1>

@@ -5,6 +5,7 @@ import { BaseEndPoints } from '../../constants/enums/base-end-points';
 import { ILoginUser } from 'src/app/models/interfaces/login-user';
 import { UserStateService } from '../../State/user/user.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,11 @@ export class AuthService extends HttpService {
     super(http)
   }
 
-  login(loginModel: ILoginUser){
+  login(loginModel: ILoginUser): Observable<any>{
     return this.post(`${this.baseEndPoint}/login`, loginModel);
   }
 
-  logOut(){
+  logOut(): void{
     this.userStateService.destroyUserState();
     localStorage.clear();
     this.router.navigate(['/sign-in'])

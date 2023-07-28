@@ -14,4 +14,5 @@ export interface ILogedInUser{
     roles: string[];
     username: string;
     token: string;
+    entityIds?: { [Name: string]: string}; 
 }

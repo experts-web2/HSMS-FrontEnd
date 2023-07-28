@@ -173,7 +173,6 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
   getAppointments(fetchRequest: IFetchRequest = {}) {
     this.appointmentService.getAppointments(fetchRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x: any) => {
-        console.log(x);
         
       },
       error: (err: Error) => {

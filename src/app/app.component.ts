@@ -43,7 +43,6 @@ export class AppComponent implements OnInit {
         this.logedInUser = x;
         this.isAdmin = x?.roles.includes('Admin');
         this.isDoctor = x?.roles.includes("Doctor");
-        console.log(x);
         
 
       },

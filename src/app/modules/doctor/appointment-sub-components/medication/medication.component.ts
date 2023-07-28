@@ -81,7 +81,6 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
 
   search(e: string){
     let text  = e.toLowerCase();
-    console.log(text);
     this.medicinesToShow = this.medicines.filter(x => x.name.toLowerCase().includes(text));
     
   }
@@ -130,7 +129,6 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
   }
 
   setDuration(index: number, duration: any){
-    console.log({index,duration});
     
     this.medicationItems.at(index).get('duration')?.setValue(duration.value);
   }

@@ -157,7 +157,6 @@ export class AddTokenModalComponent extends SubscriptionManagmentDirective imple
   getDoctors() {
     this.doctorService.getDoctorDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
-        console.log(x);
         this.doctors = x;
       },
       error: (err) => {
@@ -169,7 +168,6 @@ export class AddTokenModalComponent extends SubscriptionManagmentDirective imple
   getTests() {
     this.testService.getTestDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
-        console.log(x);
         this.tests = x;
         if(!this.display){
           this.descriptions = this.tests;
@@ -212,7 +210,6 @@ export class AddTokenModalComponent extends SubscriptionManagmentDirective imple
   }
 
   addToken() {
-    console.log(this.addTokenForm.value)
     if (this.addTokenForm.controls['patientId']?.valid && this.invoiceItems.valid) {
       let tokenpayload: IAddOrUpdateToken = {
         patientId: this.addTokenForm.controls['patientId'].value,
@@ -334,7 +331,6 @@ export class AddTokenModalComponent extends SubscriptionManagmentDirective imple
        totalDiscountTotal += discount;
        
      }
-     console.log(totalDiscount?.value * ( totalGrandTotal / 100));
      
      if(totalDiscount?.value && totalDiscount.value > 0 && totalInput) totalDiscountTotal = totalDiscount.value;
 

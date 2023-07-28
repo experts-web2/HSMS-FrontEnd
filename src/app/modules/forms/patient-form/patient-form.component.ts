@@ -41,19 +41,16 @@ export class PatientFormComponent extends SubscriptionManagmentDirective impleme
   
   ngOnInit(): void {
     this.patientService.getData().pipe(takeUntil(this.componetDestroyed)).subscribe(data=>{
-      console.log(data);
       
     })
     this.patientService.getPatients().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x)=> {
-        console.log(x);
         
       }
     })
   }
 
   onSubmit(){
-    console.log(this.patientForm.value);
     let values =   this.patientForm.value;
     let patient: IAddOrUpdatePatient = {
       mrNo: values['mrNum'],
@@ -93,7 +90,6 @@ export class PatientFormComponent extends SubscriptionManagmentDirective impleme
   }
 
   concatDate(years:string, months:string, days:string){
-    console.log({years,months,days});
     let age;
     let date = `${years} Years-${months} Months-${days} Days`;
     
@@ -129,6 +125,5 @@ export class PatientFormComponent extends SubscriptionManagmentDirective impleme
  async getUploadImage(file:any){
    
     let img = await this.toBase64(file.target.files[0]);
-    console.log(img)
   }
 }
