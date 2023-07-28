@@ -7,32 +7,36 @@
         <div>
             <div class="col-6">
                 <label for="descriptionDetail">Patients</label>
-                <select id="descriptionDetail" class="form-select" [disabled]="!descriptions || !descriptions.length"
-                    formControlName="patientId" #patient (change)="patientSelect(patient.value)" required [ngClass]="{ 'is-invalid': submitted && f['patientId'].errors }">
-                    <option [defaultSelected]="true" disabled>Select A Description</option>
-                    <option *ngFor="let drop of patientsToShow" [value]="drop.id">
-                        {{drop.name}}</option>
-                </select>
+                <div class="d-flex justify-content-center flex-column">
+                    <p-autoComplete [suggestions]="patientsToShow" #patient [dropdown]="true" field="name"
+                    (completeMethod)="onSearch($event)" (onSelect)="onPatientSelection(patient.value.id)"
+                    placeholder="Search Patient" dropdownIcon="pi pi-search" [minLength]="1">
+                </p-autoComplete>
+                </div>
                 <div *ngIf="submitted && f['patientId'].errors" class="invalid-feedback">
                     <div *ngIf="f['patientId'].errors['required']">Patient Id is required</div>
                 </div>
             </div>
 
             <div formArrayName="testItems">
-                <div class="justify-content-center">
-                    <hr class="col-12">
-                </div>
+                
                 <div *ngFor="let item of testItems.controls ; let i = index" class="my-4">
                     <div [formGroupName]='i' class="flex justify-between items-center flex-col lg:flex-row">
                         <div class="d-flex justify-content-center flex-column w-full md:pr-2">
                             <label for="descriptionDetail">Lab Template</label>
-                            <select id="descriptionDetail" class="form-select"
+                            <!-- <select id="descriptionDetail" class="form-select"
                                 [disabled]="!descriptions || !descriptions.length" formControlName="testId" #description
                                 (change)="onDescriptionSelect(i, description.value)" required>
                                 <option [defaultSelected]="true" disabled>Select A Description</option>
                                 <option *ngFor="let drop of tests" [value]="drop.id">
                                     {{drop.name}}</option>
-                            </select>
+                            </select> -->
+                            <div class="d-flex justify-content-center flex-column w-full md:pr-2">
+                                <p-autoComplete [suggestions]="testToView" #description [dropdown]="true" field="name"
+                                (completeMethod)="search($event)" (onSelect)="onDescriptionSelect(i, description.value)"
+                                placeholder="Test Name/Code" dropdownIcon="pi pi-search" [minLength]="1">
+                            </p-autoComplete>
+                            </div>
                             <!-- <div *ngIf="submitted && f['testId'].errors" class="invalid-feedback">
                                 <div *ngIf="f['testId'].errors['required']">Doctor Id is required</div>
                             </div> -->

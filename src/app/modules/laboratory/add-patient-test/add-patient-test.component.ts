@@ -17,6 +17,7 @@ import {
   PatientService,
   TestService,
 } from 'src/app/services';
+import { ILabTest } from 'src/app/models/interfaces/addOrUpdate-test';
 
 @Component({
   selector: 'app-add-patient-test',
@@ -32,9 +33,9 @@ export class AddPatientTestComponent
   addPatientTestForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
   doctors: Array<IDropDown> = [];
-  tests: Array<any> = [];
+  tests: Array<ILabTest> = [];
+  testToView: Array<ILabTest> = [];
   radiology: Array<IDropDown> = [];
-  descriptions: Array<any> = [];
 
   discountTypes = [
     {
@@ -52,7 +53,8 @@ export class AddPatientTestComponent
 
   paymentType: Array<{ id: number, label: string }> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' }, { id: PaymentTypes.Cheque, label: 'Cheque' }]
   testPriority: Array<{ value: string, label: string }> = [{ value: 'Routine', label: 'Routine' }, { value: 'Urgent', label: 'Urgent' }]
-  doctorsToView: Array<IDropDown>=[];
+  doctorsToView: Array<IDropDown> = [];
+  labTest: Array<any> = [];
 
   constructor(
     private readonly patientService: PatientService,
@@ -99,7 +101,7 @@ export class AddPatientTestComponent
   ngOnInit(): void {
     this.getDoctors();
     this.getPatients();
-    this.getTests();
+    // this.getTests();
   }
 
   getDoctors() {
@@ -115,17 +117,15 @@ export class AddPatientTestComponent
   }
 
   getTests() {
-    this.testService
-      .getTests()
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe({
-        next: (x) => {
-          console.log(x);
-          this.tests = x.data;
-          this.descriptions = this.tests;
-        },
-        error: (err) => {},
-      });
+    this.testService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        console.log(x);
+        this.labTest = x.data;
+      },
+      error: (err) => {
+
+      }
+    })
   }
 
   getPatients() {
@@ -140,23 +140,23 @@ export class AddPatientTestComponent
   }
 
   onSearch(event: { query: string }): void {
-    const searchTerm = event.query.trim();
+    const searchTerm = event.query.trim().toLowerCase();
     // if (searchTerm.length >= 3) {
     this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(searchTerm));
     // }
   }
 
-  search(event:any){
+  search(event: any) {
     console.log(event.query);
     const query = event.query.trim().toLowerCase();
-    this.descriptions = this.tests.filter(
+    this.testToView = this.tests.filter(
       (test) =>
         test.name.toLowerCase().includes(query) || // Filter by name
         test.code.toString().includes(query) // Filter by code
     );
   }
 
-  searchDoctor(event:any){
+  onSearchDoctor(event: any) {
     console.log(event.query);
     const query = event.query.trim().toLowerCase();
     this.doctorsToView = this.doctors.filter(
@@ -166,8 +166,8 @@ export class AddPatientTestComponent
   }
 
   onDescriptionSelect(index: number, labTest: any) {
-console.log({index,labTest})
-    let description = this.descriptions.find(x => x.id === labTest.id);
+    console.log({ index, labTest })
+    let description = this.testToView.find(x => x.id === labTest.id);
     this.invoiceItems.at(index).get('testId')?.setValue(description?.id);
     this.invoiceItems.at(index).get('paidAmount')?.setValue(description?.price);
     this.invoiceItems
@@ -181,30 +181,32 @@ console.log({index,labTest})
     this.calculate();
   }
 
-  onPatientSelection(selectPatient:IDropDown){
-    console.log('selectPatient',selectPatient);
-    this.testService.getTestByPatientid(selectPatient.id).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next:(x)=>{
-        console.log({x});
+  onPatientSelection(selectPatient:string) {
+    console.log('selectPatient', selectPatient);
+    this.addPatientTestForm.get('patientId')?.setValue(selectPatient);
+    this.testService.getTestByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.tests = x.length ? x : this.labTest;
+
+        console.log('this.descriptions', this.testToView);
+        console.log({ x });
       }
     })
   }
 
 
+  onDoctorSelection(doctorId:string){
+    this.addPatientTestForm.get('doctorId')?.setValue(doctorId);
 
-  patientSelect(index: number, patient: any) {
-    console.log('patient', patient);
-    // this.invoiceItems.at(index).get('patientId')?.setValue(description?.price);
-
-    this.addPatientTestForm.get('patientId')?.setValue(patient.id);
-    this.addPatientTestForm.get('patientName')?.setValue(patient.name);
   }
 
   searchPatient(query: string) {
     let text = query.toLowerCase();
-    this.patientsToShow = this.patients.filter((x) =>
-      x.name.toLowerCase().includes(text)
-    );
+    if(text.length>=3){
+      this.patientsToShow = this.patients.filter((x) =>
+        x.name.toLowerCase().includes(text)
+      );
+    }
   }
 
   addToken() {
@@ -283,8 +285,39 @@ console.log({index,labTest})
     this.calculate();
   }
 
-  calculate(index?: number) {
+  // calculate(index?: number) {
+  //   let totalDiscount = this.addPatientTestForm.get('totalDiscount');
+  //   let amountPaid = this.addPatientTestForm.get('amountPaid');
+  //   let grandTotal = this.addPatientTestForm.get('grandTotal');
+  //   let totalGrandTotal = 0;
+  //   let totalDiscountTotal = 0;
+  //   for (let invItem of this.invoiceItems.controls) {
+  //     let amount = invItem.get('paidAmount')?.value;
+  //     let discountType = invItem.get('discountType')?.value;
+  //     console.log(discountType);
+  //     let discount =
+  //       !invItem.get('discountAmount')?.value ||
+  //       invItem.get('discountAmount')?.value === 0
+  //         ? 0
+  //         : discountType === 1
+  //         ? invItem.get('discountAmount')?.value
+  //         : (invItem.get('discountAmount')?.value / 100) * amount;
+  //     totalGrandTotal += amount;
+  //     totalDiscountTotal += discount;
+  //   }
+  //   totalDiscount?.setValue(totalDiscountTotal);
+  //   grandTotal?.setValue(totalGrandTotal - totalDiscountTotal);
+  // }
+
+
+  calculate(totalInput?: boolean) {
+    let totalDiscountType = this.addPatientTestForm.get('totalDiscountType');
     let totalDiscount = this.addPatientTestForm.get('totalDiscount');
+    if (totalDiscount?.value && totalDiscount.value > 0 && totalInput) {
+      for (let invItem of this.invoiceItems.controls) {
+        invItem.get('discountAmount')?.setValue(0);
+      }
+    }
     let amountPaid = this.addPatientTestForm.get('amountPaid');
     let grandTotal = this.addPatientTestForm.get('grandTotal');
     let totalGrandTotal = 0;
@@ -292,7 +325,6 @@ console.log({index,labTest})
     for (let invItem of this.invoiceItems.controls) {
       let amount = invItem.get('paidAmount')?.value;
       let discountType = invItem.get('discountType')?.value;
-      console.log(discountType);
       let discount =
         !invItem.get('discountAmount')?.value ||
         invItem.get('discountAmount')?.value === 0
@@ -303,7 +335,17 @@ console.log({index,labTest})
       totalGrandTotal += amount;
       totalDiscountTotal += discount;
     }
+    console.log(totalDiscount?.value * (totalGrandTotal / 100));
+
+    if (totalDiscount?.value && totalDiscount.value > 0 && totalInput)
+      totalDiscountTotal = totalDiscount.value;
+
     totalDiscount?.setValue(totalDiscountTotal);
-    grandTotal?.setValue(totalGrandTotal - totalDiscountTotal);
+    grandTotal?.setValue(
+      totalGrandTotal -
+        (totalDiscountType?.value === 2
+          ? (totalDiscountTotal / 100) * totalDiscount?.value
+          : totalDiscountTotal)
+    );
   }
 }
