@@ -44,7 +44,7 @@ $HSMS-theme: mat.define-light-theme((
 // that you are using.
 @include mat.all-component-themes($HSMS-theme);
 
-/* You can add global styles to this file, and also import other style files */
+// / You can add global styles to this file, and also import other style files /
 
 @import 'src/variable.scss';
 
@@ -101,8 +101,27 @@ outline: 1px solid rgba(112, 128, 144, 0);
 p-autocomplete{
   width: 100%;
   display: grid;
+
+  .p-button{
+    background: $ctrlbg;
+    color: $bluetheme-textColor;
+    border: 0;
+    &:hover{
+      background: $ctrlbg !important;
+    }
+  }
 }
-.p-button{
+
+p-autocomplete{
+  display: block;
+  height: 36px;
+  .p-autocomplete.p-component.p-autocomplete-dd{
+    height: 100%;
+    width: 100%;
+  }
+}
+
+button{
   background: $btnbg;
   color: $bluetheme-textColor;
   border: 0;
@@ -117,6 +136,15 @@ p-calendar{
   .p-calendar.p-calendar-w-btn{
     height: 100%;
     width: 100%;
+  }
+
+  .p-button{
+    background: $ctrlbg;
+    color: $bluetheme-textColor;
+    border: 0;
+    &:hover{
+      background: $ctrlbg !important;
+    }
   }
 }
 
