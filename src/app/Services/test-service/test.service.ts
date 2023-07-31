@@ -63,4 +63,8 @@ export class TestService extends HttpService {
   generateTestSampleID(sampleIdPayload:any){
     return this.get(`${BaseEndPoints.PatientSample}/generate/sampleid?patientId=${sampleIdPayload.patientId}&testTypeId=${sampleIdPayload.testCategoryId}`);
   }
+
+  addPatientTestSamples(fetchRequest: IFetchRequest = {}){
+    return this.post(`${BaseEndPoints.PatientSample}/all`, fetchRequest);
+  }
 }

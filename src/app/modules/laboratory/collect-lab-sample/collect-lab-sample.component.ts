@@ -40,9 +40,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     super();
     this.invoiceDescriptionForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
-      description: new FormControl<number | null>(null, [Validators.required]),
       sample: new FormControl<number | null>(null),
-      // status: new FormControl<string | null>(null, [Validators.required]),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
     });
     this.collectionForm = this.fb.group({
@@ -154,13 +152,6 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     // }
   }
 
-  // patientSelect(patient: any) {
-  //   console.log('patient', patient, this.descriptions);
-  //   this.tests = this.patients.filter((x) => x.patientId == patient);
-  //   console.log('this.tests', this.tests);
-  //   console.log('this.tests', this.tests);
-  // }
-
   get f() {
     return this.collectionForm.controls;
   }
@@ -168,24 +159,19 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   addTestSample() {
     this.submitted = true;
     console.log(this.collectionForm.value);
-    if (this.collectionForm.invalid) {
-      return;
-    }
-    // let tokenpayload = {
-    //   patientId: this.collectionForm.controls['patientId'].value,
-    //   doctorId: this.collectionForm.controls['doctorId'].value,
-    //   patientCheckedIn: this.collectionForm.controls['patientCheckedIn'].value ? this.collectionForm.controls['patientCheckedIn'].value : true
+    // if (this.collectionForm.invalid) {
+    //   return;
     // }
-    // console.log('tokenpayload',tokenpayload);
-    // this.tokenService.addToken(tokenpayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
-    //   next: (x) => {
-    //     console.log(x);
+    this.testService.addPatientTestSamples(this.collectionForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.alertService.success('Test Sample added successfully', 'Success');
+        console.log(x);
 
-    //   },
-    //   error: (err) => {
+      },
+      error: (err) => {
 
-    //   }
-    // })
+      }
+    })
   }
 
   getInvoice() {
