@@ -1,15 +1,21 @@
-import { Component, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { IDropDown } from 'src/app/models/interfaces/Dropdown';
-import { PatientService } from 'src/app/Services/patient/patient.service';
-import { TestService } from 'src/app/Services/test-service/test.service';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { Component } from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { takeUntil } from 'rxjs';
+import { PatientService } from 'src/app/services';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { TestService } from 'src/app/services';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 
 @Component({
   selector: 'app-collect-lab-sample',
   templateUrl: './collect-lab-sample.component.html',
-  styleUrls: ['./collect-lab-sample.component.scss']
+  styleUrls: ['./collect-lab-sample.component.scss'],
 })
 export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   collectionForm!: FormGroup;
@@ -19,13 +25,17 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   patients: Array<any> = [];
   patientsToShow: Array<any> = [];
 
-  testStatus: Array<{ value: string, label: string }> = [{ value: 'Collected', label: 'Collected' }, { value: 'Pending', label: 'Pending' }]
+  testStatus: Array<{ value: string; label: string }> = [
+    { value: 'Collected', label: 'Collected' },
+    { value: 'Pending', label: 'Pending' },
+  ];
   submitted = false;
 
   constructor(
     private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
-    private readonly testService: TestService) {
+    private readonly testService: TestService
+  ) {
     super();
     this.invoiceDescriptionForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
@@ -33,19 +43,19 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
       sample: new FormControl<number | null>(null),
       status: new FormControl<string | null>(null, [Validators.required]),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
-    })
+    });
     this.collectionForm = this.fb.group({
       patientId: new FormControl<string | null>(null, [Validators.required]),
-      testItems: this.fb.array([this.invoiceDescriptionForm], Validators.required),
+      testItems: this.fb.array(
+        [this.invoiceDescriptionForm],
+        Validators.required
+      ),
     });
-
   }
 
   get testItems(): FormArray {
     return this.collectionForm.get('testItems') as FormArray;
   }
-
-
 
   ngOnInit(): void {
     this.getPatients();
@@ -53,43 +63,46 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   }
 
   getTests() {
-    this.testService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        console.log(x);
-        // this.tests = x;
-        console.log('this.tests', this.tests);
-        this.descriptions = x;
-      },
-      error: (err) => {
-
-      }
-    })
+    this.testService
+      .getTests()
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe({
+        next: (x) => {
+          console.log(x);
+          // this.tests = x;
+          console.log('this.tests', this.tests);
+          this.descriptions = x;
+        },
+        error: (err) => {},
+      });
   }
 
   getPatients() {
-    this.testService.getTestPatientDropdown().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.patients = x;
-        this.patientsToShow = this.getAutoCompleteValueAndObject(x);
-      },
-      error: (err) => {
-
-      }
-    })
+    this.testService
+      .getTestPatientDropdown()
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe({
+        next: (x) => {
+          this.patients = x;
+          this.patientsToShow = this.getAutoCompleteValueAndObject(x);
+        },
+        error: (err) => {},
+      });
   }
 
   onDescriptionSelect(index: number, descriptionId: string) {
-    let description = this.descriptions.find(x => x.id === descriptionId);
-    this.testItems.at(index).get('description')?.setValue(description?.description);
+    let description = this.descriptions.find((x) => x.id === descriptionId);
+    this.testItems
+      .at(index)
+      .get('description')
+      ?.setValue(description?.description);
     this.testItems.at(index).get('sample')?.setValue(description?.testSample);
   }
 
-
-
   patientSelect(patient: any) {
     console.log('patient', patient, this.descriptions);
-    this.tests = this.patients.filter(x => x.patientId == patient);
-    console.log('this.tests',this.tests);
+    this.tests = this.patients.filter((x) => x.patientId == patient);
+    console.log('this.tests', this.tests);
     console.log('this.tests', this.tests);
   }
 
@@ -97,24 +110,25 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     let result: any[] = [];
     let uniqueIds = new Set();
     arr.forEach((element) => {
-        if (!uniqueIds.has(element.patientId)) {
-            uniqueIds.add(element.patientId);
-            let temp = { id: element.patientId, name: element.patientName };
-            result.push(temp);
-        }
+      if (!uniqueIds.has(element.patientId)) {
+        uniqueIds.add(element.patientId);
+        let temp = { id: element.patientId, name: element.patientName };
+        result.push(temp);
+      }
     });
 
     return result;
-}
+  }
 
-
-  get f() { return this.collectionForm.controls; }
+  get f() {
+    return this.collectionForm.controls;
+  }
 
   addTestSample() {
     this.submitted = true;
-    console.log(this.collectionForm.value)
+    console.log(this.collectionForm.value);
     if (this.collectionForm.invalid) {
-      return
+      return;
     }
     // let tokenpayload = {
     //   patientId: this.collectionForm.controls['patientId'].value,
@@ -126,13 +140,11 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     //   next: (x) => {
     //     console.log(x);
 
-
     //   },
     //   error: (err) => {
 
     //   }
     // })
-
   }
 
   getInvoice() {
@@ -144,10 +156,10 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
           status: x.status,
           sample: x.sample,
           sampleId: x.sampleId,
-        }
-        return invoiceItem
+        };
+        return invoiceItem;
       }),
-    }
+    };
     return invoice;
   }
 
@@ -158,8 +170,8 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
       sample: new FormControl<string | null>(null, [Validators.required]),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
-    })
-    this.testItems.push(newForm)
+    });
+    this.testItems.push(newForm);
   }
 
   removeinvoiceItem(index: number) {
@@ -170,7 +182,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
       status: new FormControl<string | null>(null, [Validators.required]),
       sample: new FormControl<string | null>(null, [Validators.required]),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
-    })
+    });
     if (this.testItems.length < 1) this.testItems.push(newForm);
   }
 }

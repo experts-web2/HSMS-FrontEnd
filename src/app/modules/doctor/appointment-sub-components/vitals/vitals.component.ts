@@ -1,23 +1,28 @@
-import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs';
-import { AlertService } from 'src/app/Services/alert/alert.service';
-import { LoaderService } from 'src/app/Services/loader/loader.service';
-import { VitalService } from 'src/app/Services/vital.service';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { AlertService, LoaderService, VitalService } from 'src/app/services';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { IVitalRequest } from 'src/app/models/interfaces/vitalsRequest';
 import { IVital } from 'src/app/models/vitals';
 
-
 @Component({
   selector: 'app-vitals',
   templateUrl: './vitals.component.html',
-  styleUrls: ['./vitals.component.scss']
+  styleUrls: ['./vitals.component.scss'],
 })
-export class VitalsComponent extends SubscriptionManagmentDirective implements OnInit {
-
+export class VitalsComponent
+  extends SubscriptionManagmentDirective
+  implements OnInit
+{
   @Input() tokenVitals!: ITokenVitals;
   @Input() token!: IToken;
 
@@ -34,7 +39,11 @@ export class VitalsComponent extends SubscriptionManagmentDirective implements O
     { name: '11/07/2023', id: '11/07/2023' },
   ];
 
-  constructor(private readonly alertService: AlertService, private readonly vitalService: VitalService,private readonly loaderService:LoaderService) {
+  constructor(
+    private readonly alertService: AlertService,
+    private readonly vitalService: VitalService,
+    private readonly loaderService: LoaderService
+  ) {
     super();
     this.vitalForm = new FormGroup({
       pulseHeartRate: new FormControl<number | null>(null),
@@ -48,8 +57,8 @@ export class VitalsComponent extends SubscriptionManagmentDirective implements O
       bodyMassIndex: new FormControl<number | null>(null),
       oxygenSaturation: new FormControl<number | null>(null),
       bodySurfaceArea: new FormControl<number | null>(null),
-      reason: new FormControl<string | null>(null)
-    })
+      reason: new FormControl<string | null>(null),
+    });
   }
 
   get f() { return this.vitalForm.controls; }
@@ -126,11 +135,14 @@ export class VitalsComponent extends SubscriptionManagmentDirective implements O
   }
 
   getVitalsHistoryDropDown() {
-    this.vitalService.getVitalsHistoryDropDown(this.token.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.historyDropDown = x;
-      }
-    })
+    this.vitalService
+      .getVitalsHistoryDropDown(this.token.patientId)
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe({
+        next: (x) => {
+          this.historyDropDown = x;
+        },
+      });
   }
 
   getVitalsById(vitalsId: string){

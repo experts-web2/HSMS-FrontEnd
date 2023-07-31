@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { FormRoutingModule } from './form-routing.module';
 import { PatientFormComponent } from './patient-form/patient-form.component';
 import { InvoiceFormComponent } from './invoice-form/invoice-form.component';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
-import { SharedModule } from 'src/app/shared-module/shared-module';
 import { CameraModule } from '../camera/camera.module';
-import { PatientService } from '../../Services/patient/patient.service';
-
+import { PatientService } from 'src/app/services';
+import { MaterialModule } from 'src/app/shared/modules';
+import { PrimeNgModule } from 'src/app/shared/modules';
 
 @NgModule({
   declarations: [
@@ -18,8 +17,9 @@ import { PatientService } from '../../Services/patient/patient.service';
   imports: [
     CommonModule,
     FormRoutingModule,
-    SharedModule,
+    MaterialModule,
     CameraModule,
+    PrimeNgModule
     
   ],
   providers: [{

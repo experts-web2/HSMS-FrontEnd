@@ -1,41 +1,43 @@
+@import 'src/variable.scss';
+
 .navbar{
     position: fixed;
     height: 56px;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
     align-items: center;
+    grid-template-columns: 150px calc(100% - 200px);
+    gap: 50px;
     background-color: #fff;
     padding: 0px 10px !important;
     z-index: 999;
-    box-shadow: 0px 1px 1px 0px #bfb9b9;
+    box-shadow: 0 0 5px rgba(23, 23, 32, 0.1), 0 0 15px rgba(23, 23, 32, 0.1);
 }
 .Title{
     font-size: 50px;
     color: #acb0bd;
     
 }
+
 .navButton{
-    background-color: #fff;
-    border: #fff;
-    color: black;
-    border-radius: 0px;
-    height: 56px;
-    padding: 17px 6px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     white-space: nowrap;
+    font-size: 16px;
+    height: 56px;
 }
 
     .menu-active{
-        color: #11438F;
-        border-bottom: 2px solid #11438F;
+        color: $bluetheme-Txt;
+        border-bottom: 2px solid $bluetheme-Border;
     }
 .outlet{
     padding-top: 56px;
 }
-.arrow-height{
-    height: 17px;
-}
+// .arrow-height{
+//     height: 17px;
+// }
 .menu-items-width{
     max-width: 35%;
 }
@@ -45,25 +47,25 @@
 }
 .search-Field{
     margin-left: 20px;
+    border-radius: 4px;
+    border: 1px solid $blue-theme;
     .search-icon{
         top: 22%;
         left: 5%;
-        color: #11438F;
+        color: $blue-theme;
     }
     .search-input{
         height: 40px;
         width: 250px;
-        border-radius: 4px;
         outline: none;
-        &::placeholder{
-            padding-left: 40px;
-        }
+        padding-left: 40px;
+        border-radius: 4px;
     }
 }
 .user-name{
     padding: 7px;
     border-radius: 50%;
-    background: #11438F;
+    background: $blue-theme;
     color: rgb(255,255,255);
     font-weight: 600;
 }
@@ -74,11 +76,11 @@
     overflow: hidden;
 }
 .creat-drop{
-    background-color: #11438F; 
-    max-height: 40px;
-    padding: 8px 25px;
+    background-color: $btnbg; 
     border-radius: 4px;
-    padding: 8px 15px;
+    padding: 9px 15px;
+    display: flex;
+    align-items: center;
 }
 .toggle-btn{
     display: none;

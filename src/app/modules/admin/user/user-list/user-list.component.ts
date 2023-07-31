@@ -1,17 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Table } from 'primeng/table';
-import { UserService } from 'src/app/Services/user.service';
+import { AlertService, UserService } from 'src/app/services';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { UserStateService } from 'src/app/State/user/user.service';
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
 import { TableColumnFilterTypes } from 'src/app/constants/enums/table-column-filterTypes';
 import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
-import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { IUser } from 'src/app/models/interfaces/user';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { AlertService } from 'src/app/Services/alert/alert.service';
 import { UserFormComponent } from '../user-form/user-form.component';
-
 
 @Component({
   selector: 'app-user-list',

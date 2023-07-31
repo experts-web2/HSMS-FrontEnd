@@ -1,22 +1,29 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { takeUntil } from 'rxjs';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { UserStateService } from 'src/app/State/user/user.service';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequest';
-import { PrescriptionService } from '../../../../Services/prescription.service';
 import { IToken } from 'src/app/models/interfaces/Token';
-import { IDropDown } from 'src/app/models/interfaces/Dropdown';
-import { AlertService } from 'src/app/Services/alert/alert.service';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
-import { takeUntil } from 'rxjs';
+import { AlertService, PrescriptionService } from 'src/app/services';
 import { IPrescription } from 'src/app/models/interfaces/Prescription';
 
 @Component({
   selector: 'app-prescription',
   templateUrl: './prescription.component.html',
-  styleUrls: ['./prescription.component.scss']
+  styleUrls: ['./prescription.component.scss'],
 })
-export class PrescriptionComponent extends SubscriptionManagmentDirective implements OnInit {
+export class PrescriptionComponent
+  extends SubscriptionManagmentDirective
+  implements OnInit
+{
   @Input() token!: IToken;
 
   doctorId!: string;
@@ -30,11 +37,14 @@ export class PrescriptionComponent extends SubscriptionManagmentDirective implem
 
   constructor(private readonly fb: FormBuilder, private readonly userStateService: UserStateService, private readonly prescriptionService: PrescriptionService, private readonly alertService: AlertService) {
     super();
-    this.userStateService.getUserState().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.loggedInDoctor = x;
-      }
-    })
+    this.userStateService
+      .getUserState()
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe({
+        next: (x) => {
+          this.loggedInDoctor = x;
+        },
+      });
 
     this.prescriptionForm = this.fb.group({
       doctorId: new FormControl<string | null>(null, [Validators.required]),
@@ -46,8 +56,8 @@ export class PrescriptionComponent extends SubscriptionManagmentDirective implem
       clinicNotes: new FormControl<string | null>(null),
       advice: new FormControl<string | null>(null),
       investigation: new FormControl<string | null>(null),
-      followUpDate: new FormControl<Date | null>(null)
-      // procedure: new FormControl<Procedure | null>(null) 
+      followUpDate: new FormControl<Date | null>(null),
+      // procedure: new FormControl<Procedure | null>(null)
     });
   }
 

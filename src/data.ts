@@ -86,4 +86,38 @@ export class patientData {
             }
         ];
     }
+    static getPatients() {
+        return [
+                {
+                    id: "d878af86-ee5e-4fe1-aa33-33fc2535b0ba",
+                    name: "Furqan Majeed"
+                },
+                {
+                    id: "75c6c277-4e77-4c8b-b47e-b0001fbeaf5f",
+                    name: "Inaam"
+                },
+                {
+                    id: "c291f0b0-3709-4fa5-b08a-f5500ee31226",
+                    name: "Sharjeel"
+                }
+            
+        ];
+    }
+    static getDoctors() {
+        return [
+                {
+                    id: "d878af86-ee5e-4fe1-aa33-33fc2535b0ba",
+                    name: "Furqan Majeed"
+                },
+                {
+                    id: "75c6c277-4e77-4c8b-b47e-b0001fbeaf5f",
+                    name: "Inaam"
+                },
+                {
+                    id: "c291f0b0-3709-4fa5-b08a-f5500ee31226",
+                    name: "Sharjeel"
+                }
+            
+        ];
+    }
 }

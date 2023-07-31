@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from './httpService/http.service';
+import { HttpService } from 'src/app/services';
 import { HttpClient } from '@angular/common/http';
-import { BaseEndPoints } from '../constants/enums/base-end-points';
-import { ILabOrderRequest } from '../models/interfaces/LabOrder-Request';
 import { Observable } from 'rxjs';
+import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
+import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
 
 
 @Injectable({

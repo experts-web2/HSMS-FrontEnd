@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from './httpService/http.service';
+import { HttpService } from 'src/app/services';
 import { HttpClient } from '@angular/common/http';
-import { IAddOrUpdateToken } from '../models/interfaces/addOrUpdate-Token';
+import { IAddOrUpdateToken } from '../../models/interfaces/addOrUpdate-Token';
 import { Observable } from 'rxjs';
-import { BaseEndPoints } from '../constants/enums/base-end-points';
-import { IToken } from '../models/interfaces/Token';
-import { IFetchRequest } from '../models/interfaces/fetchTableRequest';
-import { IPagedListRequest } from '../models/interfaces/pagedListRequest';
-import { IDataSourceResponse } from '../models/interfaces/DataSourceResponse';
+import { BaseEndPoints } from '../../constants/enums/base-end-points';
+import { IToken } from '../../models/interfaces/Token';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { IDataSourceResponse } from 'src/app/models/interfaces/DataSourceResponse';
 
 @Injectable({
   providedIn: 'root'

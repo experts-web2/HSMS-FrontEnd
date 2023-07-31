@@ -1,21 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { takeUntil } from 'rxjs';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { UserStateService } from 'src/app/State/user/user.service';
 import { MedicationDosageEnum, MedicationDosages } from 'src/app/constants/Constants/MedicationDosage';
 import { MedicationFrequencies, MedicationFrequencyEnum } from 'src/app/constants/Constants/MedicationFrequency';
-import { MedicationRouteEnum, MedicationRoutes } from 'src/app/constants/Constants/MedicationRoute';
-import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
-import { MedicationDurationEnum, MedicationDurations } from '../../../../constants/Constants/MedicationDuration';
 import { MedicationInstructionEnum, MedicationInstructions } from 'src/app/constants/Constants/MedicationInstructions';
-import { MedicineService } from 'src/app/Services/medicine-service/medicine.service';
+import { MedicationRouteEnum, MedicationRoutes } from 'src/app/constants/Constants/MedicationRoute';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IMedicationDetail, IMedicationRequest } from 'src/app/models/interfaces/MedicationRequest';
-import { MedicationService } from 'src/app/Services/medication.service';
-import { IMedicinerequest } from '../../../../models/interfaces/medicine-Request';
-import { AlertService } from 'src/app/Services/alert/alert.service';
 import { IToken } from 'src/app/models/interfaces/Token';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
-import { takeUntil } from 'rxjs';
+import { AlertService, MedicationService, MedicineService } from 'src/app/services';
+import { MedicationDurations } from '../../../../constants/Constants/MedicationDuration';
 
 @Component({
   selector: 'app-medication',

@@ -1,11 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs';
-import { AlertService } from 'src/app/Services/alert/alert.service';
-import { LabOrderService } from 'src/app/Services/lab-order.service';
-import { TestService } from 'src/app/Services/test-service/test.service';
-import { TestCategoryService } from 'src/app/Services/testCategory-service/test-category.service';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { AlertService, LabOrderService, TestCategoryService, TestService } from 'src/app/services';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { Roles } from 'src/app/constants/enums/Roles-Enum';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';

@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpService } from './httpService/http.service';
 import { Observable } from 'rxjs';
-import { BaseEndPoints } from '../constants/enums/base-end-points';
-import { IAddOrUpdateDoctor, IAddOrUpdateDoctorRequest } from '../models/interfaces/addOrUpdate-Doctor';
-import { IFetchRequest } from '../models/interfaces/fetchTableRequest';
-import { IDropDown } from '../models/interfaces/Dropdown';
+import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { IAddOrUpdateDoctorRequest } from 'src/app/models/interfaces/addOrUpdate-Doctor';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { HttpService } from '../http/http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,21 +19,21 @@ export class DoctorService extends HttpService {
    }
 
    addDoctor(data: IAddOrUpdateDoctorRequest): Observable<any>{
-    return super.post(`${this.baseEndPoints}/add`, data);
+    return this.post(`${this.baseEndPoints}/add`, data);
   }
 
 
   getDoctors(fetchRequest: IFetchRequest = {}): Observable<any>{
-    return super.post(`${this.baseEndPoints}/all`, fetchRequest);
+    return this.post(`${this.baseEndPoints}/all`, fetchRequest);
   }
 
   getDoctorsDropDown(): Observable<any>{
-    return super.get(`${this.baseEndPoints}/dropdown`);
+    return this.get(`${this.baseEndPoints}/dropdown`);
   }
 
 
   updateDoctor(data: IAddOrUpdateDoctorRequest,id:string): Observable<any>{
-    return super.put(`${this.baseEndPoints}/update/${id}`, data);
+    return this.put(`${this.baseEndPoints}/update/${id}`, data);
   }
 
   deleteDoctor(doctor: any){
@@ -41,7 +41,7 @@ export class DoctorService extends HttpService {
   }
 
   isEmailInUse(email: string): Observable<boolean>{
-    return super.get(`${BaseEndPoints.User}/checkemail/${email}`);
+    return this.get(`${BaseEndPoints.User}/checkemail/${email}`);
   }
 
   getDoctorDropDown():Observable<Array<IDropDown>>{
