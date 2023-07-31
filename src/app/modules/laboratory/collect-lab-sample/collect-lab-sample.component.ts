@@ -7,10 +7,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { takeUntil } from 'rxjs';
-import { PatientService } from 'src/app/services';
+import { AlertService, PatientService, TestCategoryService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { TestService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
+import { ILabTest } from 'src/app/models/interfaces/addOrUpdate-test';
 
 @Component({
   selector: 'app-collect-lab-sample',
@@ -20,28 +21,26 @@ import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscri
 export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   collectionForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
-  tests: Array<IDropDown> = [];
-  descriptions: Array<any> = [];
-  patients: Array<any> = [];
-  patientsToShow: Array<any> = [];
-
-  testStatus: Array<{ value: string; label: string }> = [
-    { value: 'Collected', label: 'Collected' },
-    { value: 'Pending', label: 'Pending' },
-  ];
+  tests: Array<ILabTest> = [];
+  testToView: Array<ILabTest> = [];
+  patients: Array<IDropDown> = [];
+  testCategory: Array<IDropDown> = [];
+  patientsToShow: Array<IDropDown> = [];
   submitted = false;
+  category='';
+  testCategoryToShow: Array<IDropDown>=[];
 
   constructor(
     private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
-    private readonly testService: TestService
+    private readonly testService: TestService,
+    private readonly testCategoryService:TestCategoryService,
+    private readonly alertService: AlertService,
   ) {
     super();
     this.invoiceDescriptionForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
-      description: new FormControl<number | null>(null, [Validators.required]),
       sample: new FormControl<number | null>(null),
-      status: new FormControl<string | null>(null, [Validators.required]),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
     });
     this.collectionForm = this.fb.group({
@@ -59,65 +58,98 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
   ngOnInit(): void {
     this.getPatients();
-    this.getTests();
+    this.getTestCategory();
   }
 
-  getTests() {
-    this.testService
-      .getTests()
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe({
-        next: (x) => {
-          console.log(x);
-          // this.tests = x;
-          console.log('this.tests', this.tests);
-          this.descriptions = x;
-        },
-        error: (err) => {},
-      });
-  }
 
   getPatients() {
-    this.testService
-      .getTestPatientDropdown()
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe({
-        next: (x) => {
-          this.patients = x;
-          this.patientsToShow = this.getAutoCompleteValueAndObject(x);
-        },
-        error: (err) => {},
-      });
+    this.patientService.getPatientsDropdown().pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.patients = x;
+        console.log('this.patients',this.patients);
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+  
+  getTestCategory() {
+    this.testCategoryService.getTestCategoryList().pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.testCategory = x;
+        console.log('this.patients',this.testCategory);
+      },
+      error: (err) => {
+
+      }
+    })
   }
 
-  onDescriptionSelect(index: number, descriptionId: string) {
-    let description = this.descriptions.find((x) => x.id === descriptionId);
-    this.testItems
-      .at(index)
-      .get('description')
-      ?.setValue(description?.description);
+  selectCategory(categoryId:string){
+    console.log({categoryId})
+    this.category = categoryId;
+  }
+
+  GenerateSampleID(){
+    let payload = {
+      patientId: this.collectionForm.controls['patientId'].value,
+      testCategoryId: this.category
+    }
+
+    this.testService.generateTestSampleID(payload).subscribe(
+      {
+          next: (x) => {
+            console.log(x);
+            this.alertService.success('Sample Id Generate successfully', 'Success');
+          },
+          error: (err) => {
+            this.alertService.error('Something went wrong while generating sample id.', 'Error');
+          }
+        }
+    )   
+  }
+
+
+  onDescriptionSelect(index: number, labTest: any) {
+    console.log(labTest)
+    let description = this.testToView.find((x) => x.id === labTest.id);
+    this.testItems.at(index).get('testId')?.setValue(description?.id);
     this.testItems.at(index).get('sample')?.setValue(description?.testSample);
   }
 
-  patientSelect(patient: any) {
-    console.log('patient', patient, this.descriptions);
-    this.tests = this.patients.filter((x) => x.patientId == patient);
-    console.log('this.tests', this.tests);
-    console.log('this.tests', this.tests);
+  search(event: any) {
+    console.log(event.query);
+    const query = event.query.trim().toLowerCase();
+    this.testToView = this.tests.filter(
+      (test) =>
+        test.name.toLowerCase().includes(query) || // Filter by name
+        test.code.toString().includes(query) // Filter by code
+    );
   }
 
-  getAutoCompleteValueAndObject(arr: any[]) {
-    let result: any[] = [];
-    let uniqueIds = new Set();
-    arr.forEach((element) => {
-      if (!uniqueIds.has(element.patientId)) {
-        uniqueIds.add(element.patientId);
-        let temp = { id: element.patientId, name: element.patientName };
-        result.push(temp);
-      }
-    });
 
-    return result;
+  onPatientSelection(selectPatient:string) {
+    this.collectionForm.get('patientId')?.setValue(selectPatient);
+    this.testService.getTestByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.tests = x;
+
+      }
+    })
+  }
+
+  onSearch(event: { query: string }): void {
+    const searchTerm = event.query.trim();
+    // if (searchTerm.length >= 3) {
+    this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(searchTerm));
+    // }
+  }
+  onSearchCategory(event: { query: string }): void {
+    const searchTerm = event.query.trim();
+    // if (searchTerm.length >= 3) {
+    this.testCategoryToShow = this.testCategory.filter(x => x.name.toLowerCase().includes(searchTerm));
+    // }
   }
 
   get f() {
@@ -127,24 +159,19 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   addTestSample() {
     this.submitted = true;
     console.log(this.collectionForm.value);
-    if (this.collectionForm.invalid) {
-      return;
-    }
-    // let tokenpayload = {
-    //   patientId: this.collectionForm.controls['patientId'].value,
-    //   doctorId: this.collectionForm.controls['doctorId'].value,
-    //   patientCheckedIn: this.collectionForm.controls['patientCheckedIn'].value ? this.collectionForm.controls['patientCheckedIn'].value : true
+    // if (this.collectionForm.invalid) {
+    //   return;
     // }
-    // console.log('tokenpayload',tokenpayload);
-    // this.tokenService.addToken(tokenpayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
-    //   next: (x) => {
-    //     console.log(x);
+    this.testService.addPatientTestSamples(this.collectionForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.alertService.success('Test Sample added successfully', 'Success');
+        console.log(x);
 
-    //   },
-    //   error: (err) => {
+      },
+      error: (err) => {
 
-    //   }
-    // })
+      }
+    })
   }
 
   getInvoice() {
@@ -152,8 +179,6 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
       testItems: this.testItems.value.map((x: any) => {
         let invoiceItem = {
           testId: x.testId,
-          description: x.description,
-          status: x.status,
           sample: x.sample,
           sampleId: x.sampleId,
         };
@@ -165,8 +190,6 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
   addNewInvoiceItem() {
     let newForm = this.fb.group({
-      description: new FormControl<string | null>(null, [Validators.required]),
-      status: new FormControl<string | null>(null, [Validators.required]),
       sample: new FormControl<string | null>(null, [Validators.required]),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
@@ -177,9 +200,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   removeinvoiceItem(index: number) {
     this.testItems.removeAt(index);
     let newForm = this.fb.group({
-      description: new FormControl<number | null>(null, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
-      status: new FormControl<string | null>(null, [Validators.required]),
       sample: new FormControl<string | null>(null, [Validators.required]),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
     });
