@@ -21,6 +21,10 @@ export class LabOrderService extends HttpService{
     return this.post(`${this.baseEndPoint}/add`, LabOrder);
   }
 
+  getLabOrderByTokenId(tokenId: string){
+    return this.get(`${this.baseEndPoint}/getbytokenid/${tokenId}`)
+  }
+
 //   getMedicationHistoryDropDown(patientId: string): Observable<Array<IDropDown>>{
 //     return this.get(`${this.baseEndPoint}/dropdownbypatientid/${patientId}`);
 //   }

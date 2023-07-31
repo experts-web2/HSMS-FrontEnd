@@ -60,9 +60,9 @@ export class SignInComponent implements OnInit, OnDestroy {
     this.authService.login(loginPayload).subscribe({
       next: (x: any) => {
         let userToState: ILogedInUser = {
-          ...x.user,
-          token: x.accessToken,
-        };
+          ...x.user, token: x.accessToken,
+          entityIds: x.entityIds
+        }
         this.userStateService.setLogedInUser(userToState);
         this.alertService.success('Logged In Successfully.', 'Success');
         this.router.navigate(['/dashboard']);

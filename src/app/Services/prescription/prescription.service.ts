@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequest';
+import { IPrescription } from 'src/app/models/interfaces/Prescription';
 
 
 @Injectable({
@@ -20,8 +21,12 @@ export class PrescriptionService extends HttpService {
     return this.post(`${BaseEndPoints.Prescription}/add`, prescription);
   }
 
-  getPrescriptionById(id: string): Observable<any>{
+  getPrescriptionById(id: string): Observable<IPrescription>{
     return this.get(`${BaseEndPoints.Prescription}/byid/${id}`)
+  }
+
+  getPrescriptionByTokenId(tokenId: string): Observable<IPrescription>{
+    return this.get(`${BaseEndPoints.Prescription}/getbytokenid/${tokenId}`)
   }
 
   updatePrescriptionById(id: string, prescription: IPrescriptionRequest): Observable<any>{

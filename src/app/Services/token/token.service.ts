@@ -5,6 +5,8 @@ import { IAddOrUpdateToken } from '../../models/interfaces/addOrUpdate-Token';
 import { Observable } from 'rxjs';
 import { BaseEndPoints } from '../../constants/enums/base-end-points';
 import { IToken } from '../../models/interfaces/Token';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { IDataSourceResponse } from 'src/app/models/interfaces/DataSourceResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +23,6 @@ export class TokenService extends HttpService{
   addToken(token: IAddOrUpdateToken): Observable<IToken>{
     return this.post(`${this.baseEndPoint}/add`, token);
   }
-  addPatientTest(token: any): Observable<IToken>{
-    return this.post(`${this.baseEndPoint}/add`, token);
-  }
 
   getTokensByViewd(isViewd: boolean): Observable<Array<IToken>>{
     return this.get(`${this.baseEndPoint}/getbyisviewed/${isViewd}`);
@@ -31,6 +30,10 @@ export class TokenService extends HttpService{
 
   getTokenById(tokenId: string): Observable<IToken>{
     return this.get(`${this.baseEndPoint}/byid/${tokenId}`)
+  }
+
+  getAllTokens(fetchRequest: IFetchRequest = {}): Observable<IDataSourceResponse<IToken>>{
+    return this.post(`${this.baseEndPoint}/all`, fetchRequest);
   }
 
   markTokenAsViewd(tokenId: string): Observable<void>{

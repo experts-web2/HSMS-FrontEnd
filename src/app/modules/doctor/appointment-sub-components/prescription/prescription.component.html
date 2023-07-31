@@ -4,6 +4,8 @@
             <option [value]="null" [defaultSelected]="true" disabled>Prescriptions History</option>
             <option *ngFor="let his of historyDropDown" [value]="his.id">{{his.name | date: 'EEE MMM, dd/yyyy'}}</option>
         </select>
+
+        <p-button *ngIf="historyPrescription" label="Curent Prescription" (onClick)="currentPrescription()"></p-button>
     </div>
     <div class="prrescription-input">
         <label htmlFor="medicalHistory">Medical History</label>
@@ -68,7 +70,7 @@
                 <p-calendar id="date" class="datePicker" [showIcon]="true" formControlName="followUpDate"></p-calendar>
         </div>
     </div>
-    <div class="d-flex mt-4">
+    <div class="d-flex mt-4" *ngIf="!historyPrescription">
         <button class="save-button" (click)="savePrescription(true)">Save & Print</button>
         <button class="save-button" (click)="savePrescription()">Save</button>
     </div>
