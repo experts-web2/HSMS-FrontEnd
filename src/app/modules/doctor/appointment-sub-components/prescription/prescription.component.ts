@@ -158,6 +158,8 @@ export class PrescriptionComponent
     console.log(this.prescreptionRequest);
     
     if (this.prescreptionRequest) this.formSetter(this.prescreptionRequest);
+    else this.prescriptionForm.reset();
+    
     this.historyPrescription = null;
   }
 

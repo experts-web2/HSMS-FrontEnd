@@ -162,9 +162,9 @@ export class VitalsComponent
     this.vitalForm.enable({
       onlySelf: true
     });
-    console.log(this.vitalRequest);
     
-    this.formSetter(this.vitalRequest);
+    if (this.vitalRequest) this.formSetter(this.vitalRequest);
+    else this.vitalForm.reset();
     this.historyVital = null;
   }
 

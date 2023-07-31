@@ -9,7 +9,7 @@ import { IAddOrUpdatePatient } from 'src/app/models/interfaces/addOrUodate-Patie
 import { AlertService } from 'src/app/services';
 import { Relations } from 'src/app/constants/Constants/PatientRelatons';
 import { takeUntil } from 'rxjs';
-import { SubscriptionManagmentDirective } from 'src/app/Shared/directive/subscription-managment.directive';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 
 @Component({
   selector: 'app-patient-form',
