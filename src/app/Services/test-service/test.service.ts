@@ -59,4 +59,8 @@ export class TestService extends HttpService {
     return this.get(`${this.baseEndPoint}/getbypatientid/${id}`);
   }
 
+
+  generateTestSampleID(sampleIdPayload:any){
+    return this.get(`${BaseEndPoints.PatientSample}/generate/sampleid?patientId=${sampleIdPayload.patientId}&testTypeId=${sampleIdPayload.testCategoryId}`);
+  }
 }

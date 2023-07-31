@@ -51,7 +51,7 @@ export class AddPatientTestComponent
   patients: Array<IDropDown> = [];
   patientsToShow: Array<IDropDown> = [];
 
-  paymentType: Array<{ id: number, label: string }> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' }, { id: PaymentTypes.Cheque, label: 'Cheque' }]
+  paymentTypes: Array<{ id: number, label: string }> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' }, { id: PaymentTypes.Cheque, label: 'Cheque' }]
   testPriority: Array<{ value: string, label: string }> = [{ value: 'Routine', label: 'Routine' }, { value: 'Urgent', label: 'Urgent' }]
   doctorsToView: Array<IDropDown> = [];
   labTest: Array<any> = [];
@@ -170,14 +170,8 @@ export class AddPatientTestComponent
     let description = this.testToView.find(x => x.id === labTest.id);
     this.invoiceItems.at(index).get('testId')?.setValue(description?.id);
     this.invoiceItems.at(index).get('paidAmount')?.setValue(description?.price);
-    this.invoiceItems
-      .at(index)
-      .get('description')
-      ?.setValue(description?.description);
-    this.invoiceItems
-      .at(index)
-      .get('reportingHours')
-      ?.setValue(description?.reportingTime);
+    this.invoiceItems.at(index).get('description')?.setValue(description?.description);
+    this.invoiceItems.at(index).get('reportingHours')?.setValue(description?.reportingTime);
     this.calculate();
   }
 
@@ -213,15 +207,16 @@ export class AddPatientTestComponent
     if (this.addPatientTestForm.controls['amountPaid']?.value >= this.addPatientTestForm.controls['grandTotal'].value) {
       if (this.addPatientTestForm.controls['amountPaid']?.value) {
         console.log('this.addPatientTestForm.value', this.addPatientTestForm.value);
-        // this.testService.addPatientTest(this.addPatientTestForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe({
-        //   next: (x) => {
-        //     console.log(x);
-        //     this.alertService.success('Patient Test add successfully', 'Success');
-        //   },
-        //   error: (err) => {
-        //     this.alertService.error('Something went wrong while adding patient Test.', 'Error');
-        //   }
-        // })
+        this.testService.addPatientTest(this.addPatientTestForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe(
+          {
+          next: (x) => {
+            console.log(x);
+            this.alertService.success('Patient Test add successfully', 'Success');
+          },
+          error: (err) => {
+            this.alertService.error('Something went wrong while adding patient Test.', 'Error');
+          }
+        })
       }
     } else {
       this.alertService.error('add payment greater than total', 'Error');
@@ -230,8 +225,8 @@ export class AddPatientTestComponent
 
   getInvoice(): IInvoice {
     let invoice: IInvoice = {
-      amountPaid: this.addPatientTestForm.controls['amountPaid'].value,
-      paymentType: this.addPatientTestForm.controls['paymentType'].value,
+      amountPaid: this.addPatientTestForm?.controls['amountPaid'].value,
+      paymentType: this.addPatientTestForm?.controls['paymentType'].value,
       invoiceItems: this.invoiceItems.value.map((x: any) => {
         let invoiceItem = {
           testId: x.testId,
@@ -245,7 +240,7 @@ export class AddPatientTestComponent
         };
         return invoiceItem;
       }),
-      totalDiscount: this.addPatientTestForm.controls['totalDiscount'].value,
+      totalDiscount: this.addPatientTestForm?.controls['totalDiscount'].value,
       grandTotal: this.addPatientTestForm.controls['grandTotal'].value,
     };
     return invoice;
@@ -323,8 +318,8 @@ export class AddPatientTestComponent
     let totalGrandTotal = 0;
     let totalDiscountTotal = 0;
     for (let invItem of this.invoiceItems.controls) {
-      let amount = invItem.get('paidAmount')?.value;
-      let discountType = invItem.get('discountType')?.value;
+      let amount = invItem?.get('paidAmount')?.value;
+      let discountType = invItem?.get('discountType')?.value;
       let discount =
         !invItem.get('discountAmount')?.value ||
         invItem.get('discountAmount')?.value === 0

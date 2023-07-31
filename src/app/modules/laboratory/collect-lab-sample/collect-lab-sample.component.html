@@ -39,7 +39,7 @@
               [dropdown]="true"
               field="name"
               (completeMethod)="onSearchCategory($event)"
-              (onSelect)="selectCategory(category.value.name)"
+              (onSelect)="selectCategory(category.value.id)"
               placeholder="Search Test Category"
               dropdownIcon="pi pi-search"
               [minLength]="1"
@@ -99,19 +99,6 @@
                 <small>patient Id required.</small>
               </div>
             </div>
-
-            <div
-              class="d-flex justify-content-center w-full flex-column"
-            >
-              <label for="description">Description</label>
-              <input
-                class="h-10"
-                type="text"
-                pInputText
-                name="amount"
-                formControlName="description"
-              />
-            </div>
             <div
               class="d-flex justify-content-center w-full flex-column"
             >
@@ -146,34 +133,6 @@
                 "
               >
                 <small>sample Id is required.</small>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-center w-full flex-column">
-              <label for="status">Sample Status</label>
-              <select
-                id="status"
-                class="form-select"
-                formControlName="status"
-                required
-              >
-                <option [defaultSelected]="true" disabled>
-                  Select A Description
-                </option>
-                <option *ngFor="let drop of testStatus" [value]="drop.value">
-                  {{ drop.label }}
-                </option>
-              </select>
-              <div
-                class="text-danger"
-                *ngIf="
-                  (invoiceDescriptionForm.controls['status'].errors &&
-                    invoiceDescriptionForm.controls['status'].touched) ||
-                  (invoiceDescriptionForm.controls['status'].touched &&
-                    !invoiceDescriptionForm.controls['status'].valid)
-                "
-              >
-                <small>status is required.</small>
               </div>
             </div>
 
