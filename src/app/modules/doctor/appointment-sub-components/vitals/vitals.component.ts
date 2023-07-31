@@ -25,12 +25,13 @@ export class VitalsComponent
 {
   @Input() tokenVitals!: ITokenVitals;
   @Input() token!: IToken;
+  @Input() historyVital!: IVital | null;
+  @Input() historyTokenId!: string;
 
   vitalForm!: FormGroup;
   showMenu: string = '';
   action = 'update';
   historyDropDown: Array<IDropDown> = [];
-  historyVital!: IVital | null;
   vitalRequest!: IVitalRequest;
   previousDates = [
     { name: '14/07/2023', id: '14/07/2023' },
@@ -79,6 +80,8 @@ export class VitalsComponent
       this.tokenVitals = <ITokenVitals>this.token.tokenDetail;
       this.setVitalsFromInput();
     }
+
+    if(this.historyTokenId) this.getVitalsByTokenId(this.historyTokenId);
   }
 
   currentValueSetter(value: {[key: string]: any}){
@@ -143,6 +146,19 @@ export class VitalsComponent
           this.historyDropDown = x;
         },
       });
+  }
+
+  getVitalsByTokenId(tokenId: string){
+    this.vitalService.getVitalsByTokenId(tokenId).subscribe({
+      next: (x) => {
+        this.historyVital = x;
+        this.formSetter(x);
+        console.log(this.vitalRequest)
+        this.vitalForm.disable({
+          onlySelf: true
+        });
+      }
+    })
   }
 
   getVitalsById(vitalsId: string){

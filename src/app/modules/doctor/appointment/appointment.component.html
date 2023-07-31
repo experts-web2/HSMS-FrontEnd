@@ -135,13 +135,13 @@
         <div>
           <p-tabView>
             <p-tabPanel header="Prescription">
-              <app-prescription [token]="token"></app-prescription>
+              <app-prescription [token]="token" [historyTokenId]="historyTokenId"></app-prescription>
             </p-tabPanel>
             <p-tabPanel header="Vitals">
-              <app-vitals [token]="token"></app-vitals>
+              <app-vitals [token]="token" [historyTokenId]="historyTokenId"></app-vitals>
             </p-tabPanel>
             <p-tabPanel header="Medication">
-              <app-medication [token]="token"></app-medication>
+              <app-medication [token]="token" [historyTokenId]="historyTokenId"></app-medication>
             </p-tabPanel>
             <p-tabPanel header="Lab Order">
               <app-lab-order [token]="token"></app-lab-order>

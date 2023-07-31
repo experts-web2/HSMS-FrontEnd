@@ -37,4 +37,8 @@ export class VitalService extends HttpService {
   getVitalsById(vitalsId: string): Observable<IVital>{
     return this.get(`${this.baseEndpoint}/byid/${vitalsId}`);
   }
+
+  getVitalsByTokenId(tokenId: string): Observable<IVital>{
+    return this.get(`${this.baseEndpoint}/getbytokenid/${tokenId}`);
+  }
 }

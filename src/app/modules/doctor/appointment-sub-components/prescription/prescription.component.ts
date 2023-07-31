@@ -25,6 +25,7 @@ export class PrescriptionComponent
   implements OnInit
 {
   @Input() token!: IToken;
+  @Input() historyTokenId!: string;
 
   doctorId!: string;
   patientId!: string;
@@ -33,7 +34,7 @@ export class PrescriptionComponent
   loggedInDoctor!: ILogedInUser;
   improvementOptions: any[] = [];
   historyDropDown: Array<IDropDown> = [];
-  historyPrescription!: IPrescription | null;
+  @Input() historyPrescription!: IPrescription | null;
 
   constructor(private readonly fb: FormBuilder, private readonly userStateService: UserStateService, private readonly prescriptionService: PrescriptionService, private readonly alertService: AlertService) {
     super();
@@ -59,6 +60,8 @@ export class PrescriptionComponent
       followUpDate: new FormControl<Date | null>(null),
       // procedure: new FormControl<Procedure | null>(null)
     });
+
+    
   }
 
   ngOnInit(): void {
@@ -77,7 +80,9 @@ export class PrescriptionComponent
       }
         
       }
-    })
+    });
+
+    if(this.historyTokenId) this.getPrescriptionByTokenId(this.historyTokenId);
   }
 
   currentValueSetter(value: {[name: string]: any}){
@@ -99,6 +104,18 @@ export class PrescriptionComponent
     this.prescriptionService.getPrescriptionHistoryDropDown(this.token.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.historyDropDown = x;
+      }
+    })
+  }
+
+  getPrescriptionByTokenId(tokenId: string){
+    this.prescriptionService.getPrescriptionByTokenId(tokenId).subscribe({
+      next: (x)=>{
+        this.historyPrescription = x;
+        this.formSetter(x);
+        this.prescriptionForm.disable({
+          onlySelf: true
+        });
       }
     })
   }

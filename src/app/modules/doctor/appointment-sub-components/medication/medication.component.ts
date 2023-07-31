@@ -13,6 +13,7 @@ import { IMedicationDetail, IMedicationRequest } from 'src/app/models/interfaces
 import { IToken } from 'src/app/models/interfaces/Token';
 import { AlertService, MedicationService, MedicineService } from 'src/app/services';
 import { MedicationDurations } from '../../../../constants/Constants/MedicationDuration';
+import { IMedication } from 'src/app/models/interfaces/Medication';
 
 @Component({
   selector: 'app-medication',
@@ -21,6 +22,7 @@ import { MedicationDurations } from '../../../../constants/Constants/MedicationD
 })
 export class MedicationComponent extends SubscriptionManagmentDirective {
   @Input() token!: IToken;
+  @Input() historyTokenId!: string;
 
   historyDropDown: Array<IDropDown> = [];
   medicationForm!: FormGroup;
@@ -36,6 +38,8 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
   medicationDosages = MedicationDosages;
   medicationDurations = MedicationDurations;
   medicationInstructions = MedicationInstructions;
+  @Input() historyMedication!: IMedication | null;
+
   constructor(private readonly fb: FormBuilder, private readonly userStateService: UserStateService, private readonly medicineService: MedicineService, private readonly medicationService: MedicationService, private readonly alertService: AlertService) {
     super();
     this.userStateService.getUserState().pipe(takeUntil(this.componetDestroyed)).subscribe({
@@ -70,10 +74,29 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
   }
 
   ngOnInit(): void {
+
     this.getMedicine();
     this.getMedicineHistoryDropDown();
     this.medicationForm.get('doctorId')?.setValue(this.token.doctorId);
     this.medicationForm.get('patientId')?.setValue(this.token.patientId);
+  
+    this.medicationForm.valueChanges.subscribe({
+      next: (x) => {
+        if (!this.historyMedication) this.currentValueSetter(x);
+      }
+    })
+    
+    if (this.historyTokenId) this.getMedicationByTokenId(this.historyTokenId);
+  }
+
+  currentValueSetter(value: {[name: string]: any}){
+    
+    this.medicationRequest = {
+      medicationDetails: this.medicationItems.value,
+      doctorId: this.token.doctorId,
+      patientId: this.token.patientId,
+      medicationNotes: value['medicationNotes']
+    }
   }
 
   search(e: string){
@@ -95,16 +118,34 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
     })
   }
 
+  getMedicationByTokenId(tokenId: string){
+    this.medicationService.getMedicationByTokenId(tokenId).subscribe({
+      next: (x)=> {
+        this.medicationRequest.medicationDetails = this.medicationItems.value ?? [];
+        this.historyMedication = x;
+        this.medicationForm.disable({
+          onlySelf: true
+        });
+        this.formSetter(x)
+      }
+    })
+  }
+
   getMedicationById(medicationId: string){
     this.medicationService.getMedicationById(medicationId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
-
+        
+        this.medicationRequest.medicationDetails = this.medicationItems.value ?? [];
+        this.historyMedication = x;
+        this.medicationForm.disable({
+          onlySelf: true
+        });
+        this.formSetter(x)
       }
     })
   }
 
   onHistorySelection(medicationId: string){
-        
     this.getMedicationById(medicationId);
   }
 
@@ -225,6 +266,39 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
       this.alertService.error('Form is invalid.')
 
     }
+  }
+
+  currentMedication(){
+    this.historyMedication = null;
+    
+    this.medicationForm.enable({
+      onlySelf: true
+    });
+    if(this.medicationRequest) this.formSetter(this.medicationRequest);
+    else this.medicationForm.reset();
+  }
+
+  formSetter(medication: IMedicationRequest){
+    
+    this.medicationForm.patchValue({
+      medicationNotes: medication.medicationNotes,
+      medicationItems: medication.medicationDetails
+    })
+
+    medication.medicationDetails.forEach((x, i) => {
+      if (Object.keys(x).every(y => (x as {[key: string]: any})[y] !== null))
+      this.medicationItems.at(i).patchValue({
+        medicineId: x.medicineId,
+        medicineName: this.medicines.find(y => y.id === x.medicineId)?.name,
+        dosage: x.dosage,
+        frequency: x.frequency,
+        route: x.route,
+        duration: x.duration,
+        instruction: x.insturction,
+        durationValue:x.durationValue,
+        dosageValue: x.dosageValue
+      })
+    })
   }
 
 }

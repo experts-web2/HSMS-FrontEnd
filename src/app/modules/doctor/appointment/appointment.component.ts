@@ -28,6 +28,7 @@ export class AppointmentComponent implements OnInit {
   patientHistoryVisits!: Array<IToken>;
   $unsubscribe: Observable<any> = of(null);
   logedInUser!: ILogedInUser;
+  historyTokenId!: string;
 
   constructor(private alertService: AlertService, private readonly route: ActivatedRoute, private readonly tokenService: TokenService, private readonly patientService: PatientService, private readonly userStateService: UserStateService) {
     this.route.params.subscribe({
@@ -104,6 +105,18 @@ export class AppointmentComponent implements OnInit {
 
       }
     })
+  }
+
+  getHistoryVitals(tokenId: string){
+    
+  }
+
+  getHistoryPrescription(tokenId: string){
+
+  }
+
+  getHistoryMedications(tokenId: string){
+
   }
 
   getToken() {
