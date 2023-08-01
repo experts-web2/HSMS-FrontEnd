@@ -1,3 +1,9 @@
+<div *ngIf="spinner">
+  <p-progressSpinner [style]="{width: '50px', height: '50px'}" styleClass="custom-spinner" strokeWidth="5" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+</div>
+<div *ngIf="submitSpinner">
+  <p-progressSpinner></p-progressSpinner>
+</div>
 <form [formGroup]="addPatientTestForm">
   <div class="position-relative">
     <i class="fa-2xl px-8 py-8 ml-auto w-fit block"></i>
@@ -7,107 +13,50 @@
     <div>
       <label for="descriptionDetail">Patient</label>
 
-      <div class="d-flex w-1/2 justify-content-center flex-column">
-        <p-autoComplete
-          [suggestions]="patientsToShow"
-          #patient
-          [dropdown]="true"
-          field="name"
-          (completeMethod)="onSearch($event)"
-          (onSelect)="onPatientSelection(patient.value.id)"
-          placeholder="Search Patient"
-          dropdownIcon="pi pi-search"
-          [minLength]="1"
-        >
+      <div class="d-flex w-1/3 justify-content-center flex">
+        <p-autoComplete [suggestions]="patientsToShow" #patient [dropdown]="true" field="name"
+          (completeMethod)="onPatientSearch($event)" (onSelect)="onPatientSelection(patient.value.id)"
+          placeholder="Search Patient" dropdownIcon="pi pi-search">
         </p-autoComplete>
+        <button class="d-flex btn btn-primary keep-all ms-4 text-wrap align-items-center" (click)="addPatient()">
+          <i class="fa-solid fa-plus me-2"></i>Add Patient
+        </button>
       </div>
 
+
       <div>
-        <div formArrayName="invoiceItems"
-          *ngFor="let item of invoiceItems.controls; let i = index"
-          class="my-4"
-        >
+        <div formArrayName="invoiceItems" *ngFor="let item of invoiceItems.controls; let i = index" class="my-4">
           <div [formGroupName]="i" class="flex flex-col md:flex-row">
-            <div
-              class="grid md:grid-cols-6 gap-x-5 gap-y-5 justify-between items-end"
-            >
-              <div
-                class="d-flex justify-content-center flex-column w-full md:pr-2"
-              >
-                <p-autoComplete
-                  [suggestions]="testToView"
-                  #description
-                  [dropdown]="true"
-                  field="name"
-                  (completeMethod)="search($event)"
-                  (onSelect)="onDescriptionSelect(i, description.value)"
-                  placeholder="Test Name/Code"
-                  dropdownIcon="pi pi-search"
-                  [minLength]="1"
-                >
+            <div class="grid md:grid-cols-6 gap-x-5 gap-y-5 justify-between items-end">
+              <div class="d-flex justify-content-center flex-column w-full md:pr-2">
+                <p-autoComplete [suggestions]="testToView" #test [dropdown]="true" field="name"
+                  (completeMethod)="search($event)" (onSelect)="onTestSelect(i, test.value)"
+                  placeholder="Test Name/Code" dropdownIcon="pi pi-search" [minLength]="1">
                 </p-autoComplete>
               </div>
-              <div
-                class="d-flex justify-content-center lg:px-2 w-full flex-column"
-              >
+              <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
                 <label for="description">Description</label>
-                <input
-                  type="text"
-                  pInputText
-                  name="amount"
-                  formControlName="description"
-                />
+                <input type="text" pInputText name="amount" formControlName="description" />
               </div>
-              <div
-                class="d-flex justify-content-center lg:px-2 w-full flex-column"
-              >
+              <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
                 <label for="amount">Amount</label>
-                <input
-                  type="number"
-                  pInputText
-                  name="amount"
-                  [readonly]="true"
-                  formControlName="paidAmount"
-                />
+                <input type="number" pInputText name="amount" [readonly]="true" formControlName="paidAmount" />
               </div>
-              <div
-                class="d-flex justify-content-center lg:px-2 w-full flex-column"
-              >
+              <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
                 <label for="amount">Completion Time (Hours)</label>
-                <input
-                  type="number"
-                  pInputText
-                  name="reportingHours"
-                  formControlName="reportingHours"
-                />
+                <input type="number" pInputText name="reportingHours" formControlName="reportingHours" />
               </div>
-              <div
-                class="d-flex justify-content-center lg:px-2 w-full flex-column"
-              >
+              <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
                 <label for="discount">Discount</label>
-                <input
-                  type="number"
-                  pInputText
-                  name="discount"
-                  formControlName="discountAmount"
-                  (input)="calculate()"
-                />
+                <input type="number" pInputText name="discount" formControlName="discountAmount"
+                  (input)="calculate()" />
               </div>
-              <div
-                class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full flex-column"
-              >
+              <div class="d-flex justify-content-center lg:pl-2 lg:pr-4 w-full flex-column">
                 <label for="dicountType">Discount Type</label>
-                <select
-                  id="dicountType"
-                  class="w-full rounded h-10 border"
-                  formControlName="discountType"
-                  (change)="calculate()"
-                >
-                  <option
-                    *ngFor="let discType of discountTypes"
-                    [ngValue]="discType.value"
-                    [selected]="discType.value === 1"
-                  >
+                <select id="dicountType" class="w-full rounded h-10 border" formControlName="discountType"
+                  (change)="calculate()">
+                  <option *ngFor="let discType of discountTypes" [ngValue]="discType.value"
+                    [selected]="discType.value === 1">
                     {{ discType.label }}
                   </option>
                 </select>
@@ -120,112 +69,53 @@
             </div>
           </div>
         </div>
-        <button
-          (click)="addNewInvoiceItem()"
-          class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center"
-        >
+        <button (click)="addNewInvoiceItem()" class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center">
           <i class="fa-solid fa-plus me-2"></i>Item
         </button>
         <div class="grid grid-cols-2 gap-5">
           <div class="">
             <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
               <label for="category" class="w-full">Priority :</label>
-              <select
-                class="h-10 border w-full rounded"
-                name="description"
-                formControlName="priority"
-              >
+              <select class="h-10 border w-full rounded" name="description" formControlName="priority">
                 <option [value]="null" [defaultSelected]="true" disabled>
                   Select a payment Type
                 </option>
-                <option
-                  *ngFor="let item of testPriority"
-                  [ngValue]="item.value"
-                >
+                <option *ngFor="let item of testPriority" [ngValue]="item.value">
                   {{ item.label }}
                 </option>
               </select>
             </div>
             <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
-              <label class="w-full" for="category"
-                >Referral :<span class="text-danger"></span
-              ></label>
-              <p-autoComplete
-                [suggestions]="doctorsToView"
-                #doctor
-                dropdownIcon="pi pi-search"
-                (completeMethod)="onSearchDoctor($event)"
-                [dropdown]="true"
-                (onSelect)="onDoctorSelection(doctor.value.id)"
-                field="name"
-                dropdownIcon="pi pi-search"
-                [minLength]="3"
-              ></p-autoComplete>
+              <label class="w-full" for="category">Referral :<span class="text-danger"></span></label>
+              <p-autoComplete [suggestions]="doctorsToView" #doctor dropdownIcon="pi pi-search"
+                (completeMethod)="onSearchDoctor($event)" [dropdown]="true"
+                (onSelect)="onDoctorSelection(doctor.value.id)" field="name" dropdownIcon="pi pi-search"
+                [minLength]="3"></p-autoComplete>
             </div>
             <div>
               <label for="invoiceNote">Invoice Note</label>
-              <textarea
-                rows="2"
-                cols="93"
-                class="mb-2 w-full"
-                placeholder="Medication Notes"
-                id="investigation"
-                pInputTextarea
-                formControlName="invoiceNote"
-              ></textarea>
+              <textarea rows="2" cols="93" class="mb-2 w-full" placeholder="Medication Notes" id="investigation"
+                pInputTextarea formControlName="invoiceNote"></textarea>
             </div>
           </div>
           <div class="ml-auto w-full flex items-start justify-between flex-col lg:flex-row">
             <div>
-              <div
-                class="d-flex justify-content-center mt-4 w-full flex-col"
-              >
-                <label
-                  class="d-flex align-items-center min-w-fit"
-                  for="totalDiscount"
-                  >Total Discount:</label
-                >
-                <input
-                  class="pulse h-10"
-                  type="number"
-                  pInputText
-                  name="totalDiscount"
-                  formControlName="totalDiscount"
-                  (input)="calculate(true)"
-                />
+              <div class="d-flex justify-content-center mt-4 w-full flex-col">
+                <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
+                <input class="pulse h-10" type="number" pInputText name="totalDiscount" formControlName="totalDiscount"
+                  (input)="calculate(true)" />
               </div>
-              <div
-                class="d-flex justify-content-center mt-4 w-full flex-col"
-              >
-                <label
-                  class="d-flex align-items-center min-w-fit"
-                  for="totalDiscount"
-                  >Payment Types:</label
-                >
-                <select
-                  class="h-10 border rounded"
-                  name="description"
-                  formControlName="paymentType"
-                >
+              <div class="d-flex justify-content-center mt-4 w-full flex-col">
+                <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Payment Types:</label>
+                <select class="h-10 border rounded" name="description" formControlName="paymentType">
                   <option *ngFor="let item of paymentTypes" [ngValue]="item.id">
                     {{ item.label }}
                   </option>
                 </select>
               </div>
-              <div
-                class="d-flex justify-content-center mt-4 w-full flex-col"
-              >
-                <label
-                  class="d-flex align-items-center min-w-fit"
-                  for="completionDate"
-                  >Test Report Date:</label
-                >
-                <p-calendar
-                  formControlName="completionDate"
-                  [showIcon]="true"
-                  [showSeconds]="true"
-                  [showTime]="true"
-                >
+              <div class="d-flex justify-content-center mt-4 w-full flex-col">
+                <label class="d-flex align-items-center min-w-fit" for="completionDate">Test Report Date:</label>
+                <p-calendar formControlName="completionDate" [showIcon]="true" [showSeconds]="true" [showTime]="true">
                 </p-calendar>
               </div>
             </div>
@@ -244,24 +134,16 @@
               </p>
               <p>
                 Paid:
-                <input
-                  type="number"
-                  class="pulse lg:ml-3"
-                  pInputText
-                  placeholder="0"
-                  formControlName="amountPaid"
-                  required
-                />
+                <input type="number" class="pulse lg:ml-3" pInputText placeholder="0" formControlName="amountPaid"
+                  required />
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div
-        class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-end align-items-center"
-      >
-        <button class="btn btn-primary mr-8" (click)="addToken()">Save</button>
+      <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-end align-items-center">
+        <button class="btn btn-primary mr-8" (click)="addPatientTest()">Save</button>
         <button class="btn btn-primary">Save & Print</button>
       </div>
     </div>

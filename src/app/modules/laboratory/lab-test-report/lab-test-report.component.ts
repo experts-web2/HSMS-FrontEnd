@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { takeUntil } from 'rxjs';
-import { PatientService } from 'src/app/services';
+import { AlertService, PatientService } from 'src/app/services';
 import { TestService, DoctorService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
@@ -20,14 +20,13 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 })
 export class LabTestReportComponent
   extends SubscriptionManagmentDirective
-  implements OnInit
-{
+  implements OnInit {
   selectedDoctor = '';
   selectedPayment = '';
   labReportForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
   doctors: Array<IDropDown> = [];
-  tests: Array<IDropDown> = [];
+  tests: Array<any> = [];
   radiology: Array<IDropDown> = [];
   descriptions: Array<any> = [];
 
@@ -74,12 +73,16 @@ export class LabTestReportComponent
     toolbarHiddenButtons: [['bold', 'italic'], ['fontSize']],
   };
   submitted = false;
+  testToView: Array<IDropDown> = [];
+  doctorsToView: Array<IDropDown> = [];
+  labTest: any[]=[];
 
   constructor(
     private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
     private readonly doctorService: DoctorService,
-    private readonly testService: TestService
+    private readonly testService: TestService,
+    private readonly alertService: AlertService,
   ) {
     super();
     this.invoiceDescriptionForm = this.fb.group({
@@ -101,7 +104,6 @@ export class LabTestReportComponent
   }
 
   ngOnInit(): void {
-    this.getPatients();
     this.getTests();
     this.getDoctorDropDownList();
   }
@@ -113,21 +115,7 @@ export class LabTestReportComponent
       .subscribe({
         next: (x) => {
           console.log(x);
-          this.tests = x.data;
-          this.descriptions = this.tests;
-        },
-        error: (err) => {},
-      });
-  }
-
-  getPatients() {
-    this.patientService
-      .getPatientDropDown()
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe({
-        next: (x) => {
-          this.patients = x;
-          this.patientsToShow = x;
+          this.labTest = this.tests;
         },
         error: (err) => {},
       });
@@ -140,33 +128,69 @@ export class LabTestReportComponent
       .subscribe({
         next: (x) => {
           this.doctors = x;
+          this.doctorsToView = x;
         },
-        error: (err) => {},
+        error: (err) => { },
       });
   }
 
-  onDescriptionSelect(index: number, descriptionId: string) {
-    let description = this.descriptions.find((x) => x.id === descriptionId);
-    console.log('description', description);
-    this.testReport
-      .at(index)
-      .get('normalValues')
-      ?.setValue(description?.normalValues);
+  onDoctorSelection(doctorId:string){
+    this.labReportForm.get('doctorId')?.setValue(doctorId);
+
+  }
+
+  onSearchDoctor(event: any) {
+    console.log(event.query);
+    const query = event.query.trim().toLowerCase();
+    this.doctorsToView = this.doctors.filter(
+      (doctor) =>
+        doctor.name.toLowerCase().includes(query)
+    );
+  }
+
+  onTestSelect(index: number, test: any) {
+    let selectedTest = this.tests.find((x) => x.id === test.id);
+    console.log('description', selectedTest);
+    this.testReport.at(index).get('testId')?.setValue(selectedTest?.id);
+    this.testReport.at(index).get('normalValues')?.setValue(selectedTest?.normalValues);
+  }
+
+  onTestSearch(event: any) {
+    console.log(event.query);
+    const query = event.query.trim().toLowerCase();
+    this.testToView = this.tests?.filter(
+      (test) =>
+        test.name.toLowerCase().includes(query) || // Filter by name
+        test.code.toString().includes(query) // Filter by code
+    );
   }
 
   get f() {
     return this.labReportForm.controls;
   }
 
-  patientSelect(patient: any) {
-    this.labReportForm.get('patientId')?.setValue(patient.id);
+
+  onPatientSearch(event: { query: string }): void {
+    const searchTerm = event.query.trim();
+    if (searchTerm.length >= 3) {
+      this.patientService.getPatientsDropdown(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
+        next: (x) => {
+          this.patientsToShow = x;
+        },
+        error: (err) => {
+
+        }
+      })
+    }
   }
 
-  searchPatient(query: string) {
-    let text = query.toLowerCase();
-    this.patientsToShow = this.patients.filter((x) =>
-      x.name.toLowerCase().includes(text)
-    );
+  onPatientSelection(selectPatient: string) {
+    this.labReportForm.get('patientId')?.setValue(selectPatient);
+    this.testService.getTestByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.tests = x;
+      }
+    })
   }
 
   addToken() {
@@ -175,24 +199,18 @@ export class LabTestReportComponent
     if (this.labReportForm.invalid) {
       return;
     }
+    console.log('this.labReportForm.value',this.labReportForm.value)
+    this.testService.addPatientTestReport(this.labReportForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        console.log(x);
+        this.alertService.success('Add test Report successfully', 'Success');
 
-    console.log(this.labReportForm.value);
+      },
+      error: (err) => {
+        this.alertService.error('Something went wrong while generating sample id.', 'Error');
 
-    // let tokenpayload = {
-    //   patientId: this.labReportForm.controls['patientId'].value,
-    //   doctorId: this.labReportForm.controls['doctorId'].value,
-    //   patientCheckedIn: this.labReportForm.controls['patientCheckedIn'].value ? this.labReportForm.controls['patientCheckedIn'].value : true
-    // }
-    // console.log('tokenpayload',tokenpayload);
-    // this.tokenService.addToken(tokenpayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
-    //   next: (x) => {
-    //     console.log(x);
-
-    //   },
-    //   error: (err) => {
-
-    //   }
-    // })
+      }
+    })
   }
 
   getInvoice() {

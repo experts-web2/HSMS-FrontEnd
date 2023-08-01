@@ -67,4 +67,9 @@ export class TestService extends HttpService {
   addPatientTestSamples(fetchRequest: IFetchRequest = {}){
     return this.post(`${BaseEndPoints.PatientSample}/all`, fetchRequest);
   }
+
+
+  addPatientTestReport(fetchRequest:any){
+    return this.post(`${BaseEndPoints.Patientsamplereport}/add`, fetchRequest);
+  }
 }

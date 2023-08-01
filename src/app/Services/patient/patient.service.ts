@@ -31,8 +31,8 @@ export class PatientService extends HttpService{
     return this.get(`${this.baseEndPoint}/byid/${patientId}`)
   }
 
-  getPatientsDropdown(): Observable<any>{
-    return this.get(`${this.baseEndPoint}/dropdown`);
+  getPatientsDropdown(patientSerch?:string): Observable<any>{
+    return this.get(`${this.baseEndPoint}/dropdown?search=${patientSerch}`);
   }
 
   getAppointments() {

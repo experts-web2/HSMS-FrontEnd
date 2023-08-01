@@ -32,6 +32,8 @@ import { TagModule } from 'primeng/tag';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { PanelModule } from 'primeng/panel';
 import { AutoFocusModule } from 'primeng/autofocus';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+
 
 @NgModule({
   declarations: [],
@@ -68,6 +70,7 @@ import { AutoFocusModule } from 'primeng/autofocus';
     ProgressBarModule,
     PanelModule,
     AutoFocusModule,
+    ProgressSpinnerModule,
   ],
   providers: [MessageService],
 })
