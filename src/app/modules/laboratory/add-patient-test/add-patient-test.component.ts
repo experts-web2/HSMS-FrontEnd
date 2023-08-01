@@ -114,33 +114,23 @@ export class AddPatientTestComponent
   }
 
   getDoctors() {
-    this.spinner = true;
     this.doctorService.getDoctorDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.doctors = x;
         this.doctorsToView = x;
-        this.spinner = false;
       },
       error: (err) => {
-        this.spinner = false;
-
       }
     })
   }
 
   getTests() {
-    this.spinner = true;
-
     this.testService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         console.log(x);
         this.labTest = x.data;
-        this.spinner = false;
-
       },
       error: (err) => {
-        this.spinner = false;
-
       }
     })
   }
@@ -149,16 +139,16 @@ export class AddPatientTestComponent
     const searchTerm = event.query.trim().toLowerCase();
     console.log(searchTerm)
     if (searchTerm.length >= 3) {
-      this.spinner = true;
+      // this.spinner = true;
 
       this.patientService.getPatientsDropdown(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
           this.patientsToShow = x;
-          this.spinner = false;
+          // this.spinner = false;
 
         },
         error: (err) => {
-          this.spinner = false;
+          // this.spinner = false;
 
         }
       })

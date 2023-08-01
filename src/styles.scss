@@ -125,6 +125,9 @@ button{
   background: $btnbg;
   color: $bluetheme-textColor;
   border: 0;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 16px;
   &:hover{
     background: $btnbg !important;
   }
@@ -180,4 +183,21 @@ input{
       height: 32px !important;
     }
   }
+}
+
+p-button{
+  padding: 0;
+  .p-button{
+    border: 0;
+    background: $ctrlbg;
+    color: $bluetheme-textColor;
+    border: 0;
+    &:hover{
+      background: $ctrlbg !important;
+    }
+  }
+}
+
+.mdc-dialog__title::before{
+  height: 0 !important;
 }

@@ -1,6 +1,6 @@
-<div *ngIf="spinner">
+<!-- <div *ngIf="spinner">
   <p-progressSpinner [style]="{width: '50px', height: '50px'}" styleClass="custom-spinner" strokeWidth="5" fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
-</div>
+</div> -->
 <div *ngIf="submitSpinner">
   <p-progressSpinner></p-progressSpinner>
 </div>
@@ -18,8 +18,8 @@
           (completeMethod)="onPatientSearch($event)" (onSelect)="onPatientSelection(patient.value.id)"
           placeholder="Search Patient" dropdownIcon="pi pi-search">
         </p-autoComplete>
-        <button class="d-flex btn btn-primary keep-all ms-4 text-wrap align-items-center" (click)="addPatient()">
-          <i class="fa-solid fa-plus me-2"></i>Add Patient
+        <button class="d-flex keep-all ms-4 text-wrap align-items-center" (click)="addPatient()">
+          <i class="fa-solid fa-plus me-2"></i><span class="whitespace-nowrap">Add Patient</span>
         </button>
       </div>
 
@@ -100,14 +100,14 @@
           </div>
           <div class="ml-auto w-full flex items-start justify-between flex-col lg:flex-row">
             <div>
-              <div class="d-flex justify-content-center mt-4 w-full flex-col">
+              <div class="d-flex justify-between mt-4 w-full flex-col md:flex-row">
                 <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
-                <input class="pulse h-10" type="number" pInputText name="totalDiscount" formControlName="totalDiscount"
+                <input class="pulse w-1/2 h-10" type="number" pInputText name="totalDiscount" formControlName="totalDiscount"
                   (input)="calculate(true)" />
               </div>
-              <div class="d-flex justify-content-center mt-4 w-full flex-col">
+              <div class="d-flex justify-between mt-4 w-full flex-col md:flex-row">
                 <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Payment Types:</label>
-                <select class="h-10 border rounded" name="description" formControlName="paymentType">
+                <select class="h-10 border rounded w-1/2" name="description" formControlName="paymentType">
                   <option *ngFor="let item of paymentTypes" [ngValue]="item.id">
                     {{ item.label }}
                   </option>
