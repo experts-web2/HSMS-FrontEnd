@@ -185,21 +185,17 @@ export class DashboardComponent
   selectedFilter: string = 'Last 7 Days';
 
   getAppointments(fetchRequest: IFetchRequest = {}) {
-    this.appointmentService
-      .getAppointments(fetchRequest)
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe({
-        next: (x: any) => {
-          console.log(x);
-        },
-        error: (err: Error) => {},
-      });
-    this.patientService
-      .getAppointments()
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe((res: any) => {
-        this.appointmentsData = res.appointments;
-      });
+    this.appointmentService.getAppointments(fetchRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x: any) => {
+        
+      },
+      error: (err: Error) => {
+
+      }
+    })
+    this.patientService.getAppointments().pipe(takeUntil(this.componetDestroyed)).subscribe((res: any) => {
+      this.appointmentsData = res.appointments
+    })
   }
 
   getMessagesData() {

@@ -13,6 +13,7 @@ import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequest';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { AlertService, PrescriptionService } from 'src/app/services';
+import { IPrescription } from 'src/app/models/interfaces/Prescription';
 
 @Component({
   selector: 'app-prescription',
@@ -24,6 +25,7 @@ export class PrescriptionComponent
   implements OnInit
 {
   @Input() token!: IToken;
+  @Input() historyTokenId!: string;
 
   doctorId!: string;
   patientId!: string;
@@ -32,13 +34,9 @@ export class PrescriptionComponent
   loggedInDoctor!: ILogedInUser;
   improvementOptions: any[] = [];
   historyDropDown: Array<IDropDown> = [];
+  @Input() historyPrescription!: IPrescription | null;
 
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly userStateService: UserStateService,
-    private readonly prescriptionService: PrescriptionService,
-    private readonly alertService: AlertService
-  ) {
+  constructor(private readonly fb: FormBuilder, private readonly userStateService: UserStateService, private readonly prescriptionService: PrescriptionService, private readonly alertService: AlertService) {
     super();
     this.userStateService
       .getUserState()
@@ -62,6 +60,8 @@ export class PrescriptionComponent
       followUpDate: new FormControl<Date | null>(null),
       // procedure: new FormControl<Procedure | null>(null)
     });
+
+    
   }
 
   ngOnInit(): void {
@@ -70,58 +70,126 @@ export class PrescriptionComponent
       this.patientId = this.token.patientId;
       this.doctorId = this.token.doctorId;
     }
+
+    this.prescriptionForm.valueChanges.subscribe({
+      next: (x) => {
+
+        if(!this.historyPrescription){
+          console.log('chnaged') 
+          this.currentValueSetter(x);
+      }
+        
+      }
+    });
+
+    if(this.historyTokenId) this.getPrescriptionByTokenId(this.historyTokenId);
+  }
+
+  currentValueSetter(value: {[name: string]: any}){
+    this.prescreptionRequest = {
+      doctorId: this.doctorId,
+      patientId: this.patientId,
+      medicalHistory: value['medicalHistory'],
+      complaint: value['complaint'],
+      examination: value['examination'],
+      diagnosis: value['diagnosis'],
+      clinicNotes: value['clinicNotes'],
+      advice: value['advice'],
+      investigation: value['investigation'],
+      followUpDate: value['followUpDate']
+    }
   }
 
   getPrescriptionHistoryDropDown() {
-    this.prescriptionService
-      .getPrescriptionHistoryDropDown(this.token.patientId)
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe({
-        next: (x) => {
-          this.historyDropDown = x;
-        },
-      });
+    this.prescriptionService.getPrescriptionHistoryDropDown(this.token.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.historyDropDown = x;
+      }
+    })
+  }
+
+  getPrescriptionByTokenId(tokenId: string){
+    this.prescriptionService.getPrescriptionByTokenId(tokenId).subscribe({
+      next: (x)=>{
+        this.historyPrescription = x;
+        this.formSetter(x);
+        this.prescriptionForm.disable({
+          onlySelf: true
+        });
+      }
+    })
   }
 
   getPrescription(prescriptionId: string) {
-    this.prescriptionService
-      .getPrescriptionById(prescriptionId)
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe({
-        next: (x) => {},
-      });
+    this.prescriptionService.getPrescriptionById(prescriptionId).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.historyPrescription = x;
+        this.formSetter(x);
+        this.prescriptionForm.disable({
+          onlySelf: true
+        });
+        console.log(this.prescreptionRequest)
+      }
+    })
   }
 
-  onHistorySelection(prescriptionId: string) {}
+  onHistorySelection(prescriptionId: string) {
+
+  }
 
   savePrescription(print?: boolean) {
-    console.log(this.prescriptionForm.value);
     let values = this.prescriptionForm.value;
-    let prescription: IPrescriptionRequest = {
-      doctorId: this.doctorId,
-      patientId: this.patientId,
-      medicalHistory: values['medicalHistory'],
-      complaint: values['complaint'],
-      examination: values['examination'],
-      diagnosis: values['diagnosis'],
-      clinicNotes: values['clinicNotes'],
-      advice: values['advice'],
-      investigation: values['investigation'],
-      followUpDate: values['followUpDate'],
-    };
-    this.prescriptionService
-      .addPrescription(prescription)
-      .pipe(takeUntil(this.componetDestroyed))
-      .subscribe({
-        next: (x) => {
-          console.log(x);
-          this.alertService.success('Prescription Saved Successfully.');
-        },
-        error: (err) => {},
-      });
+
+    // let prescription: IPrescriptionRequest = {
+    //   doctorId: this.doctorId,
+    //   patientId: this.patientId,
+    //   medicalHistory: values['medicalHistory'],
+    //   complaint: values['complaint'],
+    //   examination: values['examination'],
+    //   diagnosis: values['diagnosis'],
+    //   clinicNotes: values['clinicNotes'],
+    //   advice: values['advice'],
+    //   investigation: values['investigation'],
+    //   followUpDate: values['followUpDate']
+    // }
+
+    this.prescriptionService.addPrescription(this.prescreptionRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.alertService.success('Prescription Saved Successfully.');
+      },
+      error: (err) => {
+
+      }
+    })
   }
 
   onSelectHistory(prescriptionId: string) {
     this.getPrescription(prescriptionId);
+
+  }
+
+  currentPrescription(){
+    this.prescriptionForm.enable({
+      onlySelf: true
+    });
+    console.log(this.prescreptionRequest);
+    
+    if (this.prescreptionRequest) this.formSetter(this.prescreptionRequest);
+    else this.prescriptionForm.reset();
+    
+    this.historyPrescription = null;
+  }
+
+  formSetter(prescription: IPrescriptionRequest){
+    this.prescriptionForm.patchValue({
+      medicalHistory: prescription.medicalHistory,
+      complaint: prescription.complaint,
+      examination: prescription.examination,
+      diagnosis: prescription.diagnosis,
+      clinicNotes: prescription.clinicNotes,
+      advice: prescription.advice,
+      investigation: prescription.investigation,
+      followUpDate: prescription.followUpDate
+    })
   }
 }

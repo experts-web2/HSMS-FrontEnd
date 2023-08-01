@@ -263,11 +263,7 @@ export class AddTokenModalComponent
   }
 
   addToken() {
-    console.log(this.addTokenForm.value);
-    if (
-      this.addTokenForm.controls['patientId']?.valid &&
-      this.invoiceItems.valid
-    ) {
+    if (this.addTokenForm.controls['patientId']?.valid && this.invoiceItems.valid) {
       let tokenpayload: IAddOrUpdateToken = {
         patientId: this.addTokenForm.controls['patientId'].value,
         tokenDetails: [this.getTokenDetail()],
@@ -385,23 +381,16 @@ export class AddTokenModalComponent
     let grandTotal = this.addTokenForm.get('grandTotal');
     let totalGrandTotal = 0;
     let totalDiscountTotal = 0;
-    for (let invItem of this.invoiceItems.controls) {
-      let amount = invItem.get('paidAmount')?.value;
-      let discountType = invItem.get('discountType')?.value;
-      let discount =
-        !invItem.get('discountAmount')?.value ||
-        invItem.get('discountAmount')?.value === 0
-          ? 0
-          : discountType === 1
-          ? invItem.get('discountAmount')?.value
-          : (invItem.get('discountAmount')?.value / 100) * amount;
-      totalGrandTotal += amount;
-      totalDiscountTotal += discount;
-    }
-    console.log(totalDiscount?.value * (totalGrandTotal / 100));
-
-    if (totalDiscount?.value && totalDiscount.value > 0 && totalInput)
-      totalDiscountTotal = totalDiscount.value;
+     for(let invItem of this.invoiceItems.controls){
+       let amount = invItem.get('paidAmount')?.value;
+       let discountType = invItem.get('discountType')?.value;
+       let discount = !invItem.get('discountAmount')?.value || invItem.get('discountAmount')?.value === 0 ? 0 : discountType === 1 ? invItem.get('discountAmount')?.value  : (invItem.get('discountAmount')?.value / 100) * amount;
+       totalGrandTotal += amount;
+       totalDiscountTotal += discount;
+       
+     }
+     
+     if(totalDiscount?.value && totalDiscount.value > 0 && totalInput) totalDiscountTotal = totalDiscount.value;
 
     totalDiscount?.setValue(totalDiscountTotal);
     grandTotal?.setValue(
