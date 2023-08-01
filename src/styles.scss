@@ -121,17 +121,17 @@ p-autocomplete{
   }
 }
 
-button{
-  background: $btnbg;
-  color: $bluetheme-textColor;
-  border: 0;
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 16px;
-  &:hover{
-    background: $btnbg !important;
-  }
-}
+// button{
+//   background: $btnbg;
+//   color: $bluetheme-textColor;
+//   border: 0;
+//   padding: 5px 10px;
+//   border-radius: 6px;
+//   font-size: 16px;
+//   &:hover{
+//     background: $btnbg !important;
+//   }
+// }
 
 p-calendar{
   display: block;
@@ -200,4 +200,9 @@ p-button{
 
 .mdc-dialog__title::before{
   height: 0 !important;
+}
+
+.close-icon:hover {
+  transform: rotate(180deg);
+  transition: 0.5s ease-in-out;
 }

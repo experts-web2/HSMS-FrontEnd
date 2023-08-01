@@ -163,8 +163,8 @@
             </div>
 
         </div>
-        <div class="form-group" style="text-align: end;">
-            <button pButton type="submit" style="margin-left: 20px;" [disabled]="
+        <div class="form-group flex justify-end" style="text-align: end;">
+            <button type="submit" [disabled]="
             (f['firstName'].errors || !f['firstName'].valid) &&
             (f['lastName'].errors || !f['lastName'].valid) &&
             (f['email'].errors || !f['email'].valid) &&
