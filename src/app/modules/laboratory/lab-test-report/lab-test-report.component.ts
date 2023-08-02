@@ -173,7 +173,7 @@ export class LabTestReportComponent
   onPatientSearch(event: { query: string }): void {
     const searchTerm = event.query.trim();
     if (searchTerm.length >= 3) {
-      this.patientService.getPatientsDropdown(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      this.patientService.patientTestInvoice(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
           this.patientsToShow = x;
         },
@@ -186,7 +186,7 @@ export class LabTestReportComponent
 
   onPatientSelection(selectPatient: string) {
     this.labReportForm.get('patientId')?.setValue(selectPatient);
-    this.testService.getTestByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    this.testService.getTestInvoiceItemsByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.tests = x;
       }

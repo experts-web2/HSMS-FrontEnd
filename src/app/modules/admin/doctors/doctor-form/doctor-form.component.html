@@ -5,14 +5,16 @@
             <div class="row">
                 <div class="col-6">
                     <label for="name">First Name<span class="text-danger">*</span></label>
-                    <input class="form-control" pInputText type="text" formControlName="firstName" name="" required id="firstName">
+                    <input class="form-control" pInputText type="text" formControlName="firstName" name="" required
+                        id="firstName">
                     <div class="text-danger"
                         *ngIf="(f['firstName'].errors && f['firstName'].touched) || (f['firstName'].dirty && f['firstName'].errors)">
                         First Name is required.</div>
                 </div>
                 <div class="col-6">
                     <label for="name">Last Name<span class="text-danger">*</span></label>
-                    <input class="form-control" pInputText type="text" name="" formControlName="lastName" required id="lastName">
+                    <input class="form-control" pInputText type="text" name="" formControlName="lastName" required
+                        id="lastName">
                     <div class="text-danger"
                         *ngIf="(f['lastName'].errors && f['lastName'].touched) || (f['lastName'].dirty && f['lastName'].errors)">
                         Last Name is required.</div>
@@ -21,7 +23,8 @@
             <div class="row mt-3">
                 <div class="col-4">
                     <label for="email">Email<span class="text-danger">*</span></label>
-                    <input class="form-control" pInputText type="email"  formControlName="email" (blur)="isEmailExist()" required autocomplete="off">
+                    <input class="form-control" pInputText type="email" formControlName="email" (blur)="isEmailExist()"
+                        required autocomplete="off">
                     <div class="text-danger"
                         *ngIf="(f['email'].errors && f['email'].touched) || (f['email'].dirty && f['email'].errors)">
                         Email is required.</div>
@@ -34,7 +37,8 @@
 
                 <div *ngIf="action !== 'update'" class="col-4">
                     <label for="password">Password<span class="text-danger">*</span></label>
-                    <input class="form-control" pInputText type="password" name="" formControlName="password" autocomplete="off">
+                    <input class="form-control" pInputText type="password" name="" formControlName="password"
+                        autocomplete="off">
 
                     <div class="text-danger"
                         *ngIf="(f['password'].errors && f['password'].touched) || (f['password'].dirty && f['password'].errors)">
@@ -54,20 +58,20 @@
             <div class="row mt-3">
                 <label for="name">Gender</label>
                 <div class="d-flex mt-3 justify-content-between align-items-center w-50">
-                    <div class="d-flex justify-content-between align-items-center" >
+                    <div class="d-flex justify-content-between align-items-center">
                         <label for="">Male</label>
-                        <input class="form-check-input mt-0 ms-2" type="radio" name="gender" id="male" formControlName="gender"
-                            [value]="1">
+                        <input class="form-check-input mt-0 ms-2" type="radio" name="gender" id="male"
+                            formControlName="gender" [value]="1">
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <label for="">Female</label>
-                        <input class="form-check-input mt-0 ms-2" type="radio" name="gender" id="female" formControlName="gender"
-                            [value]="2">
+                        <input class="form-check-input mt-0 ms-2" type="radio" name="gender" id="female"
+                            formControlName="gender" [value]="2">
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <label for="">Others</label>
-                        <input class="form-check-input mt-0 ms-2" type="radio" name="gender" id="others" formControlName="gender"
-                            [value]="3">
+                        <input class="form-check-input mt-0 ms-2" type="radio" name="gender" id="others"
+                            formControlName="gender" [value]="3">
                     </div>
                 </div>
             </div>
@@ -78,7 +82,8 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                     <label for="token">Token<span class="text-danger"></span></label>
-                    <input class="form-check-input mt-0 ms-2" type="checkbox" formControlName="token" name="" id="token">
+                    <input class="form-check-input mt-0 ms-2" type="checkbox" formControlName="token" name=""
+                        id="token">
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                     <label for="appointment">Appointment<span class="text-danger"></span></label>
@@ -89,8 +94,8 @@
             <div class="row mt-3">
                 <div class="col-4">
                     <label for="consultationFee">Consultation Fee<span class="text-danger">*</span></label>
-                    <input class="form-control" pInputText type="number" required name="" formControlName="consultationFee"
-                        id="consultationFee">
+                    <input class="form-control" pInputText type="number" required name=""
+                        formControlName="consultationFee" id="consultationFee">
                     <div class="text-danger"
                         *ngIf="(f['consultationFee'].errors && f['consultationFee'].touched) || (f['consultationFee'].dirty && f['consultationFee'].errors)">
                         Consultation Fee is required.</div>
@@ -106,7 +111,8 @@
                 </div>
                 <div class="col-4">
                     <label for="timings">Timings</label>
-                    <input class="form-control" pInputText type="text" formControlName="timings" name="" id="timings" required>
+                    <input class="form-control" pInputText type="text" formControlName="timings" name="" id="timings"
+                        required>
                     <div class="text-danger"
                         *ngIf="(f['timings'].errors && f['timings'].touched) || (f['timings'].dirty && f['timings'].errors)">
                         Timing is required.</div>
@@ -118,7 +124,8 @@
             <div class="row mt-3">
                 <div class="col-6">
                     <label for="speciality">Speciality<span class="text-danger">*</span></label>
-                    <input class="form-control" pInputText type="text" formControlName="speciality" name="" id="speciality" required>
+                    <input class="form-control" pInputText type="text" formControlName="speciality" name=""
+                        id="speciality" required>
                     <div class="text-danger"
                         *ngIf="(f['speciality'].errors && f['speciality'].touched) || (f['speciality'].dirty && f['speciality'].errors)">
                         Speciality is required.</div>
@@ -126,7 +133,8 @@
 
                 <div class="col-6">
                     <label for="speciality">Qualification<span class="text-danger">*</span></label>
-                    <input class="form-control" pInputText type="text" formControlName="qualification" name="" id="qualification" required>
+                    <input class="form-control" pInputText type="text" formControlName="qualification" name=""
+                        id="qualification" required>
                     <div class="text-danger"
                         *ngIf="(f['qualification'].errors && f['qualification'].touched) || (f['qualification'].dirty && f['qualification'].errors)">
                         Qualification is required.</div>
@@ -135,7 +143,8 @@
 
             <div class="form-outline mt-3">
                 <label class="form-label" for="biography">Biography</label>
-                <textarea class="form-control" pInputTextarea id="biography" formControlName="biography" rows="4"></textarea>
+                <textarea class="form-control" pInputTextarea id="biography" formControlName="biography"
+                    rows="4"></textarea>
             </div>
 
             <div class="mt-3 

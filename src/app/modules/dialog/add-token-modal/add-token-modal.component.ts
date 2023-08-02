@@ -371,7 +371,9 @@ export class AddTokenModalComponent
 
   calculate(totalInput?: boolean) {
     let totalDiscountType = this.addTokenForm.get('totalDiscountType');
+    console.log('totalDiscountType',totalDiscountType?.value);
     let totalDiscount = this.addTokenForm.get('totalDiscount');
+    console.log('totalDiscount',totalDiscount?.value);
     if (totalDiscount?.value && totalDiscount.value > 0 && totalInput) {
       for (let invItem of this.invoiceItems.controls) {
         invItem.get('discountAmount')?.setValue(0);
@@ -379,6 +381,7 @@ export class AddTokenModalComponent
     }
     let amountPaid = this.addTokenForm.get('amountPaid');
     let grandTotal = this.addTokenForm.get('grandTotal');
+    console.log('grandTotal',grandTotal?.value);
     let totalGrandTotal = 0;
     let totalDiscountTotal = 0;
      for(let invItem of this.invoiceItems.controls){
@@ -393,11 +396,9 @@ export class AddTokenModalComponent
      if(totalDiscount?.value && totalDiscount.value > 0 && totalInput) totalDiscountTotal = totalDiscount.value;
 
     totalDiscount?.setValue(totalDiscountTotal);
+    console.log(totalDiscountTotal)
     grandTotal?.setValue(
-      totalGrandTotal -
-        (totalDiscountType?.value === 2
-          ? (totalDiscountTotal / 100) * totalDiscount?.value
-          : totalDiscountTotal)
+      totalGrandTotal - (totalDiscountType?.value === 2 ? ((totalDiscountTotal / 100) * totalDiscount?.value) : totalDiscountTotal)
     );
   }
 

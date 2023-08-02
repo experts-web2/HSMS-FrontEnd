@@ -58,6 +58,9 @@ export class TestService extends HttpService {
   getTestByPatientid(id: string){
     return this.get(`${this.baseEndPoint}/getbypatientid/${id}`);
   }
+  getTestInvoiceItemsByPatientid(patientId: string){
+    return this.get(`${BaseEndPoints.Patienttestinvoiceitem}/testdropdownbytodayinvoiced?patientId=${patientId}`);
+  }
 
 
   generateTestSampleID(sampleIdPayload:any){

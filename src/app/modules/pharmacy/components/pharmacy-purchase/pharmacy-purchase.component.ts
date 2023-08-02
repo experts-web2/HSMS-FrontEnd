@@ -11,7 +11,8 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 export class PharmacyPurchaseComponent implements OnInit {
 
   purchaseMedicineForm!: FormGroup;
-  vendorDropDowns: Array<IDropDown> = [];
+  vendors: Array<IDropDown> = [];
+  vendorsToView: Array<IDropDown> = [];
 
   constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService){
     let initialMedicine = this.fb.group({
@@ -74,12 +75,31 @@ export class PharmacyPurchaseComponent implements OnInit {
     }
   }
 
+  onVendorSelection(vendorId:string){
+    this.purchaseMedicineForm.get('vendorId')?.setValue(vendorId);
+  }
+
   getVendorsDropDown(){
     this.vendorService.getVendors().subscribe({
       next: (x) => {
-        this.vendorDropDowns = x;
+        this.vendors = x;
       }
     })
+  }
+
+
+  onSearchVendor(event: any) {
+    console.log(event.query);
+    const query = event.query.trim().toLowerCase();
+    this.vendorsToView = this.vendors.filter(
+      (vendor) =>
+        vendor.name.toLowerCase().includes(query)
+    );
+  }
+
+
+  saveMedicine(){
+    console.log(this.purchaseMedicineForm.value)
   }
 
 }

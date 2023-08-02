@@ -5,61 +5,62 @@
     <div class="mt-5">
         <div class="p-5">
             <form [formGroup]="purchaseMedicineForm">
-                <div class="mb-5">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Vendor: </label>
-                    <select
-                        class="block appearance-none border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-1/6"
-                        name="" id="" formControlName="vendorId">
-                        <option [value]="null" [defaultSelected]="true" disabled>Select a Vendor</option>
-                    </select>
+                <div class="mb-5 w-1/3">
+                    <label class="w-full" for="category">Vendor :<span class="text-danger"></span></label>
+                    <p-autoComplete [suggestions]="vendorsToView" #doctor dropdownIcon="pi pi-search"
+                        (completeMethod)="onSearchVendor($event)" [dropdown]="true"
+                        (onSelect)="onVendorSelection(doctor.value.id)" field="name" dropdownIcon="pi pi-search"
+                        [minLength]="3"></p-autoComplete>
                 </div>
                 <div class="flex flex-column" formArrayName="medicines">
                     <div *ngFor="let form of medicines.controls; let i = index" class="flex mb-3">
                         <p class="text-2xl mr-2 font-bold mr-5">{{i+1}}</p>
                         <div [formGroupName]="i" class="flex">
-                            <div>
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine Name</label>
-                                <input
-                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    type="text" formControlName="medicineId">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine Packs</label>
-                                <input
-                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    type="number" formControlName="packsQty">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">#Units Per/Pak</label>
-                                <input
-                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    type="number" formControlName="unitsPerPack">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A pack</label>
-                                <input
-                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    type="number" formControlName="packPrice">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A Unit</label>
-                                <input
-                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    type="number" formControlName="unitPrice">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">MFG: Date</label>
-                                    <p-calendar  [showIcon]="true" formControlName="mfgDate"></p-calendar>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">EXP: Date</label>
+                            <div class="grid md:grid-cols-4 gap-4 w-full px-2 md:px-8">
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine Name</label>
+                                    <input
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        type="text" formControlName="medicineId">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine Packs</label>
+                                    <input
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        type="number" formControlName="packsQty">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">#Units Per/Pak</label>
+                                    <input
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        type="number" formControlName="unitsPerPack">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A pack</label>
+                                    <input
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        type="number" formControlName="packPrice">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A Unit</label>
+                                    <input
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        type="number" formControlName="unitPrice">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">MFG: Date</label>
+                                    <p-calendar [showIcon]="true" formControlName="mfgDate"></p-calendar>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">EXP: Date</label>
                                     <p-calendar [showIcon]="true" formControlName="expDate"></p-calendar>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="">Brand</label>
-                                <input
-                                    class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    type="text" formControlName="brandId">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Brand</label>
+                                    <input
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        type="text" formControlName="brandId">
+                                </div>
                             </div>
                             <div>
                                 <button (click)="removeMedicine(i)"><i class="fa fa-trash"></i></button>
@@ -77,7 +78,7 @@
             </div>
             <div class="flex justify-end">
                 <button
-                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
+                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" (click)="saveMedicine()">
                     Save
                 </button>
                 <button

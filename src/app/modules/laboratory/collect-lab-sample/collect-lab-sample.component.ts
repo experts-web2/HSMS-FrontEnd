@@ -62,10 +62,6 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   }
 
 
-  getPatients() {
-    
-  }
-
   getTestCategory() {
     this.testCategoryService.getTestCategoryList().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
@@ -92,7 +88,8 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
       {
         next: (x) => {
           console.log(x);
-          this.generateId = x
+          this.generateId = x.sampleId
+
           this.alertService.success('Sample Id Generate successfully', 'Success');
 
         },
@@ -125,7 +122,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
   onPatientSelection(selectPatient: string) {
     this.collectionForm.get('patientId')?.setValue(selectPatient);
-    this.testService.getTestByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    this.testService.getTestInvoiceItemsByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.tests = x;
       }
@@ -135,7 +132,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   onPatientSearch(event: { query: string }): void {
     const searchTerm = event.query.trim();
     if (searchTerm.length >= 3) {
-      this.patientService.getPatientsDropdown(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      this.patientService.patientTestInvoice(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
           this.patientsToShow = x;
           console.log('this.patients', this.patients);
