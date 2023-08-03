@@ -33,6 +33,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
 import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
+import { BrandFormComponent } from './medicine-brand/brand-form/brand-form.component';
+import { BrandListComponent } from './medicine-brand/brand-list/brand-list.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,9 @@ import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
     DoctorFormComponent,
     DoctorListComponent,
     VendorListComponent,
-    AddVendorComponent
+    AddVendorComponent,
+    BrandFormComponent,
+    BrandListComponent
   ],
   imports: [
     CommonModule,

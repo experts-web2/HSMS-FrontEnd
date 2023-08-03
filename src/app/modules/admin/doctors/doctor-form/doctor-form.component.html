@@ -173,17 +173,17 @@
 
         </div>
         <div class="form-group flex justify-end" style="text-align: end;">
-            <button type="submit" [disabled]="
-            (f['firstName'].errors || !f['firstName'].valid) &&
-            (f['lastName'].errors || !f['lastName'].valid) &&
-            (f['email'].errors || !f['email'].valid) &&
-            (f['consultationFee'].errors || !f['consultationFee'].valid) &&
-            (f['sharePrice'].errors || !f['sharePrice'].valid) &&
-            (f['timings'].errors || !f['timings'].valid) &&
-            (f['speciality'].errors || !f['speciality'].valid) &&
-            (f['qualification'].errors || !f['qualification'].valid) &&
-            (f['service'].errors || !f['service'].valid) 
-            " class="btn btn-primary">{{action === 'add'?'Add Doctor +':'Update Doctor +'}}</button>
+            <p-button type="submit" [disabled]="
+            (f['firstName'].invalid) &&
+            (f['lastName'].invalid) &&
+            (f['email'].invalid) &&
+            (f['consultationFee'].invalid) &&
+            (f['sharePrice'].invalid) &&
+            (f['timings'].invalid) &&
+            (f['speciality'].invalid) &&
+            (f['qualification'].invalid) &&
+            (f['service'].invalid) 
+            " >{{action === 'add'?'Add Doctor +':'Update Doctor +'}}</p-button>
         </div>
     </form>
 </p-tabView>

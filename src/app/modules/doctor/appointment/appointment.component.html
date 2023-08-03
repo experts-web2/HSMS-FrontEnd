@@ -1,7 +1,7 @@
 <div class="flex" *ngIf="!tokenId">
   <div class="mb-5 mt-3 flex flex-col md:flex-row justify-content-between justify-items-center position-relative">
     <label for="patient">Patient</label>
-    <p-autoComplete #autoComplete [suggestions]="( !autoComplete || autoComplete.inputValue === '' ? patients: patientsToShow)" (completeMethod)="searchPatient(autoComplete)" (onSelect)="patientSelect(autoComplete.value.id)" field="name"></p-autoComplete>
+    <p-autoComplete #autoComplete [suggestions]="( !autoComplete || autoComplete.inputValue === '' ? patients: patientsToShow)" (completeMethod)="searchPatient(autoComplete)" (onSelect)="patientSelect(autoComplete.value.id)" field="name" [showEmptyMessage]="true"></p-autoComplete>
     
   </div>
   <select class="w-1/5 rounded border-solid border-2 h-10 mb-5 mt-3 flex flex-col md:flex-row justify-content-between justify-items-center position-relative" name="" id="" #patientHistory

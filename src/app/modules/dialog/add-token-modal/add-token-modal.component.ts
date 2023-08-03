@@ -52,6 +52,7 @@ export class AddTokenModalComponent
   tests: Array<IDropDown> = [];
   radiology: Array<IDropDown> = [];
   descriptions: Array<IDropDown> = [];
+  tokenToShow:Array<{ value: number; label: string }>=[]
   tokentypes: Array<{ value: number; label: string }> = [
     {
       label: 'Doctor',
@@ -207,7 +208,6 @@ export class AddTokenModalComponent
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe({
         next: (x) => {
-          console.log(x);
           this.doctors = x;
         },
         error: (err) => {},
@@ -220,7 +220,6 @@ export class AddTokenModalComponent
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe({
         next: (x) => {
-          console.log(x);
           this.tests = x;
           if (!this.display) {
             this.descriptions = this.tests;
@@ -255,8 +254,8 @@ export class AddTokenModalComponent
     this.addTokenForm.get('patientName')?.setValue(patient.name);
   }
 
-  searchPatient(query: string) {
-    let text = query.toLowerCase();
+  searchPatient(event: any) {
+    let text = event.query.trim().toLowerCase();
     this.patientsToShow = this.patients.filter((x) =>
       x.name.toLowerCase().includes(text)
     );
@@ -329,7 +328,7 @@ export class AddTokenModalComponent
   addNewInvoiceItem() {
     let newForm = this.fb.group({
       paidAmount: new FormControl<number | null>(null, [Validators.required]),
-      discountAmount: new FormControl<number | null>(null, [
+      discountAmount: new FormControl<number | null>(0, [
         Validators.required,
       ]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
@@ -344,7 +343,7 @@ export class AddTokenModalComponent
     this.invoiceItems.removeAt(index);
     let newForm = this.fb.group({
       paidAmount: new FormControl<number | null>(null, [Validators.required]),
-      discountAmount: new FormControl<number | null>(null, [
+      discountAmount: new FormControl<number | null>(0, [
         Validators.required,
       ]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
@@ -355,7 +354,16 @@ export class AddTokenModalComponent
     if (this.invoiceItems.length < 1) this.invoiceItems.push(newForm);
   }
 
-  tokenTypeChange(e: any) {
+
+  searchToken(event: any) {
+    let text = event.query.trim().toLowerCase();
+    this.tokenToShow = this.tokentypes.filter((x) =>
+      x.label.toLowerCase().includes(text)
+    );
+  }
+
+  tokenTypeChange(tockenType: any) {
+    this.addTokenForm.get('tokenTypes')?.setValue(tockenType);
     let tokentype = this.addTokenForm.get('tokenTypes')?.value;
     switch (tokentype) {
       case TokenTypes.Doctor:
@@ -371,9 +379,7 @@ export class AddTokenModalComponent
 
   calculate(totalInput?: boolean) {
     let totalDiscountType = this.addTokenForm.get('totalDiscountType');
-    console.log('totalDiscountType',totalDiscountType?.value);
     let totalDiscount = this.addTokenForm.get('totalDiscount');
-    console.log('totalDiscount',totalDiscount?.value);
     if (totalDiscount?.value && totalDiscount.value > 0 && totalInput) {
       for (let invItem of this.invoiceItems.controls) {
         invItem.get('discountAmount')?.setValue(0);
@@ -381,7 +387,6 @@ export class AddTokenModalComponent
     }
     let amountPaid = this.addTokenForm.get('amountPaid');
     let grandTotal = this.addTokenForm.get('grandTotal');
-    console.log('grandTotal',grandTotal?.value);
     let totalGrandTotal = 0;
     let totalDiscountTotal = 0;
      for(let invItem of this.invoiceItems.controls){
@@ -396,7 +401,6 @@ export class AddTokenModalComponent
      if(totalDiscount?.value && totalDiscount.value > 0 && totalInput) totalDiscountTotal = totalDiscount.value;
 
     totalDiscount?.setValue(totalDiscountTotal);
-    console.log(totalDiscountTotal)
     grandTotal?.setValue(
       totalGrandTotal - (totalDiscountType?.value === 2 ? ((totalDiscountTotal / 100) * totalDiscount?.value) : totalDiscountTotal)
     );
