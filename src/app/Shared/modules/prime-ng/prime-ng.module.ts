@@ -33,7 +33,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { PanelModule } from 'primeng/panel';
 import { AutoFocusModule } from 'primeng/autofocus';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
-
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   declarations: [],
@@ -71,6 +71,7 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
     PanelModule,
     AutoFocusModule,
     ProgressSpinnerModule,
+    FileUploadModule
   ],
   providers: [MessageService],
 })

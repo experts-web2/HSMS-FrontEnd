@@ -2,8 +2,10 @@ import {
   Component,
   Input,
   OnInit,
+  OnChanges,
   TemplateRef,
   ViewChild,
+  SimpleChanges,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs';
@@ -21,8 +23,7 @@ import { IVital } from 'src/app/models/vitals';
 })
 export class VitalsComponent
   extends SubscriptionManagmentDirective
-  implements OnInit
-{
+  implements OnInit, OnChanges {
   @Input() tokenVitals!: ITokenVitals;
   @Input() token!: IToken;
   @Input() historyVital!: IVital | null;
@@ -64,12 +65,19 @@ export class VitalsComponent
 
   get f() { return this.vitalForm.controls; }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    let tokenId = changes['historyTokenId'].currentValue;
+    console.log(tokenId);
+    this.getVitalsByTokenId(this.historyTokenId);
+
+  }
+
   ngOnInit(): void {
     this.getVitalsHistoryDropDown();
     this.vitalForm.valueChanges.subscribe({
       next: (x) => {
-        
-        if(!this.historyVital){
+
+        if (!this.historyVital) {
           console.log('chnages');
           this.currentValueSetter(x);
         }
@@ -78,13 +86,13 @@ export class VitalsComponent
 
     if (this.token) {
       this.tokenVitals = <ITokenVitals>this.token.tokenDetail;
-      this.setVitalsFromInput();
+      // this.setVitalsFromInput();
     }
 
-    if(this.historyTokenId) this.getVitalsByTokenId(this.historyTokenId);
+    if (this.historyTokenId) this.getVitalsByTokenId(this.historyTokenId);
   }
 
-  currentValueSetter(value: {[key: string]: any}){
+  currentValueSetter(value: { [key: string]: any }) {
     this.vitalRequest = {
       pulseHeartRate: value['pulseHeartRate'],
       temperature: value['temperature'],
@@ -104,7 +112,7 @@ export class VitalsComponent
   }
 
   onSubmit() {
-    
+
     this.loaderService.show();
     this.vitalService.addVitals(this.vitalRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
@@ -148,7 +156,7 @@ export class VitalsComponent
       });
   }
 
-  getVitalsByTokenId(tokenId: string){
+  getVitalsByTokenId(tokenId: string) {
     this.vitalService.getVitalsByTokenId(tokenId).subscribe({
       next: (x) => {
         this.historyVital = x;
@@ -161,9 +169,9 @@ export class VitalsComponent
     })
   }
 
-  getVitalsById(vitalsId: string){
+  getVitalsById(vitalsId: string) {
     this.vitalService.getVitalsById(vitalsId).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x)=>{
+      next: (x) => {
         this.historyVital = x;
         this.formSetter(x);
         console.log(this.vitalRequest)
@@ -174,17 +182,17 @@ export class VitalsComponent
     })
   }
 
-  currentVitals(){
+  currentVitals() {
     this.vitalForm.enable({
       onlySelf: true
     });
-    
+
     if (this.vitalRequest) this.formSetter(this.vitalRequest);
     else this.vitalForm.reset();
     this.historyVital = null;
   }
 
-  formSetter(vitals: IVitalRequest){
+  formSetter(vitals: IVitalRequest) {
     this.vitalForm.patchValue({
       pulseHeartRate: vitals.pulseHeartRate,
       temperature: vitals.temperature,
@@ -203,14 +211,14 @@ export class VitalsComponent
 }
 
 interface ITokenVitals {
-  pulseHeartRate: number;
-  temperature: number;
-  bloodPressure: string;
-  respiratoryRate: number;
-  bloodSugar: number;
-  height: number;
-  weight: number;
-  bodyMassIndex: number;
-  bodySurfaceArea: number;
-  oxygenSaturation: number;
+  pulseHeartRate?: number;
+  temperature?: number;
+  bloodPressure?: string;
+  respiratoryRate?: number;
+  bloodSugar?: number;
+  height?: number;
+  weight?: number;
+  bodyMassIndex?: number;
+  bodySurfaceArea?: number;
+  oxygenSaturation?: number;
 }

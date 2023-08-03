@@ -11,7 +11,9 @@ import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { IPatient } from 'src/app/models/interfaces/patient-model';
-import { AlertService, TokenService, PatientService } from 'src/app/services';
+import { IVital } from 'src/app/models/vitals';
+import { AlertService, TokenService, PatientService, VitalService, MedicationService, PrescriptionService } from 'src/app/services';
+import { LabOrderService } from '../../../services/lab-order/lab-order.service';
 
 @Component({
   selector: 'app-appointment',
@@ -29,8 +31,9 @@ export class AppointmentComponent implements OnInit {
   $unsubscribe: Observable<any> = of(null);
   logedInUser!: ILogedInUser;
   historyTokenId!: string;
+  tokenVitals!: IVital;
 
-  constructor(private alertService: AlertService, private readonly route: ActivatedRoute, private readonly tokenService: TokenService, private readonly patientService: PatientService, private readonly userStateService: UserStateService) {
+  constructor(private alertService: AlertService, private readonly route: ActivatedRoute, private readonly tokenService: TokenService, private readonly patientService: PatientService, private readonly userStateService: UserStateService, private readonly vitalsService: VitalService, private readonly medicationService: MedicationService, private readonly prescriptionService: PrescriptionService, private readonly LabOrderService: LabOrderService) {
     this.route.params.subscribe({
       next: (x) => {
         this.tokenId = x["tokenId"];
@@ -39,7 +42,7 @@ export class AppointmentComponent implements OnInit {
 
     this.userStateService.getUserState().subscribe({
       next: (x) => {
-        this.logedInUser = x;
+        this.logedInUser = x; 
         
       }
     })
@@ -63,7 +66,11 @@ export class AppointmentComponent implements OnInit {
 
   selectPatientHistoryVisit(visitId: any) {
     let selectedVisit = this.patientHistoryVisits.find(x => x.id === visitId);
-    if(selectedVisit) this.token = selectedVisit;
+    if(selectedVisit) {
+      this.token = selectedVisit
+      this.historyTokenId = this.token.id;
+      this.getVitalsByTokenId(this.token.id); 
+    }
   }
 
   getPatientHistorvisits(patientId: string) {
@@ -164,5 +171,38 @@ export class AppointmentComponent implements OnInit {
     this.tokenService.getTokenById('').subscribe({
       next: (x) => {},
     });
+  }
+  
+  getVitalsByTokenId(tokenId: string){
+    this.vitalsService.getVitalsByTokenId(tokenId).subscribe({
+      next: (x) => {
+        console.log(x);
+        if (x){
+
+          this.token.tokenDetail = {
+            tokenId: this.token.id,
+            pulseHeartRate: x.pulseHeartRate,
+            bloodPressure: x.bloodPressure,
+            height: x.height,
+            tokenTypes: 1,
+            respiratoryRate: x.respiratoryRate,
+            weight: x.weight,
+            bloodSugar: x.bloodSugar,
+            bodyMassIndex: x.bodyMassIndex,
+            oxygenSaturation: x.oxygenSaturation,
+            temperature: x.temperature,
+            bodySurfaceArea: x.bodySurfaceArea,
+            id: '',
+            createdAt: new Date(),
+            createdBy: '',
+            diastolicBloodPressure: x.diastolicBloodPressure
+          }
+        }
+        else {
+          this.token.tokenDetail = undefined;
+        }
+        
+      }
+    })
   }
 }

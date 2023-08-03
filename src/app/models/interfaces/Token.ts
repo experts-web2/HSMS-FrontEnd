@@ -18,22 +18,22 @@ export interface IToken {
 
   
   export interface ITokenDetail {
-    tokenId: string;
-    tokenTypes: number;
-    pulseHeartRate: number;
-    temperature: number;
-    bloodPressure: string;
-    respiratoryRate: number;
-    bloodSugar: number;
-    height: number;
-    weight: number;
-    bodyMassIndex: number;
-    bodySurfaceArea: number;
-    oxygenSaturation: number;
-    diastolicBloodPressure: string;
+    tokenId?: string;
+    tokenTypes?: number;
+    pulseHeartRate?: number;
+    temperature?: number;
+    bloodPressure?: string;
+    respiratoryRate?: number;
+    bloodSugar?: number;
+    height?: number;
+    weight?: number;
+    bodyMassIndex?: number;
+    bodySurfaceArea?: number;
+    oxygenSaturation?: number;
+    diastolicBloodPressure?: number;
     id: string;
     createdAt: Date;
-    modifiedAt: Date;
+    modifiedAt?: Date;
     createdById?: string;
     createdBy?: string;
     modifiedById?: string;

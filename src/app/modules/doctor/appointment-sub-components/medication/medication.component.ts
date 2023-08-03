@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -20,7 +20,7 @@ import { IMedication } from 'src/app/models/interfaces/Medication';
   templateUrl: './medication.component.html',
   styleUrls: ['./medication.component.scss']
 })
-export class MedicationComponent extends SubscriptionManagmentDirective {
+export class MedicationComponent extends SubscriptionManagmentDirective implements OnInit, OnChanges {
   @Input() token!: IToken;
   @Input() historyTokenId!: string;
 
@@ -67,6 +67,10 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
       followUpDate: new FormControl<Date | null>(null),
       medicationNotes: new FormControl<string | null>(null)
     })
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.getMedicationByTokenId(this.historyTokenId);
   }
 
   get medicationItems(): FormArray{
@@ -121,12 +125,15 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
   getMedicationByTokenId(tokenId: string){
     this.medicationService.getMedicationByTokenId(tokenId).subscribe({
       next: (x)=> {
-        this.medicationRequest.medicationDetails = this.medicationItems.value ?? [];
+        console.log({medicationDetail: x, medicationItems: this.medicationItems.value});
+        console.log(Object.entries(this.medicationItems.value[0]).every(x => x[1] !== null));
+        
+        this.medicationRequest.medicationDetails = [];
         this.historyMedication = x;
         this.medicationForm.disable({
           onlySelf: true
         });
-        this.formSetter(x)
+        this.formSetter(x);
       }
     })
   }
