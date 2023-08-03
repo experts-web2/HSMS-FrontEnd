@@ -32,15 +32,12 @@ export class AddPatientTestComponent
   extends SubscriptionManagmentDirective
   implements OnInit
 {
-  selectedDoctor = '';
-  selectedPayment = '';
   addPatientTestForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
   doctors: Array<IDropDown> = [];
   tests: Array<ILabTest> = [];
   testToView: Array<ILabTest> = [];
   radiology: Array<IDropDown> = [];
-
   discountTypes = [
     {
       label: 'Amount',
@@ -51,7 +48,6 @@ export class AddPatientTestComponent
       value: 2,
     },
   ];
-  dropDown!: Array<{ id: number; label: string }>;
   patients: Array<IDropDown> = [];
   patientsToShow: Array<IDropDown> = [];
 
@@ -80,14 +76,13 @@ export class AddPatientTestComponent
       discountAmount: new FormControl<number | null>(0, [Validators.required]),
       discountType: new FormControl<number | null>(1, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
-      reportingHours: new FormControl<string | null>(null, [
-        Validators.required,
-      ]),
+      reportingHours: new FormControl<string | null>(null, [Validators.required]),
       othersType: new FormControl<number | null>(null),
       othersName: new FormControl<string | null>(null),
     });
     this.addPatientTestForm = this.fb.group({
       doctorId: new FormControl<string | null>(null, [Validators.required]),
+      otherName: new FormControl<string | null>(null, [Validators.required]),
       patientId: new FormControl<string | null>(null, [Validators.required]),
       totalDiscount: new FormControl<number | null>(0, [Validators.required]),
       paymentType: new FormControl<number | null>(1, [Validators.required]),
@@ -139,17 +134,11 @@ export class AddPatientTestComponent
     const searchTerm = event.query.trim().toLowerCase();
     console.log(searchTerm)
     if (searchTerm.length >= 3) {
-      // this.spinner = true;
-
       this.patientService.getPatientsDropdown(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
           this.patientsToShow = x;
-          // this.spinner = false;
-
         },
         error: (err) => {
-          // this.spinner = false;
-
         }
       })
     }
@@ -326,14 +315,6 @@ export class AddPatientTestComponent
     );
   }
 
-
-  // addPatient() {
-  //   this.ref = this.dialogService.open(PatientFormComponent, {
-  //     width: '600px',
-  //   });
-  //   this.ref.onClose.subscribe((medicine) => {
-  //   });
-  // }
   addPatient() {
     const dialogRef = this.dialog.open(PatientFormComponent, {
       width: '600px',

@@ -9,14 +9,14 @@
     <i class="fa-2xl px-8 py-8 ml-auto w-fit block"></i>
     <p class="text-center font-weight-bold"><b>Add Patient Test</b></p>
   </div>
-  <div class="px-md-5 px-2 pb-5">
+  <div class="px-md-5 px-2">
     <div>
       <label for="descriptionDetail">Patient</label>
 
       <div class="d-flex w-1/3 justify-content-center flex">
         <p-autoComplete [suggestions]="patientsToShow" #patient [dropdown]="true" field="name"
           (completeMethod)="onPatientSearch($event)" (onSelect)="onPatientSelection(patient.value.id)"
-          placeholder="Search Patient" dropdownIcon="pi pi-search">
+          placeholder="Search Patient" dropdownIcon="pi pi-search" [showEmptyMessage]="true">
         </p-autoComplete>
         <button class="d-flex btn btn-primary keep-all ms-4 text-wrap align-items-center" (click)="addPatient()">
           <i class="fa-solid fa-plus me-2"></i><span class="whitespace-nowrap">Add Patient</span>
@@ -31,7 +31,7 @@
               <div class="d-flex justify-content-center flex-column w-full md:pr-2">
                 <p-autoComplete [suggestions]="testToView" #test [dropdown]="true" field="name"
                   (completeMethod)="search($event)" (onSelect)="onTestSelect(i, test.value)"
-                  placeholder="Test Name/Code" dropdownIcon="pi pi-search" [minLength]="1">
+                  placeholder="Test Name/Code" dropdownIcon="pi pi-search" [minLength]="1" [showEmptyMessage]="true">
                 </p-autoComplete>
               </div>
               <div class="d-flex justify-content-center lg:px-2 w-full flex-column">
@@ -88,9 +88,13 @@
             <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
               <label class="w-full" for="category">Referral :<span class="text-danger"></span></label>
               <p-autoComplete [suggestions]="doctorsToView" #doctor dropdownIcon="pi pi-search"
-                (completeMethod)="onSearchDoctor($event)" [dropdown]="true"
+                (completeMethod)="onSearchDoctor($event)" placeholder="select referral" [dropdown]="true"
                 (onSelect)="onDoctorSelection(doctor.value.id)" field="name" dropdownIcon="pi pi-search"
-                [minLength]="3"></p-autoComplete>
+                [minLength]="3" [showEmptyMessage]="true"></p-autoComplete>
+                <div class=" mt-4 w-full flex-col md:flex-row">
+                  <input class="pulse w-1/2 h-10" type="text" pInputText name="otherName" formControlName="otherName"
+                   />
+                </div>
             </div>
             <div>
               <label for="invoiceNote">Invoice Note</label>
@@ -115,7 +119,7 @@
               </div>
               <div class="d-flex justify-content-center mt-4 w-full flex-col">
                 <label class="d-flex align-items-center min-w-fit" for="completionDate">Test Report Date:</label>
-                <p-calendar formControlName="completionDate" [showIcon]="true" [showSeconds]="true" [showTime]="true">
+                <p-calendar formControlName="completionDate" [showIcon]="true" [showTime]="true">
                 </p-calendar>
               </div>
             </div>

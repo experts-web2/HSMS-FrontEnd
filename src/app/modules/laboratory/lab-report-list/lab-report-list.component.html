@@ -19,13 +19,13 @@
                 <div>
                     <p-autoComplete [suggestions]="testsToShow" [dropdown]="true" field="name"
                         (completeMethod)="search($event)" placeholder="Search Test" dropdownIcon="pi pi-search"
-                        [minLength]="1">
+                        [minLength]="1" [showEmptyMessage]="true">
                     </p-autoComplete>
 
                 </div>
                 <div>
                     <p-autoComplete [suggestions]="[]" [dropdown]="true" field="name"
-                        placeholder="Search by Lab Location" dropdownIcon="pi pi-search" [minLength]="1">
+                        placeholder="Search by Lab Location" dropdownIcon="pi pi-search" [minLength]="1" [showEmptyMessage]="true">
                     </p-autoComplete>
                 </div>
                 <div class="p-fluid p-grid p-formgrid">
@@ -38,7 +38,7 @@
 
                 <div >
                     <p-autoComplete [suggestions]="[]" [dropdown]="true" field="name" placeholder="Search Added By"
-                        dropdownIcon="pi pi-search" [minLength]="1">
+                        dropdownIcon="pi pi-search" [minLength]="1" [showEmptyMessage]="true">
                     </p-autoComplete>
                 </div>
             </div>
@@ -46,7 +46,7 @@
 
                 <div>
                     <p-autoComplete [suggestions]="[]" [dropdown]="true" field="name"
-                        placeholder="Search By Collection Center" dropdownIcon="pi pi-search" [minLength]="1">
+                        placeholder="Search By Collection Center" dropdownIcon="pi pi-search" [minLength]="1" [showEmptyMessage]="true">
                     </p-autoComplete>
                 </div>
                 <div>
@@ -67,7 +67,7 @@
 
                 <div>
                     <p-autoComplete [suggestions]="[]" [dropdown]="true" field="name" placeholder="Search Lab#..."
-                        dropdownIcon="pi pi-search" [minLength]="1">
+                        dropdownIcon="pi pi-search" [minLength]="1" [showEmptyMessage]="true">
                     </p-autoComplete>
                 </div>
             </div>

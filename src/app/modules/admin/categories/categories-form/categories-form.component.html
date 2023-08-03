@@ -1,8 +1,8 @@
-    <h3><b>{{action === 'add'?'Add Category':'Update Category'}}</b></h3>
+    <h3 class="text-center"><b>{{action === 'add'?'Add Category':'Update Category'}}</b></h3>
     <form class="d-flex flex-column gap-2" (ngSubmit)="formSubmit($event)" [formGroup]="categoryForm">
     <div class="d-flex flex-column gap-2">
         <label for="name">Lab Test Category Name <span class="text-danger">*</span></label>
-        <input pInputText type="text" name="" id="name" formControlName="name" required pAutoFocus [autofocus]="true">
+        <input pInputText type="text" name="" id="name" formControlName="name" required>
         <div class="text-danger" *ngIf="(categoryForm.controls['name'].errors && categoryForm.controls['name'].touched) || (categoryForm.controls['name'].touched && !categoryForm.controls['name'].valid)"><small>Please enter category name.</small></div>
     </div>
     <div style="text-align: end;">

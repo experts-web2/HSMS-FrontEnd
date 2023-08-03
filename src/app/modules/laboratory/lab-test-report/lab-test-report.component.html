@@ -20,7 +20,7 @@
                     <div class="d-flex justify-content-center flex-column">
                         <p-autoComplete [suggestions]="patientsToShow" #patient [dropdown]="true" field="name"
                             (completeMethod)="onPatientSearch($event)" (onSelect)="onPatientSelection(patient.value.id)"
-                            placeholder="Search Patient" dropdownIcon="pi pi-search" [minLength]="1">
+                            placeholder="Search Patient" dropdownIcon="pi pi-search" [minLength]="1" [showEmptyMessage]="true">
                         </p-autoComplete>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                     <p-autoComplete [suggestions]="doctorsToView" #doctor dropdownIcon="pi pi-search"
                         (completeMethod)="onSearchDoctor($event)" [dropdown]="true"
                         (onSelect)="onDoctorSelection(doctor.value.id)" field="name" dropdownIcon="pi pi-search"
-                        [minLength]="3"></p-autoComplete>
+                        [minLength]="3" [showEmptyMessage]="true"></p-autoComplete>
                     <!-- <select id="descriptionDetail" class="form-select" formControlName="doctorId" required>
                         <option [defaultSelected]="true" disabled>Select A Description</option>
                         <option *ngFor="let drop of doctors" [value]="drop.id">
@@ -54,7 +54,7 @@
                             </select> -->
                             <p-autoComplete [suggestions]="testToView" #description [dropdown]="true" field="name"
                                 (completeMethod)="onTestSearch($event)" (onSelect)="onTestSelect(i, description.value)"
-                                placeholder="Test Name/Code" dropdownIcon="pi pi-search" [minLength]="1">
+                                placeholder="Test Name/Code" dropdownIcon="pi pi-search" [minLength]="1" [showEmptyMessage]="true">
                             </p-autoComplete>
                         </div>
 

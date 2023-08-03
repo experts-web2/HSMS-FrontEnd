@@ -49,11 +49,6 @@ export class TestService extends HttpService {
   getTestDropDown(): Observable<Array<IDropDown>>{
     return this.get(`${this.baseEndPoint}/dropdown`);
   }
-
-
-  getPatients() {
-    return of(patientData.getPatients())
-  }
   
   getTestByPatientid(id: string){
     return this.get(`${this.baseEndPoint}/getbypatientid/${id}`);
