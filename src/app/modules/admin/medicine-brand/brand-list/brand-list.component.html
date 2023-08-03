@@ -1,2 +1,2 @@
-<div class="text-center inside-header"><h1>Medicine Brand</h1> <button class="btn btn-primary" (click)="addBrand()"><i class="pi pi-plus me-2"></i>Add Medicine Brand</button></div>
+<div class="text-center inside-header"><h1>Medicine Brand</h1> <p-button (click)="addBrand()"><i class="pi pi-plus me-2"></i>Add Medicine Brand</p-button></div>
 <app-generic-table [data]="medicineBrandList" [columns]="columns" (edit)="edit($event)" (delete)="delete($event)" [actionsToShow]="actionsToShow" [totalRecords]="totalRecords" [showActions]="true"></app-generic-table>

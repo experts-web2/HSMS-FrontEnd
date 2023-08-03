@@ -18,9 +18,9 @@
           (completeMethod)="onPatientSearch($event)" (onSelect)="onPatientSelection(patient.value.id)"
           placeholder="Search Patient" dropdownIcon="pi pi-search" [showEmptyMessage]="true">
         </p-autoComplete>
-        <button class="d-flex btn btn-primary keep-all ms-4 text-wrap align-items-center" (click)="addPatient()">
+        <p-button class="d-flex keep-all ms-4 text-wrap align-items-center" (click)="addPatient()">
           <i class="fa-solid fa-plus me-2"></i><span class="whitespace-nowrap">Add Patient</span>
-        </button>
+        </p-button>
       </div>
 
 
@@ -69,9 +69,9 @@
             </div>
           </div>
         </div>
-        <button (click)="addNewInvoiceItem()" class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center">
+        <p-button (click)="addNewInvoiceItem()" class="d-flex mb-4 md:mb-0 align-items-center">
           <i class="fa-solid fa-plus me-2"></i>Item
-        </button>
+        </p-button>
         <div class="grid grid-cols-2 gap-5">
           <div class="">
             <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
@@ -91,10 +91,8 @@
                 (completeMethod)="onSearchDoctor($event)" placeholder="select referral" [dropdown]="true"
                 (onSelect)="onDoctorSelection(doctor.value.id)" field="name" dropdownIcon="pi pi-search"
                 [minLength]="3" [showEmptyMessage]="true"></p-autoComplete>
-                <div class=" mt-4 w-full flex-col md:flex-row">
-                  <input class="pulse w-1/2 h-10" type="text" pInputText name="otherName" formControlName="otherName"
+                  <input class="pulse" type="text" pInputText name="otherName" formControlName="otherName"
                    />
-                </div>
             </div>
             <div>
               <label for="invoiceNote">Invoice Note</label>
@@ -147,8 +145,8 @@
       </div>
 
       <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-end align-items-center">
-        <button class="btn btn-primary mr-8" (click)="addPatientTest()">Save</button>
-        <button class="btn btn-primary">Save & Print</button>
+        <p-button class="mr-8" (click)="addPatientTest()">Save</p-button>
+        <p-button >Save & Print</p-button>
       </div>
     </div>
   </div>

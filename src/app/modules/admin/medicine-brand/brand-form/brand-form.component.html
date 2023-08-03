@@ -6,6 +6,6 @@
     <div class="text-danger" *ngIf="(medicineBrandForm.controls['name'].errors && medicineBrandForm.controls['name'].touched) || (medicineBrandForm.controls['name'].touched && !medicineBrandForm.controls['name'].valid)"><small>Please enter Brand name.</small></div>
 </div>
 <div style="text-align: end;">
-    <button class="btn btn-primary mt-3" type="submit" [disabled]="medicineBrandForm.controls['name'].errors || !medicineBrandForm.controls['name'].valid">{{action === 'add'?'Add Brand +':'Update Brand +'}}</button>
+    <p-button class="mt-3" type="submit" [disabled]="!medicineBrandForm.controls['name'].valid">{{action === 'add'?'Add Brand +':'Update Brand +'}}</p-button>
 </div>
 </form>

@@ -6,6 +6,6 @@
         <div class="text-danger" *ngIf="(categoryForm.controls['name'].errors && categoryForm.controls['name'].touched) || (categoryForm.controls['name'].touched && !categoryForm.controls['name'].valid)"><small>Please enter category name.</small></div>
     </div>
     <div style="text-align: end;">
-        <button class="btn btn-primary mt-3" type="submit" [disabled]="categoryForm.controls['name'].errors || !categoryForm.controls['name'].valid">{{action === 'add'?'Add Category +':'Update Category +'}}</button>
+        <p-button class="mt-3" type="submit" [disabled]="categoryForm.controls['name'].invalid">{{action === 'add'?'Add Category +':'Update Category +'}}</p-button>
     </div>
     </form>

@@ -17,6 +17,7 @@ export class CategoriesFormComponent extends SubscriptionManagmentDirective impl
   testCategoryId!: string;
   category: any;
   action: string;
+  disable=true;
 
   constructor(private fb: FormBuilder,
     private readonly labTestCategoryService: TestCategoryService,

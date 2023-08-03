@@ -27,34 +27,35 @@
                                     <p-autoComplete [suggestions]="medicineToView" #medicine dropdownIcon="pi pi-search"
                                         (completeMethod)="onSearchMedicine($event)" [dropdown]="true"
                                         (onSelect)="onMedicineSelection(i,medicine.value.id)" field="name"
-                                        dropdownIcon="pi pi-search" [minLength]="3" placeholder="select medicine" [showEmptyMessage]="true"></p-autoComplete>
+                                        dropdownIcon="pi pi-search" [minLength]="3" placeholder="select medicine"
+                                        [showEmptyMessage]="true"></p-autoComplete>
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine
                                         Packs</label>
-                                    <input
-                                       pInputText class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    <input pInputText
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         type="number" formControlName="packsQty">
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">#Units
                                         Per/Pak</label>
-                                    <input
-                                    pInputText class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    <input pInputText
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         type="number" formControlName="unitsPerPack">
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A
                                         pack</label>
-                                    <input
-                                    pInputText class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    <input pInputText
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         type="number" formControlName="packPrice">
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A
                                         Unit</label>
-                                    <input
-                                    pInputText class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    <input pInputText
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         type="number" formControlName="unitPrice">
                                 </div>
                                 <div>
@@ -70,14 +71,15 @@
                                     <!-- <input
                                         class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         type="text" formControlName="brandId"> -->
-                                        <p-autoComplete [suggestions]="brandToView" #brand dropdownIcon="pi pi-search"
+                                    <p-autoComplete [suggestions]="brandToView" #brand dropdownIcon="pi pi-search"
                                         (completeMethod)="onSearchBrand($event)" [dropdown]="true"
                                         (onSelect)="onBrandSelection(i,brand.value.id)" field="name"
-                                        dropdownIcon="pi pi-search" [minLength]="3" placeholder="select medicine brand" [showEmptyMessage]="true"></p-autoComplete>
+                                        dropdownIcon="pi pi-search" [minLength]="3" placeholder="select medicine brand"
+                                        [showEmptyMessage]="true"></p-autoComplete>
                                 </div>
                             </div>
                             <div>
-                                <button (click)="removeMedicine(i)"><i class="fa fa-trash"></i></button>
+                                <p-button (click)="removeMedicine(i)"><i class="fa fa-trash"></i></p-button>
                             </div>
                         </div>
                     </div>
@@ -85,20 +87,15 @@
             </form>
             <div class="mt-4 mb-4">
 
-                <button
-                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-                    (click)="addMedicine()">+
-                    Add a medicine</button>
+                <p-button (click)="addMedicine()">+
+                    Add a medicine</p-button>
             </div>
             <div class="flex justify-end">
-                <button
-                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-                    (click)="saveMedicine()">
+                <p-button (click)="saveMedicine()">
                     Save
-                </button>
-                <button
-                    class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">Save
-                    & Print</button>
+                </p-button>
+                <p-button class="ml-3">Save
+                    & Print</p-button>
             </div>
         </div>
     </div>

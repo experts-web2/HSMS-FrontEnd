@@ -27,12 +27,12 @@
     <div class="text-danger" *ngIf="(vendorForm.controls['address'].errors && vendorForm.controls['address'].touched) || (vendorForm.controls['address'].touched && !vendorForm.controls['address'].valid)"><small>Please enter address.</small></div>
 </div>
 <div style="text-align: end;">
-    <button class="btn btn-primary mt-3" type="submit" [disabled]="
-    vendorForm.controls['firstName'].errors || !vendorForm.controls['firstName'].valid &&
-    vendorForm.controls['lastName'].errors || !vendorForm.controls['lastName'].valid &&
-    vendorForm.controls['companyName'].errors || !vendorForm.controls['companyName'].valid &&
-    vendorForm.controls['phoneNumber'].errors || !vendorForm.controls['phoneNumber'].valid &&
-    vendorForm.controls['address'].errors || !vendorForm.controls['address'].valid
-    ">{{action === 'add'?'Add Vendor +':'Update Vendor +'}}</button>
+    <p-button class="mt-3" type="submit" [disabled]="
+    !vendorForm.controls['firstName'].valid &&
+    !vendorForm.controls['lastName'].valid &&
+    !vendorForm.controls['companyName'].valid &&
+    !vendorForm.controls['phoneNumber'].valid &&
+    !vendorForm.controls['address'].valid
+    ">{{action === 'add'?'Add Vendor +':'Update Vendor +'}}</p-button>
 </div>
 </form>

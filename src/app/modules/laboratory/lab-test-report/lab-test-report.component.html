@@ -69,9 +69,9 @@
                         </div>
 
                         <div class="ml-3">
-                            <button (click)="removeinvoiceItem(i)">
+                            <p-button (click)="removeinvoiceItem(i)">
                                 <i class="fa fa-trash"></i>
-                            </button>
+                            </p-button>
                         </div>
                     </div>
                     <div class="flex justify-between items-center flex-col lg:flex-row">
@@ -87,13 +87,13 @@
                 </div>
 
             </div>
-            <button (click)="addNewInvoiceItem()"
-                class="d-flex btn btn-primary mb-4 md:mb-0 align-items-center">Item</button>
+            <p-button (click)="addNewInvoiceItem()"
+                class="d-flex mb-4 md:mb-0 align-items-center">Item</p-button>
 
         </div>
         <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-content-evenly align-items-center">
-            <button class="btn btn-primary" (click)="addToken()">Save</button>
-            <button class="btn btn-primary">Save & Print</button>
+            <p-button (click)="addToken()">Save</p-button>
+            <p-button>Save & Print</p-button>
         </div>
     </div>
 </form>

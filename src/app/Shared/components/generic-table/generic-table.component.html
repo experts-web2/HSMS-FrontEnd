@@ -82,10 +82,10 @@
             <i class="pi pi-trash btn btn-danger m-1" *ngIf="actionsToShow.includes('delete')" pTooltip="Delete Record" (click)="actionEmitter(rowData, 'delete')"></i>
             <i class="pi pi-pencil btn btn-success m-1" *ngIf="actionsToShow.includes('edit')" pTooltip="Edit Record" (click)="actionEmitter(rowData, 'edit')"></i>
             <ng-container *ngFor="let action of additionalActions">
-              <button [style]="action.style" [pTooltip]="action.toolTip ? action.toolTip : ''" (click)="action.action(rowData)">
+              <p-button [style]="action.style" [pTooltip]="action.toolTip ? action.toolTip : ''" (click)="action.action(rowData)">
                 <i *ngIf="action.icon" [class]="action.icon"  ></i>
                 {{action.icon && action.name ? action.name : ''}}
-              </button>
+              </p-button>
 
             </ng-container>
         </div>
