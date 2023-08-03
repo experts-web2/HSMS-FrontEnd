@@ -16,13 +16,14 @@ export class CategoriesFormComponent extends SubscriptionManagmentDirective impl
   categoryForm!: FormGroup;
   testCategoryId!: string;
   category: any;
-  action: any;
+  action: string;
 
   constructor(private fb: FormBuilder,
     private readonly labTestCategoryService: TestCategoryService,
     private readonly alertService: AlertService,
     public config: DynamicDialogConfig,
-    public ref: DynamicDialogRef,) {
+    public ref: DynamicDialogRef
+    ) {
       super();
     this.category = this.config?.data?.category;
     this.action = this.config?.data?.action

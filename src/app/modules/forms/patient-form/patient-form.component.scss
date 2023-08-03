@@ -132,25 +132,12 @@
 
 
 .close-button{
-    top:-9px;
-    right:-11px;
+    // top:-9px;
+    // right:-11px;
     &:focus {
         outline: none;
     }
   }
   
-  .close-icon {
-    transition: 0.5s ease-in-out;
-  }
+ 
   
-  .close-icon:hover {
-    transform: rotate(180deg);
-  }
-  
-  ::ng-deep{
-     .icon-outside .close-button{
-    float: right;
-    top:-52px;
-    right:-52px;
-  }
-}

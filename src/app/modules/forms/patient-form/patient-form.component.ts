@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CameraComponent } from 'src/app/modules/camera/camera.component';
 import { PatientService } from 'src/app/services';
 import { IAddOrUpdatePatient } from 'src/app/models/interfaces/addOrUodate-Patient';
@@ -30,6 +30,7 @@ export class PatientFormComponent
     { label: 'Daughter', value: Relations.Child },
     { label: 'Wife', value: Relations.Spouse },
     { label: 'Husband', value: Relations.Spouse },
+    { label: 'Self', value: Relations.Self },
   ];
   addOnBlur = true;
   base64ImagStr: string = '';
@@ -39,6 +40,7 @@ export class PatientFormComponent
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
+    public dialogRef: MatDialogRef<PatientFormComponent>,
     private readonly patientService: PatientService,
     private readonly alertService: AlertService
   ) {
@@ -80,6 +82,7 @@ export class PatientFormComponent
         next: (x) => {
           this.alertService.success('Patient Added');
           this.patientForm.reset();
+          this.dialogRef.close();
         },
         error: (err) => {},
       });

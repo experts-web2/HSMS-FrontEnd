@@ -31,6 +31,8 @@ import {
 } from 'primeng/dynamicdialog';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
+import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +55,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     DataImpExpComponent,
     DoctorFormComponent,
     DoctorListComponent,
+    VendorListComponent,
+    AddVendorComponent
   ],
   imports: [
     CommonModule,

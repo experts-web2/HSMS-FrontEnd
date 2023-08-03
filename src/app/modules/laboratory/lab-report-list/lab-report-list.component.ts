@@ -10,6 +10,7 @@ import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { PatientService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { takeUntil } from 'rxjs';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 
 @Component({
   selector: 'app-lab-report-list',
@@ -48,13 +49,13 @@ export class LabReportListComponent
     },
     {
       name: 'MR#',
-      property: 'mr',
+      property: 'mrNo',
       filter: false,
       filterType: TableColumnFilterTypes.Text,
     },
     {
       name: 'PATIENT',
-      property: 'patient',
+      property: 'patientName',
       filter: false,
       filterType: TableColumnFilterTypes.Text,
     },
@@ -65,8 +66,8 @@ export class LabReportListComponent
       filterType: TableColumnFilterTypes.Text,
     },
     {
-      name: 'NAME',
-      property: 'name',
+      name: 'TEST NAME',
+      property: 'testName',
       filter: false,
       filterType: TableColumnFilterTypes.Text,
     },
@@ -84,7 +85,7 @@ export class LabReportListComponent
     },
     {
       name: 'ADDED BY',
-      property: 'addedBy',
+      property: 'createdBy',
       filter: false,
       filterType: TableColumnFilterTypes.Text,
     },
@@ -139,14 +140,14 @@ export class LabReportListComponent
       });
   }
 
-  getLabTestData() {
+  getLabTestData(filterRequest: IFetchRequest = {}) {
     this.patientService
-      .getLabTests()
+      .getsamplecollections(filterRequest)
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe((res: any) => {
         console.log(res);
-        this.labTests = res;
-        this.totalRecords = res.length;
+        this.labTests = res.data;
+        this.totalRecords = res.total;
       });
   }
 

@@ -1,0 +1,3 @@
+<div class="text-center inside-header"><h1>Vendors</h1> <button class="btn btn-primary" (click)="addVendor()"><i class="pi pi-plus me-2"></i>Add Vendor</button></div>
+<app-generic-table [data]="vendorsList" [columns]="columns" (edit)="edit($event)" (delete)="delete($event)" [actionsToShow]="actionsToShow" [totalRecords]="totalRecords" [showActions]="true"></app-generic-table>
+

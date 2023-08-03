@@ -90,7 +90,6 @@ outline: 1px solid rgba(112, 128, 144, 0);
   border: 0;
   background-color: $btnbg;
   color: $bluetheme-textColor;
-  display: flex;
   align-items: center;
   justify-content: center;
   &:hover{
@@ -121,14 +120,17 @@ p-autocomplete{
   }
 }
 
-button{
-  background: $btnbg;
-  color: $bluetheme-textColor;
-  border: 0;
-  &:hover{
-    background: $btnbg !important;
-  }
-}
+// button{
+//   background: $btnbg;
+//   color: $bluetheme-textColor;
+//   border: 0;
+//   padding: 5px 10px;
+//   border-radius: 6px;
+//   font-size: 16px;
+//   &:hover{
+//     background: $btnbg !important;
+//   }
+// }
 
 p-calendar{
   display: block;
@@ -150,4 +152,56 @@ p-calendar{
 
 input{
   height: 36px;
+}
+
+.spinnerStyle {
+  width: 40px !important;
+  height: 40px !important;
+
+  svg {
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
+
+.matSpinner {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  display: flex;
+  width: 32px;
+  height: 32px;
+  justify-content: end;
+
+  .spin {
+    width: 32px !important;
+    height: 32px !important;
+
+    svg {
+      width: 32px !important;
+      height: 32px !important;
+    }
+  }
+}
+
+p-button{
+  padding: 0;
+  .p-button{
+    border: 0;
+    background: $ctrlbg;
+    color: $bluetheme-textColor;
+    border: 0;
+    &:hover{
+      background: $ctrlbg !important;
+    }
+  }
+}
+
+.mdc-dialog__title::before{
+  height: 0 !important;
+}
+
+.close-icon:hover {
+  transform: rotate(180deg);
+  transition: 0.5s ease-in-out;
 }

@@ -10,6 +10,7 @@ export enum BaseEndPoints {
     Patienttestinvoice = 'patienttestinvoice',
     PatientSample = 'patientsample',
     Patienttestinvoiceitem = 'patienttestinvoiceitem',
+    Patientsamplereport = 'patientsamplereport',
     Category = 'labtestcategory',
     Appointment = 'appointment',
     Doctor = 'doctor',

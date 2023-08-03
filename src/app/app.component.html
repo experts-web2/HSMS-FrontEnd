@@ -3,41 +3,54 @@
   <div class="navbar p-0" *ngIf="showNav">
     <div class="Title">HSMS</div>
     <div class="md:flex items-center justify-between md:gap-x-20">
-    <div class=" menu-items-width d-flex justify-content-between align-items-center ">
-      <a class="navButton px-8 cursor-pointer" routerLink="/dashboard" [routerLinkActive]="['menu-active']">Dashboard</a>
-      <a class="navButton px-8 cursor-pointer" routerLink="doctor/health_records" [routerLinkActive]="['menu-active']">Health Records</a>
-      <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="more">Laboratory<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+      <div class=" menu-items-width d-flex justify-content-between align-items-center ">
+        <a class="navButton px-8 cursor-pointer" routerLink="/dashboard"
+          [routerLinkActive]="['menu-active']">Dashboard</a>
+        <a class="navButton px-8 cursor-pointer" routerLink="doctor/health_records"
+          [routerLinkActive]="['menu-active']">Health Records</a>
+        <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="more">Laboratory<mat-icon
+            class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #more="matMenu">
           <a mat-menu-item routerLink="/laboratory/add_patient_test">Add Patient Test</a>
           <a mat-menu-item routerLink="/laboratory/collect_lab_sample">Collection Lab Sample</a>
           <a mat-menu-item routerLink="/laboratory/lab_report">Lab Test Report</a>
           <a mat-menu-item routerLink="/laboratory/lab_report_list">Lab Test Lists</a>
-        </mat-menu> 
+        </mat-menu>
 
-        <a class="navButton px-8 cursor-pointer" routerLink="/register" [routerLinkActive]="['menu-active']" *ngIf="!isDoctor">Messages</a>
-      <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="lab" *ngIf="!isDoctor">More<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
-      <mat-menu #lab="matMenu">
-        <a mat-menu-item>Item 1</a>
-        <a mat-menu-item>Item 2</a>
-      </mat-menu> 
-      <!-- <a class="navButton" routerLink="/laboratory">Laboratory</a> -->
-            
-    </div>
+        <p-menu #menu [model]="items" [popup]="true"></p-menu>
+        <p-button type="button" icon="pi pi-angle-down" (click)="menu.toggle($event)" label="Pharmacy"></p-button>
+
+        <a class="navButton px-8 cursor-pointer" routerLink="/register" [routerLinkActive]="['menu-active']"
+          *ngIf="!isDoctor">Messages</a>
+        <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="lab" *ngIf="!isDoctor">More<mat-icon
+            class="arrow-height">arrow_drop_down</mat-icon></a>
+        <mat-menu #lab="matMenu">
+          <a mat-menu-item>Item 1</a>
+          <a mat-menu-item>Item 2</a>
+        </mat-menu>
+        <!-- <a class="navButton" routerLink="/laboratory">Laboratory</a> -->
+
+      </div>
       <div class="d-flex align-items-center ">
-        <a class="creat-drop cursor-pointer text-white" [matMenuTriggerFor]="creat">Create<mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <a class="creat-drop cursor-pointer text-white" [matMenuTriggerFor]="creat">Create<mat-icon
+            class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #creat="matMenu">
           <a mat-menu-item (click)="addPatient()">Patient</a>
           <a mat-menu-item (click)="addToken()">Token</a>
           <a mat-menu-item>Invoice</a>
           <a mat-menu-item>Health Record</a>
-        </mat-menu> 
+        </mat-menu>
         <div class="search-Field d-flex position-relative">
-          <mat-icon class="position-absolute search-icon">search</mat-icon> 
+          <mat-icon class="position-absolute search-icon">search</mat-icon>
           <input class="search-input" placeholder="Search">
         </div>
-        <a class="navButton cursor-pointer blub-icon"><mat-icon >lightbulb_on</mat-icon></a>
-        <a class="navButton cursor-pointer notification-icon mr-4"><mat-icon style="rotate: 45deg;">notifications</mat-icon></a>
-        <a class="navButton cursor-pointer" [matMenuTriggerFor]="User"><span class="span-elpis user-name">{{logedInUser.firstName.substring(0, 1).toUpperCase() + logedInUser.lastName.substring(0, 1).toUpperCase()}}</span><mat-icon class="arrow-height">arrow_drop_down</mat-icon></a>
+        <a class="navButton cursor-pointer blub-icon"><mat-icon>lightbulb_on</mat-icon></a>
+        <a class="navButton cursor-pointer notification-icon mr-4"><mat-icon
+            style="rotate: 45deg;">notifications</mat-icon></a>
+        <a class="navButton cursor-pointer" [matMenuTriggerFor]="User"><span
+            class="span-elpis user-name">{{logedInUser.firstName.substring(0, 1).toUpperCase() +
+            logedInUser.lastName.substring(0, 1).toUpperCase()}}</span><mat-icon
+            class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #User="matMenu">
           <a mat-menu-item *ngIf="isAdmin" routerLink="/admin">Admin</a>
           <a mat-menu-item>Option 2</a>
@@ -50,11 +63,11 @@
         </div> -->
       </div>
     </div>
-      <!-- <div class="toggle-btn" (click)="navbarToggle()">
+    <!-- <div class="toggle-btn" (click)="navbarToggle()">
         <i class="fa fa-solid fa-bars text-xl"></i>
       </div> -->
-    </div>
+  </div>
 </nav>
-<div  class="outlet">
+<div class="outlet">
   <router-outlet></router-outlet>
 </div>

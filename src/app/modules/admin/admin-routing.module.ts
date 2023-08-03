@@ -17,6 +17,8 @@ import { TestsListComponent } from './tests/tests-list/tests-list.component';
 import { CategoriesListComponent } from './categories/categories-list/categories-list.component';
 import { DoctorFormComponent } from './doctors/doctor-form/doctor-form.component';
 import { DoctorListComponent } from './doctors/doctor-list/doctor-list.component';
+import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
+import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
 
 const routes: Routes = [
   {path:'', component: AdminRootComponent, children:[
@@ -25,6 +27,8 @@ const routes: Routes = [
     {path: 'doctors-list', component: DoctorListComponent},
     {path: 'medicine', component: MedicineFormComponent},
     {path: 'medicine-list', component: MedicineListComponent},
+    {path: 'vendor', component: AddVendorComponent},
+    {path: 'vendor-list', component: VendorListComponent},
     {path: 'wards', component: WardFormComponent},
     // {path: 'categories', component: CategoriesFormComponent},
     {path: 'category-list', component: CategoriesListComponent},

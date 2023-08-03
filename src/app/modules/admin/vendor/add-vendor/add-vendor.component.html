@@ -1,0 +1,38 @@
+<h3><b>{{action === 'add' ? 'Add Vendor':'Update Vendor'}}</b></h3>
+<form class="d-flex flex-column gap-2" (ngSubmit)="addVendor()" [formGroup]="vendorForm">
+    
+<div class="d-flex flex-column gap-2">
+    <label for="name">First Name <span class="text-danger">*</span></label>
+    <input pInputText type="text" name="" id="firstName" formControlName="firstName" required>
+    <div class="text-danger" *ngIf="(vendorForm.controls['firstName'].errors && vendorForm.controls['firstName'].touched) || (vendorForm.controls['firstName'].touched && !vendorForm.controls['firstName'].valid)"><small>Please enter First Name.</small></div>
+</div>
+<div class="d-flex flex-column gap-2">
+    <label for="name">Last Name <span class="text-danger">*</span></label>
+    <input pInputText type="text" name="" id="lastName" formControlName="lastName" required>
+    <div class="text-danger" *ngIf="(vendorForm.controls['lastName'].errors && vendorForm.controls['lastName'].touched) || (vendorForm.controls['lastName'].touched && !vendorForm.controls['lastName'].valid)"><small>Please enter Last Name.</small></div>
+</div>
+<div class="d-flex flex-column gap-2">
+    <label for="name">Company Name <span class="text-danger">*</span></label>
+    <input pInputText type="text" name="" id="companyName" formControlName="companyName" required>
+    <div class="text-danger" *ngIf="(vendorForm.controls['companyName'].errors && vendorForm.controls['companyName'].touched) || (vendorForm.controls['companyName'].touched && !vendorForm.controls['companyName'].valid)"><small>Please enter Company Name.</small></div>
+</div>
+<div class="d-flex flex-column gap-2">
+    <label for="name">Phone Number <span class="text-danger">*</span></label>
+    <input pInputText type="text" name="" id="phoneNumber" formControlName="phoneNumber" required>
+    <div class="text-danger" *ngIf="(vendorForm.controls['phoneNumber'].errors && vendorForm.controls['phoneNumber'].touched) || (vendorForm.controls['phoneNumber'].touched && !vendorForm.controls['phoneNumber'].valid)"><small>Please enter Phone Number.</small></div>
+</div>
+<div class="d-flex flex-column gap-2">
+    <label for="name">Address <span class="text-danger">*</span></label>
+    <input pInputText type="text" name="" id="address" formControlName="address" required>
+    <div class="text-danger" *ngIf="(vendorForm.controls['address'].errors && vendorForm.controls['address'].touched) || (vendorForm.controls['address'].touched && !vendorForm.controls['address'].valid)"><small>Please enter address.</small></div>
+</div>
+<div style="text-align: end;">
+    <button class="btn btn-primary mt-3" type="submit" [disabled]="
+    vendorForm.controls['firstName'].errors || !vendorForm.controls['firstName'].valid &&
+    vendorForm.controls['lastName'].errors || !vendorForm.controls['lastName'].valid &&
+    vendorForm.controls['companyName'].errors || !vendorForm.controls['companyName'].valid &&
+    vendorForm.controls['phoneNumber'].errors || !vendorForm.controls['phoneNumber'].valid &&
+    vendorForm.controls['address'].errors || !vendorForm.controls['address'].valid
+    ">{{action === 'add'?'Add Vendor +':'Update Vendor +'}}</button>
+</div>
+</form>

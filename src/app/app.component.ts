@@ -24,6 +24,20 @@ export class AppComponent implements OnInit {
   logedInUser!: ILogedInUser;
   navbarShowHide = false;
   isDoctor: boolean = false;
+  items = [
+    {
+        items: [
+            {
+                label: 'Medicine Purchase',
+                routerLink: 'pharmacy/pharmacy-purchase'
+            },
+            {
+                label: 'Medicine Sale',
+                routerLink: 'pharmacy/pharmacy-sale'
+            }
+        ]
+    }
+];
 
   constructor(
     private dialog: MatDialog,

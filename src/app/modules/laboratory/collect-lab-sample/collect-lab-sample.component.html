@@ -14,7 +14,7 @@
                 #patient
                 [dropdown]="true"
                 field="name"
-                (completeMethod)="onSearch($event)"
+                (completeMethod)="onPatientSearch($event)"
                 (onSelect)="onPatientSelection(patient.value.id)"
                 placeholder="Search Patient"
                 dropdownIcon="pi pi-search"
@@ -53,8 +53,8 @@
           >
             Generate Sample Id
           </button>
+          {{generateId}}==
         </div>
-        <hr class="my-4">
       <div formArrayName="testItems">
         <div
           *ngFor="let item of testItems.controls; let i = index"
@@ -76,8 +76,8 @@
                   #description
                   [dropdown]="true"
                   field="name"
-                  (completeMethod)="search($event)"
-                  (onSelect)="onDescriptionSelect(i, description.value)"
+                  (completeMethod)="onTestSearch($event)"
+                  (onSelect)="onTestSelect(i, description.value)"
                   placeholder="Test Name/Code"
                   dropdownIcon="pi pi-search"
                   [minLength]="1"

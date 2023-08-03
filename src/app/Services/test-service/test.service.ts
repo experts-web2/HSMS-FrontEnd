@@ -58,6 +58,9 @@ export class TestService extends HttpService {
   getTestByPatientid(id: string){
     return this.get(`${this.baseEndPoint}/getbypatientid/${id}`);
   }
+  getTestInvoiceItemsByPatientid(patientId: string){
+    return this.get(`${BaseEndPoints.Patienttestinvoiceitem}/testdropdownbytodayinvoiced?patientId=${patientId}`);
+  }
 
 
   generateTestSampleID(sampleIdPayload:any){
@@ -66,5 +69,10 @@ export class TestService extends HttpService {
 
   addPatientTestSamples(fetchRequest: IFetchRequest = {}){
     return this.post(`${BaseEndPoints.PatientSample}/all`, fetchRequest);
+  }
+
+
+  addPatientTestReport(fetchRequest:any){
+    return this.post(`${BaseEndPoints.Patientsamplereport}/add`, fetchRequest);
   }
 }
