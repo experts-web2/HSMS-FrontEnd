@@ -10,11 +10,15 @@
     <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
         <div class="input_Divs">
             <mat-label>MR#</mat-label>
-            <input class="form-control inpt-Field1 " pInputText type="number"  placeholder="MR#" formControlName="mrNum">
+            <div>
+                <input class="form-control" pInputText type="number"  placeholder="MR#" formControlName="mrNum">
+            </div>
         </div>
          <div class="input_Divs">
             <mat-label>Name<span class="text-danger">*</span></mat-label>
-            <input class="form-control inpt-Field1" pInputText placeholder="Name" formControlName="name">
+            <div>
+                <input class="form-control" pInputText placeholder="Name" formControlName="name">
+            </div>
         </div>
         <div class="input_Divs">
             <mat-label>Phone#<span class="text-danger">*</span></mat-label>
@@ -44,7 +48,7 @@
         <div class="input_Divs">
             <mat-label>Age</mat-label>
             <div class="inpt-phone">
-                <input class="form-control inpt-age" pInputText placeholder="Years" #years (input)="concatDate(years.value)">
+                <input class="form-control " pInputText placeholder="Years" #years (input)="concatDate(years.value)">
                 <!-- <input class="form-control inpt-age" pInputText placeholder="Months" #months (input)="concatDate(years.value, months.value, days.value)"> -->
                 <!-- <input class="form-control inpt-age" pInputText placeholder="Days" #days (input)="concatDate(years.value, months.value, days.value)"> -->
                 <input hidden class="" formControlName="age">
@@ -62,7 +66,8 @@
         </div>
         <div class="input_Divs">
             <mat-label>Add Tags</mat-label>
-            <mat-chip-grid class="form-control inpt-Field1" #chipGrid aria-label="Fruit selection">
+           <div>
+            <mat-chip-grid class="form-control" #chipGrid aria-label="Fruit selection">
                 <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
                   {{tag}}
                   <button matChipRemove>
@@ -75,19 +80,22 @@
                        [matChipInputAddOnBlur]="addOnBlur"
                        (matChipInputTokenEnd)="add($event)">
               </mat-chip-grid>
+           </div>
         </div>
         <div class="input_Divs">
             <mat-label>Select Tags</mat-label>
-            <mat-select class="form-control inpt-Field1" placeholder="Select Tags" >
-                <mat-option *ngFor="let tag of tags" [value]="tag">
-                    {{tag}}
-                </mat-option>
-                </mat-select>
+            <div>
+                <mat-select class="form-control " placeholder="Select Tags" >
+                    <mat-option *ngFor="let tag of tags" [value]="tag">
+                        {{tag}}
+                    </mat-option>
+                    </mat-select>
+            </div>
         </div>
         <div class="input_Divs">
             <mat-label>Add Photo</mat-label>
             <img *ngIf="base64ImagStr" [src]="base64ImagStr" style="height: 300px; width:300px;">
-            <div class="inpt-Field1 d-flex justify-content-between">
+            <div class="d-flex justify-content-between">
                 <input class="form-control form-control-sm inpt-Fieldcam" type="button" (click)="openCamera()" value="Take Picture" >
                 <span class="slash">/</span>
                 <input class="form-control form-control-sm inpt-FieldPic" type="file"  accept="image/png, image/jpeg, application/pdf" placeholder="Add Photo" (change)="getUploadImage($event)" formControlName="addPhoto">
