@@ -73,14 +73,14 @@
             </div>
         </div>
         <div class="form-group" style="text-align: end;">
-        <button type="Submit" class="mt-3 btn btn-primary"
+        <p-button type="Submit" class="mt-3"
         [disabled]="
-        (f['firstName'].errors || !f['firstName'].valid) &&
-        (f['lastName'].errors || !f['lastName'].valid) &&
-        (f['email'].errors || !f['email'].valid) &&
-        (f['phoneNumber'].errors || !f['phoneNumber'].valid) &&
-        (f['role'].errors || !f['role'].valid)"
-        >{{action === 'add'?'Add User':'Update User'}}</button>
+        (!f['firstName'].valid) &&
+        (!f['lastName'].valid) &&
+        (!f['email'].valid) &&
+        (!f['phoneNumber'].valid) &&
+        (!f['role'].valid)"
+        >{{action === 'add'?'Add User':'Update User'}}</p-button>
     </div>
     </form>
 </div>

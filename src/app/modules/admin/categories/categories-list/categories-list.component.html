@@ -1,2 +1,2 @@
-<div class="text-center inside-header"><h1>Categories</h1> <button class="btn btn-primary" (click)="addCategory()"><i class="pi pi-plus me-2"></i>Add Category</button></div>
+<div class="text-center inside-header"><h1>Categories</h1> <p-button (click)="addCategory()"><i class="pi pi-plus me-2"></i>Add Category</p-button></div>
 <app-generic-table [data]="labTestCategoryList" [columns]="columns" (edit)="edit($event)" (delete)="delete($event)" [actionsToShow]="actionsToShow" [totalRecords]="totalRecords" [showActions]="true"></app-generic-table>

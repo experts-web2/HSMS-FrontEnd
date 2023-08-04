@@ -23,100 +23,90 @@ export class patientData {
     static getTokenData() {
         return [];
     }
+    
+    static getBrands() {
 
-
-    static getPatientTests() {
-        return [
-            {
-                patientId: "a4b96ae6-4101-4fdf-ae8c-b146a34b6aaa",
-                name: "Diabetes",
-                description: "Diabetes",
-                id: "ae2084f3-84dd-4408-9d95-143b8e10cd4f",
-            },
-            {
-                patientId: "a4b96ae6-4101-4fdf-ae8c-b146a34b6aaa",
-                name: "Serum Anti Smooth Muscle Abs (ASMA)",
-                description: "Wide species reactivity, highly cited and reviewed alpha smooth muscle Actin antibodies.",
-                id: "2588cb05-fc8c-4bc8-b68f-2a4d5f70b177",
-
-            },
-            {
-                patientId: "a4b96ae6-4101-4fdf-ae8c-b146a34b6aaa",
-                name: "Urine Sugar",
-                description: "Sugar present in urine",
-                id: "bed5674c-0bb6-4b57-90c0-4e2920d50bc4",
-
-            },
-            {
-                patientId: "a4b96ae6-4101-4fdf-ae8c-b146a34b6aaa",
-                name: "Skin Scrapping for fungus",
-                description: "Scrape the skin using a scalpel (held at a blunt angle) ",
-                id: "12a3faeb-b95a-443e-8b8a-51f328b00934",
-
-            },
-            {
-                patientId: "e964336a-80f1-497d-905a-d5301202136f",
-                name: "17-Hydroxy Progesterone (OHP)",
-                description: "17-Hydroxy Progesterone (OHP)",
-                id: "adcd290f-d868-4bc7-b18b-7a3618871a86",
-            },
-            {
-                patientId: "e964336a-80f1-497d-905a-d5301202136f",
-                name: "Red blood cell ",
-                description: "RBC",
-                id: "b80bade3-29ac-49a8-98fd-7f546436ce51",
-            },
-            {
-                patientId: "e964336a-80f1-497d-905a-d5301202136f",
-                name: "White blood cell (WBC)",
-                description: "(WBC)",
-                id: "5f6e740e-b392-480c-995b-925f6e28ff7b",
-            },
-            {
-                patientId: "e964336a-80f1-497d-905a-d5301202136f",
-                name: "5 HIAA (24 Hrs Urine)",
-                description: "5 HIAA (24 Hrs Urine)",
-                id: "53a4aeb9-aa08-4bd5-b51d-b575d74aed0d",
-            },
-            {
-                patientId: "e964336a-80f1-497d-905a-d5301202136f",
-                name: "CBC",
-                description: "Complete Blood Count",
-                id: "3cbbc6fc-11b9-41bd-9eee-fbab242b6b49",
-            }
-        ];
-    }
-    static getPatients() {
         return [
                 {
-                    id: "d878af86-ee5e-4fe1-aa33-33fc2535b0ba",
-                    name: "Furqan Majeed"
+                    id: "1",
+                    name: "GlaxoSimth Kline"
                 },
                 {
-                    id: "75c6c277-4e77-4c8b-b47e-b0001fbeaf5f",
-                    name: "Inaam"
+                    id: "2",
+                    name: "Getz Pharma"
                 },
                 {
-                    id: "c291f0b0-3709-4fa5-b08a-f5500ee31226",
-                    name: "Sharjeel"
-                }
-            
-        ];
-    }
-    static getDoctors() {
-        return [
-                {
-                    id: "d878af86-ee5e-4fe1-aa33-33fc2535b0ba",
-                    name: "Furqan Majeed"
+                    id: "3",
+                    name: "Abbott Laboratories"
                 },
                 {
-                    id: "75c6c277-4e77-4c8b-b47e-b0001fbeaf5f",
-                    name: "Inaam"
+                    id: "4",
+                    name: "Sami Pharma"
                 },
                 {
-                    id: "c291f0b0-3709-4fa5-b08a-f5500ee31226",
-                    name: "Sharjeel"
-                }
+                    id: "5",
+                    name: "Halton Pharma"
+                },
+                {
+                    id: "6",
+                    name: "Searle"
+                },
+                {
+                    id: "7",
+                    name: "Ferozsons"
+                },
+                {
+                    id: "8",
+                    name: "Pfizer"
+                },
+                {
+                    id: "9",
+                    name: "Bayer"
+                },
+                {
+                    id: "10",
+                    name: "Macter pharma"
+                },
+                {
+                    id: "11",
+                    name: "Martin Dow"
+                },
+                {
+                    id: "12",
+                    name: "Novartis"
+                },
+                {
+                    id: "13",
+                    name: "Sanofi"
+                },
+                {
+                    id: "14",
+                    name: "Bosch pharma"
+                },
+                {
+                    id: "15",
+                    name: "Merck & Co"
+                },
+                {
+                    id: "16",
+                    name: "Eli Lilly"
+                },
+                {
+                    id: "17",
+                    name: "Indus Pharma"
+                },
+                {
+                    id: "18",
+                    name: "Horizon Healthcare"
+                },
+                {
+                    id: "19",
+                    name: "Platinum Pharma"
+                },
+                {
+                    id: "20",
+                    name: "Reckitt Benckiser"
+                },
             
         ];
     }

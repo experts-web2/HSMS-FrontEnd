@@ -1,11 +1,11 @@
 
 <div class="d-flex mx-auto">
     <aside class="sideNav" [ngClass]="{'pushed-content': sidebarVisible}">
-        <button class="btn btn-primary mb-2 ms-auto d-block" *ngIf="!sidebarVisible" (click)="sidebarVisible = !sidebarVisible"><i class="pi pi-align-justify"></i></button>
+        <p-button class="mb-2 ms-auto d-block" *ngIf="!sidebarVisible" (click)="sidebarVisible = !sidebarVisible"><i class="pi pi-align-justify"></i></p-button>
         <app-admin-side-nav></app-admin-side-nav>
     </aside>
     <div class="mainPage" [ngClass]="sidebarVisible ? 'w-100':'w-75 mx-auto'">
-        <button class="btn btn-primary togle-btn" *ngIf="sidebarVisible" (click)="sidebarVisible = !sidebarVisible"><i class="pi pi-align-justify"></i></button>
+        <p-button class="togle-btn" *ngIf="sidebarVisible" (click)="sidebarVisible = !sidebarVisible"><i class="pi pi-align-justify"></i></p-button>
         <router-outlet></router-outlet>
     </div>
 </div>

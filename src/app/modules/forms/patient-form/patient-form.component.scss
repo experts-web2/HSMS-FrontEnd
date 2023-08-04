@@ -5,17 +5,14 @@
     justify-content: center;
 }
 
-
-.inpt-Field1 {
-    width: 75%
-}
-
 .input_Divs {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     padding: 10px;
-
+    div{
+        width: 70%;
+    }
 }
 
 .inpt-FieldPic {
@@ -65,26 +62,6 @@
     justify-content: space-between;
     align-items: center;
 
-}
-
-.inpt-age {
-    width: 30%
-}
-
-.date-div {
-    padding: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 75%;
-    padding: 1px;
-    background-color: #fff;
-    border: 1px solid #ced4da;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border-radius: .375rem;
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 .datepickerIcon {

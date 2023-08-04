@@ -5,11 +5,11 @@
       <webcam [height]="500" [width]="300" [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
         [switchCamera]="nextWebcamObservable"></webcam>
       <div class="camera-options">
-        <button *ngIf="isCameraExist" (click)="takeSnapshot()" name="btn_submit" mat-button
+        <p-button *ngIf="isCameraExist" (click)="takeSnapshot()" name="btn_submit" 
           class='custom-btn btn-12 btn tack-action-btn'>
-          <span>Take Picture</span> </button>
-        <button (click)="close()" name="btn_submit" mat-button class='custom-btn btn-12 btn tack-action-btn'>
-          <span>Cancel</span> </button>
+          <span>Take Picture</span> </p-button>
+        <p-button (click)="close()" name="btn_submit" class='custom-btn btn-12 btn tack-action-btn'>
+          <span>Cancel</span> </p-button>
       </div>
     </div>
     <div *ngIf="errors.length > 0">

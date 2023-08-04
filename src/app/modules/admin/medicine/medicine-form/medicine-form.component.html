@@ -1,4 +1,5 @@
 <div>
+    <h3 class="text-center"><b>{{action === 'add'? 'Add Medicine': 'Update Medicine'}}</b></h3>
     <form (ngSubmit)="submitMedicine()" class="medicineform-wrapper" [formGroup]="medicineForm">
         <div class="d-flex flex-column gap-2">
             <label for="name">Name<span class="text-danger">*</span></label>
@@ -38,16 +39,16 @@
             <div class="text-danger" *ngIf="(f['medicineType'].errors && f['medicineType'].touched) || (f['medicineType'].dirty && f['medicineType'].errors)">Please select a type.</div>
         </div>
         <div class="d-flex flex-column">
-            <button class="btn btn-primary add-medicine mt-3 col-2"
+            <p-button class="add-medicine mt-3 col-2"
                 [disabled]="
-                (f['name'].errors || !f['name'].valid) &&
-                (f['potency'].errors || !f['potency'].valid) &&
-                (f['potencyUnits'].errors || !f['potencyUnits'].valid) &&
-                (f['price'].errors || !f['price'].valid) &&
-                (f['salt'].errors || !f['salt'].valid) &&
-                (f['medicineType'].errors || !f['medicineType'].valid) 
+                (!f['name'].valid) &&
+                (!f['potency'].valid) &&
+                (!f['potencyUnits'].valid) &&
+                (!f['price'].valid) &&
+                (!f['salt'].valid) &&
+                (!f['medicineType'].valid) 
                 "
-            type="submit">{{action === 'add'? 'add Medicine +': 'update Medicine +'}}</button>
+            type="submit">{{action === 'add'? 'add Medicine +': 'update Medicine +'}}</p-button>
         </div>
     </form>
 </div>

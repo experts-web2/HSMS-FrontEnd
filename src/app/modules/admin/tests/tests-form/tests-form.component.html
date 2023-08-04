@@ -46,17 +46,17 @@
     
     
     <div class="button-wrapper">
-        <button class="btn btn-primary" 
+        <p-button  
         type="submit" 
         [disabled]="
-        (testForm.controls['name'].errors || !testForm.controls['name'].valid) && 
-        (testForm.controls['description'].errors || !testForm.controls['description'].valid) && 
-        (testForm.controls['testCategoryId'].errors || !testForm.controls['testCategoryId'].valid) && 
-        (testForm.controls['price'].errors || !testForm.controls['price'].valid) &&
-        (testForm.controls['normalValues'].errors || !testForm.controls['normalValues'].valid) &&
-        (testForm.controls['testSample'].errors || !testForm.controls['testSample'].valid) && 
-        (testForm.controls['reportingTime'].errors || !testForm.controls['reportingTime'].valid)
+        (!testForm.controls['name'].valid) && 
+        (!testForm.controls['description'].valid) && 
+        (!testForm.controls['testCategoryId'].valid) && 
+        (!testForm.controls['price'].valid) &&
+        (!testForm.controls['normalValues'].valid) &&
+        (!testForm.controls['testSample'].valid) && 
+        (!testForm.controls['reportingTime'].valid)
         "
-        >{{action === 'add'?'Add Test':'Update Test'}}</button>
+        >{{action === 'add'?'Add Test':'Update Test'}}</p-button>
     </div>
 </form>
