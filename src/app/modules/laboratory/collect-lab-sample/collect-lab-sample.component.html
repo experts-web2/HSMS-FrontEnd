@@ -147,15 +147,15 @@
       </div>
       <p-button
         (click)="addNewInvoiceItem()"
-        class="d-flex mb-4 md:mb-0 align-items-center"
+        class="d-flex mb-4 md:mb-0 w-fit align-items-center"
       >
-        Item
+      <span>Item +</span>
       </p-button>
     </div>
     <div
       class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-end align-items-center"
     >
-      <p-button class=" mr-8" [disabled]="!collectionForm.controls['patientId'].valid" (click)="addTestSample()">
+      <p-button class=" mr-8" [disabled]="!testItems.length || testItems.invalid || patientId.invalid" (click)="addTestSample()">
         Save
       </p-button>
       <p-button >Save & Print</p-button>

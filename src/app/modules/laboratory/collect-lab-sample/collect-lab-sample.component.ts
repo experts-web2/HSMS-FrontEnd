@@ -162,7 +162,6 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
   addTestSample() {
     this.submitted = true;
-    console.log(this.collectionForm.value);
     if (this.collectionForm.invalid) {
       return;
     }

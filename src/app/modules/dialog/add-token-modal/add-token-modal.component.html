@@ -137,16 +137,16 @@
                                 </select>
                             </div>
                             <div class="">
-                                <p-button (click)="removeinvoiceItem(i)">
+                                <span (click)="removeinvoiceItem(i)">
                                     <i class="fa fa-trash"></i>
-                                </p-button>
+                                </span>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <p-button (click)="addNewInvoiceItem()" class="d-flex mb-4 md:mb-0 align-items-center"
-                *ngIf="addTokenForm.controls['tokenTypes'].value !== 1">Item +</p-button>
+                <p-button (click)="addNewInvoiceItem()" class="d-flex mb-4 md:mb-0 align-items-center w-fit"
+                *ngIf="addTokenForm.controls['tokenTypes'].value !== 1"><span>Item +</span></p-button>
                 <div class="grid lg:grid-cols-2 gap-5">
                     <div>
                     <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
