@@ -39,6 +39,11 @@ export class PatientService extends HttpService{
     return this.get(`${BaseEndPoints.Patienttestinvoice}/patientdropdownbytodayinvoiced?search=${patientSerch}`);
   }
 
+  // patienttestinvoiceitem/labtestsbytodayinvoiced
+  patientLabtestsTestInvoice(patientSerch?:string): Observable<any>{
+    return this.get(`${BaseEndPoints.Patienttestinvoiceitem}/labtestsbytodayinvoiced?patientId=${patientSerch}`);
+  }
+
   getsamplecollections(fetchRequest: IFetchRequest = {}): Observable<any>{
     return this.post(`${BaseEndPoints.Patienttestinvoiceitem}/getsamplecollections`,fetchRequest);
   }

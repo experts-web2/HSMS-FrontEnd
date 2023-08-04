@@ -36,21 +36,20 @@
             <label for="descriptionDetail">Test Category</label>
             <p-autoComplete
               [suggestions]="testCategoryToShow"
-              #category
+              #testCategory
               [dropdown]="true"
               field="name"
               (completeMethod)="onSearchCategory($event)"
-              (onSelect)="selectCategory(category.value.id)"
+              (onSelect)="category = testCategory.value.id"
               placeholder="Search Test Category"
-              dropdownIcon="pi pi-search"
               [minLength]="1"
               [showEmptyMessage]="true"
             >
             </p-autoComplete>
           </div>
           <p-button
-            class="whitespace-nowrap h-fit py-2"
-            [disabled]="!category.value"
+            class="h-fit "
+            [disabled]="!category"
             (click)="GenerateSampleID()"
           >
             Generate Sample Id
@@ -148,15 +147,15 @@
       </div>
       <p-button
         (click)="addNewInvoiceItem()"
-        class="d-flex mb-4 md:mb-0 align-items-center"
+        class="d-flex mb-4 md:mb-0 w-fit align-items-center"
       >
-        Item
+      <span>Item +</span>
       </p-button>
     </div>
     <div
       class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-end align-items-center"
     >
-      <p-button class=" mr-8" (click)="addTestSample()">
+      <p-button class=" mr-8" [disabled]="!testItems.length || testItems.invalid || patientId.invalid" (click)="addTestSample()">
         Save
       </p-button>
       <p-button >Save & Print</p-button>

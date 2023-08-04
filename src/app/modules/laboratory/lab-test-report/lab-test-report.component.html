@@ -8,13 +8,8 @@
             <div class="row mb-3">
                 <div class="col-6">
                     <label for="descriptionDetail">Patients</label>
-                    <!-- <select id="descriptionDetail" class="form-select"
-                        formControlName="patientId" #patient (change)="patientSelect(patient.value)" required>
-                        <option [defaultSelected]="true" disabled>Select A Description</option>
-                        <option *ngFor="let drop of patientsToShow" [value]="drop.id">
-                            {{drop.name}}</option>
-                    </select>
-                    <div *ngIf="submitted && f['patientId'].errors" class="invalid-feedback">
+                
+                    <!-- <div *ngIf="submitted && f['patientId'].errors" class="invalid-feedback">
                         <div *ngIf="f['patientId'].errors['required']">Patient Id is required</div>
                     </div> -->
                     <div class="d-flex justify-content-center flex-column">
@@ -26,18 +21,10 @@
                 </div>
                 <div class="col-6">
                     <label for="descriptionDetail">Doctor</label>
-                    <p-autoComplete [suggestions]="doctorsToView" #doctor dropdownIcon="pi pi-search"
+                    <p-autoComplete [suggestions]="doctorsToView" #doctor placeholder="Select Doctor"
                         (completeMethod)="onSearchDoctor($event)" [dropdown]="true"
-                        (onSelect)="onDoctorSelection(doctor.value.id)" field="name" dropdownIcon="pi pi-search"
+                        (onSelect)="onDoctorSelection(doctor.value.id)" field="name"
                         [minLength]="3" [showEmptyMessage]="true"></p-autoComplete>
-                    <!-- <select id="descriptionDetail" class="form-select" formControlName="doctorId" required>
-                        <option [defaultSelected]="true" disabled>Select A Description</option>
-                        <option *ngFor="let drop of doctors" [value]="drop.id">
-                            {{drop.name}}</option>
-                    </select>
-                    <div *ngIf="submitted && f['doctorId'].errors" class="invalid-feedback">
-                        <div *ngIf="f['doctorId'].errors['required']">Doctor Id is required</div>
-                    </div> -->
                 </div>
             </div>
 
@@ -46,12 +33,6 @@
                     <div class="flex justify-between items-center flex-col lg:flex-row">
                         <div class="d-flex justify-content-center flex-column w-full md:pr-2">
                             <label for="descriptionDetail">Lab Test</label>
-                            <!-- <select id="descriptionDetail" class="form-select"
-                                formControlName="testId" #description
-                                (change)="onTestSelect(i, description.value)">
-                                <option *ngFor="let drop of tests" [value]="drop.id">
-                                    {{drop.name}}</option>
-                            </select> -->
                             <p-autoComplete [suggestions]="testToView" #description [dropdown]="true" field="name"
                                 (completeMethod)="onTestSearch($event)" (onSelect)="onTestSelect(i, description.value)"
                                 placeholder="Test Name/Code" dropdownIcon="pi pi-search" [minLength]="1" [showEmptyMessage]="true">
@@ -69,9 +50,9 @@
                         </div>
 
                         <div class="ml-3">
-                            <p-button (click)="removeinvoiceItem(i)">
+                            <span (click)="removeinvoiceItem(i)">
                                 <i class="fa fa-trash"></i>
-                            </p-button>
+                            </span>
                         </div>
                     </div>
                     <div class="flex justify-between items-center flex-col lg:flex-row">
@@ -87,12 +68,13 @@
                 </div>
 
             </div>
+            
             <p-button (click)="addNewInvoiceItem()"
-                class="d-flex mb-4 md:mb-0 align-items-center">Item</p-button>
+                class="d-flex mb-4 md:mb-0 align-items-center w-fit"><span>Item +</span> </p-button>
 
         </div>
-        <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-content-evenly align-items-center">
-            <p-button (click)="addToken()">Save</p-button>
+        <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-end align-items-center">
+            <p-button class="mr-8" (click)="addToken()">Save</p-button>
             <p-button>Save & Print</p-button>
         </div>
     </div>

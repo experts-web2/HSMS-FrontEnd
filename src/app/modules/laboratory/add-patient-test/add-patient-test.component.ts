@@ -81,8 +81,8 @@ export class AddPatientTestComponent
       othersName: new FormControl<string | null>(null),
     });
     this.addPatientTestForm = this.fb.group({
-      doctorId: new FormControl<string | null>(null, [Validators.required]),
-      otherName: new FormControl<string | null>(null, [Validators.required]),
+      doctorId: new FormControl<string | null>(null),
+      // otherName: new FormControl<string | null>(null, [Validators.required]),
       patientId: new FormControl<string | null>(null, [Validators.required]),
       totalDiscount: new FormControl<number | null>(0, [Validators.required]),
       paymentType: new FormControl<number | null>(1, [Validators.required]),
