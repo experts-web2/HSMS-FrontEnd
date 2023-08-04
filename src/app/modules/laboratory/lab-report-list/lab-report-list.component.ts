@@ -11,6 +11,8 @@ import { PatientService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { takeUntil } from 'rxjs';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { SortOrder } from 'src/app/constants/enums/SortOrder';
+import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
 
 @Component({
   selector: 'app-lab-report-list',
@@ -92,8 +94,7 @@ export class LabReportListComponent
     {
       name: 'CREATED AT',
       property: 'createdAt',
-      filter: false,
-      filterType: TableColumnFilterTypes.Text,
+      valueToShow: this.dateFormate.bind(this),
     },
   ];
   testsList: ILabeTest[] = [];
@@ -124,8 +125,24 @@ export class LabReportListComponent
   }
 
   getTests(): void {
+    let getAllLabTestPayload: IFetchRequest = {
+      pagedListRequest:{
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest:{
+        filtersRequest:[],
+        sortRequest:[
+          {
+            field: 'CreatedAt',
+            direction: SortOrder.Descending,
+            priority: 1
+          }
+        ]
+      }
+    }
     this.testsService
-      .getTests()
+      .getTests(getAllLabTestPayload)
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe({
         next: (x: any) => {
@@ -140,15 +157,35 @@ export class LabReportListComponent
       });
   }
 
-  getLabTestData(filterRequest: IFetchRequest = {}) {
+  getLabTestData() {
+    let getLabTestCollectionPayload: IFetchRequest = {
+      pagedListRequest:{
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest:{
+        filtersRequest:[],
+        sortRequest:[
+          {
+            field: 'CreatedAt',
+            direction: SortOrder.Descending,
+            priority: 1
+          }
+        ]
+      }
+    }
     this.patientService
-      .getsamplecollections(filterRequest)
+      .getsamplecollections(getLabTestCollectionPayload)
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe((res: any) => {
         console.log(res);
         this.labTests = res.data;
         this.totalRecords = res.total;
       });
+  }
+
+  dateFormate(date: string): string {
+    return formatDate(date, 'MM/dd/yyyy hh:mm:aa', 'en-US');
   }
 
   search(event: any) {

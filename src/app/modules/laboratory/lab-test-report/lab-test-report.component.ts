@@ -186,7 +186,7 @@ export class LabTestReportComponent
 
   onPatientSelection(selectPatient: string) {
     this.labReportForm.get('patientId')?.setValue(selectPatient);
-    this.testService.getTestInvoiceItemsByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    this.testService.getLabtestsBytodayInvoicedByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.tests = x;
       }
@@ -204,7 +204,8 @@ export class LabTestReportComponent
       next: (x) => {
         console.log(x);
         this.alertService.success('Add test Report successfully', 'Success');
-
+        this.labReportForm.reset();
+        this.testReport.clear();
       },
       error: (err) => {
         this.alertService.error('Something went wrong while generating sample id.', 'Error');
