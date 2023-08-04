@@ -3,35 +3,34 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MedicineService, VendorService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { MedicineBrandService } from 'src/app/Services/medicine-brand/medicine-brand.service';
+import { takeUntil } from 'rxjs';
+import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 
 @Component({
   selector: 'app-pharmacy-purchase',
   templateUrl: './pharmacy-purchase.component.html',
   styleUrls: ['./pharmacy-purchase.component.scss']
 })
-export class PharmacyPurchaseComponent implements OnInit {
+export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective implements OnInit {
 
   purchaseMedicineForm!: FormGroup;
   vendors: Array<IDropDown> = [];
   vendorsToView: Array<IDropDown> = [];
-  medicineList: Array<IDropDown> = [];
-  medicineToView: Array<IDropDown> = [];
-  brandList: Array<IDropDown> = [];
-  brandToView: Array<IDropDown> = [];
+  medicinesList!: Array<IDropDown>;
+  medicinesToShow!: Array<IDropDown>;
+  medicineToView: Array<any> = [];
+  brandToView: Array<any> = [];
+  medicineList: Array<any> = [];
+  brandList: Array<any> = [];
 
-  constructor(private readonly fb: FormBuilder,
-    private readonly vendorService: VendorService,
-    private readonly medicineService: MedicineService,
-    private readonly medicineBrandService: MedicineBrandService,
-
-
-  ) {
+  constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService){
+    super();
     let initialMedicine = this.fb.group({
       medicineId: new FormControl<string | null>(null, [Validators.required]),
-      packsQty: new FormControl<number | null>(null, [Validators.required]),
-      unitsPerPack: new FormControl<number | null>(null, [Validators.required]),
-      packPrice: new FormControl<number | null>(null, [Validators.required]),
-      unitPrice: new FormControl<number | null>(null, [Validators.required]),
+      packsQty: new FormControl<number | null>(0, [Validators.required]),
+      unitsPerPack: new FormControl<number | null>(0, [Validators.required]),
+      packPrice: new FormControl<number | null>(0, [Validators.required]),
+      unitPrice: new FormControl<number | null>(0, [Validators.required]),
       brandId: new FormControl<string | null>(null, [Validators.required]),
       mfgDate: new FormControl<Date | null>(null, [Validators.required]),
       expDate: new FormControl<Date | null>(null, [Validators.required]),
@@ -49,8 +48,7 @@ export class PharmacyPurchaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.getVendorsDropDown();
-    this.getMedicineDropDown();
-    this.getMedicineBrandDropDown();
+    this.getVendorsDropDown();
   }
 
   addMedicine() {
@@ -106,22 +104,6 @@ export class PharmacyPurchaseComponent implements OnInit {
     })
   }
 
-  getMedicineDropDown() {
-    this.medicineService.getMedicineDropDown().subscribe({
-      next: (x) => {
-        this.medicineList = x;
-      }
-    })
-  }
-  getMedicineBrandDropDown() {
-    this.medicineBrandService.getBrands().subscribe({
-      next: (x) => {
-        this.brandList = x;
-      }
-    })
-  }
-
-
   onSearchVendor(event: any) {
     console.log(event.query);
     const query = event.query.trim().toLowerCase();
@@ -147,9 +129,30 @@ export class PharmacyPurchaseComponent implements OnInit {
     );
   }
 
+  getMedicine(){
+    this.medicineService.getMedicineDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.medicinesList = x;
+        this.medicinesToShow = x;
+
+      },
+      error: (err: Error)=>{
+
+      }
+    })
+  }
 
   saveMedicine() {
     console.log(this.purchaseMedicineForm.value)
   }
 
+  packsQtyChnage(value: any, index: number){
+    console.log({value, index});
+    
+  }
+
+  unitsInPackChange(value: any, index: number){
+    console.log({value, index});
+    
+  }
 }
