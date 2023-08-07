@@ -63,6 +63,14 @@ export class UserListComponent implements OnInit {
       columnType: DataTypesEnum.String
     },
     {
+      name: 'Role',
+      property: 'roles',
+      filter: true,
+      globalSearch: true,
+      filterType: TableColumnFilterTypes.Text,
+      valueToShow: this.getRoles.bind(this)
+    },
+    {
       name: 'Active',
       property: 'active',
       filter: true,
@@ -105,6 +113,10 @@ export class UserListComponent implements OnInit {
     let icon = '<span class="text-success"><i class="fa-solid fa-check"></i></span>';
     if (!status) icon = '<span class="text-danger"><i  class="fa-solid fa-xmark"></i></span>';
     return icon;
+  }
+
+  getRoles(status: any) {
+    return status[0];
   }
 
   edit(user: IUser) {

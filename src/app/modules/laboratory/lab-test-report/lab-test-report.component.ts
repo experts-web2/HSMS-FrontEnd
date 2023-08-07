@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -8,7 +9,7 @@ import {
 } from '@angular/forms';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { takeUntil } from 'rxjs';
-import { AlertService, PatientService } from 'src/app/services';
+import { AlertService, PatientService, PatientTestService } from 'src/app/services';
 import { TestService, DoctorService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
@@ -83,6 +84,8 @@ export class LabTestReportComponent
     private readonly doctorService: DoctorService,
     private readonly testService: TestService,
     private readonly alertService: AlertService,
+    private readonly patientTestService: PatientTestService,
+
   ) {
     super();
     this.invoiceDescriptionForm = this.fb.group({
@@ -101,6 +104,14 @@ export class LabTestReportComponent
 
   get testReport(): FormArray {
     return this.labReportForm.get('testReport') as FormArray;
+  }
+
+  get patientId(): AbstractControl {
+    return this.labReportForm.get('patientId') as AbstractControl;
+  }
+  
+  get doctorId(): AbstractControl {
+    return this.labReportForm.get('doctorId') as AbstractControl;
   }
 
   ngOnInit(): void {
@@ -173,7 +184,7 @@ export class LabTestReportComponent
   onPatientSearch(event: { query: string }): void {
     const searchTerm = event.query.trim();
     if (searchTerm.length >= 3) {
-      this.patientService.patientTestInvoice(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      this.patientTestService.patientTestInvoice(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
           this.patientsToShow = x;
         },
@@ -186,7 +197,7 @@ export class LabTestReportComponent
 
   onPatientSelection(selectPatient: string) {
     this.labReportForm.get('patientId')?.setValue(selectPatient);
-    this.testService.getLabtestsBytodayInvoicedByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    this.patientTestService.getLabtestsBytodayInvoicedByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.tests = x;
       }
@@ -200,7 +211,7 @@ export class LabTestReportComponent
       return;
     }
     console.log('this.labReportForm.value',this.labReportForm.value)
-    this.testService.addPatientTestReport(this.labReportForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    this.patientTestService.addPatientTestReport(this.labReportForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         console.log(x);
         this.alertService.success('Add test Report successfully', 'Success');

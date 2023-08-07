@@ -18,3 +18,4 @@ export * from "./token/token.service";
 export * from "./user/user.service";
 export * from "./vender/vendor.service";
 export * from "./vital/vital.service";
+export * from "./patient-test/patient-test.service";

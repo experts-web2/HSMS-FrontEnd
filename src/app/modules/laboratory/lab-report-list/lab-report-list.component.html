@@ -13,7 +13,7 @@
                 </select>
             </div>
         </div>
-        <p-tabView (onChange)="handleChange($event.index)" [activeIndex]="selectedIndex">
+        <p-tabView (onChange)="handleChange($event.index)">
             <div class="mb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10 align-items-center justify-content-between">
 
                 <div>
@@ -75,15 +75,15 @@
             <p-tabPanel header="Collect Sample(0)">
                 1
                 <div>
-                    <app-generic-table [data]="labTests" [columns]="columns" 
+                    <app-generic-table [data]="sampleTests" [columns]="columns" 
                         [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
                 </div>
             </p-tabPanel>
             <p-tabPanel header="Pending Test(0)">
                 2
                 <div>
-                    <app-generic-table [data]="[]" [columns]="columns" 
-                        [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
+                    <app-generic-table [data]="sampleTestPending" [columns]="columns" 
+                        [showActions]="true" [totalRecords]="sampleTestPendingTotalRecords"></app-generic-table>
                 </div>
             </p-tabPanel>
             <p-tabPanel header="Test Validation(0)">

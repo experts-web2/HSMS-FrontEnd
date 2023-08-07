@@ -10,6 +10,7 @@ import { MedicineBrandService } from 'src/app/Services/medicine-brand/medicine-b
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { BrandFormComponent } from '../brand-form/brand-form.component';
 import { IAddOrUpdateBrandRequest } from 'src/app/models/interfaces/medicine-brand';
+import { SortOrder } from 'src/app/constants/enums/SortOrder';
 
 
 
@@ -56,12 +57,28 @@ export class BrandListComponent extends SubscriptionManagmentDirective {
     this.getBrands();
   }
 
-  getBrands(filterRequest: IFetchRequest = {}) {
+  getBrands() {
+    let getMedicineBrandPayload: IFetchRequest = {
+      pagedListRequest:{
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest:{
+        filtersRequest:[],
+        sortRequest:[
+          {
+            field: 'CreatedAt',
+            direction: SortOrder.Descending,
+            priority: 1
+          }
+        ]
+      }
+    }
     this.medicineBrandService
-      .getBrandsList(filterRequest)
+      .getBrandsList(getMedicineBrandPayload)
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe((x) => {
-        this.medicineBrandList = x;
+        this.medicineBrandList = x.data;
         this.totalRecords = x.total;
       });
   }

@@ -5,7 +5,7 @@ import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TestsFormComponent } from '../../admin/tests/tests-form/tests-form.component';
 import { formatDate } from '@angular/common';
-import { TestService, AlertService } from 'src/app/services';
+import { TestService, AlertService, PatientTestService } from 'src/app/services';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { PatientService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -25,7 +25,6 @@ export class LabReportListComponent
 {
   actionsToShow: Array<string> = ['edit', 'delete'];
   totalRecords: number = 0;
-  selectedIndex = 0;
   selectTypes: IDropDown[] = [];
   selectReportType: IDropDown[] = [];
   ref!: DynamicDialogRef;
@@ -99,29 +98,35 @@ export class LabReportListComponent
   ];
   testsList: ILabeTest[] = [];
   testsToShow: any;
-  labTests: any;
+  sampleTests: any;
+  sampleTestPending: any;
+  sampleTestPendingTotalRecords: any;
   constructor(
     public readonly dialogService: DialogService,
     private readonly testsService: TestService,
     private readonly alertService: AlertService,
-    private patientService: PatientService
+    private patientTestService: PatientTestService
   ) {
     super();
     console.log(this.startDatePlaceholder, this.endDatePlaceholder);
   }
   ngOnInit(): void {
-    this.getLabTestData();
+    this.getLabSampleCollected();
     this.getTests();
   }
 
-  selctData(event: any) {
-    console.log(event);
-  }
-
   handleChange(tabIndex: number) {
-    this.selectedIndex = tabIndex;
-
-    console.log(this.selectedIndex);
+    console.log(tabIndex)
+    switch (tabIndex) {
+      case 0:
+        this.getLabSampleCollected();
+        break;
+      case 1:
+        this.getLabSamplePending();
+        break;
+      default:
+        break;
+    }
   }
 
   getTests(): void {
@@ -157,7 +162,7 @@ export class LabReportListComponent
       });
   }
 
-  getLabTestData() {
+  getLabSampleCollected() {
     let getLabTestCollectionPayload: IFetchRequest = {
       pagedListRequest:{
         pageNo: 1,
@@ -174,13 +179,41 @@ export class LabReportListComponent
         ]
       }
     }
-    this.patientService
+    this.patientTestService
       .getsamplecollections(getLabTestCollectionPayload)
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe((res: any) => {
         console.log(res);
-        this.labTests = res.data;
+        this.sampleTests = res.data;
         this.totalRecords = res.total;
+      });
+  }
+
+
+  getLabSamplePending() {
+    let getLabTestCollectionPayload: IFetchRequest = {
+      pagedListRequest:{
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest:{
+        filtersRequest:[],
+        sortRequest:[
+          {
+            field: 'CreatedAt',
+            direction: SortOrder.Descending,
+            priority: 1
+          }
+        ]
+      }
+    }
+    this.patientTestService
+      .getpendingsamplecollections(getLabTestCollectionPayload)
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe((res: any) => {
+        console.log(res);
+        this.sampleTestPending = res.data;
+        this.sampleTestPendingTotalRecords = res.total;
       });
   }
 
