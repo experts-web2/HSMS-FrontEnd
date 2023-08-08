@@ -1,0 +1,122 @@
+.search-wrapper-home {
+    flex-grow: 1;
+  
+    .search-bar-wrapper {
+      max-width: 332px;
+      width: 100%;
+      background-color: white;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      height: 40px;
+      border: 2px solid #e5f0fe;
+      padding: 2px;
+  
+      &:hover {
+        background-color: #e5f0fe;
+  
+        .search-divider {
+          display: none;
+        }
+      }
+
+      @media screen and (max-width:1024px) {
+        max-width: 225px;
+        .search-input{
+            max-width: 125px;
+        }
+      }
+      @media screen and (max-width:768px) {
+        max-width: 400px;
+        .search-input{
+            max-width: 300px;
+        }
+      }
+      @media screen and (max-width:768px) {
+        max-width: 100%;
+        .search-input{
+            max-width: 100%;
+            width: auto;
+        }
+      }
+    }
+  
+    .search-icon {
+      top: 4px;
+      left: 4px;
+  
+      @media screen and (max-width: 586px) {
+        top: 5px;
+        left: 2px;
+      }
+    }
+  
+    .home-header-search-bar {
+      border-radius: 7px;
+      border: none;
+      width: 100%;
+      background-color: transparent;
+  
+      @media screen and (max-width: 1024px) {
+        width: 100%;
+      }
+  
+      color: white;
+  
+      &::placeholder {
+        padding-left: 25px;
+      }
+    }
+  }
+  
+  .search-input-wrapper {
+    border-radius: 20px;
+    height: 100%;
+    color: #000000;
+    flex-grow: 1;
+  
+    &:hover {
+      background-color: #fff;
+    }
+  
+    .search-input {
+      outline: none;
+      border: 0;
+      padding-left: 30px;
+      width: 230px;
+      background: transparent;
+      font-weight: 500;
+      height: 100%;
+      color: #000000;
+  
+      @media screen and (max-width: 586px) {
+        padding-left: 35px;
+        }
+    }
+  }
+
+  .select-search-category {
+    border-radius: 20px;
+    height: 100%;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+  
+    &:hover {
+      background-color: #fff;
+    }
+  
+    .mat-icon {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .close-icon{
+    font-size: 30px;
+    width: fit-content;
+    height: 100%;
+  }

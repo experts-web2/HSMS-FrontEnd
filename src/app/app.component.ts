@@ -7,6 +7,7 @@ import { AddTokenModalComponent } from './modules/dialog/add-token-modal/add-tok
 import { PatientFormComponent } from './modules/forms/patient-form/patient-form.component';
 import { AddPatientTestComponent } from './modules/laboratory/add-patient-test/add-patient-test.component';
 import { CollectLabSampleComponent } from './modules/laboratory/collect-lab-sample/collect-lab-sample.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit {
   logedInUser!: ILogedInUser;
   navbarShowHide = false;
   isDoctor: boolean = false;
+  mobileSerchBar: boolean = false;
   items = [
     {
         items: [
@@ -43,7 +45,8 @@ export class AppComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private readonly authService: AuthService,
-    private readonly userStateService: UserStateService
+    private readonly userStateService: UserStateService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +62,10 @@ export class AppComponent implements OnInit {
         this.logedInUser = x;
         this.isAdmin = x?.roles.includes('Admin');
         this.isDoctor = x?.roles.includes('Doctor');
-        this.isLabTechnician = x?.roles.includes('LabTechnician');
+        if(x?.roles.includes('LabTechnician')){
+          this.isLabTechnician = true;
+          this.router.navigate(['/laboratory/add_patient_test'])
+        }
       },
       error: (err: Error) => {},
     });

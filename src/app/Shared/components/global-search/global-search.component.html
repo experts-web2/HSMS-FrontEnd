@@ -1,0 +1,20 @@
+<div
+class="search-wrapper-home mx-2 flex flex-row justify-content-between"
+>
+<div class="relative search-bar-wrapper">
+    <mat-icon class="text-2xl md:hidden close-icon" *ngIf="mobileSerchBarData === true" (click)="emitEvent()">keyboard_arrow_left</mat-icon>
+  <div class="search-input-wrapper relative">
+    <input
+      placeholder="Search"
+      class="search-input text-sm"
+    />
+    <mat-icon class="absolute search-icon">search</mat-icon>
+  </div>
+  <span class="search-divider"> | </span>
+  <div
+    class="items-center text-sm flex select-search-category cursor-pointer w-28"
+  >
+    Doctor <mat-icon>keyboard_arrow_down</mat-icon>
+  </div>
+</div>
+</div>

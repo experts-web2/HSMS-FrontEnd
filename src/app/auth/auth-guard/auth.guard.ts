@@ -22,10 +22,14 @@ export class AuthGuard implements CanActivate {
       this.router.navigate(['/sign-in'])
       return  canActivate;   
     }
-
     
-    this.userStateService.getUserState().subscribe((x: ILogedInUser) => {      
-      if(x && x?.roles.includes('Admin') && route.routeConfig?.path === 'admin') canActivate = true 
+    this.userStateService.getUserState().subscribe((x: ILogedInUser) => {   
+      const { roles } = route.data;   
+      if(roles && roles.includes(x?.roles[0])) {
+        canActivate = true;
+      }else{
+        canActivate = false; 
+      }
     });
     
     if(this.userStateService.isLogedIn()) return true;

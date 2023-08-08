@@ -30,7 +30,7 @@ export class UserFormComponent
     { id: Roles.Patient, name: 'Ptient' },
     { id: Roles.Admin, name: 'Admin' },
     { id: Roles.LabTechnician, name: 'Lab Technician' },
-    { id: Roles.Sweeper, name: 'Sweeper' },
+    { id: Roles.LabAdmin, name: 'Lab Admin' },
   ];
   user: any;
   action: string;
