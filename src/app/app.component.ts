@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
         ]
     }
 ];
+  isLabTechnician = false;
 
   constructor(
     private dialog: MatDialog,
@@ -58,6 +59,7 @@ export class AppComponent implements OnInit {
         this.logedInUser = x;
         this.isAdmin = x?.roles.includes('Admin');
         this.isDoctor = x?.roles.includes('Doctor');
+        this.isLabTechnician = x?.roles.includes('LabTechnician');
       },
       error: (err: Error) => {},
     });

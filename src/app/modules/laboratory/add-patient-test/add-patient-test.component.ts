@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -15,6 +16,7 @@ import {
   AlertService,
   DoctorService,
   PatientService,
+  PatientTestService,
   TestService,
 } from 'src/app/services';
 import { ILabTest } from 'src/app/models/interfaces/addOrUpdate-test';
@@ -65,8 +67,10 @@ export class AddPatientTestComponent
     private readonly doctorService: DoctorService,
     private readonly alertService: AlertService,
     private readonly testService: TestService,
+    private readonly patientTestService: PatientTestService,
     public dialogService: DialogService,
     private dialog: MatDialog,
+
 
   ) {
     super();
@@ -101,6 +105,12 @@ export class AddPatientTestComponent
 
   get invoiceItems(): FormArray {
     return this.addPatientTestForm.get('invoiceItems') as FormArray;
+  }
+  get patientId(): AbstractControl {
+    return this.addPatientTestForm.get('patientId') as AbstractControl;
+  }
+  get amountPaid(): AbstractControl {
+    return this.addPatientTestForm.get('amountPaid') as AbstractControl;
   }
 
   ngOnInit(): void {
@@ -199,7 +209,7 @@ export class AddPatientTestComponent
       if (this.addPatientTestForm.controls['amountPaid']?.value) {
         console.log('this.addPatientTestForm.value', this.addPatientTestForm.value);
         this.submitSpinner = true;
-        this.testService.addPatientTest(this.addPatientTestForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe(
+        this.patientTestService.addPatientTest(this.addPatientTestForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe(
           {
           next: (x) => {
             console.log(x);

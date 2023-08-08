@@ -57,6 +57,11 @@ export class MedicineListComponent
       filterType: TableColumnFilterTypes.Numeric,
     },
     {
+      name: 'Brand Name',
+      property: 'brandName',
+      filter: true,
+    },
+    {
       name: 'Created By',
       property: 'createdBy',
       filter: true,

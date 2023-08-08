@@ -4,8 +4,8 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TestsFormComponent } from '../../admin/tests/tests-form/tests-form.component';
-import { formatDate } from '@angular/common';
-import { TestService, AlertService } from 'src/app/services';
+import { DatePipe, formatDate } from '@angular/common';
+import { TestService, AlertService, PatientTestService } from 'src/app/services';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { PatientService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -13,6 +13,8 @@ import { takeUntil } from 'rxjs';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { SortOrder } from 'src/app/constants/enums/SortOrder';
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
+import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
+import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
 
 @Component({
   selector: 'app-lab-report-list',
@@ -21,11 +23,9 @@ import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
 })
 export class LabReportListComponent
   extends SubscriptionManagmentDirective
-  implements OnInit
-{
+  implements OnInit {
   actionsToShow: Array<string> = ['edit', 'delete'];
   totalRecords: number = 0;
-  selectedIndex = 0;
   selectTypes: IDropDown[] = [];
   selectReportType: IDropDown[] = [];
   ref!: DynamicDialogRef;
@@ -99,40 +99,55 @@ export class LabReportListComponent
   ];
   testsList: ILabeTest[] = [];
   testsToShow: any;
-  labTests: any;
+  sampleTests: any;
+  sampleTestPending: any;
+  sampleTestPendingTotalRecords: any;
+  testCompleted: any;
+  testCompletedTotalRecords: any;
   constructor(
     public readonly dialogService: DialogService,
     private readonly testsService: TestService,
     private readonly alertService: AlertService,
-    private patientService: PatientService
+    private patientTestService: PatientTestService,
+    private readonly datePipe: DatePipe,
   ) {
     super();
     console.log(this.startDatePlaceholder, this.endDatePlaceholder);
   }
   ngOnInit(): void {
-    this.getLabTestData();
+    this.getLabSampleCollected();
     this.getTests();
   }
 
-  selctData(event: any) {
-    console.log(event);
-  }
-
   handleChange(tabIndex: number) {
-    this.selectedIndex = tabIndex;
+    console.log(tabIndex)
+    switch (tabIndex) {
+      case 0:
+        this.getLabSampleCollected();
+        break;
+      case 1:
+        this.getLabSamplePending();
+        break;
+      case 2:
 
-    console.log(this.selectedIndex);
+        break;
+      case 3:
+        this.getLabTestCompleted();
+        break;
+      default:
+        break;
+    }
   }
 
   getTests(): void {
     let getAllLabTestPayload: IFetchRequest = {
-      pagedListRequest:{
+      pagedListRequest: {
         pageNo: 1,
         pageSize: 100
       },
-      queryOptionsRequest:{
-        filtersRequest:[],
-        sortRequest:[
+      queryOptionsRequest: {
+        filtersRequest: [],
+        sortRequest: [
           {
             field: 'CreatedAt',
             direction: SortOrder.Descending,
@@ -157,15 +172,16 @@ export class LabReportListComponent
       });
   }
 
-  getLabTestData() {
+  getLabSampleCollected() {
     let getLabTestCollectionPayload: IFetchRequest = {
-      pagedListRequest:{
+      pagedListRequest: {
         pageNo: 1,
         pageSize: 100
       },
-      queryOptionsRequest:{
-        filtersRequest:[],
-        sortRequest:[
+      queryOptionsRequest: {
+        filtersRequest: [
+        ],
+        sortRequest: [
           {
             field: 'CreatedAt',
             direction: SortOrder.Descending,
@@ -174,18 +190,74 @@ export class LabReportListComponent
         ]
       }
     }
-    this.patientService
-      .getsamplecollections(getLabTestCollectionPayload)
+    this.patientTestService
+      .getsamplecollections(getLabTestCollectionPayload, 'Collected')
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe((res: any) => {
         console.log(res);
-        this.labTests = res.data;
+        this.sampleTests = res.data;
         this.totalRecords = res.total;
       });
   }
 
-  dateFormate(date: string): string {
-    return formatDate(date, 'MM/dd/yyyy hh:mm:aa', 'en-US');
+
+  getLabSamplePending() {
+    let getLabTestCollectionPayload: IFetchRequest = {
+      pagedListRequest: {
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest: {
+        filtersRequest: [],
+        sortRequest: [
+          {
+            field: 'CreatedAt',
+            direction: SortOrder.Descending,
+            priority: 1
+          }
+        ]
+      }
+    }
+    this.patientTestService
+      .getsamplecollections(getLabTestCollectionPayload, 'Pending')
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe((res: any) => {
+        console.log(res);
+        this.sampleTestPending = res.data;
+        this.sampleTestPendingTotalRecords = res.total;
+      });
+  }
+  getLabTestCompleted() {
+    let getLabTestCollectionPayload: IFetchRequest = {
+      pagedListRequest: {
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest: {
+        filtersRequest: [],
+        sortRequest: [
+          {
+            field: 'CreatedAt',
+            direction: SortOrder.Descending,
+            priority: 1
+          }
+        ]
+      }
+    }
+    this.patientTestService
+      .getsamplecollections(getLabTestCollectionPayload, 'Completed')
+      .pipe(takeUntil(this.componetDestroyed))
+      .subscribe((res: any) => {
+        console.log(res);
+        this.testCompleted = res.data;
+        this.testCompletedTotalRecords = res.total;
+      });
+  }
+
+  dateFormate(date: string): string | null {
+    console.log('date', date)
+    return this.datePipe.transform(date, 'MM/dd/yyyy hh:mm:aa');
+    // return formatDate(date, 'MM/dd/yyyy hh:mm:aa', 'en-US');
   }
 
   search(event: any) {
@@ -205,6 +277,6 @@ export class LabReportListComponent
         action: action,
       },
     });
-    this.ref.onClose.subscribe((test) => {});
+    this.ref.onClose.subscribe((test) => { });
   }
 }

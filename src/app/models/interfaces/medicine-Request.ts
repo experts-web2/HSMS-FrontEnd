@@ -10,5 +10,6 @@ export interface IMedicinerequest{
     price: number,
     medicineType: MedicineType,
     potencyUnits: PotencyUnits     
+    medicineBrandId:string
     
 }

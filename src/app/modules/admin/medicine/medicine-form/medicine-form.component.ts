@@ -7,6 +7,8 @@ import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
 import { PotencyUnits } from 'src/app/constants/enums/potency-units';
 import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
 import { AlertService, MedicineService } from 'src/app/services';
+import { MedicineBrandService } from 'src/app/Services/medicine-brand/medicine-brand.service';
+import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 
 
 @Component({
@@ -35,21 +37,19 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
   ];
   medicine: any;
   action: string;
+  brandList: Array<IDropDown> = [];
 
   constructor(private fb: FormBuilder,
     private readonly medicineService: MedicineService,
     private readonly alertService: AlertService,
     public config: DynamicDialogConfig,
     public ref: DynamicDialogRef,
+    private readonly medicineBrandService: MedicineBrandService,
   ) {
     super();
     this.medicine = this.config.data.medicine;
     this.action = this.config.data.action
-
-    this.medicineService.getMedicine().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x: any) => { console.log(x); },
-      error: (err: Error) => { }
-    })
+    this.getMedicineBrandDropDown();
   }
   ngOnInit(): void {
     this.medicineForm = this.fb.group({
@@ -58,7 +58,8 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
       potencyUnits: new FormControl(null, [Validators.required]),
       medicineType: new FormControl(null, [Validators.required]),
       salt: new FormControl('', [Validators.required]),
-      price: new FormControl(null, [Validators.required])
+      price: new FormControl(null, [Validators.required]),
+      medicineBrandId: new FormControl(null, [Validators.required])
     })
     if (this.action === 'update' && this.medicine) {
       this.medicineForm.patchValue(
@@ -69,8 +70,17 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
           medicineType: this.medicine.medicineType,
           salt: this.medicine.salt,
           price: this.medicine.price,
+          medicineBrandId: this.medicine.brandID,
         });
     }
+  }
+
+  getMedicineBrandDropDown() {
+    this.medicineBrandService.getBrands().subscribe({
+      next: (x) => {
+        this.brandList = x;
+      }
+    })
   }
 
   get f() { return this.medicineForm.controls; }
@@ -82,7 +92,8 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
       potencyUnits: this.medicineForm.value.potencyUnits,
       medicineType: this.medicineForm.value.medicineType,
       salt: this.medicineForm.value.salt,
-      price: this.medicineForm.value.price
+      price: this.medicineForm.value.price,
+      medicineBrandId: this.medicineForm.value.medicineBrandId
     }
 
     if (this.action === 'add') {
