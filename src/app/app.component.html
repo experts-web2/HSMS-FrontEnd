@@ -8,7 +8,7 @@
           [routerLinkActive]="['menu-active']">Dashboard</a>
         <a class="navButton px-8 cursor-pointer" routerLink="doctor/health_records"
           [routerLinkActive]="['menu-active']">Health Records</a>
-        <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="more">Laboratory<mat-icon
+        <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="more" *ngIf="isLabTechnician || isAdmin">Laboratory<mat-icon
             class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #more="matMenu">
           <a mat-menu-item routerLink="/laboratory/add_patient_test">Add Patient Test</a>

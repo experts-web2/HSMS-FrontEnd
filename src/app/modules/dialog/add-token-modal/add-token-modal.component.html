@@ -137,17 +137,37 @@
                                 </select>
                             </div>
                             <div class="">
-                                <p-button (click)="removeinvoiceItem(i)">
+                                <span (click)="removeinvoiceItem(i)">
                                     <i class="fa fa-trash"></i>
-                                </p-button>
+                                </span>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <p-button (click)="addNewInvoiceItem()" class="d-flex mb-4 md:mb-0 align-items-center"
-                *ngIf="addTokenForm.controls['tokenTypes'].value !== 1">Item +</p-button>
-                <div class="lg:w-2/4 ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
+                <p-button (click)="addNewInvoiceItem()" class="d-flex mb-4 md:mb-0 align-items-center w-fit"
+                *ngIf="addTokenForm.controls['tokenTypes'].value !== 1"><span>Item +</span></p-button>
+                <div class="grid lg:grid-cols-2 gap-5">
+                    <div>
+                    <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
+                        <input type="text" class="md:mr-3 pl-2 border mb-4 md:mb-0 rounded h-10"
+                            [value]="currentDate | date: 'EEE MM, dd/yyyy  hh:mm'" disabled>
+                        <select class="h-10 border rounded" name="description" formControlName="paymentType">
+                            <option [value]="null" [defaultSelected]="true" disabled>Select a payment Type</option>
+                            <option *ngFor="let item of paymentTypes" [ngValue]="item.id">{{item.label}}</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="checked_in" class="me-4">Patient is checked-in</label>
+                        <input formControlName="patientCheckedIn" type="checkbox" name="checked_in">
+                    </div>
+                    <div>
+                        <input formControlName="confirmation" class="me-4" type="checkbox" name="confirmation">
+                        <label for="confirmation">Send Confirmation</label>
+                    </div>
+                </div>
+              <div>
+                <div class="ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
                     <label for="dicountType">Discount Type</label>
                     <select id="dicountType" class="pulse rounded h-10 border" formControlName="totalDiscountType"
                         (change)="calculate(true)">
@@ -155,30 +175,24 @@
                         </option>
                     </select>
                 </div>
-                <div class="lg:w-2/4 ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
+                <div class="ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
                     <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
                     <input class="pulse h-10 lg:ml-3" type="number" pInputText name="totalDiscount"
                         formControlName="totalDiscount" (input)="calculate(true)">
                 </div>
-                <div class="lg:w-2/4 ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
+                <div class="ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
                     <label for="total_discount" class="min-w-fit">Grand Total: Rs. </label>
                     <input type="text" class="pulse lg:ml-3" pInputText placeholder="0"
                         formControlName="grandTotal" />
                 </div>
-                <div class="lg:w-2/4 ms-auto flex-col lg:flex-row d-flex justify-content-between items-start">
+                <div class="ms-auto flex-col lg:flex-row d-flex justify-content-between items-start">
                     <label for="total_discount" class="min-w-fit">Paid: Rs.</label>
                     <input type="number" class="pulse lg:ml-3 " pInputText placeholder="0"
                         formControlName="amountPaid" />
 
                 </div>
-                <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
-                    <input type="text" class="md:mr-3 pl-2 border mb-4 md:mb-0 rounded h-10"
-                        [value]="currentDate | date: 'EEE MM, dd/yyyy  hh:mm'" disabled>
-                    <select class="h-10 border rounded" name="description" formControlName="paymentType">
-                        <option [value]="null" [defaultSelected]="true" disabled>Select a payment Type</option>
-                        <option *ngFor="let item of paymentTypes" [ngValue]="item.id">{{item.label}}</option>
-                    </select>
-                </div>
+              </div>
+            </div>
                 <!-- <div>
             <input formControlName="payment_notification" type="checkbox" name="payment_notification">
             <label for="payment_notification" class="ms-2">Send Payment Notification</label>
@@ -188,16 +202,6 @@
                     class="ms-2">add_box</mat-icon></p-button>
         </div> -->
 
-            </div>
-            <div>
-                <div class="mb-4">
-                    <label for="checked_in" class="me-4">Patient is checked-in</label>
-                    <input formControlName="patientCheckedIn" type="checkbox" name="checked_in">
-                </div>
-                <div>
-                    <input formControlName="confirmation" class="me-4" type="checkbox" name="confirmation">
-                    <label for="confirmation">Send Confirmation</label>
-                </div>
             </div>
             <div class="md:w-2/4 ms-auto mt-5 md:mt-0 flex  justify-end">
                 <p-button class=" mr-4" (click)="addToken()"

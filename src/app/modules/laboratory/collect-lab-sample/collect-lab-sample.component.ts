@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -7,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { takeUntil } from 'rxjs';
-import { AlertService, PatientService, TestCategoryService } from 'src/app/services';
+import { AlertService, PatientService, PatientTestService, TestCategoryService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { TestService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -27,7 +28,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   testCategory: Array<IDropDown> = [];
   patientsToShow: Array<IDropDown> = [];
   submitted = false;
-  category = '';
+  category='';
   testCategoryToShow: Array<IDropDown> = [];
   generateId: string='';
 
@@ -37,6 +38,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     private readonly testService: TestService,
     private readonly testCategoryService: TestCategoryService,
     private readonly alertService: AlertService,
+    private readonly patientTestService: PatientTestService,
   ) {
     super();
     this.invoiceDescriptionForm = this.fb.group({
@@ -55,6 +57,10 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
   get testItems(): FormArray {
     return this.collectionForm.get('testItems') as FormArray;
+  }
+
+  get patientId(): AbstractControl {
+    return this.collectionForm.get('patientId') as AbstractControl;
   }
 
   ngOnInit(): void {
@@ -84,7 +90,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
       patientId: this.collectionForm.controls['patientId'].value,
       testCategoryId: this.category
     }
-    this.testService.generateTestSampleID(payload).pipe(takeUntil(this.componetDestroyed)).subscribe(
+    this.patientTestService.generateTestSampleID(payload).pipe(takeUntil(this.componetDestroyed)).subscribe(
       {
         next: (x) => {
           console.log(x);
@@ -122,7 +128,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
   onPatientSelection(selectPatient: string) {
     this.collectionForm.get('patientId')?.setValue(selectPatient);
-    this.testService.getTestInvoiceItemsByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    this.patientTestService.getLabtestsBytodayInvoicedByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.tests = x;
       }
@@ -132,7 +138,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   onPatientSearch(event: { query: string }): void {
     const searchTerm = event.query.trim();
     if (searchTerm.length >= 3) {
-      this.patientService.patientTestInvoice(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      this.patientTestService.patientTestInvoice(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
           this.patientsToShow = x;
           console.log('this.patients', this.patients);
@@ -157,11 +163,10 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
   addTestSample() {
     this.submitted = true;
-    console.log(this.collectionForm.value);
-    // if (this.collectionForm.invalid) {
-    //   return;
-    // }
-    this.testService.addPatientTestSamples(this.collectionForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe(
+    if (this.collectionForm.invalid) {
+      return;
+    }
+    this.patientTestService.addPatientTestSamples(this.collectionForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe(
       {
         next: (x) => {
           this.alertService.success('Test Sample added successfully', 'Success');

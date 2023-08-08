@@ -23,13 +23,7 @@ export class TestService extends HttpService {
   addTest(test: IAddOrUpdateTest){
     return this.post(`${this.baseEndPoint}/add`, test);
   }
-  addPatientTest(test:any){
-    return this.post(`${BaseEndPoints.Patienttestinvoice}/add`, test);
-  }
-  getTestPatientDropdown(): Observable<Array<any>>{
-    return this.get(`${BaseEndPoints.Patienttestinvoiceitem}/gettodaypatienttest`);
-  }
-
+ 
   deleteTest(test: ILabeTest){
     return this.delete(`${this.baseEndPoint}/delete/${test.id}`);
   }
@@ -53,21 +47,5 @@ export class TestService extends HttpService {
   getTestByPatientid(id: string){
     return this.get(`${this.baseEndPoint}/getbypatientid/${id}`);
   }
-  getTestInvoiceItemsByPatientid(patientId: string){
-    return this.get(`${BaseEndPoints.Patienttestinvoiceitem}/testdropdownbytodayinvoiced?patientId=${patientId}`);
-  }
 
-
-  generateTestSampleID(sampleIdPayload:any){
-    return this.get(`${BaseEndPoints.PatientSample}/generate/sampleid?patientId=${sampleIdPayload.patientId}&testTypeId=${sampleIdPayload.testCategoryId}`);
-  }
-
-  addPatientTestSamples(fetchRequest: IFetchRequest = {}){
-    return this.post(`${BaseEndPoints.PatientSample}/all`, fetchRequest);
-  }
-
-
-  addPatientTestReport(fetchRequest:any){
-    return this.post(`${BaseEndPoints.Patientsamplereport}/add`, fetchRequest);
-  }
 }

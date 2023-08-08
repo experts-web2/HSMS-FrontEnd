@@ -35,14 +35,6 @@ export class PatientService extends HttpService{
     return this.get(`${this.baseEndPoint}/dropdown?search=${patientSerch}`);
   }
 
-  patientTestInvoice(patientSerch?:string): Observable<any>{
-    return this.get(`${BaseEndPoints.Patienttestinvoice}/patientdropdownbytodayinvoiced?search=${patientSerch}`);
-  }
-
-  getsamplecollections(fetchRequest: IFetchRequest = {}): Observable<any>{
-    return this.post(`${BaseEndPoints.Patienttestinvoiceitem}/getsamplecollections`,fetchRequest);
-  }
-
   getAppointments() {
     return of(patientData.getAppointments())
   }

@@ -69,8 +69,8 @@
             </div>
           </div>
         </div>
-        <p-button (click)="addNewInvoiceItem()" class="d-flex mb-4 md:mb-0 align-items-center">
-          <i class="fa-solid fa-plus me-2"></i>Item
+        <p-button (click)="addNewInvoiceItem()" class="d-flex mb-4 md:mb-0 align-items-center w-fit">
+          <i class="fa-solid fa-plus me-2"></i><span>Item +</span>
         </p-button>
         <div class="grid grid-cols-2 gap-5">
           <div class="">
@@ -87,12 +87,12 @@
             </div>
             <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
               <label class="w-full" for="category">Referral :<span class="text-danger"></span></label>
-              <p-autoComplete [suggestions]="doctorsToView" #doctor dropdownIcon="pi pi-search"
+              <p-autoComplete [suggestions]="doctorsToView" #doctor
                 (completeMethod)="onSearchDoctor($event)" placeholder="select referral" [dropdown]="true"
-                (onSelect)="onDoctorSelection(doctor.value.id)" field="name" dropdownIcon="pi pi-search"
+                (onSelect)="onDoctorSelection(doctor.value.id)" field="name"
                 [minLength]="3" [showEmptyMessage]="true"></p-autoComplete>
-                  <input class="pulse" type="text" pInputText name="otherName" formControlName="otherName"
-                   />
+                  <!-- <input class="pulse" type="text" pInputText name="otherName" formControlName="otherName"
+                   /> -->
             </div>
             <div>
               <label for="invoiceNote">Invoice Note</label>
@@ -116,7 +116,7 @@
                 </select>
               </div>
               <div class="d-flex justify-content-center mt-4 w-full flex-col">
-                <label class="d-flex align-items-center min-w-fit" for="completionDate">Test Report Date:</label>
+                <label class="d-flex align-items-center min-w-fit" for="completionDate">Test Date:</label>
                 <p-calendar formControlName="completionDate" [showIcon]="true" [showTime]="true">
                 </p-calendar>
               </div>
@@ -145,7 +145,7 @@
       </div>
 
       <div class="md:w-2/4 ms-auto mt-5 md:mt-0 d-flex justify-end align-items-center">
-        <p-button class="mr-8" (click)="addPatientTest()">Save</p-button>
+        <p-button class="mr-8" [disabled]="!invoiceItems.length || invoiceItems.invalid || patientId.invalid || amountPaid.invalid" (click)="addPatientTest()">Save</p-button>
         <p-button >Save & Print</p-button>
       </div>
     </div>

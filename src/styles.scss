@@ -150,8 +150,10 @@ p-calendar{
     }
   }
 }
-
-input{
+input[type=textarea],
+input[type=number],
+input[type=email],
+input[type=text]{
   height: 36px;
 }
 
@@ -186,12 +188,16 @@ input{
 }
 
 p-button{
+  display: flex;
   padding: 0;
   .p-button{
     border: 0;
     background: $ctrlbg;
     color: $bluetheme-textColor;
     border: 0;
+    justify-content: center;
+    width: 100%;
+    padding: 8px 1.25rem;
     &:hover{
       background: $ctrlbg !important;
     }
@@ -205,4 +211,8 @@ p-button{
 .close-icon:hover {
   transform: rotate(180deg);
   transition: 0.5s ease-in-out;
+}
+
+.p-datatable .p-datatable-tbody > tr > td{
+  padding: 5px 16px;
 }

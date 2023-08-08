@@ -70,6 +70,7 @@ export class UserFormComponent
         firstName: this.user.firstName,
         lastName: this.user.lastName,
         active: true,
+        role: Roles[this.user.roles[0]],
         phoneNumber: this.user.phoneNumber,
         photoPath: this.user.photoPath,
         email: this.user.email,
@@ -153,7 +154,7 @@ export class UserFormComponent
       // const data = userToAdd;
       // const { password, roles, ...rest } = data;
       this.userService
-        .updateUser(this.user.id, userToAdd)
+        .updateUserData(this.user.id, userToAdd)
         .pipe(takeUntil(this.componetDestroyed))
         .subscribe({
           next: (x: any) => {

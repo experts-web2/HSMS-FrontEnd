@@ -18,15 +18,15 @@ export class MedicineBrandService extends HttpService {
     super(http)
   }
 
-  private baseEndPoint = BaseEndPoints.Brand;
+  private baseEndPoint = BaseEndPoints.Medicinebrand;
 
-  addBrand(vendor: IAddOrUpdateBrand): Observable<IAddOrUpdateBrandRequest> {
-    return this.post(`${this.baseEndPoint}/add`, vendor);
+  addBrand(brandPayload: IAddOrUpdateBrand): Observable<IAddOrUpdateBrandRequest> {
+    return this.post(`${this.baseEndPoint}/add`, brandPayload);
   }
 
   getBrands(): Observable<Array<IDropDown>> {
-    return of(patientData.getBrands())
-    // return this.get(`${this.baseEndPoint}/dropdown`);
+    // return of(patientData.getBrands())
+    return this.get(`${this.baseEndPoint}/dropdown`);
   }
 
   getBrandsList(fetchRequest: IFetchRequest = {}){
