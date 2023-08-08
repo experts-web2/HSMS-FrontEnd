@@ -45,7 +45,7 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
     this.getMedicineDropDown();
   }
 
-  addMedicine(){
+  addMedicine(){ 
     let initialMedicine = this.fb.group({
       medicineId: new FormControl<string | null>(null, Validators.required),
       packsQty: new FormControl<number | null>(null, Validators.required),

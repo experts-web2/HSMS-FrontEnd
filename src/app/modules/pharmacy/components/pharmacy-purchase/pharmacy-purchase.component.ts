@@ -149,7 +149,7 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
   packsQtyChnage(value: any, index: number){
     console.log({value, index});
     
-  }
+  } 
 
   unitsInPackChange(value: any, index: number){
     console.log({value, index});

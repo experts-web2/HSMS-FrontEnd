@@ -7,7 +7,8 @@
         <p-button label="Current Vitals" *ngIf="historyVital" (onClick)="currentVitals(); historyVitals.value = '';"></p-button>
     </div>
 </div>
-<p-tabView>
+    <hr class="w-90 mb-2"  style="border: 1px solid #979797;">
+<div>
     <form (ngSubmit)="onSubmit()" [formGroup]="vitalForm">
         <div class="d-flex flex-column">
             <div class="row">
@@ -102,4 +103,4 @@
             </div>
         </div>
     </form>
-</p-tabView>
+</div>

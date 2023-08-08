@@ -1,13 +1,12 @@
-<div class="flex" *ngIf="!tokenId">
-  <div class=" flex flex-col  justify-content-between justify-items-center position-relative">
+<div class="flex m-3" *ngIf="!tokenId">
+  <div class=" flex flex-col p-1  justify-content-between justify-items-center position-relative">
     <label for="patient">Patient</label>
     <p-autoComplete #autoComplete [suggestions]="( !autoComplete || autoComplete.inputValue === '' ? patients: patientsToShow)" (completeMethod)="searchPatient(autoComplete)" (onSelect)="patientSelect(autoComplete.value.id)" field="name" [showEmptyMessage]="true"></p-autoComplete>
     
   </div>
-  <div class="flex flex-col">
+  <div class="flex flex-col p-1 w-40">
     <label for="visit">Visit</label>
-
-    <select class="w-1/5 rounded border-solid border-2 h-10 mb-5 mt-3 flex flex-col md:flex-row justify-content-between justify-items-center position-relative" name="" id="visit" #patientHistory
+    <select class="rounded border-solid border-2 h-10  flex flex-col md:flex-row justify-content-between justify-items-center position-relative" name="" id="visit" #patientHistory
       (change)="selectPatientHistoryVisit(patientHistory.value)" [disabled]="!patientHistoryVisits">
       <option [value]="null" [defaultSelected]="true" disabled>Select a history visit</option>
       <option *ngFor="let visit of patientHistoryVisits" [value]="visit.id">{{visit.createdAt | date: 'EEE MMM, dd/yyyy'}}</option>
@@ -90,7 +89,7 @@
         </div>
 
         <div>
-          <p-fileUpload mode="basic" chooseLabel="upload a file" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" [maxFileSize]="1000000" (onUpload)="null"></p-fileUpload>
+          <p-fileUpload mode="basic" chooseLabel="Upload a file" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" [maxFileSize]="1000000" (onUpload)="null"></p-fileUpload>
         </div>
 
       </div>
