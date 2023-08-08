@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { LaboratoryRoutingModule } from './laboratory-routing.module';
 import { LaboratoryRootComponent } from './laboratory-root/laboratory-root.component';
 import { ToastModule } from 'primeng/toast';
@@ -40,6 +40,6 @@ import { AddPatientTestComponent } from './add-patient-test/add-patient-test.com
     GenericTableComponent,
     ReactiveFormsModule,
   ],
-  providers: [DialogService, DynamicDialogRef, DynamicDialogConfig],
+  providers: [DialogService, DynamicDialogRef, DynamicDialogConfig,DatePipe],
 })
 export class LaboratoryModule {}

@@ -36,9 +36,9 @@ export class PatientTestService extends HttpService {
   patientLabtestsTestInvoice(patientSerch?:string): Observable<any>{
     return this.get(`${this.baseEndPoint}/labtestsbytodayinvoiced?patientId=${patientSerch}`);
   }
-
-  getsamplecollections(fetchRequest: IFetchRequest = {}): Observable<any>{
-    return this.post(`${this.baseEndPoint}/getsamplecollections`,fetchRequest);
+//
+  getsamplecollections(fetchRequest: IFetchRequest = {},status:string): Observable<any>{
+    return this.post(`${this.baseEndPoint}/getsamplecollections?status=${status}`,fetchRequest);
   }
 
   generateTestSampleID(sampleIdPayload:any){
@@ -46,7 +46,7 @@ export class PatientTestService extends HttpService {
   }
 
   addPatientTestSamples(fetchRequest: IFetchRequest = {}){
-    return this.post(`${BaseEndPoints.PatientSample}/all`, fetchRequest);
+    return this.post(`${BaseEndPoints.PatientSample}/add`, fetchRequest);
   }
 
   addPatientTestReport(fetchRequest:any){
