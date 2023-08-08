@@ -15,7 +15,7 @@ import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 export class LabOrderComponent extends SubscriptionManagmentDirective implements OnInit {
   @Input() token!: IToken;
   tabs: any[] = [];
-  roles = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.Sweeper, name: 'Sweeper' }];
+  roles = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.LabAdmin, name: 'Lab Admin' }];
   testPriorty = [{ id: 1, name: 'Routine' }, { id: 2, name: 'Urgent' }];
 
   testsList: ILabTestList[] = [];

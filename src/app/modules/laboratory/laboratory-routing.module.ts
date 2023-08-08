@@ -7,11 +7,13 @@ import { CollectLabSampleComponent } from './collect-lab-sample/collect-lab-samp
 import { AddPatientTestComponent } from './add-patient-test/add-patient-test.component';
 
 const routes: Routes = [{
-  path: '', component: LaboratoryRootComponent, children: [
+  path: '',  component: LaboratoryRootComponent,
+   children: [
     { path: 'lab_report', component: LabTestReportComponent },
     { path: 'lab_report_list', component: LabReportListComponent },
     { path: 'add_patient_test', component: AddPatientTestComponent },
-    { path: 'collect_lab_sample', component: CollectLabSampleComponent }
+    { path: 'collect_lab_sample', component: CollectLabSampleComponent },
+    { path: "", redirectTo: "add_patient_test", pathMatch: "full" }
   ]
 }];
 
