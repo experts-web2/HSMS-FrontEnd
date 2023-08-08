@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MedicineService, VendorService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -11,53 +11,85 @@ import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscri
 })
 export class PharmacySaleComponent extends SubscriptionManagmentDirective implements OnInit {
 
-  purchaseMedicineForm!: FormGroup;
+  saleMedicineForm!: FormGroup;
   vendorDropDowns: Array<IDropDown> = [];
   medicinesList: Array<IDropDown> = [];
   medicinesToShow: Array<IDropDown> = [];
+  discountTypes: Array<{label: string, value: number}> = [{label: 'Amount', value: 1}, {label: 'Percentage %', value: 2}];
 
 
   constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService){
     super();
     let initialMedicine = this.fb.group({
       medicineId: new FormControl<string | null>(null, [Validators.required]),
-      packsQty: new FormControl<number | null>(null, [Validators.required]),
-      unitsPerPack: new FormControl<number | null>(null, [Validators.required]),
-      packPrice: new FormControl<number | null>(null, [Validators.required]),
-      unitPrice: new FormControl<number | null>(null, [Validators.required]),
-      brandId: new FormControl<string | null>(null, [Validators.required]),
-      mfgDate: new FormControl<Date | null>(null, [Validators.required]),
-      expDate: new FormControl<Date | null>(null, [Validators.required]),
+      qty: new FormControl<number | null>(1, [Validators.required]),
+      price: new FormControl<number | null>(0, [Validators.required]),
     });
 
-    this.purchaseMedicineForm = this.fb.group({
+    this.saleMedicineForm = this.fb.group({
+      customerName: new FormControl<string | null>(null, [Validators.required]),
       vendorId: new FormControl<string | null>(null, [Validators.required]),
-      medicines: this.fb.array([initialMedicine])
+      medicines: this.fb.array([initialMedicine]),      
+      disountType: new FormControl<number>(1, [Validators.required]),
+      discountAmount: new FormControl<number | null>(0 ,[Validators.required]),
+      totalAmount: new FormControl<number>(0, [Validators.required]),
+      netTotalAmount: new FormControl<number>(0, [Validators.required]), 
+      discountInp: new FormControl<number | null>(null, [Validators.required]) 
     })
   }
 
   get medicines(): FormArray{
-    return this.purchaseMedicineForm.get('medicines') as FormArray;
+    return this.saleMedicineForm.get('medicines') as FormArray;
+  }
+
+  
+  get discountType() : AbstractControl {
+    return this.saleMedicineForm.get('disountType') as AbstractControl;
+  }
+
+  get totalAmount() : AbstractControl {
+    return this.saleMedicineForm.get('totalAmount') as AbstractControl;
+  }
+
+  get netTotalAmount() : AbstractControl {
+    return this.saleMedicineForm.get('netTotalAmount') as AbstractControl;
+  }
+
+  get discountAmount(): AbstractControl{
+    return this.saleMedicineForm.get('discountAmount') as AbstractControl;
+  }
+
+  get discountInp(): AbstractControl{
+    return this.saleMedicineForm.get('discountInp') as AbstractControl;
   }
 
   ngOnInit(): void {
-    this.getVendorsDropDown();
+    // this.getVendorsDropDown();
     this.getMedicineDropDown();
+
+    this.discountType.valueChanges.subscribe({
+      next: (x) => {
+        this.calculate();
+        this.discountAmountChange();
+      }
+    });
+
+    this.medicines.valueChanges.subscribe({
+      next: (x) => {
+        this.calculate();
+        this.discountAmountChange();
+      }
+    });
   }
 
   addMedicine(){ 
-    let initialMedicine = this.fb.group({
-      medicineId: new FormControl<string | null>(null, Validators.required),
-      packsQty: new FormControl<number | null>(null, Validators.required),
-      unitsPerPack: new FormControl<number | null>(null, Validators.required),
-      packPrice: new FormControl<number | null>(null, Validators.required),
-      unitPrice: new FormControl<number | null>(null, Validators.required),
-      brandId: new FormControl<string | null>(null, Validators.required),
-      mfgDate: new FormControl<Date | null>(null, Validators.required),
-      expDate: new FormControl<Date | null>(null, Validators.required),
+    let newMedicine = this.fb.group({
+      medicineId: new FormControl<string | null>(null, [Validators.required]),
+      qty: new FormControl<number | null>(1, [Validators.required]),
+      price: new FormControl<number | null>(0, [Validators.required]),
     });
 
-    this.medicines.push(initialMedicine);
+    this.medicines.push(newMedicine);
     
   }
 
@@ -65,14 +97,9 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
     this.medicines.removeAt(index);
     if(this.medicines.length < 1){
       let initialMedicine = this.fb.group({
-        medicineId: new FormControl<string | null>(null, Validators.required),
-        packsQty: new FormControl<number | null>(null, Validators.required),
-        unitsPerPack: new FormControl<number | null>(null, Validators.required),
-        packPrice: new FormControl<number | null>(null, Validators.required),
-        unitPrice: new FormControl<number | null>(null, Validators.required),
-        brandId: new FormControl<string | null>(null, Validators.required),
-        mfgDate: new FormControl<Date | null>(null, Validators.required),
-        expDate: new FormControl<Date | null>(null, Validators.required),
+        medicineId: new FormControl<string | null>(null, [Validators.required]),
+        qty: new FormControl<number | null>(1, [Validators.required]),
+        price: new FormControl<number | null>(0, [Validators.required]),
       });
 
       this.medicines.push(initialMedicine);
@@ -98,7 +125,20 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
   }
 
   saveMedicine() {
-    console.log(this.purchaseMedicineForm.value)
+    console.log(JSON.stringify(this.saleMedicineForm.value))
+  }
+
+  onMedicineSelection(index: number, medicineId: string) {
+    this.medicines.at(index).get('medicineId')?.setValue(medicineId);
+  }
+
+  onSearchMedicine(event: any) {
+    const query = event.query.trim().toLowerCase();
+    this.medicinesToShow = this.medicinesList.filter(
+      (medicine) =>
+        medicine.name.toLowerCase().includes(query)
+    );
+    
   }
 
   packsQtyChnage(value: any, index: number){
@@ -106,9 +146,34 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
     
   }
 
+  discountAmountChange(){
+    let disc = this.discountInp.value;
+    let discAmt = 0;
+    
+    if (this.discountType.value === 1){
+      discAmt = disc;
+    } else {
+      discAmt = (this.totalAmount.value / 100) * disc;
+    }
+
+    this.discountAmount.setValue(discAmt);
+    this.calculate();
+  }
+
   unitsInPackChange(value: any, index: number){
     console.log({value, index});
     
+  }
+  
+  calculate(){
+    let totalBill = 0;
+     this.medicines.value.forEach((x: any) => {
+      totalBill+= x.price * x.qty;
+      
+     });
+
+     this.totalAmount.setValue(totalBill);
+     this.netTotalAmount.setValue(this.totalAmount.value - this.discountAmount.value)
   }
 
 }

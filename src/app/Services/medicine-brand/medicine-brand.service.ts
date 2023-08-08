@@ -24,7 +24,7 @@ export class MedicineBrandService extends HttpService {
     return this.post(`${this.baseEndPoint}/add`, brandPayload);
   }
 
-  getBrands(): Observable<Array<IDropDown>> {
+  getBrandsDropDown(): Observable<Array<IDropDown>> {
     // return of(patientData.getBrands())
     return this.get(`${this.baseEndPoint}/dropdown`);
   }

@@ -6,8 +6,7 @@ import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscri
 import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
 import { PotencyUnits } from 'src/app/constants/enums/potency-units';
 import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
-import { AlertService, MedicineService } from 'src/app/services';
-import { MedicineBrandService } from 'src/app/Services/medicine-brand/medicine-brand.service';
+import { AlertService, MedicineService, MedicineBrandService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 
 
@@ -76,7 +75,7 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
   }
 
   getMedicineBrandDropDown() {
-    this.medicineBrandService.getBrands().subscribe({
+    this.medicineBrandService.getBrandsDropDown().subscribe({
       next: (x) => {
         this.brandList = x;
       }

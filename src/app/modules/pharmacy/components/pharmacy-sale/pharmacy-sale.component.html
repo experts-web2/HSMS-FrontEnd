@@ -4,15 +4,11 @@
     </div>
     <div class="mt-5">
         <div class="px-5 pb-5">
-            <form [formGroup]="purchaseMedicineForm">
-                <!-- <div class="mb-5">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Vendor: </label>
-                    <select
-                        class="block appearance-none border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-1/6"
-                        name="" id="" formControlName="vendorId">
-                        <option [value]="null" [defaultSelected]="true" disabled>Select a Vendor</option>
-                    </select>
-                </div> --> 
+            <form [formGroup]="saleMedicineForm">
+                <div class="mb-5">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Customer Name: </label>
+                    <input pInputText type="text" formControlName="customerName">
+                </div> 
                 <div class="flex flex-column" formArrayName="medicines">
                     <div *ngFor="let form of medicines.controls; let i = index" class="flex pt-5 pb-2"
                         [ngClass]="i === 0 ?'pt-5':'pt-16 border-t'">
@@ -22,32 +18,26 @@
                                 <div>
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine
                                         Name</label>
-                                    <input
-                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        type="text" formControlName="medicineId">
+                                    <p-autoComplete [suggestions]="medicinesToShow" #medicine dropdownIcon="pi pi-search"
+                                        (completeMethod)="onSearchMedicine($event)" [dropdown]="true"
+                                        (onSelect)="onMedicineSelection(i,medicine.value.id)" field="name"
+                                        dropdownIcon="pi pi-search" [minLength]="3" placeholder="select medicine"
+                                        [showEmptyMessage]="true"></p-autoComplete>
                                 </div>
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine
-                                        Packs</label>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">#qty (Units)
+                                        </label>
                                     <input
                                         class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        type="number" formControlName="packsQty">
+                                        type="number" formControlName="qty">
                                 </div>
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">#Units
-                                        Per/Pak</label>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price</label>
                                     <input
                                         class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        type="number" formControlName="unitsPerPack">
+                                        type="number" formControlName="price">
                                 </div>
-                                <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A
-                                        pack</label>
-                                    <input
-                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        type="number" formControlName="packPrice">
-                                </div>
-                                <div>
+                                <!-- <div>
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A
                                         Unit</label>
                                     <input
@@ -67,7 +57,7 @@
                                     <input
                                         class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         type="text" formControlName="brandId">
-                                </div>
+                                </div> -->
                             </div>
                             <div>
                                 <span (click)="removeMedicine(i)"><i class="fa fa-trash"></i></span>
@@ -75,14 +65,31 @@
                         </div>
                     </div>
                 </div>
-            </form>
-            <div class="w-fit mt-4 mb-4">
+                <div class="w-fit mt-4 mb-4">
 
-                <p-button (click)="addMedicine()">+
-                    Add a medicine</p-button>
+                    <p-button (click)="addMedicine()">+
+                        Add a medicine</p-button>
+                </div>
+                <div>
+                    <div> 
+                        <h2>Discount:</h2>           
+                        <p-dropdown placeholder="Select Discount Type" [options]="discountTypes" optionLabel="label" optionValue="value" formControlName="disountType" ></p-dropdown>
+                        <input pInputText type="number" placeholder="Discount Amount" formControlName="discountInp" #dicountAmount (input)="discountAmountChange()" />
+                    </div>        
+                </div>
+            </form>
+
+
+            <div class="flex flex-row-reverse">
+                <div class="flex flex-col p-2 w-full items-end">
+                    <div class="w-1/3 flex justify-between p-2"><strong>Number Of Medicines:</strong> <span class="ml-4">{{medicines.length}}</span></div>
+                    <div class="w-1/3 flex justify-between p-2"><strong>Dicount Amount:</strong> <span class="ml-4">{{saleMedicineForm.controls['discountAmount'].value}}</span></div>
+                    <div class="w-1/3 flex justify-between p-2"><strong>Gross Total:</strong> <span class="ml-4">{{saleMedicineForm.controls['totalAmount'].value}}</span></div>
+                    <div class="w-1/3 flex justify-between p-2"><strong>Net Total:</strong> <span class="ml-4">{{saleMedicineForm.controls['netTotalAmount'].value}}</span></div>
+                </div>
             </div>
             <div class="flex justify-end">
-                <p-button>
+                <p-button (onClick)="saveMedicine()">
                     Save
                 </p-button>
                 <p-button class="ml-3"> Save
