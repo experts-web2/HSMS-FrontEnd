@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -20,7 +20,7 @@ import { IMedication } from 'src/app/models/interfaces/Medication';
   templateUrl: './medication.component.html',
   styleUrls: ['./medication.component.scss']
 })
-export class MedicationComponent extends SubscriptionManagmentDirective {
+export class MedicationComponent extends SubscriptionManagmentDirective implements OnInit, OnChanges {
   @Input() token!: IToken;
   @Input() historyTokenId!: string;
 
@@ -58,7 +58,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
       instruction: new FormControl<number | null>(null, [Validators.required]),
       durationValue: new FormControl<number | null>(null, [Validators.required]),
       dosageValue: new FormControl<number | null>(null, [Validators.required])
-    })
+    });
 
     this.medicationForm = this.fb.group({
       medicationItems: this.fb.array([this.medicationItem],[Validators.required]),
@@ -66,7 +66,11 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
       patientId: new FormControl<string | null>(null, [Validators.required]),
       followUpDate: new FormControl<Date | null>(null),
       medicationNotes: new FormControl<string | null>(null)
-    })
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.getMedicationByTokenId(this.historyTokenId);
   }
 
   get medicationItems(): FormArray{
@@ -79,7 +83,9 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
     this.getMedicineHistoryDropDown();
     this.medicationForm.get('doctorId')?.setValue(this.token.doctorId);
     this.medicationForm.get('patientId')?.setValue(this.token.patientId);
-  
+
+    console.log(this.token);
+    
     this.medicationForm.valueChanges.subscribe({
       next: (x) => {
         if (!this.historyMedication) this.currentValueSetter(x);
@@ -121,12 +127,20 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
   getMedicationByTokenId(tokenId: string){
     this.medicationService.getMedicationByTokenId(tokenId).subscribe({
       next: (x)=> {
-        this.medicationRequest.medicationDetails = this.medicationItems.value ?? [];
+        console.log({medicationDetail: x, medicationItems: this.medicationItems.value});
+        console.log(Object.entries(this.medicationItems.value[0]).every(x => x[1] !== null));
+        this.medicationRequest = {
+          medicationDetails: [],
+          medicationNotes: this.medicationForm.controls['medicationNotes'].value,
+          doctorId: this.token.doctorId,
+          patientId: this.token.patientId
+        }
+        this.medicationRequest.medicationDetails = this.medicationItems.value;
         this.historyMedication = x;
         this.medicationForm.disable({
           onlySelf: true
         });
-        this.formSetter(x)
+        this.formSetter(x);
       }
     })
   }
@@ -279,25 +293,25 @@ export class MedicationComponent extends SubscriptionManagmentDirective {
   }
 
   formSetter(medication: IMedicationRequest){
+    console.log('form setter');
     
     this.medicationForm.patchValue({
       medicationNotes: medication.medicationNotes,
       medicationItems: medication.medicationDetails
     })
 
-    medication.medicationDetails.forEach((x, i) => {
-      if (Object.keys(x).every(y => (x as {[key: string]: any})[y] !== null))
-      this.medicationItems.at(i).patchValue({
-        medicineId: x.medicineId,
-        medicineName: this.medicines.find(y => y.id === x.medicineId)?.name,
-        dosage: x.dosage,
-        frequency: x.frequency,
-        route: x.route,
-        duration: x.duration,
-        instruction: x.insturction,
-        durationValue:x.durationValue,
-        dosageValue: x.dosageValue
-      })
+    medication.medicationDetails.forEach((x, i) => {        
+        this.medicationItems.at(i).patchValue({
+          medicineId: x.medicineId,
+          medicineName: this.medicines.find(y => y.id === x.medicineId)?.name,
+          dosage: x.dosage,
+          frequency: x.frequency,
+          route: x.route,
+          duration: x.duration,
+          instruction: x.insturction,
+          durationValue:x.durationValue,
+          dosageValue: x.dosageValue
+        })
     })
   }
 
