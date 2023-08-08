@@ -12,12 +12,23 @@
     padding: 0px 10px !important;
     z-index: 999;
     box-shadow: 0 0 5px rgba(23, 23, 32, 0.1), 0 0 15px rgba(23, 23, 32, 0.1);
+    .Title{
+        font-size: 50px;
+        color: #acb0bd;   
+    }
+    @media screen and (max-width:1024px) {
+        grid-template-columns: 115px calc(100% - 135px);
+        gap: 20px;
+        .Title{
+            font-size: 40px;
+        }
+    }
+    @media screen and (max-width:768px) {
+        padding: 16px !important;
+        display: flex;
+    }
 }
-.Title{
-    font-size: 50px;
-    color: #acb0bd;
-    
-}
+
 
 .navButton{
     display: flex;
@@ -45,23 +56,7 @@
 .blub-icon{
     margin-left: 20px;
 }
-.search-Field{
-    margin-left: 20px;
-    border-radius: 4px;
-    border: 1px solid $blue-theme;
-    .search-icon{
-        top: 22%;
-        left: 5%;
-        color: $blue-theme;
-    }
-    .search-input{
-        height: 40px;
-        width: 250px;
-        outline: none;
-        padding-left: 40px;
-        border-radius: 4px;
-    }
-}
+
 .user-name{
     padding: 7px;
     border-radius: 50%;
@@ -78,17 +73,17 @@
 .creat-drop{
     background-color: $green-theme; 
     border-radius: 4px;
-    padding: 9px 15px;
+    padding: 7px 10px;
     display: flex;
     align-items: center;
 }
 .toggle-btn{
     display: none;
 }
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 768px) {
     .navbar {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       height: fit-content;
     }
     .toggle-btn{
@@ -101,14 +96,26 @@
     top: 0;
     bottom: 0;
     right: 0;
-    max-width: 250px;
+    width: 250px;
     background-color: white;
+    transition: 1s;
+    box-shadow: 0 0 5px rgba(23, 23, 32, 0.1), 0 0 15px rgba(23, 23, 32, 0.1);
 }
 .hide-navbar{
-    position: fixed;
-    top: 0;
-    bottom: 0;
     right: -250px;
-    max-width: 250px;
-    background-color: white;
+}
+
+.search-icon{
+    display: flex;
+    height: auto;
+    @media screen and (min-width:768px) {
+        display: none;
+    }
+}
+
+.mobile-search-bar{
+    width: calc(100% - 35px);
+    @media screen and (min-width:768px) {
+        display: none;
+    }
 }

@@ -15,9 +15,10 @@ import { MessagesModule } from 'primeng/messages';
 import { LoaderComponent, GenericTableComponent } from './shared/components';
 import { AppHttpInterceptor } from './auth/interceptor/app-http.interceptor';
 import { PrimeNgModule, MaterialModule } from 'src/app/shared/modules';
+import { GlobalSearchComponent } from './Shared/components/global-search/global-search.component';
 
 @NgModule({
-  declarations: [AppComponent, AddTokenModalComponent],
+  declarations: [AppComponent, AddTokenModalComponent,GlobalSearchComponent],
   providers: [
     MessageService,
     {

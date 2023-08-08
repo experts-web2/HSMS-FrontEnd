@@ -1,14 +1,14 @@
 <p-toast></p-toast>
 <nav class="p-0" [ngClass]="">
-  <div class="navbar p-0" *ngIf="showNav">
+  <div class="navbar" *ngIf="showNav">
     <div class="Title">HSMS</div>
-    <div class="md:flex items-center justify-between md:gap-x-20">
+    <div class="hidden lg:flex items-center justify-between gap-x-6 xl:gap-x-20">
       <div class=" menu-items-width d-flex justify-content-between align-items-center ">
-        <a class="navButton px-8 cursor-pointer" *ngIf="isDoctor || isAdmin" routerLink="/dashboard"
+        <a class="navButton md:px-2 xl:px-8 cursor-pointer" *ngIf="isDoctor || isAdmin" routerLink="/dashboard"
           [routerLinkActive]="['menu-active']">Dashboard</a>
-        <a class="navButton px-8 cursor-pointer" *ngIf="isDoctor || isAdmin" routerLink="doctor/health_records"
+        <a class="navButton md:px-2 xl:px-8 cursor-pointer" *ngIf="isDoctor || isAdmin" routerLink="doctor/health_records"
           [routerLinkActive]="['menu-active']">Health Records</a>
-        <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="more" *ngIf="isLabTechnician || isAdmin">Laboratory<mat-icon
+        <a class="navButton md:px-2 xl:px-8 cursor-pointer" *ngIf="isLabTechnician || isAdmin" [matMenuTriggerFor]="more">Laboratory<mat-icon
             class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #more="matMenu">
           <a mat-menu-item routerLink="/laboratory/add_patient_test">Add Patient Test</a>
@@ -17,12 +17,10 @@
           <a mat-menu-item routerLink="/laboratory/lab_report_list">Lab Test Lists</a>
         </mat-menu>
 
-        <p-menu #menu [model]="items" [popup]="true" ></p-menu>
-        <p-button type="button" icon="pi pi-angle-down" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)" label="Pharmacy"></p-button>
-
-        <a class="navButton px-8 cursor-pointer" routerLink="/register" [routerLinkActive]="['menu-active']"
-        *ngIf="isDoctor || isAdmin">Messages</a>
-        <!-- <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="lab" *ngIf="!isDoctor">More<mat-icon
+        <p-menu #menu [model]="items" [popup]="true"></p-menu>
+        <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)">Pharmacy<mat-icon
+          class="arrow-height">arrow_drop_down</mat-icon></a>
+        <!-- <a class="navButton px-2 xl:px-4 2xl:px-8 cursor-pointer" [matMenuTriggerFor]="lab" *ngIf="!isDoctor">More<mat-icon
             class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #lab="matMenu">
           <a mat-menu-item>Item 1</a>
@@ -31,7 +29,7 @@
         <!-- <a class="navButton" routerLink="/laboratory">Laboratory</a> -->
 
       </div>
-      <div class="d-flex align-items-center ">
+      <div class="hidden md:flex align-items-center ">
         <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" [matMenuTriggerFor]="creat">Create<mat-icon
             class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #creat="matMenu">
@@ -40,13 +38,26 @@
           <a mat-menu-item>Invoice</a>
           <a mat-menu-item>Health Record</a>
         </mat-menu>
-        <div class="search-Field d-flex position-relative">
-          <mat-icon class="position-absolute search-icon">search</mat-icon>
-          <input class="search-input" placeholder="Search">
+        <app-global-search></app-global-search>
+        <!-- <div
+        class="search-wrapper-home mx-2 hidden md:flex flex-row justify-content-between"
+      >
+        <div class="relative search-bar-wrapper">
+          <div class="search-input-wrapper">
+            <input
+              placeholder="Search"
+              class="search-input text-sm"
+            />
+            <mat-icon class="absolute search-icon">search</mat-icon>
+          </div>
+          <span class="search-divider"> | </span>
+          <div
+            class="items-center text-sm flex select-search-category cursor-pointer w-28"
+          >
+            Doctor <mat-icon>keyboard_arrow_down</mat-icon>
+          </div>
         </div>
-        <a class="navButton cursor-pointer blub-icon"><mat-icon>lightbulb_on</mat-icon></a>
-        <a class="navButton cursor-pointer notification-icon mr-4"><mat-icon
-            style="rotate: 45deg;">notifications</mat-icon></a>
+      </div> -->
         <a class="navButton cursor-pointer" [matMenuTriggerFor]="User"><span
             class="span-elpis user-name">{{logedInUser.firstName.substring(0, 1).toUpperCase() +
             logedInUser.lastName.substring(0, 1).toUpperCase()}}</span><mat-icon
@@ -54,6 +65,11 @@
         <mat-menu #User="matMenu">
           <a mat-menu-item *ngIf="isAdmin" routerLink="/admin">Admin</a>
           <a mat-menu-item>Option 2</a>
+          <a class="navButton cursor-pointer blub-icon"><mat-icon>lightbulb_on</mat-icon></a>
+          <a class="navButton cursor-pointer notification-icon mr-4"><mat-icon
+              style="rotate: 45deg;">notifications</mat-icon></a>
+              <a class="navButton px-2 xl:px-4 2xl:px-8 cursor-pointer" routerLink="/register" [routerLinkActive]="['menu-active']"
+              *ngIf="isDoctor || isAdmin">Messages</a>
           <a mat-menu-item (click)="logOut()">Log Out</a>
         </mat-menu>
         <!-- <div *ngFor="let h of [1,2,3]">{{h}}</div> -->
@@ -63,9 +79,50 @@
         </div> -->
       </div>
     </div>
-    <!-- <div class="toggle-btn" (click)="navbarToggle()">
-        <i class="fa fa-solid fa-bars text-xl"></i>
-      </div> -->
+    <div class="flex lg:hidden">
+      <mat-icon class="search-icon text-3xl mr-4" (click)="mobileSerchBar = !mobileSerchBar">search</mat-icon>
+      <div *ngIf="mobileSerchBar" [ngClass]="mobileSerchBar === true ? 'fixed left-0 right-10 mobile-search-bar':''">
+        <app-global-search [mobileSerchBarData]="mobileSerchBar" (mobileSerchBar)="mobileSerchBar = !mobileSerchBar"></app-global-search>
+      </div>
+      <div class="hidden md:block">
+        <app-global-search></app-global-search>
+      </div>
+      <div class="toggle-btn md:ml-4" (click)="navbarToggle()">
+          <i class="fa fa-solid fa-bars text-3xl"></i>
+        </div>
+    </div>
+      <div class="fixed-navbar" [ngClass]="navbarShowHide ? '':'hide-navbar'">
+        <div class="toggle-btn pl-4 pt-3" (click)="navbarToggle()">
+          <i class="fa fa-solid fa-bars text-3xl"></i>
+        </div>
+        <div class="w-full px-4 pb-4">
+          <a class="navButton mt-3 cursor-pointer" routerLink="/dashboard"
+            [routerLinkActive]="['menu-active']">Dashboard</a>
+          <a class="navButton mt-3 cursor-pointer" routerLink="doctor/health_records"
+            [routerLinkActive]="['menu-active']">Health Records</a>
+          <a class="navButton mt-3 cursor-pointer" [matMenuTriggerFor]="more" *ngIf="isLabTechnician || isAdmin">Laboratory<mat-icon
+              class="arrow-height">arrow_drop_down</mat-icon></a>
+          <mat-menu #more="matMenu">
+            <a mat-menu-item routerLink="/laboratory/add_patient_test">Add Patient Test</a>
+            <a mat-menu-item routerLink="/laboratory/collect_lab_sample">Collection Lab Sample</a>
+            <a mat-menu-item routerLink="/laboratory/lab_report">Lab Test Report</a>
+            <a mat-menu-item routerLink="/laboratory/lab_report_list">Lab Test Lists</a>
+          </mat-menu>
+          <p-menu #menu [model]="items" [popup]="true"></p-menu>
+          <a class="creat-drop cursor-pointer text-white mt-3 justify-center" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)">Pharmacy<mat-icon
+            class="arrow-height">arrow_drop_down</mat-icon></a>
+
+            <a class="creat-drop cursor-pointer mt-3 text-white justify-center" [matMenuTriggerFor]="creat">Create<mat-icon
+              class="arrow-height">arrow_drop_down</mat-icon></a>
+          <mat-menu #creat="matMenu">
+            <a mat-menu-item (click)="addPatient()">Patient</a>
+            <a mat-menu-item (click)="addToken()">Token</a>
+            <a mat-menu-item>Invoice</a>
+            <a mat-menu-item>Health Record</a>
+          </mat-menu>
+  
+        </div>
+      </div>
   </div>
 </nav>
 <div class="outlet">

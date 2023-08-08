@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
   logedInUser!: ILogedInUser;
   navbarShowHide = false;
   isDoctor: boolean = false;
+  mobileSerchBar: boolean = false;
   items = [
     {
         items: [
