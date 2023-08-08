@@ -3,9 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { takeUntil } from 'rxjs';
-import { AlertService } from 'src/app/services';
+import { AlertService, MedicineBrandService } from 'src/app/services';
 import { IAddOrUpdateBrand } from 'src/app/models/interfaces/medicine-brand';
-import { MedicineBrandService } from 'src/app/Services/medicine-brand/medicine-brand.service';
 
 @Component({
   selector: 'app-brand-form',
