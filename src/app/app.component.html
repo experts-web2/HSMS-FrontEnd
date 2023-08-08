@@ -4,9 +4,9 @@
     <div class="Title">HSMS</div>
     <div class="md:flex items-center justify-between md:gap-x-20">
       <div class=" menu-items-width d-flex justify-content-between align-items-center ">
-        <a class="navButton px-8 cursor-pointer" routerLink="/dashboard"
+        <a class="navButton px-8 cursor-pointer" *ngIf="isDoctor || isAdmin" routerLink="/dashboard"
           [routerLinkActive]="['menu-active']">Dashboard</a>
-        <a class="navButton px-8 cursor-pointer" routerLink="doctor/health_records"
+        <a class="navButton px-8 cursor-pointer" *ngIf="isDoctor || isAdmin" routerLink="doctor/health_records"
           [routerLinkActive]="['menu-active']">Health Records</a>
         <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="more" *ngIf="isLabTechnician || isAdmin">Laboratory<mat-icon
             class="arrow-height">arrow_drop_down</mat-icon></a>
@@ -17,11 +17,11 @@
           <a mat-menu-item routerLink="/laboratory/lab_report_list">Lab Test Lists</a>
         </mat-menu>
 
-        <p-menu #menu [model]="items" [popup]="true"></p-menu>
-        <p-button type="button" icon="pi pi-angle-down" (click)="menu.toggle($event)" label="Pharmacy"></p-button>
+        <p-menu #menu [model]="items" [popup]="true" ></p-menu>
+        <p-button type="button" icon="pi pi-angle-down" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)" label="Pharmacy"></p-button>
 
         <a class="navButton px-8 cursor-pointer" routerLink="/register" [routerLinkActive]="['menu-active']"
-          *ngIf="!isDoctor">Messages</a>
+        *ngIf="isDoctor || isAdmin">Messages</a>
         <!-- <a class="navButton px-8 cursor-pointer" [matMenuTriggerFor]="lab" *ngIf="!isDoctor">More<mat-icon
             class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #lab="matMenu">
@@ -32,7 +32,7 @@
 
       </div>
       <div class="d-flex align-items-center ">
-        <a class="creat-drop cursor-pointer text-white" [matMenuTriggerFor]="creat">Create<mat-icon
+        <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" [matMenuTriggerFor]="creat">Create<mat-icon
             class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #creat="matMenu">
           <a mat-menu-item (click)="addPatient()">Patient</a>

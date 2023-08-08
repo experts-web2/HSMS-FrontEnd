@@ -6,3 +6,11 @@ export enum Roles{
     LabTechnician = 5,
     Sweeper = 6
 }
+export enum AuthRoles{
+    Admin = 'Admin',
+    Doctor = 'Doctor',
+    Patient = 'Patient',
+    Nurse = 'Nurse',
+    LabTechnician = 'LabTechnician',
+    Sweeper = 'Sweeper'
+}
