@@ -65,7 +65,11 @@ export class SignInComponent implements OnInit, OnDestroy {
         }
         this.userStateService.setLogedInUser(userToState);
         this.alertService.success('Logged In Successfully.', 'Success');
-        this.router.navigate(['/dashboard']);
+        if(x && x?.user?.roles?.includes('LabTechnician')){
+          this.router.navigate(['/laboratory']);
+        }else{
+          this.router.navigate(['/dashboard']);
+        }
       },
       error: (err) => {
         this.alertService.error('Error', 'There Was an error while loging in.');

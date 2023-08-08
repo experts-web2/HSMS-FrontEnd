@@ -62,7 +62,6 @@ export class AppComponent implements OnInit {
         this.isAdmin = x?.roles.includes('Admin');
         this.isDoctor = x?.roles.includes('Doctor');
         if(x?.roles.includes('LabTechnician')){
-
           this.isLabTechnician = true;
           this.router.navigate(['/laboratory/add_patient_test'])
         }
