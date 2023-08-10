@@ -12,7 +12,7 @@
                         (onSelect)="onVendorSelection(vendor.value.id)" field="name" dropdownIcon="pi pi-search"
                         [minLength]="3" [showEmptyMessage]="true"></p-autoComplete>
                 </div>
-                <div class="flex flex-column" formArrayName="medicines">
+                <div class="flex flex-column" formArrayName="medicinePurchaseItems">
                     <div *ngFor="let form of medicines.controls; let i = index" class="flex mb-3">
                         <p class="text-2xl mr-2 font-bold mr-5">{{i+1}}</p>
                         <div [formGroupName]="i" class="flex">
@@ -108,3 +108,5 @@
     </div>
 
 </div>
+
+<app-pharmacy-purchase-invoice></app-pharmacy-purchase-invoice>

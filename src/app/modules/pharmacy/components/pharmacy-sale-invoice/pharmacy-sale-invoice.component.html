@@ -1,0 +1,17 @@
+<div>
+    <div class="flex justify-between">
+
+        <div>Customer Name</div>
+        <div> {{billDate | date: 'EEE MMM, dd/yyyy'}}</div>
+
+    </div>
+
+    <app-generic-table [columns]="tableColumns" [showActions]="false" [showPaginator]="false"></app-generic-table>
+    <div class="">
+        <div><span>Items#:</span> <span>{{medicines.length}}</span></div>
+        <div><span>Total Discount:</span> <span></span>  </div>
+        <div><span>Gross Total:</span> <span></span></div>
+        <div><span>Net Total:</span> <span></span></div>
+    </div>
+
+</div>

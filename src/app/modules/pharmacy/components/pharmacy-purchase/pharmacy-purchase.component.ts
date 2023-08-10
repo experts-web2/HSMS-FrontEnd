@@ -4,6 +4,8 @@ import { MedicineService, VendorService, MedicineBrandService } from 'src/app/se
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { takeUntil } from 'rxjs';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
+import { MedicinePurchaseService } from 'src/app/services/medicinePurchase/medicine-purchase.service';
+import { IMedicinePurchaseRequest } from 'src/app/models/interfaces/MedicinePurchase-request';
 
 @Component({
   selector: 'app-pharmacy-purchase',
@@ -23,7 +25,7 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
   brandList: Array<IDropDown> = [];
   discountTypes: Array<{label: string, value: number}> = [{label: 'Amount', value: 1}, {label: 'Percentage %', value: 2}];
 
-  constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService, private readonly medicaineBrandService: MedicineBrandService){
+  constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService, private readonly medicaineBrandService: MedicineBrandService, private readonly medicinePurchaseService: MedicinePurchaseService){
     super();
     let initialMedicine = this.fb.group({
       medicineId: new FormControl<string | null>(null, [Validators.required]),
@@ -40,7 +42,7 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
 
     this.purchaseMedicineForm = this.fb.group({
       vendorId: new FormControl<string | null>(null, [Validators.required]),
-      medicines: this.fb.array([initialMedicine]),
+      medicinePurchaseItems: this.fb.array([initialMedicine]),
       disountType: new FormControl<number>(1, [Validators.required]),
       discountAmount: new FormControl<number | null>(0 ,[Validators.required]),
       totalAmount: new FormControl<number>(0, [Validators.required]),
@@ -50,7 +52,7 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
   }
 
   get medicines(): FormArray {
-    return this.purchaseMedicineForm.get('medicines') as FormArray;
+    return this.purchaseMedicineForm.get('medicinePurchaseItems') as FormArray;
   }
 
   get discountType() : AbstractControl {
@@ -233,7 +235,15 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
 
   saveMedicine() {
     console.log(JSON.stringify(this.purchaseMedicineForm.value));
-    
+    let purchaseInvoicePayload: IMedicinePurchaseRequest = this.purchaseMedicineForm.value;
+    this.medicinePurchaseService.addMedicinePurchaseInvoice(purchaseInvoicePayload).subscribe({
+      next: (x) => {
+
+      },
+      error: (err: Error) => {
+
+      }
+    })
   }
 
   packsQtyChnage(value: any, index: number){

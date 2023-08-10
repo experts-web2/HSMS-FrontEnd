@@ -3,6 +3,8 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { MedicineService, VendorService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
+import { MedicineSaleService } from 'src/app/services/medicineSale/medicine-sale.service';
+import { IMedicineSaleRequest } from 'src/app/models/interfaces/MedicineSale-Request';
 
 @Component({
   selector: 'app-pharmacy-sale',
@@ -18,7 +20,7 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
   discountTypes: Array<{label: string, value: number}> = [{label: 'Amount', value: 1}, {label: 'Percentage %', value: 2}];
 
 
-  constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService){
+  constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService, private readonly medicineSaleService: MedicineSaleService){
     super();
     let initialMedicine = this.fb.group({
       medicineId: new FormControl<string | null>(null, [Validators.required]),
@@ -28,8 +30,7 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
 
     this.saleMedicineForm = this.fb.group({
       customerName: new FormControl<string | null>(null, [Validators.required]),
-      vendorId: new FormControl<string | null>(null, [Validators.required]),
-      medicines: this.fb.array([initialMedicine]),      
+      medicineSaleItems: this.fb.array([initialMedicine]),      
       disountType: new FormControl<number>(1, [Validators.required]),
       discountAmount: new FormControl<number | null>(0 ,[Validators.required]),
       totalAmount: new FormControl<number>(0, [Validators.required]),
@@ -39,7 +40,7 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
   }
 
   get medicines(): FormArray{
-    return this.saleMedicineForm.get('medicines') as FormArray;
+    return this.saleMedicineForm.get('medicineSaleItems') as FormArray;
   }
 
   
@@ -125,7 +126,16 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
   }
 
   saveMedicine() {
-    console.log(JSON.stringify(this.saleMedicineForm.value))
+    console.log(JSON.stringify(this.saleMedicineForm.value));
+    let saleInvoicePayload: IMedicineSaleRequest = this.saleMedicineForm.value;
+    this.medicineSaleService.addMedicineSaleInvoice(saleInvoicePayload).subscribe({
+      next: (x) => {
+
+      },
+      error: (err: Error) => {
+
+      }
+    })
   }
 
   onMedicineSelection(index: number, medicineId: string) {
@@ -168,8 +178,7 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
   calculate(){
     let totalBill = 0;
      this.medicines.value.forEach((x: any) => {
-      totalBill+= x.price * x.qty;
-      
+      totalBill += x.price * x.qty;      
      });
 
      this.totalAmount.setValue(totalBill);

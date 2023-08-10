@@ -7,12 +7,19 @@ import { PharmacyRootComponent } from './components/pharmacy-root/pharmacy-root.
 import { PharmacySaleComponent } from './components/pharmacy-sale/pharmacy-sale.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {  PrimeNgModule } from 'src/app/shared/modules';
+import { PharmacyReportingComponent } from './components/pharmacy-reporting/pharmacy-reporting.component';
+import { PharmacySaleInvoiceComponent } from './components/pharmacy-sale-invoice/pharmacy-sale-invoice.component';
+import { PharmacyPurchaseInvoiceComponent } from './components/pharmacy-purchase-invoice/pharmacy-purchase-invoice.component';
+import { GenericTableComponent } from 'src/app/shared/components';
 
 @NgModule({
   declarations: [
     PharmacyPurchaseComponent,
     PharmacyRootComponent,
     PharmacySaleComponent,
+    PharmacyReportingComponent,
+    PharmacySaleInvoiceComponent,
+    PharmacyPurchaseInvoiceComponent,
   ],
   imports: [
     CommonModule,
@@ -20,6 +27,7 @@ import {  PrimeNgModule } from 'src/app/shared/modules';
     ReactiveFormsModule,
     FormsModule,
     PrimeNgModule,
+    GenericTableComponent
   ],
 })
 export class PharmacyModule {}
