@@ -30,7 +30,7 @@ export class PrescriptionComponent
   doctorId!: string;
   patientId!: string;
   prescriptionForm!: FormGroup;
-  prescreptionRequest!: IPrescriptionRequest;
+  prescriptionRequest!: IPrescriptionRequest;
   loggedInDoctor!: ILogedInUser;
   improvementOptions: any[] = [];
   historyDropDown: Array<IDropDown> = [];
@@ -86,7 +86,7 @@ export class PrescriptionComponent
   }
 
   currentValueSetter(value: {[name: string]: any}){
-    this.prescreptionRequest = {
+    this.prescriptionRequest = {
       doctorId: this.doctorId,
       patientId: this.patientId,
       medicalHistory: value['medicalHistory'],
@@ -153,7 +153,7 @@ export class PrescriptionComponent
     //   followUpDate: values['followUpDate']
     // }
 
-    this.prescriptionService.addPrescription(this.prescreptionRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    this.prescriptionService.addPrescription(this.prescriptionRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.alertService.success('Prescription Saved Successfully.');
       },
@@ -172,9 +172,9 @@ export class PrescriptionComponent
     this.prescriptionForm.enable({
       onlySelf: true
     });
-    console.log(this.prescreptionRequest);
+    console.log(this.prescriptionRequest);
     
-    if (this.prescreptionRequest) this.formSetter(this.prescreptionRequest);
+    if (this.prescriptionRequest) this.formSetter(this.prescriptionRequest);
     else this.prescriptionForm.reset();
     
     this.historyPrescription = null;
