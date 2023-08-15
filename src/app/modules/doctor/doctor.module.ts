@@ -14,7 +14,8 @@ import { VitalsComponent } from './appointment-sub-components/vitals/vitals.comp
 import { MedicationComponent } from './appointment-sub-components/medication/medication.component';
 import { LabOrderComponent } from './appointment-sub-components/lab-order/lab-order.component';
 import { RadiologyOrderComponent } from './appointment-sub-components/radiology-order/radiology-order.component';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { PatientHistoryPageComponent } from './appointment-sub-components/patient-history-page/patient-history-page.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
     MedicationComponent,
     LabOrderComponent,
     RadiologyOrderComponent,
+    PatientHistoryPageComponent,
   ],
   imports: [
     CommonModule,
@@ -37,6 +39,6 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
     AddPrescriptionDialogueComponent,
     PrimeNgModule,
   ],
-  providers: [DialogService, DynamicDialogRef],
+  providers: [DialogService, DynamicDialogRef, DynamicDialogConfig],
 })
 export class DoctorModule {}

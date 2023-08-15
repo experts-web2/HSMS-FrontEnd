@@ -6,6 +6,9 @@ import { takeUntil } from 'rxjs';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { MedicinePurchaseService } from 'src/app/services/medicinePurchase/medicine-purchase.service';
 import { IMedicinePurchaseRequest } from 'src/app/models/interfaces/MedicinePurchase-request';
+import { DialogService } from 'primeng/dynamicdialog';
+import { PharmacyPurchaseInvoiceComponent } from '../pharmacy-purchase-invoice/pharmacy-purchase-invoice.component';
+import { IMedicinePurchase } from 'src/app/models/interfaces/MedicinePurchase';
 
 @Component({
   selector: 'app-pharmacy-purchase',
@@ -25,7 +28,7 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
   brandList: Array<IDropDown> = [];
   discountTypes: Array<{label: string, value: number}> = [{label: 'Amount', value: 1}, {label: 'Percentage %', value: 2}];
 
-  constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService, private readonly medicaineBrandService: MedicineBrandService, private readonly medicinePurchaseService: MedicinePurchaseService){
+  constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService, private readonly medicaineBrandService: MedicineBrandService, private readonly medicinePurchaseService: MedicinePurchaseService, private readonly dialogService: DialogService){
     super();
     let initialMedicine = this.fb.group({
       medicineId: new FormControl<string | null>(null, [Validators.required]),
@@ -33,7 +36,7 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
       unitsPerPack: new FormControl<number | null>(1, [Validators.required]),
       packPrice: new FormControl<number | null>(0, [Validators.required]),
       unitPrice: new FormControl<number | null>(0, [Validators.required]),
-      brandId: new FormControl<string | null>(null, [Validators.required]),
+      medicineBrandId: new FormControl<string | null>(null, [Validators.required]),
       mfgDate: new FormControl<Date | null>(null, [Validators.required]),
       expDate: new FormControl<Date | null>(null, [Validators.required]),
     });
@@ -103,7 +106,7 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
       unitsPerPack: new FormControl<number | null>(1, Validators.required),
       packPrice: new FormControl<number | null>(0, Validators.required),
       unitPrice: new FormControl<number | null>(0, Validators.required),
-      brandId: new FormControl<string | null>(null, Validators.required),
+      medicineBrandId: new FormControl<string | null>(null, Validators.required),
       mfgDate: new FormControl<Date | null>(null, Validators.required),
       expDate: new FormControl<Date | null>(null, Validators.required),
     });
@@ -121,7 +124,7 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
         unitsPerPack: new FormControl<number | null>(1, Validators.required),
         packPrice: new FormControl<number | null>(0, Validators.required),
         unitPrice: new FormControl<number | null>(0, Validators.required),
-        brandId: new FormControl<string | null>(null, Validators.required),
+        medicineBrandId: new FormControl<string | null>(null, Validators.required),
         mfgDate: new FormControl<Date | null>(null, Validators.required),
         expDate: new FormControl<Date | null>(null, Validators.required),
       });
@@ -141,7 +144,7 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
   }
 
   onBrandSelection(index: number, brandId: string) {
-    this.medicines.at(index).get('brandId')?.setValue(brandId);
+    this.medicines.at(index).get('medicineBrandId')?.setValue(brandId);
   }
 
   discountAmountChange(){
@@ -236,9 +239,10 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
   saveMedicine() {
     console.log(JSON.stringify(this.purchaseMedicineForm.value));
     let purchaseInvoicePayload: IMedicinePurchaseRequest = this.purchaseMedicineForm.value;
+    purchaseInvoicePayload.medicinePurchaseItems = this.medicines.value;
     this.medicinePurchaseService.addMedicinePurchaseInvoice(purchaseInvoicePayload).subscribe({
       next: (x) => {
-
+        this.openDialog({invoice: x, medicines: this.medicineList})
       },
       error: (err: Error) => {
 
@@ -286,5 +290,13 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
 
      this.totalAmount.setValue(totalBill);
      this.netTotalAmount.setValue(this.totalAmount.value - this.discountAmount.value)
+  }
+
+  openDialog(data: { invoice: IMedicinePurchase, medicines: Array<IDropDown> }){
+    this.dialogService.open(PharmacyPurchaseInvoiceComponent, {
+      width: '60%',
+      height: '90%',
+      data: data
+    })
   }
 }

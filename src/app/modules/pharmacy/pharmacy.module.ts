@@ -11,6 +11,7 @@ import { PharmacyReportingComponent } from './components/pharmacy-reporting/phar
 import { PharmacySaleInvoiceComponent } from './components/pharmacy-sale-invoice/pharmacy-sale-invoice.component';
 import { PharmacyPurchaseInvoiceComponent } from './components/pharmacy-purchase-invoice/pharmacy-purchase-invoice.component';
 import { GenericTableComponent } from 'src/app/shared/components';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @NgModule({
   declarations: [
@@ -29,5 +30,10 @@ import { GenericTableComponent } from 'src/app/shared/components';
     PrimeNgModule,
     GenericTableComponent
   ],
+  providers: [
+    DialogService,
+    DynamicDialogRef,
+    DynamicDialogConfig
+  ]
 })
 export class PharmacyModule {}

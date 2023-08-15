@@ -5,6 +5,9 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { MedicineSaleService } from 'src/app/services/medicineSale/medicine-sale.service';
 import { IMedicineSaleRequest } from 'src/app/models/interfaces/MedicineSale-Request';
+import { DialogService } from 'primeng/dynamicdialog';
+import { PharmacySaleInvoiceComponent } from '../pharmacy-sale-invoice/pharmacy-sale-invoice.component';
+import { IMedicineSale } from 'src/app/models/interfaces/MedicineSale';
 
 @Component({
   selector: 'app-pharmacy-sale',
@@ -20,12 +23,12 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
   discountTypes: Array<{label: string, value: number}> = [{label: 'Amount', value: 1}, {label: 'Percentage %', value: 2}];
 
 
-  constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService, private readonly medicineSaleService: MedicineSaleService){
+  constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService, private readonly medicineSaleService: MedicineSaleService, private readonly dialogService: DialogService){
     super();
     let initialMedicine = this.fb.group({
       medicineId: new FormControl<string | null>(null, [Validators.required]),
-      qty: new FormControl<number | null>(1, [Validators.required]),
-      price: new FormControl<number | null>(0, [Validators.required]),
+      unitQty: new FormControl<number | null>(1, [Validators.required]),
+      unitPrice: new FormControl<number | null>(0, [Validators.required]),
     });
 
     this.saleMedicineForm = this.fb.group({
@@ -86,8 +89,8 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
   addMedicine(){ 
     let newMedicine = this.fb.group({
       medicineId: new FormControl<string | null>(null, [Validators.required]),
-      qty: new FormControl<number | null>(1, [Validators.required]),
-      price: new FormControl<number | null>(0, [Validators.required]),
+      unitQty: new FormControl<number | null>(1, [Validators.required]),
+      unitPrice: new FormControl<number | null>(0, [Validators.required]),
     });
 
     this.medicines.push(newMedicine);
@@ -128,9 +131,10 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
   saveMedicine() {
     console.log(JSON.stringify(this.saleMedicineForm.value));
     let saleInvoicePayload: IMedicineSaleRequest = this.saleMedicineForm.value;
+    saleInvoicePayload.medicineSaleItems = this.medicines.value;
     this.medicineSaleService.addMedicineSaleInvoice(saleInvoicePayload).subscribe({
       next: (x) => {
-
+        this.openDialog({invoice: x, medicines: this.medicinesList})
       },
       error: (err: Error) => {
 
@@ -178,11 +182,18 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
   calculate(){
     let totalBill = 0;
      this.medicines.value.forEach((x: any) => {
-      totalBill += x.price * x.qty;      
+      totalBill += x.unitPrice * x.unitQty;      
      });
 
      this.totalAmount.setValue(totalBill);
      this.netTotalAmount.setValue(this.totalAmount.value - this.discountAmount.value)
   }
 
+  openDialog(data: {invoice: IMedicineSale, medicines: Array<IDropDown>}){
+    this.dialogService.open(PharmacySaleInvoiceComponent,{
+      width: '60%',
+      height: '90%',
+      data: data
+    });
+  }
 }
