@@ -15,6 +15,7 @@ import { SortOrder } from 'src/app/constants/enums/SortOrder';
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
 import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
 import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
+import { IPatientReport } from 'src/app/models/interfaces/addOrUpdate-test';
 
 @Component({
   selector: 'app-lab-report-list',
@@ -97,12 +98,12 @@ export class LabReportListComponent
       valueToShow: this.dateFormate.bind(this),
     },
   ];
-  testsList: ILabeTest[] = [];
-  testsToShow: any;
-  sampleTests: any;
-  sampleTestPending: any;
+  testsList: Array<ILabeTest> = [];
+  testsToShow: Array<ILabeTest> = [];
+  sampleTests: Array<IPatientReport> =[];
+  sampleTestPending: Array<IPatientReport> =[];
   sampleTestPendingTotalRecords: any;
-  testCompleted: any;
+  testCompleted: Array<IPatientReport> =[];
   testCompletedTotalRecords: any;
   constructor(
     public readonly dialogService: DialogService,
@@ -129,9 +130,6 @@ export class LabReportListComponent
         this.getLabSamplePending();
         break;
       case 2:
-
-        break;
-      case 3:
         this.getLabTestCompleted();
         break;
       default:
@@ -255,7 +253,6 @@ export class LabReportListComponent
   }
 
   dateFormate(date: string): string | null {
-    console.log('date', date)
     return this.datePipe.transform(date, 'MM/dd/yyyy hh:mm:aa');
     // return formatDate(date, 'MM/dd/yyyy hh:mm:aa', 'en-US');
   }
@@ -268,15 +265,15 @@ export class LabReportListComponent
     );
   }
 
-  addTests(test?: any, action: string = 'add') {
-    this.ref = this.dialogService.open(TestsFormComponent, {
-      width: '80%',
-      height: '80%',
-      data: {
-        test: test,
-        action: action,
-      },
-    });
-    this.ref.onClose.subscribe((test) => { });
-  }
+  // addTests(test?: any, action: string = 'add') {
+  //   this.ref = this.dialogService.open(TestsFormComponent, {
+  //     width: '80%',
+  //     height: '80%',
+  //     data: {
+  //       test: test,
+  //       action: action,
+  //     },
+  //   });
+  //   this.ref.onClose.subscribe((test) => { });
+  // }
 }

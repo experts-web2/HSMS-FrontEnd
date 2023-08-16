@@ -128,7 +128,6 @@ export class PrescriptionComponent
         this.prescriptionForm.disable({
           onlySelf: true
         });
-        console.log(this.prescreptionRequest)
       }
     })
   }
