@@ -271,19 +271,18 @@ export class AddTokenModalComponent
           ? this.addTokenForm.controls['patientCheckedIn'].value
           : true,
       };
-      console.log('tokenpayload',tokenpayload);
-      // this.tokenService
-      //   .addToken(tokenpayload)
-      //   .pipe(takeUntil(this.componetDestroyed))
-      //   .subscribe({
-      //     next: (x) => {
-      //       this.alertService.success('Token added successfully.');
-      //       this.dialogRef.close();
-      //     },
-      //     error: (err) => {
-      //       this.alertService.error('An error accourd while adding token.');
-      //     },
-      //   });
+      this.tokenService
+        .addToken(tokenpayload)
+        .pipe(takeUntil(this.componetDestroyed))
+        .subscribe({
+          next: (x) => {
+            this.alertService.success('Token added successfully.');
+            this.dialogRef.close();
+          },
+          error: (err) => {
+            this.alertService.error('An error accourd while adding token.');
+          },
+        });
     }
   }
 

@@ -312,7 +312,7 @@ export class AddPatientTestComponent
           ? invItem.get('discountAmount')?.value
           : (invItem.get('discountAmount')?.value / 100) * amount;
       totalGrandTotal += amount;
-      totalDiscountTotal = discount;
+      totalDiscountTotal += discount;
     }
     console.log(totalDiscount?.value * (totalGrandTotal / 100));
 
