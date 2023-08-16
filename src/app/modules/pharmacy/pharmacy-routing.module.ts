@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PharmacyRootComponent } from './components/pharmacy-root/pharmacy-root.component';
 import { PharmacySaleComponent } from './components/pharmacy-sale/pharmacy-sale.component';
 import { PharmacyPurchaseComponent } from './components/pharmacy-purchase/pharmacy-purchase.component';
+import { PharmacyReportingComponent } from './components/pharmacy-reporting/pharmacy-reporting.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,9 @@ const routes: Routes = [
       },
       {
         path: 'pharmacy-purchase', component: PharmacyPurchaseComponent
+      },
+      {
+        path: 'pharmacy-reporting', component: PharmacyReportingComponent
       }
     ]
   }

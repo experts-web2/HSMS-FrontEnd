@@ -14,6 +14,8 @@ import { IPatient } from 'src/app/models/interfaces/patient-model';
 import { IVital } from 'src/app/models/vitals';
 import { AlertService, TokenService, PatientService, VitalService, MedicationService, PrescriptionService } from 'src/app/services';
 import { LabOrderService } from '../../../services/lab-order/lab-order.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { PatientHistoryPageComponent } from '../appointment-sub-components/patient-history-page/patient-history-page.component';
 
 @Component({
   selector: 'app-appointment',
@@ -33,7 +35,7 @@ export class AppointmentComponent implements OnInit {
   historyTokenId!: string;
   tokenVitals!: IVital;
 
-  constructor(private alertService: AlertService, private readonly route: ActivatedRoute, private readonly tokenService: TokenService, private readonly patientService: PatientService, private readonly userStateService: UserStateService, private readonly vitalsService: VitalService, private readonly medicationService: MedicationService, private readonly prescriptionService: PrescriptionService, private readonly LabOrderService: LabOrderService) {
+  constructor(private alertService: AlertService, private readonly route: ActivatedRoute, private readonly tokenService: TokenService, private readonly patientService: PatientService, private readonly userStateService: UserStateService, private readonly vitalsService: VitalService, private readonly medicationService: MedicationService, private readonly prescriptionService: PrescriptionService, private readonly LabOrderService: LabOrderService, private readonly dialogService: DialogService) {
     this.route.params.subscribe({
       next: (x) => {
         this.tokenId = x["tokenId"];
@@ -202,6 +204,21 @@ export class AppointmentComponent implements OnInit {
           this.token.tokenDetail = undefined;
         }
         
+      }
+    })
+  }
+
+  openHistoryView(){
+    this.openPatientHistoryDialog();
+  }
+
+  openPatientHistoryDialog(){
+    this.dialogService.open(PatientHistoryPageComponent, {
+      width: '90%',
+      height: '100%',
+      data: {
+        token: this.token,
+        patient: this.patient
       }
     })
   }

@@ -6,6 +6,7 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IAddOrUpdateDoctorRequest } from 'src/app/models/interfaces/addOrUpdate-Doctor';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { HttpService } from '../http/http.service';
+import { IDoctor } from 'src/app/models/interfaces/Doctor';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,9 @@ export class DoctorService extends HttpService {
 
   getDoctorDropDown():Observable<Array<IDropDown>>{
     return this.get(`${this.baseEndPoints}/dropdown`)
+  }
+
+  getDoctorById(doctorId: string): Observable<IDoctor>{
+    return this.get(`${this.baseEndPoints}/byid/${doctorId}`)
   }
 }

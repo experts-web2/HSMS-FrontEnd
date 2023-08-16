@@ -26,6 +26,7 @@ export class GenericTableComponent {
   @Input() actionsToShow: Array<string> = [];
   @Input() additionalActions: Array<ICustomActions> = [];
   @Input() clickableRow: boolean = false;
+  @Input() showPaginator: boolean = true;
   @Input() rowClickAction!: Function;
 
   @Output() edit: EventEmitter<any> = new EventEmitter<any>();

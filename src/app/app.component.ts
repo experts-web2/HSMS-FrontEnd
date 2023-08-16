@@ -36,6 +36,10 @@ export class AppComponent implements OnInit {
             {
                 label: 'Medicine Sale',
                 routerLink: 'pharmacy/pharmacy-sale'
+            },
+            {
+                label: 'Medicine Reports',
+                routerLink: 'pharmacy/pharmacy-reporting'
             }
         ]
     }
