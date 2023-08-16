@@ -4,6 +4,7 @@ import { HttpService } from 'src/app/services';
 import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { Observable } from 'rxjs';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { ITestReport } from 'src/app/models/interfaces/addOrUpdate-test';
 
 
 @Injectable({
@@ -49,7 +50,7 @@ export class PatientTestService extends HttpService {
     return this.post(`${BaseEndPoints.PatientSample}/add`, fetchRequest);
   }
 
-  addPatientTestReport(fetchRequest:any){
+  addPatientTestReport(fetchRequest:ITestReport){
     return this.post(`${BaseEndPoints.Patientsamplereport}/add`, fetchRequest);
   }
 

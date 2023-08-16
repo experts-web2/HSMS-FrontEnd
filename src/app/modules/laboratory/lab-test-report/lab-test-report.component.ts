@@ -13,6 +13,7 @@ import { AlertService, PatientService, PatientTestService } from 'src/app/servic
 import { TestService, DoctorService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { ILabTest } from 'src/app/models/interfaces/addOrUpdate-test';
 
 @Component({
   selector: 'app-lab-test-report',
@@ -76,10 +77,9 @@ export class LabTestReportComponent
   submitted = false;
   testToView: Array<IDropDown> = [];
   doctorsToView: Array<IDropDown> = [];
-  labTest: any[]=[];
+  labTest: Array<ILabTest> = [];
 
   constructor(
-    private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
     private readonly doctorService: DoctorService,
     private readonly testService: TestService,
@@ -94,6 +94,8 @@ export class LabTestReportComponent
       testValue: new FormControl<string | null>(null, [Validators.required]),
       report: new FormControl<string | null>(null, [Validators.required]),
       remarks: new FormControl<string | null>(null, [Validators.required]),
+      patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
+
     });
     this.labReportForm = this.fb.group({
       patientId: new FormControl<string | null>(null, [Validators.required]),
@@ -161,8 +163,8 @@ export class LabTestReportComponent
 
   onTestSelect(index: number, test: any) {
     let selectedTest = this.tests.find((x) => x.id === test.id);
-    console.log('description', selectedTest);
     this.testReport.at(index).get('testId')?.setValue(selectedTest?.id);
+    this.testReport.at(index).get('patientTestInvoiceItemId')?.setValue(selectedTest?.patientTestInvoiceItemId);
     this.testReport.at(index).get('normalValues')?.setValue(selectedTest?.normalValues);
   }
 
@@ -204,7 +206,7 @@ export class LabTestReportComponent
     })
   }
 
-  addToken() {
+  addReport() {
     this.submitted = true;
 
     if (this.labReportForm.invalid) {
@@ -231,6 +233,7 @@ export class LabTestReportComponent
         let invoiceItem = {
           testId: x.testId,
           normalValues: x.normalValues,
+          patientTestInvoiceItemId: x.patientTestInvoiceItemId,
           testValue: x.testValue,
           report: x.report,
           remarks: x.remarks,
@@ -245,6 +248,7 @@ export class LabTestReportComponent
     let newForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
       normalValues: new FormControl<string | null>(null, [Validators.required]),
+      patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
       testValue: new FormControl<string | null>(null, [Validators.required]),
       report: new FormControl<string | null>(null, [Validators.required]),
       remarks: new FormControl<string | null>(null, [Validators.required]),
@@ -257,6 +261,7 @@ export class LabTestReportComponent
     let newForm = this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
       normalValues: new FormControl<string | null>(null, [Validators.required]),
+      patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
       testValue: new FormControl<string | null>(null, [Validators.required]),
       report: new FormControl<string | null>(null, [Validators.required]),
       remarks: new FormControl<string | null>(null, [Validators.required]),

@@ -400,10 +400,10 @@ export class AddTokenModalComponent
      
      if(totalDiscount?.value && totalDiscount.value > 0 && totalInput) totalDiscountTotal = totalDiscount.value;
 
+     grandTotal?.setValue(
+       totalGrandTotal - (totalDiscountType?.value === 1 ? totalDiscountTotal : ((totalDiscountTotal / 100) * totalDiscount?.value))
+     );
     totalDiscount?.setValue(totalDiscountTotal);
-    grandTotal?.setValue(
-      totalGrandTotal - (totalDiscountType?.value === 2 ? ((totalDiscountTotal / 100) * totalDiscount?.value) : totalDiscountTotal)
-    );
   }
 
   addPatient() {

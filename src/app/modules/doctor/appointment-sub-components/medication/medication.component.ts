@@ -210,19 +210,8 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   }
 
   removeMedicationItem(index: any){
-    this.medicationItems.removeAt(index);
-    let medicationForm = this.fb.group({
-      medicineId: new FormControl<string | null>(null, [Validators.required]),
-      medicineName: new FormControl<string | null>(null),
-      dosage: new FormControl<number | null>(null, [Validators.required]),
-      frequency: new FormControl<number | null>(null, [Validators.required]),
-      route: new FormControl<number | null>(null, [Validators.required]),
-      duration: new FormControl<number | null>(null, [Validators.required]),
-      instruction: new FormControl<number | null>(null, [Validators.required]),
-      durationValue: new FormControl<number | null>(null, [Validators.required]),
-      dosageValue: new FormControl<number | null>(null, [Validators.required])
-    })
-    if(this.medicationItems.length < 1) this.medicationItems.push(medicationForm);
+    this.medicationItems.removeAt(index);   
+    if(this.medicationItems.length < 1) this.addMedicationItem();
   }
 
   addMedicationItem(){
@@ -265,12 +254,9 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
       this.medicationService.addMedication(medicationRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
-          
           this.alertService.success('Medication Saved.')
-          
         },
         error: (err) => {
-
           this.alertService.error('There was an error while saving medication.')
         }
       })
@@ -278,7 +264,6 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
     }
     else{
       this.alertService.error('Form is invalid.')
-
     }
   }
 
