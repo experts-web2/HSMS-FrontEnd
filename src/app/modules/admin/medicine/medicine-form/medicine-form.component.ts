@@ -20,7 +20,7 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
 
   medicineTypes = [
     { label: 'Tablets', value: MedicineType.Tablets },
-    { label: 'Injection', value: MedicineType.inject },
+    { label: 'Injection', value: MedicineType.Inject },
     { label: 'Liquid', value: MedicineType.Liquid },
     { label: 'Capsules', value: MedicineType.Capsules },
     { label: 'Drops', value: MedicineType.Drops },

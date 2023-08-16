@@ -271,18 +271,19 @@ export class AddTokenModalComponent
           ? this.addTokenForm.controls['patientCheckedIn'].value
           : true,
       };
-      this.tokenService
-        .addToken(tokenpayload)
-        .pipe(takeUntil(this.componetDestroyed))
-        .subscribe({
-          next: (x) => {
-            this.alertService.success('Token added successfully.');
-            this.dialogRef.close();
-          },
-          error: (err) => {
-            this.alertService.error('An error accourd while adding token.');
-          },
-        });
+      console.log('tokenpayload',tokenpayload);
+      // this.tokenService
+      //   .addToken(tokenpayload)
+      //   .pipe(takeUntil(this.componetDestroyed))
+      //   .subscribe({
+      //     next: (x) => {
+      //       this.alertService.success('Token added successfully.');
+      //       this.dialogRef.close();
+      //     },
+      //     error: (err) => {
+      //       this.alertService.error('An error accourd while adding token.');
+      //     },
+      //   });
     }
   }
 
@@ -400,10 +401,10 @@ export class AddTokenModalComponent
      
      if(totalDiscount?.value && totalDiscount.value > 0 && totalInput) totalDiscountTotal = totalDiscount.value;
 
+     grandTotal?.setValue(
+       totalGrandTotal - (totalDiscountType?.value === 1 ? totalDiscountTotal : ((totalDiscountTotal / 100) * totalDiscount?.value))
+     );
     totalDiscount?.setValue(totalDiscountTotal);
-    grandTotal?.setValue(
-      totalGrandTotal - (totalDiscountType?.value === 2 ? ((totalDiscountTotal / 100) * totalDiscount?.value) : totalDiscountTotal)
-    );
   }
 
   addPatient() {

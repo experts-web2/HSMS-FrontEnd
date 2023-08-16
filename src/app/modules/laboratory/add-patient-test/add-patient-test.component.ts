@@ -36,8 +36,10 @@ export class AddPatientTestComponent
 {
   addPatientTestForm!: FormGroup;
   invoiceDescriptionForm!: FormGroup;
+  currentDate: Date = new Date();
   doctors: Array<IDropDown> = [];
   tests: Array<ILabTest> = [];
+  totalDiscountType: number = 1;
   testToView: Array<ILabTest> = [];
   radiology: Array<IDropDown> = [];
   discountTypes = [
@@ -92,13 +94,14 @@ export class AddPatientTestComponent
       paymentType: new FormControl<number | null>(1, [Validators.required]),
       amountPaid: new FormControl<number | null>(null, [Validators.required]),
       grandTotal: new FormControl<number | null>(0.0, [Validators.required]),
-      completionDate: new FormControl<number | null>(0.0, [
+      completionDate: new FormControl(this.currentDate, [
         Validators.required,
       ]),
       priority: new FormControl<string | null>('Routine', [
         Validators.required,
       ]),
       invoiceNote: new FormControl<string | null>(null, [Validators.required]),
+      totalDiscountType: new FormControl<number | null>(1),
       invoiceItems: this.fb.array([this.invoiceDescriptionForm]),
     });
   }
@@ -309,20 +312,20 @@ export class AddPatientTestComponent
           ? invItem.get('discountAmount')?.value
           : (invItem.get('discountAmount')?.value / 100) * amount;
       totalGrandTotal += amount;
-      totalDiscountTotal += discount;
+      totalDiscountTotal = discount;
     }
     console.log(totalDiscount?.value * (totalGrandTotal / 100));
 
     if (totalDiscount?.value && totalDiscount.value > 0 && totalInput)
       totalDiscountTotal = totalDiscount.value;
 
-    totalDiscount?.setValue(totalDiscountTotal);
     grandTotal?.setValue(
       totalGrandTotal -
         (totalDiscountType?.value === 2
-          ? (totalDiscountTotal / 100) * totalDiscount?.value
+          ? totalDiscount?.value * (totalGrandTotal / 100)
           : totalDiscountTotal)
     );
+    totalDiscount?.setValue(totalDiscountTotal);
   }
 
   addPatient() {

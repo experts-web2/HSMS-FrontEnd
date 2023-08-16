@@ -103,6 +103,14 @@
           <div class="ml-auto w-full flex items-start justify-between flex-col lg:flex-row">
             <div>
               <div class="d-flex justify-between mt-4 w-full flex-col md:flex-row">
+                <label for="dicountType">Discount Type</label>
+                <select id="dicountType" class="pulse rounded h-10 border" formControlName="totalDiscountType"
+                    (change)="calculate(true)">
+                    <option *ngFor="let discType of discountTypes" [ngValue]="discType.value">{{discType.label}}
+                    </option>
+                </select>
+            </div>
+              <div class="d-flex justify-between mt-4 w-full flex-col md:flex-row">
                 <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
                 <input class="pulse w-1/2 h-10" type="number" pInputText name="totalDiscount" formControlName="totalDiscount"
                   (input)="calculate(true)" />
@@ -117,8 +125,10 @@
               </div>
               <div class="d-flex justify-content-center mt-4 w-full flex-col">
                 <label class="d-flex align-items-center min-w-fit" for="completionDate">Test Date:</label>
-                <p-calendar formControlName="completionDate" [showIcon]="true" [showTime]="true">
-                </p-calendar>
+                <!-- <p-calendar formControlName="completionDate" [showIcon]="true" [showTime]="true">
+                </p-calendar> -->
+                <input type="text" class="md:mr-3 pl-2 border mb-4 md:mb-0 rounded h-10"
+                            [value]="currentDate | date: 'EEE MM, dd/yyyy  hh:mm'" disabled>
               </div>
             </div>
             <div class="mt-4">

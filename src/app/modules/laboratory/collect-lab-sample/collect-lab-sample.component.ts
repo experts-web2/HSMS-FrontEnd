@@ -33,9 +33,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   generateId: string='';
 
   constructor(
-    private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
-    private readonly testService: TestService,
     private readonly testCategoryService: TestCategoryService,
     private readonly alertService: AlertService,
     private readonly patientTestService: PatientTestService,
@@ -45,6 +43,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
       testId: new FormControl<string | null>(null, [Validators.required]),
       sample: new FormControl<number | null>(null),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
+      patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
     });
     this.collectionForm = this.fb.group({
       patientId: new FormControl<string | null>(null, [Validators.required]),
@@ -113,6 +112,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     let description = this.testToView.find((x) => x.id === labTest.id);
     this.testItems.at(index).get('testId')?.setValue(description?.id);
     this.testItems.at(index).get('sample')?.setValue(description?.testSample);
+    this.testItems.at(index).get('patientTestInvoiceItemId')?.setValue(description?.patientTestInvoiceItemId);
   }
 
   onTestSearch(event: any) {
@@ -170,6 +170,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
       {
         next: (x) => {
           this.alertService.success('Test Sample added successfully', 'Success');
+          this.collectionForm.reset();
           console.log(x);
 
         },
@@ -187,6 +188,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
           testId: x.testId,
           sample: x.sample,
           sampleId: x.sampleId,
+          patientTestInvoiceItemId: x.patientTestInvoiceItemId,
         };
         return invoiceItem;
       }),
@@ -198,6 +200,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     let newForm = this.fb.group({
       sample: new FormControl<string | null>(null, [Validators.required]),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
+      patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
       testId: new FormControl<string | null>(null, [Validators.required]),
     });
     this.testItems.push(newForm);
@@ -209,6 +212,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
       testId: new FormControl<string | null>(null, [Validators.required]),
       sample: new FormControl<string | null>(null, [Validators.required]),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
+      patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
     });
     if (this.testItems.length < 1) this.testItems.push(newForm);
   }
