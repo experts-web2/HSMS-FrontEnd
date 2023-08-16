@@ -1,116 +1,127 @@
 <div>
+    <div>
+        <span></span>
+        <span></span>
+    </div>
     <p-accordion [activeIndex]="0">
-        <!-- <ng-container *ngFor="let token of tokens">
-
-        </ng-container> -->
-        <p-accordionTab header="Header I">
-                <div><h1>Patient History</h1></div>
-                <section>
+        <p-accordionTab *ngFor="let token of tokens" header="{{token.createdAt | date: 'EEE MMM, dd/yyyy'}}" (onOpen)="getAllData(token.id, token.doctorId)">
+            <ng-container *ngIf="historyData">
+                <div class="bg-success text-white"><h1>Patient History</h1></div>
+                <section *ngIf="historyData.prescription">
                     <div>
                         <h2>Prescription</h2>
                         <div>
                             <div>
                                 <h3>Medical History</h3>
-                                <p>{{historyData?.prescription?.medicalHistory}}</p>
+                                <p class="text-black">{{historyData.prescription.medicalHistory ?? 'N/A'}}</p>
                             </div>
                             <div>
                                 <h3>Complaint</h3>
-                                <p>{{historyData?.prescription?.complaint}}</p>
+                                <p class="text-black">{{historyData.prescription.complaint ?? 'N/A'}}</p>
                             </div>
                             <div>
                                 <h3>Examination</h3>
-                                <p>{{historyData?.prescription?.examination}}</p>
+                                <p class="text-black">{{historyData.prescription.examination ?? 'N/A'}}</p>
                             </div>
                             <div>
                                 <h3>Diagnosis</h3>
-                                <p>{{historyData?.prescription?.diagnosis}}</p>
+                                <p class="text-black">{{historyData.prescription.diagnosis ?? 'N/A'}}</p>
                             </div>
                             <div>
                                 <h3>Clinical Notes</h3>
-                                <p>{{historyData?.prescription?.clinicNotes}}</p>
+                                <p class="text-black">{{historyData.prescription.clinicNotes ?? 'N/A'}}</p>
                             </div>
                             <div>
                                 <h3>Advice</h3>
-                                <p>{{historyData?.prescription?.advice}}</p>
+                                <p class="text-black">{{historyData.prescription.advice ?? 'N/A'}}</p>
                             </div>
                             <div>
                                 <h3>Investigation</h3>
-                                <p>{{historyData?.prescription?.investigation}}</p>
+                                <p class="text-black">{{historyData.prescription.investigation ?? 'N/A'}}</p>
                             </div>
                         </div>
                     </div>
                 </section>
-                <section>
+                <section *ngIf="historyData.vitals">
                     <div>
-                        <h2>Vitals</h2>
+                        <div class="bg-success text-white">
+
+                            <h2>Vitals</h2>
+                        </div>
                         <div class="grid grid-cols-4 gap-4">
                             <div>
                                 <h3>Pulse heart rate</h3>
-                                <span>{{historyData?.vitals?.pulseHeartRate}}</span>                    
+                                <span class="text-black">{{historyData.vitals.pulseHeartRate ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Temperature °C To °F</h3>
-                                <span>{{historyData?.vitals?.temperature}}</span>                    
+                                <span class="text-black">{{historyData.vitals.temperature ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Blood pressure</h3>
-                                <span>{{historyData?.vitals?.bloodPressure}}</span>                    
+                                <span class="text-black">{{historyData.vitals.bloodPressure ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Diastolic Blood Pressure</h3>
-                                <span>{{historyData?.vitals?.diastolicBloodPressure}}</span>                    
+                                <span class="text-black">{{historyData.vitals.diastolicBloodPressure ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Respiratory Rate</h3>
-                                <span>{{historyData?.vitals?.respiratoryRate}}</span>                    
+                                <span class="text-black">{{historyData.vitals.respiratoryRate ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Blood Sugar</h3>
-                                <span>{{historyData?.vitals?.bloodSugar}}</span>                    
+                                <span class="text-black">{{historyData.vitals.bloodSugar ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Weight(in kg e.g:70)</h3>
-                                <span>{{historyData?.vitals?.weight}}</span>                    
+                                <span class="text-black">{{historyData.vitals.weight ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Height Feet To Cm</h3>
-                                <span>{{historyData?.vitals?.height}}</span>                    
+                                <span class="text-black">{{historyData.vitals.height ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Body Mass Index (BMI)</h3>
-                                <span>{{historyData?.vitals?.bodyMassIndex}}</span>                    
+                                <span class="text-black">{{historyData.vitals.bodyMassIndex ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Oxygen Saturation</h3>
-                                <span>{{historyData?.vitals?.oxygenSaturation}}</span>                    
+                                <span class="text-black">{{historyData.vitals.oxygenSaturation ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Body Surface Area (BSA)</h3>
-                                <span>{{historyData?.vitals?.bodySurfaceArea}}</span>                    
+                                <span class="text-black">{{historyData.vitals.bodySurfaceArea ?? 'N/A'}}</span>                    
                             </div>
                             <div>
                                 <h3>Reason</h3>
-                                <span>{{historyData?.vitals?.reason}}</span>                    
+                                <span class="text-black">{{historyData.vitals.reason ?? 'N/A'}}</span>                    
                             </div>
                         </div>
                     </div>
                 </section>
             
-                <section>
+                <section *ngIf="historyData.medication">
                     <div>
-                        <h2>Medications</h2>
+                        <div class="bg-success text-white">
+                            <h2>Medications</h2>
+
+                        </div>
                         <div>
+                            <app-generic-table [columns]="medicationTableColumns" [data]="medicationTableData" [showPaginator]="false"></app-generic-table>
                         </div>
                     </div>
                 </section>
-                <section>
+                <!-- <section>
                     <div>
                         <h1>Lab Order</h1>
                         <div>
             
                         </div>
                     </div>
-                </section>
+                </section> -->
+            </ng-container>
+
         </p-accordionTab>
     </p-accordion>
   
