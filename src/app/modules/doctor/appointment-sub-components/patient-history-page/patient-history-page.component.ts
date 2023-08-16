@@ -83,15 +83,16 @@ export class PatientHistoryPageComponent implements OnInit {
     this.getDoctor(doctorId);
   }
 
-  medicationMapper(tokenId: string){
-    this.medicationService.getMedicationByTokenId(tokenId).subscribe({
-      next: (x) => {
-
-      },
-      error: (err: Error) => {
-
-      }
-    })
+  medicationMapper(){
+    if (this.historyData?.mediction?.medicationDetails) {
+      this.historyData.mediction.medicationDetails.map((x, i) => {
+        // let medication: IMedicationTableColumn ={
+        //   number: i + 1,
+        //   name: x.med
+        // } 
+        return 
+      })
+    }
   }
 
   getMedication(tokenId: string){
@@ -130,7 +131,7 @@ export class PatientHistoryPageComponent implements OnInit {
   getDoctor(doctorId: string){
     this.doctorService.getDoctorById(doctorId).subscribe({
       next: (x) => {
-        if(this.historyData) this.historyData.doctor = x;
+        if (this.historyData) this.historyData.doctor = x;
       },
       error: (err: Error) => {
 

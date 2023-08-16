@@ -1,109 +1,117 @@
 <div>
-    <div><h1>Patient History</h1></div>
-    <section>
-        <div>
-            <h2>Vitals</h2>
-            <div class="grid grid-cols-4 gap-4">
-                <div>
-                    <h3>Pulse heart rate</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Temperature °C To °F</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Blood pressure</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Diastolic Blood Pressure</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Respiratory Rate</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Blood Sugar</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Weight(in kg e.g:70)</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Height Feet To Cm</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Body Mass Index (BMI)</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Oxygen Saturation</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Body Surface Area (BSA)</h3>
-                    <span></span>                    
-                </div>
-                <div>
-                    <h3>Reason</h3>
-                    <span></span>                    
-                </div>
-            </div>
-        </div>
-    </section>
-    <section>
-        <div>
-            <h2>Prescription</h2>
-            <div>
-                <div>
-                    <h3>Medical History</h3>
-                    <p></p>
-                </div>
-                <div>
-                    <h3>Complaint</h3>
-                    <p></p>
-                </div>
-                <div>
-                    <h3>Examination</h3>
-                    <p></p>
-                </div>
-                <div>
-                    <h3>Diagnosis</h3>
-                    <p></p>
-                </div>
-                <div>
-                    <h3>Clinical Notes</h3>
-                    <p></p>
-                </div>
-                <div>
-                    <h3>Advice</h3>
-                    <p></p>
-                </div>
-                <div>
-                    <h3>Investigation</h3>
-                    <p></p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section>
-        <div>
-            <h2>Medications</h2>
-            <div>
-                
-            </div>
-        </div>
-    </section>
-    <section>
-        <div>
-            <h1>Lab Order</h1>
-            <div>
+    <p-accordion [activeIndex]="0">
+        <!-- <ng-container *ngFor="let token of tokens">
 
-            </div>
-        </div>
-    </section>
+        </ng-container> -->
+        <p-accordionTab header="Header I">
+                <div><h1>Patient History</h1></div>
+                <section>
+                    <div>
+                        <h2>Prescription</h2>
+                        <div>
+                            <div>
+                                <h3>Medical History</h3>
+                                <p>{{historyData?.prescription?.medicalHistory}}</p>
+                            </div>
+                            <div>
+                                <h3>Complaint</h3>
+                                <p>{{historyData?.prescription?.complaint}}</p>
+                            </div>
+                            <div>
+                                <h3>Examination</h3>
+                                <p>{{historyData?.prescription?.examination}}</p>
+                            </div>
+                            <div>
+                                <h3>Diagnosis</h3>
+                                <p>{{historyData?.prescription?.diagnosis}}</p>
+                            </div>
+                            <div>
+                                <h3>Clinical Notes</h3>
+                                <p>{{historyData?.prescription?.clinicNotes}}</p>
+                            </div>
+                            <div>
+                                <h3>Advice</h3>
+                                <p>{{historyData?.prescription?.advice}}</p>
+                            </div>
+                            <div>
+                                <h3>Investigation</h3>
+                                <p>{{historyData?.prescription?.investigation}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div>
+                        <h2>Vitals</h2>
+                        <div class="grid grid-cols-4 gap-4">
+                            <div>
+                                <h3>Pulse heart rate</h3>
+                                <span>{{historyData?.vitals?.pulseHeartRate}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Temperature °C To °F</h3>
+                                <span>{{historyData?.vitals?.temperature}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Blood pressure</h3>
+                                <span>{{historyData?.vitals?.bloodPressure}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Diastolic Blood Pressure</h3>
+                                <span>{{historyData?.vitals?.diastolicBloodPressure}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Respiratory Rate</h3>
+                                <span>{{historyData?.vitals?.respiratoryRate}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Blood Sugar</h3>
+                                <span>{{historyData?.vitals?.bloodSugar}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Weight(in kg e.g:70)</h3>
+                                <span>{{historyData?.vitals?.weight}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Height Feet To Cm</h3>
+                                <span>{{historyData?.vitals?.height}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Body Mass Index (BMI)</h3>
+                                <span>{{historyData?.vitals?.bodyMassIndex}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Oxygen Saturation</h3>
+                                <span>{{historyData?.vitals?.oxygenSaturation}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Body Surface Area (BSA)</h3>
+                                <span>{{historyData?.vitals?.bodySurfaceArea}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Reason</h3>
+                                <span>{{historyData?.vitals?.reason}}</span>                    
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            
+                <section>
+                    <div>
+                        <h2>Medications</h2>
+                        <div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div>
+                        <h1>Lab Order</h1>
+                        <div>
+            
+                        </div>
+                    </div>
+                </section>
+        </p-accordionTab>
+    </p-accordion>
+  
 </div>
