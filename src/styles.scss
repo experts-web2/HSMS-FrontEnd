@@ -1,9 +1,7 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 // @use '@angular/material' as mat;
 // Plus imports for other components in your app.
-
 
 // PrimeNg styles
 @import "primeng/resources/themes/lara-light-blue/theme.css";
@@ -13,7 +11,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -46,75 +43,78 @@
 
 // / You can add global styles to this file, and also import other style files /
 
-@import 'src/variable.scss';
+@import "src/variable.scss";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
-
-::-webkit-scrollbar{
-  width:7px;
-  height:5px;
+::-webkit-scrollbar {
+  width: 7px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-box-shadow: none;
+  box-shadow: none;
 }
 ::-webkit-scrollbar-thumb {
-background-color: $themelight-blue;
-border-radius: 8px;
-outline: 1px solid rgba(112, 128, 144, 0);
+  background-color: $themelight-blue;
+  border-radius: 8px;
+  outline: 1px solid rgba(112, 128, 144, 0);
 }
 
-*{
+* {
   font-family: sans-serif;
 }
 
-
-.inside-header{
+.inside-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px ;
+  padding: 10px;
   box-shadow: 0 0 5px rgba(23, 23, 32, 0.1), 0 0 15px rgba(23, 23, 32, 0.1);
   margin: 20px 0 50px 0;
-  h1{
-      font-size: 30px;
-      font-weight: 600;
-      margin: 0;
+  h1 {
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0;
   }
-
 }
 
 .btn-success,
-.btn-primary{
+.btn-primary {
   border: 0;
   background-color: $btnbg;
   color: $bluetheme-textColor;
   align-items: center;
   justify-content: center;
-  &:hover{
+  &:hover {
     background-color: $btnbg;
   }
 }
 
-p-autocomplete{
+p-autocomplete {
   width: 100%;
   display: grid;
 
-  .p-button{
+  .p-button {
     background: $ctrlbg;
     color: $bluetheme-textColor;
     border: 0;
-    &:hover{
+    &:hover {
       background: $ctrlbg !important;
     }
   }
 }
 
-p-autocomplete{
+p-autocomplete {
   display: block;
   height: 36px;
-  .p-autocomplete.p-component.p-autocomplete-dd{
+  .p-autocomplete.p-component.p-autocomplete-dd {
     height: 100%;
     width: 100%;
   }
@@ -132,28 +132,28 @@ p-autocomplete{
 //   }
 // }
 
-p-calendar{
+p-calendar {
   display: block;
   width: 100%;
   height: 36px;
-  .p-calendar.p-calendar-w-btn{
+  .p-calendar.p-calendar-w-btn {
     height: 100%;
     width: 100%;
   }
 
-  .p-button{
+  .p-button {
     background: $ctrlbg;
     color: $bluetheme-textColor;
     border: 0;
-    &:hover{
+    &:hover {
       background: $ctrlbg !important;
     }
   }
 }
-input[type=textarea],
-input[type=number],
-input[type=email],
-input[type=text]{
+input[type="textarea"],
+input[type="number"],
+input[type="email"],
+input[type="text"] {
   height: 36px;
 }
 
@@ -187,10 +187,10 @@ input[type=text]{
   }
 }
 
-p-button{
+p-button {
   display: flex;
   padding: 0;
-  .p-button{
+  .p-button {
     border: 0;
     background: $ctrlbg;
     color: $bluetheme-textColor;
@@ -198,13 +198,13 @@ p-button{
     justify-content: center;
     width: 100%;
     padding: 8px 1.25rem;
-    &:hover{
+    &:hover {
       background: $ctrlbg !important;
     }
   }
 }
 
-.mdc-dialog__title::before{
+.mdc-dialog__title::before {
   height: 0 !important;
 }
 
@@ -213,6 +213,12 @@ p-button{
   transition: 0.5s ease-in-out;
 }
 
-.p-datatable .p-datatable-tbody > tr > td{
+.p-datatable .p-datatable-tbody > tr > td {
   padding: 5px 16px;
+}
+
+.generictable-customstyle {
+  th {
+    min-width: 0 !important;
+  }
 }
