@@ -17,7 +17,11 @@ import { RadiologyOrderComponent } from './appointment-sub-components/radiology-
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { PatientHistoryPageComponent } from './appointment-sub-components/patient-history-page/patient-history-page.component';
 import { PatientScheduleComponent } from './patient-schedule/patient-schedule.component';
+import { SchedulingComponent } from './scheduling/scheduling.component';
 
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     DoctorRootComponent,
@@ -30,6 +34,7 @@ import { PatientScheduleComponent } from './patient-schedule/patient-schedule.co
     RadiologyOrderComponent,
     PatientHistoryPageComponent,
     PatientScheduleComponent,
+    SchedulingComponent,
   ],
   imports: [
     CommonModule,
@@ -41,6 +46,11 @@ import { PatientScheduleComponent } from './patient-schedule/patient-schedule.co
     ButtonModule,
     AddPrescriptionDialogueComponent,
     PrimeNgModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
+    FormsModule
   ],
   providers: [DialogService, DynamicDialogRef, DynamicDialogConfig],
 })
