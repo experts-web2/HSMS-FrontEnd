@@ -29,4 +29,5 @@ export interface IMedication {
     route: number;
     frequency: number;
     insturction: number;
+    medicineName: string;
   }

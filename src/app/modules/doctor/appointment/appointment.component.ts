@@ -109,6 +109,7 @@ export class AppointmentComponent implements OnInit {
     this.tokenService.getAllTokens(tokensPayload).subscribe({
       next: (x) => {
         this.patientHistoryVisits = x.data;
+        this.openPatientHistoryDialog();
       },
       error: (err) => {
 
@@ -217,7 +218,7 @@ export class AppointmentComponent implements OnInit {
       width: '90%',
       height: '100%',
       data: {
-        token: this.token,
+        historyVisits: this.patientHistoryVisits,
         patient: this.patient
       }
     })
