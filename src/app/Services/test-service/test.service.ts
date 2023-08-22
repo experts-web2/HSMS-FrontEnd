@@ -21,7 +21,7 @@ export class TestService extends HttpService {
   }
 
   addTest(test: IAddOrUpdateTest){
-    return this.post(`${this.baseEndPoint}/add`, test);
+    return this.post(`${this.baseEndPoint}`, test);
   }
  
   deleteTest(test: ILabeTest){
@@ -37,7 +37,7 @@ export class TestService extends HttpService {
   }
 
   getTestById(id: string){
-    return this.get(`${this.baseEndPoint}/byid/${id}`);
+    return this.get(`${this.baseEndPoint}/${id}`);
   }
 
   getTestDropDown(): Observable<Array<IDropDown>>{

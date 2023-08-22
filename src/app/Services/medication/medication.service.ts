@@ -19,7 +19,7 @@ export class MedicationService extends HttpService {
   private baseEndPoint = BaseEndPoints.Medication;
 
   addMedication(medication: IMedicationRequest): Observable<any>{
-    return this.post(`${this.baseEndPoint}/add`, medication);
+    return this.post(`${this.baseEndPoint}`, medication);
   }
 
   getMedicationHistoryDropDown(patientId: string): Observable<Array<IDropDown>>{
@@ -27,7 +27,7 @@ export class MedicationService extends HttpService {
   }
 
   getMedicationById(medicationId: string): Observable<IMedication>{
-    return this.get(`${this.baseEndPoint}/byid/${medicationId}`)
+    return this.get(`${this.baseEndPoint}/${medicationId}`)
   }
 
   getMedicationByTokenId(tokenId: string): Observable<IMedication>{

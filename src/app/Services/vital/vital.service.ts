@@ -20,7 +20,7 @@ export class VitalService extends HttpService {
 
 
    addVitals(vital: IVitalRequest): Observable<IVital>{
-    return this.post(`${this.baseEndpoint}/add`, vital);
+    return this.post(`${this.baseEndpoint}`, vital);
   }
 
    getVitals(): Observable<any>{
@@ -35,7 +35,7 @@ export class VitalService extends HttpService {
   }
 
   getVitalsById(vitalsId: string): Observable<IVital>{
-    return this.get(`${this.baseEndpoint}/byid/${vitalsId}`);
+    return this.get(`${this.baseEndpoint}/${vitalsId}`);
   }
 
   getVitalsByTokenId(tokenId: string): Observable<IVital>{

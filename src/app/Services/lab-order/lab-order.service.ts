@@ -18,7 +18,7 @@ export class LabOrderService extends HttpService{
   private baseEndPoint = BaseEndPoints.LabOrder;
 
   addMedication(LabOrder: ILabOrderRequest): Observable<any>{
-    return this.post(`${this.baseEndPoint}/add`, LabOrder);
+    return this.post(`${this.baseEndPoint}`, LabOrder);
   }
 
   getLabOrderByTokenId(tokenId: string){
@@ -30,6 +30,6 @@ export class LabOrderService extends HttpService{
 //   }
 
 //   getMedicationById(medicationId: string): Observable<any>{
-//     return this.get(`${this.baseEndPoint}/byid/${medicationId}`)
+//     return this.get(`${this.baseEndPoint}/${medicationId}`)
 //   }
 }

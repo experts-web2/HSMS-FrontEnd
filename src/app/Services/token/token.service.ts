@@ -21,7 +21,7 @@ export class TokenService extends HttpService{
 
 
   addToken(token: IAddOrUpdateToken): Observable<IToken>{
-    return this.post(`${this.baseEndPoint}/add`, token);
+    return this.post(`${this.baseEndPoint}`, token);
   }
 
   getTokensByViewd(isViewd: boolean): Observable<Array<IToken>>{
@@ -29,7 +29,7 @@ export class TokenService extends HttpService{
   }
 
   getTokenById(tokenId: string): Observable<IToken>{
-    return this.get(`${this.baseEndPoint}/byid/${tokenId}`)
+    return this.get(`${this.baseEndPoint}/${tokenId}`)
   }
 
   getAllTokens(fetchRequest: IFetchRequest = {}): Observable<IDataSourceResponse<IToken>>{
