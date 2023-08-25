@@ -18,6 +18,7 @@ import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dy
 import { PatientHistoryPageComponent } from './appointment-sub-components/patient-history-page/patient-history-page.component';
 import { PatientScheduleComponent } from './patient-schedule/patient-schedule.component';
 import { SchedulingComponent } from './scheduling/scheduling.component';
+import { FlatpickrModule } from 'angularx-flatpickr';
 
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -46,6 +47,7 @@ import { FormsModule } from '@angular/forms';
     ButtonModule,
     AddPrescriptionDialogueComponent,
     PrimeNgModule,
+    FlatpickrModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

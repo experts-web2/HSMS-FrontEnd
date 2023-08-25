@@ -9,6 +9,7 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IScheduleRequest } from 'src/app/models/interfaces/schedule-Request';
 import { DoctorService, PatientService, SchedulingService } from 'src/app/services';
 import { PrimeNgModule } from 'src/app/shared/modules';
+import * as moment from 'moment'
 
 @Component({
   selector: 'app-add-appointment',
@@ -79,6 +80,9 @@ export class AddAppointmentComponent implements OnInit {
         
       }
     })
+
+    console.log(moment().format('HH:mm:ss').toString());
+    
   }
 
   saveAppointment(){
@@ -86,8 +90,8 @@ export class AddAppointmentComponent implements OnInit {
 
     let schedulingRequest: IScheduleRequest = {
       appointmentDate: this.scheduleDate.value,
-      startTime: this.startTime.value,
-      endTime: this.endTime.value,
+      startTime: moment(this.startTime.value).format('HH:mm:ss').toString(),
+      endTime: moment(this.endTime.value).format('HH:mm:ss').toString(),
       type: this.appointmentType.value,
       status: AppointmentStatusEnum.Scheduled,
       doctorId: this.doctortId.value,

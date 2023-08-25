@@ -11,6 +11,8 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
+import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
+import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
 
 const colors: any = {
   red: {
@@ -33,8 +35,7 @@ const colors: any = {
   styleUrls: ['./scheduling.component.scss']
 })
 export class SchedulingComponent implements OnInit {
-  @ViewChild('modalContent')
-  modalContent!: TemplateRef<any>;
+  @ViewChild('modalContent', { static: true }) modalContent!: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
 
@@ -42,80 +43,114 @@ export class SchedulingComponent implements OnInit {
 
   viewDate: Date = new Date();
 
-  // modalData: {
-  //   action: string;
-  //   event: CalendarEvent;
-  // };
+  modalData!: {
+    action: string;
+    event: CalendarEvent;
+  };
+
+  tableColumns: Array<ITableColumns> = [
+    {
+      name: 'Patient Name',
+      property: 'patientName',
+    },
+    {
+      name: 'Appointment Date',
+      property: 'patientName',
+    },
+    {
+      name: 'Appointment Start Time',
+      property: 'patientName',
+    },
+    {
+      name: 'Appointment End Time',
+      property: 'patientName',
+    },
+    {
+      name: 'Appointment Status',
+      property: 'patientName',
+    },
+    {
+      name: 'Appointment Type',
+      property: 'patientName',
+    },
+    {
+      name: 'Actions',
+      property: 'patientName',
+      columnType: DataTypesEnum.Action
+    },
+  ];
 
   actions: CalendarEventAction[] = [
     {
-      label: '<i class="fa fa-fw fa-pencil"></i>',
+      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
+      a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
-      }
+      },
     },
     {
-      label: '<i class="fa fa-fw fa-times"></i>',
+      label: '<i class="fas fa-fw fa-trash-alt"></i>',
+      a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
+        this.events = this.events.filter((iEvent) => iEvent !== event);
         this.handleEvent('Deleted', event);
-      }
-    }
+      },
+    },
   ];
 
-  refresh: Subject<any> = new Subject();
+  refresh = new Subject<void>();
 
   events: CalendarEvent[] = [
     {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
       title: 'A 3 day event',
-      color: colors.red,
+      color: { ...colors.red },
       actions: this.actions,
       allDay: true,
       resizable: {
         beforeStart: true,
-        afterEnd: true
+        afterEnd: true,
       },
-      draggable: true
+      draggable: true,
     },
     {
       start: startOfDay(new Date()),
       title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions
+      color: { ...colors.yellow },
+      actions: this.actions,
     },
     {
       start: subDays(endOfMonth(new Date()), 3),
       end: addDays(endOfMonth(new Date()), 3),
       title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true
+      color: { ...colors.blue },
+      allDay: true,
     },
     {
       start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
+      end: addHours(new Date(), 2),
       title: 'A draggable and resizable event',
-      color: colors.yellow,
+      color: { ...colors.yellow },
       actions: this.actions,
       resizable: {
         beforeStart: true,
-        afterEnd: true
+        afterEnd: true,
       },
-      draggable: true
-    }
+      draggable: true,
+    },
   ];
 
   activeDayIsOpen: boolean = true;
 
   constructor() {}
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
-      this.viewDate = date;
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
         events.length === 0
@@ -124,40 +159,59 @@ export class SchedulingComponent implements OnInit {
       } else {
         this.activeDayIsOpen = true;
       }
+      this.viewDate = date;
     }
-  }
-
-  isEventOnDay(event: CalendarEvent, day: CalendarMonthViewDay): boolean {
-    return day.events.indexOf(event) > -1;
   }
 
   eventTimesChanged({
     event,
     newStart,
-    newEnd
+    newEnd,
   }: CalendarEventTimesChangedEvent): void {
-    event.start = newStart;
-    event.end = newEnd;
-    // this.handleEvent('Dropped or resized', event);
-    this.refresh.next(null);
+    this.events = this.events.map((iEvent) => {
+      if (iEvent === event) {
+        return {
+          ...event,
+          start: newStart,
+          end: newEnd,
+        };
+      }
+      return iEvent;
+    });
+    this.handleEvent('Dropped or resized', event);
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    // this.modalData = { event, action };
+    this.modalData = { event, action };
+    // this.modal.open(this.modalContent, { size: 'lg' });s
   }
 
   addEvent(): void {
-    this.events.push({
-      title: 'New event',
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      color: colors.red,
-      draggable: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      }
-    });
-    this.refresh.next(null);
+    this.events = [
+      ...this.events,
+      {
+        title: 'New event',
+        start: startOfDay(new Date()),
+        end: endOfDay(new Date()),
+        color: colors.red,
+        draggable: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true,
+        },
+      },
+    ];
+  }
+
+  deleteEvent(eventToDelete: CalendarEvent) {
+    this.events = this.events.filter((event) => event !== eventToDelete);
+  }
+
+  setView(view: CalendarView) {
+    this.view = view;
+  }
+
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
   }
 }
