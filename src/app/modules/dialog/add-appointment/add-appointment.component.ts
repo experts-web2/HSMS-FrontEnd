@@ -3,13 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { AppointmentStatusEnum } from 'src/app/constants/enums/appointment-status';
-import { ScheduleTypeEnum, ScheduleTypesDropDown } from 'src/app/constants/enums/scheduleType';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
-import { IScheduleRequest } from 'src/app/models/interfaces/schedule-Request';
 import { DoctorService, PatientService, SchedulingService } from 'src/app/services';
 import { PrimeNgModule } from 'src/app/shared/modules';
 import * as moment from 'moment'
+import { ScheduleTypeEnum, ScheduleTypesDropDown } from 'src/app/constants/enums/scheduleType';
+import { IScheduleRequest } from 'src/app/models/interfaces/schedule-Request';
+import { AppointmentStatusEnum } from 'src/app/constants/enums/appointment-status';
 
 @Component({
   selector: 'app-add-appointment',

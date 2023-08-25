@@ -23,6 +23,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FormsModule } from '@angular/forms';
+import { DrPrescriptionPrintComponent } from './appointment-sub-components/dr-prescription-print/dr-prescription-print.component';
 @NgModule({
   declarations: [
     DoctorRootComponent,
@@ -36,6 +37,7 @@ import { FormsModule } from '@angular/forms';
     PatientHistoryPageComponent,
     PatientScheduleComponent,
     SchedulingComponent,
+    DrPrescriptionPrintComponent,
   ],
   imports: [
     CommonModule,
