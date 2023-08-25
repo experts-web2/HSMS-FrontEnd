@@ -16,6 +16,7 @@ import { AlertService, TokenService, PatientService, VitalService, MedicationSer
 import { LabOrderService } from '../../../services/lab-order/lab-order.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { PatientHistoryPageComponent } from '../appointment-sub-components/patient-history-page/patient-history-page.component';
+import { DrPrescriptionPrintComponent } from '../appointment-sub-components/dr-prescription-print/dr-prescription-print.component';
 
 @Component({
   selector: 'app-appointment',
@@ -73,6 +74,17 @@ export class AppointmentComponent implements OnInit {
       this.historyTokenId = this.token.id;
       this.getVitalsByTokenId(this.token.id); 
     }
+  }
+
+  openPrescriptionPrintDialogue(){
+    this.dialogService.open(DrPrescriptionPrintComponent,{
+      width: '85%',
+      height: '100%',
+      data: {
+        historyVisits: this.token,
+        patient: this.patient
+      }
+    })
   }
 
   getPatientHistorvisits(patientId: string) {
