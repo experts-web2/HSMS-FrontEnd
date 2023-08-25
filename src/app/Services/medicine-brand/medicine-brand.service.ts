@@ -21,7 +21,7 @@ export class MedicineBrandService extends HttpService {
   private baseEndPoint = BaseEndPoints.Medicinebrand;
 
   addBrand(brandPayload: IAddOrUpdateBrand): Observable<IAddOrUpdateBrandRequest> {
-    return this.post(`${this.baseEndPoint}/add`, brandPayload);
+    return this.post(`${this.baseEndPoint}`, brandPayload);
   }
 
   getBrandsDropDown(): Observable<Array<IDropDown>> {

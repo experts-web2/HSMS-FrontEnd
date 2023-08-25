@@ -16,7 +16,7 @@ export class AppointmentService extends HttpService {
   }
 
   addAppointment(data: any): Observable<any> {
-    return this.post(`${this.baseEndPoints}/add`, data);
+    return this.post(`${this.baseEndPoints}`, data);
   }
 
   getAppointments(fetchRequest: IFetchRequest = {}): Observable<any> {
@@ -28,7 +28,7 @@ export class AppointmentService extends HttpService {
   }
 
   getAppointmentById(id: string): Observable<any> {
-    return this.get(`${this.baseEndPoints}/byid/${id}`);
+    return this.get(`${this.baseEndPoints}/${id}`);
   }
 
   deleteAppointment(id: string): Observable<any> {

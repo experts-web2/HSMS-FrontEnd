@@ -18,7 +18,7 @@ export class MedicinePurchaseService extends HttpService {
   private baseEndPoint = BaseEndPoints.MeicinePurchase;
 
   addMedicinePurchaseInvoice(medicinePurchasePayload: IMedicinePurchaseRequest): Observable<IMedicinePurchase> {
-    return this.post(`${this.baseEndPoint}/add`, medicinePurchasePayload);
+    return this.post(`${this.baseEndPoint}`, medicinePurchasePayload);
   }
 
 

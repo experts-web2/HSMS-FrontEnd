@@ -20,7 +20,7 @@ export class DoctorService extends HttpService {
    }
 
    addDoctor(data: IAddOrUpdateDoctorRequest): Observable<any>{
-    return this.post(`${this.baseEndPoints}/add`, data);
+    return this.post(`${this.baseEndPoints}`, data);
   }
 
 
@@ -50,6 +50,6 @@ export class DoctorService extends HttpService {
   }
 
   getDoctorById(doctorId: string): Observable<IDoctor>{
-    return this.get(`${this.baseEndPoints}/byid/${doctorId}`)
+    return this.get(`${this.baseEndPoints}/${doctorId}`)
   }
 }

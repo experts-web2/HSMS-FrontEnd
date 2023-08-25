@@ -20,7 +20,7 @@ export class VendorService extends HttpService {
   private baseEndPoint = BaseEndPoints.Vendor;
 
   addVendor(vendor: IVendorRequest): Observable<IVendor> {
-    return this.post(`${this.baseEndPoint}/add`, vendor);
+    return this.post(`${this.baseEndPoint}`, vendor);
   }
 
   getVendors(): Observable<Array<IDropDown>> {

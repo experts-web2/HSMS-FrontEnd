@@ -17,7 +17,7 @@ export class TestCategoryService extends HttpService {
   }
 
   addCategory(category: IAddOrUpdateCategory){
-    return this.post(`${this.baseEndPoint}/add`, category);
+    return this.post(`${this.baseEndPoint}`, category);
   }
 
   deleteCategory(deleteCategory: IAddOrUpdateCategoryRequest){
@@ -37,7 +37,7 @@ export class TestCategoryService extends HttpService {
   }
 
   getCategoryById(id: string){
-    return this.get(`${this.baseEndPoint}/byid/${id}`);
+    return this.get(`${this.baseEndPoint}/${id}`);
   }
 
 

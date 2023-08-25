@@ -20,7 +20,7 @@ export class PatientService extends HttpService{
   baseEndPoint: string = BaseEndPoints.Patient
 
   addPatient(data: IAddOrUpdatePatient): Observable<IPatient>{
-   return this.post(`${this.baseEndPoint}/add`, data);
+   return this.post(`${this.baseEndPoint}`, data);
   }
 
   getPatients(fetchRequest: IFetchRequest = {}): Observable<any>{
@@ -28,7 +28,7 @@ export class PatientService extends HttpService{
   }
 
   getPatientById(patientId: string): Observable<IPatient>{
-    return this.get(`${this.baseEndPoint}/byid/${patientId}`)
+    return this.get(`${this.baseEndPoint}/${patientId}`)
   }
 
   getPatientsDropdown(patientSerch?:string): Observable<any>{
