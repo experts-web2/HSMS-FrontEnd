@@ -58,20 +58,11 @@
           </div>
         </div>
       </div> -->
-        <a class="navButton cursor-pointer" [matMenuTriggerFor]="User"><span
+        <a class="navButton cursor-pointer" (click)="logoutmenu.toggle($event)"><span
             class="span-elpis user-name">{{logedInUser.firstName.substring(0, 1).toUpperCase() +
             logedInUser.lastName.substring(0, 1).toUpperCase()}}</span><mat-icon
             class="arrow-height">arrow_drop_down</mat-icon></a>
-        <mat-menu #User="matMenu">
-          <a mat-menu-item *ngIf="isAdmin" routerLink="/admin">Admin</a>
-          <a mat-menu-item>Option 2</a>
-          <a class="navButton cursor-pointer blub-icon"><mat-icon>lightbulb_on</mat-icon></a>
-          <a class="navButton cursor-pointer notification-icon mr-4"><mat-icon
-              style="rotate: 45deg;">notifications</mat-icon></a>
-              <a class="navButton px-2 xl:px-4 2xl:px-8 cursor-pointer" routerLink="/register" [routerLinkActive]="['menu-active']"
-              *ngIf="isDoctor || isAdmin">Messages</a>
-          <a mat-menu-item (click)="logOut()">Log Out</a>
-        </mat-menu>
+        <p-menu #logoutmenu [model]="navItemToShow" [popup]="true"></p-menu>
         <!-- <div *ngFor="let h of [1,2,3]">{{h}}</div> -->
         <!-- <div>
           <button class="navButton" routerLink="/home">Home</button>

@@ -8,6 +8,7 @@ import { PatientFormComponent } from './modules/forms/patient-form/patient-form.
 import { AddPatientTestComponent } from './modules/laboratory/add-patient-test/add-patient-test.component';
 import { CollectLabSampleComponent } from './modules/laboratory/collect-lab-sample/collect-lab-sample.component';
 import { Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { AddAppointmentComponent } from './modules/dialog/add-appointment/add-appointment.component';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -19,6 +20,22 @@ import { DialogService } from 'primeng/dynamicdialog';
 })
 export class AppComponent implements OnInit {
   title = 'HSMS';
+  navitems:Array<MenuItem> = [
+  {
+      label: 'Notification',
+      icon: 'fa-solid fa-bell',
+  },
+  {
+      label: 'Suggest',
+      icon: 'fa-solid fa-lightbulb',
+  },
+  {
+      label: 'Log Out',
+      icon: 'fa fa-sign-out',
+      command: this.logOut.bind(this),
+  },
+  ]
+  navItemToShow: Array<MenuItem> = []
   step = '';
   logedIn: boolean = false;
   showNav: boolean = false;
@@ -58,7 +75,24 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     this.checkLoggedIn();
+
+    if (this.isDoctor || this.isAdmin) {
+      this.navItemToShow= [{
+        label: 'Messages',
+        icon: 'fa-solid fa-message',
+        routerLink: '/register',
+        styleClass:"navButton cursor-pointer",
+    }, ...this.navitems, ]
+    if (this.isAdmin) {
+      this.navItemToShow.unshift({
+        label: 'Admin',
+        icon: 'fa-solid fa-user',
+        routerLink: '/admin',
+    })
+    }
+    }
   }
 
   checkLoggedIn() {
