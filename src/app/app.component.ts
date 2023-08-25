@@ -8,6 +8,9 @@ import { PatientFormComponent } from './modules/forms/patient-form/patient-form.
 import { AddPatientTestComponent } from './modules/laboratory/add-patient-test/add-patient-test.component';
 import { CollectLabSampleComponent } from './modules/laboratory/collect-lab-sample/collect-lab-sample.component';
 import { Router } from '@angular/router';
+import { Dialog } from 'primeng/dialog';
+import { AddAppointmentComponent } from './modules/dialog/add-appointment/add-appointment.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-root',
@@ -51,6 +54,7 @@ export class AppComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly userStateService: UserStateService,
     private router: Router,
+    private pNgDialog: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -102,6 +106,13 @@ export class AppComponent implements OnInit {
 
   logOut() {
     this.authService.logOut();
+  }
+
+  addSchedule(){
+    this.pNgDialog.open(AddAppointmentComponent,{
+      width: '60%',
+      height: '80%'
+    })
   }
 
   navbarToggle() {

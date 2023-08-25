@@ -1,0 +1,31 @@
+<form [formGroup]="addAppointmentForm" class="p-3 flex flex-column gap-4">
+    <div>
+        <label for="">Doctor</label>
+        <p-autoComplete formControlName="doctorName" [suggestions]="doctorsToShow" [dropdown]="true" (completeMethod)="filterDoctors($event)" (onSelect)="selectDoctor($event)" field="name"></p-autoComplete>
+        <p-button [icon]="'pi-plus'" [pTooltip]="'Add New Patient'"></p-button>
+    </div>
+    <div>
+        <label for="">Patient</label>
+        <p-autoComplete formControlName="patientName" [suggestions]="patientsToShow" [dropdown]="true" (completeMethod)="filterPatients($event)" (onSelect)="selectPatient($event)" field="name"></p-autoComplete>
+    </div>
+    <div>
+        <label for="">Appointment Type</label>
+        <p-dropdown formControlName="appointmentType" [options]="scheduleTypesToShow" optionLabel="label" optionValue="value" (onChange)="selectAppointmentType($event)"></p-dropdown>
+    </div>
+    <div>
+        <label for="">Schedule Date</label>
+        <p-calendar formControlName="scheduleDate" [showIcon]="true"></p-calendar>
+    </div>
+    <div>
+        <label for="">Start Time</label>
+        <p-calendar formControlName="startTime" [showIcon]="true" [showTime]="true" hourFormat="12" [timeOnly]="true"></p-calendar>
+    </div>
+    <div>
+        <label for="">End Time</label>
+        <p-calendar formControlName="endTime" [showIcon]="true" [showTime]="true" hourFormat="12" [timeOnly]="true"></p-calendar>
+    </div>   
+</form>
+<div class="flex">
+    <p-button [disabled]="addAppointmentForm.invalid" label="Save" (onClick)="saveAppointment()"></p-button>
+    <p-button label="Close" (onClick)="close()"></p-button>
+</div>

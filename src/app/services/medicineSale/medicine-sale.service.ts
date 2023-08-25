@@ -18,6 +18,6 @@ export class MedicineSaleService extends HttpService {
   private baseEndPoint = BaseEndPoints.MeicineSale;
 
   addMedicineSaleInvoice(medicineSalePayload: IMedicineSaleRequest): Observable<IMedicineSale> {
-    return this.post(`${this.baseEndPoint}/add`, medicineSalePayload);
+    return this.post(`${this.baseEndPoint}`, medicineSalePayload);
   }
 }

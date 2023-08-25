@@ -19,5 +19,6 @@ export * from "./user/user.service";
 export * from "./vender/vendor.service";
 export * from "./vital/vital.service";
 export * from "./patient-test/patient-test.service";
-export * from "./medicine-brand/medicine-brand.service"
-export * from "./prescription/prescription.service"
+export * from "./medicine-brand/medicine-brand.service";
+export * from "./prescription/prescription.service";
+export * from "./scheduling/scheduling.service";

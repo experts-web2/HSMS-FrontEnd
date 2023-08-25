@@ -47,11 +47,11 @@ export class PatientTestService extends HttpService {
   }
 
   addPatientTestSamples(fetchRequest: IFetchRequest = {}){
-    return this.post(`${BaseEndPoints.PatientSample}/add`, fetchRequest);
+    return this.post(`${BaseEndPoints.PatientSample}`, fetchRequest);
   }
 
   addPatientTestReport(fetchRequest:ITestReport){
-    return this.post(`${BaseEndPoints.Patientsamplereport}/add`, fetchRequest);
+    return this.post(`${BaseEndPoints.Patientsamplereport}`, fetchRequest);
   }
 
   patientTestInvoice(patientSerch?:string): Observable<any>{
@@ -59,6 +59,6 @@ export class PatientTestService extends HttpService {
   }
 
   addPatientTest(test:any){
-    return this.post(`${BaseEndPoints.Patienttestinvoice}/add`, test);
+    return this.post(`${BaseEndPoints.Patienttestinvoice}`, test);
   }
 }
