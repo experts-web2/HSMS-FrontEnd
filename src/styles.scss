@@ -222,3 +222,35 @@ p-button {
     min-width: 0 !important;
   }
 }
+
+.p-tabview.p-component{
+  width: 100%;
+}
+
+p-autoComplete {
+  span{
+    width: 100%;
+    input{
+      width: 100%;
+    }
+  }
+}
+
+.appointment{
+  .p-tabview-nav li .p-tabview-nav-link,
+  .p-tabview-nav{
+    border: 0;
+  }
+  .p-tabview-nav-link{
+    border: 0;
+  }
+ .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus{
+  box-shadow: none;
+ }
+  .p-highlight{
+    span{
+      padding-bottom: 10px;
+      border-bottom: 2px solid #3B82F6;
+    }
+  }
+}

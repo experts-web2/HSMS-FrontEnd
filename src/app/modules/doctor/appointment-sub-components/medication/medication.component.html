@@ -22,7 +22,7 @@
                             {{medicine.name}}
                           </mat-option>
                         </mat-autocomplete> -->
-                        <p-autoComplete [suggestions]="medicinesToShow" #medicines  class="w-1"
+                        <p-autoComplete [suggestions]="medicinesToShow" #medicines
                                         (completeMethod)="search($event)"
                                         (onSelect)="onMedicineSelect(i,medicines.value)" field="name" [minLength]="3" placeholder="Select Medicine"
                                         [showEmptyMessage]="true"
@@ -49,7 +49,7 @@
                         <div *ngIf="form.get('durationValue')?.invalid && form.get('durationValue')?.touched">
                             <div class="text-danger" *ngIf="form.get('durationValue')?.errors">Duration Value is required.</div>
                           </div>
-                        <select class="form-select" type="number" name="" id="" formControlName="duration">
+                        <select class="form-select mt-2" type="number" name="" id="" formControlName="duration">
                             <option [value]="null" disabled >Select A Duration</option>
                             <option *ngFor="let duration of medicationDurations" [ngValue]="duration.value">{{duration.label}}</option>
                         </select>
@@ -64,7 +64,7 @@
                         <div *ngIf="form.get('dosageValue')?.invalid && form.get('dosageValue')?.touched">
                             <div class="text-danger" *ngIf="form.get('dosageValue')?.errors">Dosage value is required.</div>
                           </div>
-                        <select class="form-select" type="number" name="" id="" formControlName="dosage">
+                        <select class="form-select mt-2" type="number" name="" id="" formControlName="dosage">
                             <option [value]="null" desabled>Select A Dosage</option>
                             <option *ngFor="let dosage of medicationDosages" [ngValue]="dosage.value">{{dosage.label}}</option>
                         </select>
@@ -113,18 +113,18 @@
                 </div>               
             </div>
         </div>
-        <div *ngIf="!historyMedication">
+        <div *ngIf="!historyMedication" class="w-fit">
 
-            <button class="btn btn-primary d-flex align-items-center mt-4 mb-2" (click)="addMedicationItem()"><i class="pi pi-plus"></i> Drug</button>
+            <p-button class="mt-4 mb-2" (click)="addMedicationItem()"><i class="pi pi-plus"></i> Drug</p-button>
         </div>
-        <textarea rows="2" cols="93" class="mb-2" placeholder="Medication Notes" id="investigation" pInputTextarea formControlName="medicationNotes"></textarea>
+        <textarea rows="2" cols="93" class="mb-4 mt-2" placeholder="Medication Notes" id="investigation" pInputTextarea formControlName="medicationNotes"></textarea>
     </div>
     <div *ngIf="!historyMedication">
         <!-- <div>
             <p-checkbox  [binary]="true" inputId="reminder" ></p-checkbox><label class="m-x-2 ml-3" for="reminder">Send Reminder</label>
         </div> -->
         <div class="d-flex flex-row-reverse">
-            <button class="btn btn-primary d-flex align-items-center mt-4 mb-2" (click)="save()" [disabled]="medicationForm.errors">Save</button>
+            <p-button class="mt-4 mb-2" (click)="save()" [disabled]="!medicationForm.valid">Save</p-button>
         </div>
     </div>
 </div>
