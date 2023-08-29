@@ -67,7 +67,7 @@
     <section class="d-flex flex-column col-span-2 xl:order-1">
       <div class=" flex-column bg-white align-items-center p-3 rounded-3">
         <div>
-          <p-tabView>
+          <p-tabView class="flex justify-between">
             <p-tabPanel header="Prescription">
               <app-prescription [token]="token" [historyTokenId]="historyTokenId"></app-prescription>
             </p-tabPanel>
@@ -87,7 +87,7 @@
             </p-tabPanel>
           </p-tabView>
         </div>
-
+        
         <div>
           <p-fileUpload mode="basic" chooseLabel="Upload a file" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" [maxFileSize]="1000000" (onUpload)="null"></p-fileUpload>
         </div>

@@ -32,5 +32,5 @@ export interface IFiltersRequest
      * @rmarks
      * Holds the comparison value whether case is needed to be ignored or not.
      */
-    stringComparison?: StringComparison 
+    ignoreCase?: boolean 
 }

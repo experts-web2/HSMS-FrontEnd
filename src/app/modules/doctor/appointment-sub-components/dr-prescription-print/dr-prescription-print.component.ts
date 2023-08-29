@@ -59,7 +59,6 @@ export class DrPrescriptionPrintComponent {
     private readonly prescriptionService: PrescriptionService,
     private readonly labOrderService: LabOrderService,
     private readonly doctorService: DoctorService,
-    private readonly loaderService: LoaderService
   ){
     
   }

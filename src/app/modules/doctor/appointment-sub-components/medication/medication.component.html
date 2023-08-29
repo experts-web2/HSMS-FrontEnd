@@ -16,12 +16,28 @@
                 <div [formGroupName]="i" class="grid grid-cols-1 md:grid-cols-7 justify-content-between gap-x-8 gap-y-2 p-2 w-full">
                     <div class="d-flex flex-column">
                         <label htmlFor="name">Name</label>
-                        <input type="text" pInputText  [matAutocomplete]="auto" #mediceineSerch (input)="search(mediceineSerch.value)"  formControlName="medicineName">
+                        <!-- <input type="text" pInputText  [matAutocomplete]="auto" #mediceineSerch (input)="search(mediceineSerch.value)"  formControlName="medicineName">
                         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onMedicineSelect(i,$event.option.value)">
                           <mat-option *ngFor="let medicine of medicinesToShow" [value]="medicine">
                             {{medicine.name}}
                           </mat-option>
-                        </mat-autocomplete>
+                        </mat-autocomplete> -->
+                        <p-autoComplete [suggestions]="medicinesToShow" #medicines  class="w-1"
+                                        (completeMethod)="search($event)"
+                                        (onSelect)="onMedicineSelect(i,medicines.value)" field="name" [minLength]="3" placeholder="Select Medicine"
+                                        [showEmptyMessage]="true"
+                        >
+                        <ng-template let-medicine pTemplate="selectedItem">
+                            <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}} </span>
+                            <small>{{medicine.potency}} {{getPotencyUnit(medicine.potencyUnits)}} ({{medicine.salt}})</small>
+                          </ng-template>
+                          <ng-template let-medicine pTemplate="item">
+                            <div class="flex flex-column">
+                                <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}}</span>
+                                  <small>{{medicine.potency}} {{getPotencyUnit(medicine.potencyUnits)}} ({{medicine.salt}})</small> 
+                            </div>
+                          </ng-template>
+                        </p-autoComplete>
                         <div *ngIf="form.get('medicineId')?.invalid && form.get('medicineId')?.touched">
                             <div class="text-danger" *ngIf="form.get('medicineId')?.errors">Medicine is required.</div>
                           </div>
