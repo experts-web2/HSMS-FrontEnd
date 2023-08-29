@@ -6,6 +6,8 @@ import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { HttpService } from 'src/app/services';
+import { IMedicine } from 'src/app/models/interfaces/Medicine';
+import { IDataSourceResponse } from 'src/app/models/interfaces/DataSourceResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +22,7 @@ export class MedicineService extends HttpService {
     return this.post(`${this.baseEndPoint}`, medicine);
   }
 
-  getMedicine(fetchRequest: IFetchRequest = {}) {
+  getMedicine(fetchRequest: IFetchRequest = {}): Observable<IDataSourceResponse<IMedicine>> {
     return this.post(`${this.baseEndPoint}/all`, fetchRequest);
   }
 

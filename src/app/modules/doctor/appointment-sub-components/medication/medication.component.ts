@@ -14,6 +14,12 @@ import { IToken } from 'src/app/models/interfaces/Token';
 import { AlertService, MedicationService, MedicineService } from 'src/app/services';
 import { MedicationDurations } from '../../../../constants/Constants/MedicationDuration';
 import { IMedication } from 'src/app/models/interfaces/Medication';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
+import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
+import { IMedicine } from 'src/app/models/interfaces/Medicine';
+import { PotencyUnits } from 'src/app/constants/enums/potency-units';
+import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
 
 @Component({
   selector: 'app-medication',
@@ -28,7 +34,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   medicationForm!: FormGroup;
   loggedInDoctor!: ILogedInUser;
   medicines: Array<IDropDown> = [];
-  medicinesToShow: Array<IDropDown> = [];
+  medicinesToShow: Array<IMedicine> = [];
   medicationItem!: FormGroup;
   improvementOptions: any[] = [];
   suggestions: any[]= [];
@@ -105,15 +111,54 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
     }
   }
 
-  search(e: string){
-    let text  = e.toLowerCase();
-    this.medicinesToShow = this.medicines.filter(x => x.name.toLowerCase().includes(text));
+  search(e: any){
+
+    let medicineRequest: IFetchRequest = {
+      pagedListRequest:{
+        pageNo: 1,
+        pageSize: 1000
+      },
+      queryOptionsRequest: {
+        filtersRequest:[
+          {
+            field: 'Name',
+            value: e.query,
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.And,
+            ignoreCase: true
+          }
+        ]
+      }
+    }
+
+    this.medicineService.getMedicine(medicineRequest).subscribe({
+      next: (x) => {
+        console.log(x);
+        this.medicinesToShow = x.data;
+        
+      },
+      error: (err: Error) => {
+
+      }
+    })
+    // let text  = e.toLowerCase();
+    // this.medicinesToShow = this.medicines.filter(x => x.name.toLowerCase().includes(text));
     
   }
 
-  onMedicineSelect(index: number, medicine: IDropDown){
+  onMedicineSelect(index: number, medicine: IMedicine){
+    console.log({index,medicine});
+    
     this.medicationItems.at(index).get('medicineName')?.setValue(medicine.name);
     this.medicationItems.at(index).get('medicineId')?.setValue(medicine.id);    
+  }
+
+  getPotencyUnit(potency: number): string{
+    return PotencyUnits[potency];
+  }
+
+  getMedicineType(potency: number): string{
+    return MedicineType[potency];
   }
 
   getMedicineHistoryDropDown(){
@@ -164,16 +209,16 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   }
 
   getMedicine(){
-    this.medicineService.getMedicineDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.medicines = x;
-        this.medicinesToShow = x;
+    // this.medicineService.getMedicineDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
+    //   next: (x) => {
+    //     this.medicines = x;
+    //     this.medicinesToShow = x;
 
-      },
-      error: (err)=>{
+    //   },
+    //   error: (err)=>{
 
-      }
-    })
+    //   }
+    // })
   }
 
   submitMedications(){
