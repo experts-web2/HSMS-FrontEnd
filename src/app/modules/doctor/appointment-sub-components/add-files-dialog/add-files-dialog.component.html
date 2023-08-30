@@ -4,7 +4,7 @@
     <form >
         <ng-container >
             <div >
-                <p-fileUpload   (onSelect)="fileSelected($event)"  [multiple]="true" accept="image/*" [maxFileSize]="1000000">
+                <p-fileUpload class="uploadFiles-custom-style"   (onSelect)="fileSelected($event)"  [multiple]="true" accept="image/*" [maxFileSize]="1000000">
                     <ng-template pTemplate="content">
                         <ul *ngIf="uploadedFiles.length">
                             <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
