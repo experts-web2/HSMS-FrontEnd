@@ -1,0 +1,20 @@
+<h2>Upload Files</h2>
+
+<div>
+    <form >
+        <ng-container >
+            <div >
+                <p-fileUpload   (onSelect)="fileSelected($event)"  [multiple]="true" accept="image/*" [maxFileSize]="1000000">
+                    <ng-template pTemplate="content">
+                        <ul *ngIf="uploadedFiles.length">
+                            <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+                        </ul>
+                    </ng-template>
+                </p-fileUpload>
+            </div>
+        </ng-container>
+    </form>
+</div>
+<button (click)="uploadFile($event)">UPload</button>
+
+<p-button [label]="'Take A Picture'" [icon]="'pi-camera'" (onClick)="openCamera()"></p-button>

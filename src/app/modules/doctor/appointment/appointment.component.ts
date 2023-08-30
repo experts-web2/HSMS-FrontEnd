@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, takeUntil } from 'rxjs';
 import { UserStateService } from 'src/app/State/user/user.service';
@@ -17,13 +17,18 @@ import { LabOrderService } from '../../../services/lab-order/lab-order.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { PatientHistoryPageComponent } from '../appointment-sub-components/patient-history-page/patient-history-page.component';
 import { DrPrescriptionPrintComponent } from '../appointment-sub-components/dr-prescription-print/dr-prescription-print.component';
+import { IVitalRequest } from '../../../models/interfaces/vitalsRequest';
+import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequest';
+import { IMedicationRequest } from '../../../models/interfaces/MedicationRequest';
+import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
+import { AddFilesDialogComponent } from '../appointment-sub-components/add-files-dialog/add-files-dialog.component';
 
 @Component({
   selector: 'app-appointment',
   templateUrl: './appointment.component.html',
   styleUrls: ['./appointment.component.scss'],
 })
-export class AppointmentComponent implements OnInit {
+export class AppointmentComponent implements OnInit, OnChanges {
   tokenId!: string;
   patient!: IPatient;
   token!: IToken;
@@ -35,8 +40,23 @@ export class AppointmentComponent implements OnInit {
   logedInUser!: ILogedInUser;
   historyTokenId!: string;
   tokenVitals!: IVital;
+  vitals!: IVitalRequest;
+  prescription!: IPrescriptionRequest;
+  medication!: IMedicationRequest;
+  laboOrder!: ILabOrderRequest;
 
-  constructor(private alertService: AlertService, private readonly route: ActivatedRoute, private readonly tokenService: TokenService, private readonly patientService: PatientService, private readonly userStateService: UserStateService, private readonly vitalsService: VitalService, private readonly medicationService: MedicationService, private readonly prescriptionService: PrescriptionService, private readonly LabOrderService: LabOrderService, private readonly dialogService: DialogService) {
+  constructor(
+    private alertService: AlertService, 
+    private readonly route: ActivatedRoute, 
+    private readonly tokenService: TokenService, 
+    private readonly patientService: PatientService, 
+    private readonly userStateService: UserStateService, 
+    private readonly vitalsService: VitalService, 
+    private readonly medicationService: MedicationService, 
+    private readonly prescriptionService: PrescriptionService, 
+    private readonly LabOrderService: LabOrderService, 
+    private readonly dialogService: DialogService
+    ) {
     this.route.params.subscribe({
       next: (x) => {
         this.tokenId = x["tokenId"];
@@ -49,6 +69,11 @@ export class AppointmentComponent implements OnInit {
         
       }
     })
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes['vitals']);
+    
   }
 
   ngOnInit(): void {
@@ -121,7 +146,7 @@ export class AppointmentComponent implements OnInit {
     this.tokenService.getAllTokens(tokensPayload).subscribe({
       next: (x) => {
         this.patientHistoryVisits = x.data;
-        this.openPatientHistoryDialog();
+        // this.openPatientHistoryDialog();
       },
       error: (err) => {
 
@@ -221,6 +246,43 @@ export class AppointmentComponent implements OnInit {
     })
   }
 
+  addPrescription(){
+    this.prescriptionService.addPrescription(this.prescription).subscribe({
+      next: (x) => {
+
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  addVitals(){
+    this.vitalsService.addVitals(this.vitals).subscribe({
+      next: (x) => {
+
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  addMedication(){
+    this.medicationService.addMedication(this.medication).subscribe({
+      next: (x) => {
+
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  addLabOrder(){
+    this.LabOrderService.addMedication
+  }
+
   openHistoryView(){
     this.openPatientHistoryDialog();
   }
@@ -233,6 +295,14 @@ export class AppointmentComponent implements OnInit {
         historyVisits: this.patientHistoryVisits,
         patient: this.patient
       }
+    })
+  }
+
+  openUploadFileDialog(){
+    this.dialogService.open(AddFilesDialogComponent,{
+      width: '40%',
+      height: '50%',
+      data: {patient: this.patient}
     })
   }
 }

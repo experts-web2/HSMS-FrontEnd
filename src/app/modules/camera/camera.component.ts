@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -18,10 +18,7 @@ export class CameraComponent implements OnInit {
   private trigger: Subject<void> = new Subject<void>();
   private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
 
-  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<CameraComponent>) {
-    this.dialogRef.backdropClick().subscribe((backdrop) => {
-      this.dialogRef.close();
-    });
+  constructor(public dialogRef: DynamicDialogRef) {
   }
 
   ngOnInit(): void {

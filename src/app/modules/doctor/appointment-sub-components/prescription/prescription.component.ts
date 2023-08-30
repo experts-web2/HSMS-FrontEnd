@@ -26,11 +26,11 @@ export class PrescriptionComponent
 {
   @Input() token!: IToken;
   @Input() historyTokenId!: string;
+  @Input() prescriptionRequest!: IPrescriptionRequest;
 
   doctorId!: string;
   patientId!: string;
   prescriptionForm!: FormGroup;
-  prescriptionRequest!: IPrescriptionRequest;
   loggedInDoctor!: ILogedInUser;
   improvementOptions: any[] = [];
   historyDropDown: Array<IDropDown> = [];

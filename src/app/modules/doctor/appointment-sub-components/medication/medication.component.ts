@@ -29,7 +29,7 @@ import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
 export class MedicationComponent extends SubscriptionManagmentDirective implements OnInit, OnChanges {
   @Input() token!: IToken;
   @Input() historyTokenId!: string;
-
+  @Input() medicationRequest!: IMedicationRequest;
   historyDropDown: Array<IDropDown> = [];
   medicationForm!: FormGroup;
   loggedInDoctor!: ILogedInUser;
@@ -38,7 +38,6 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   medicationItem!: FormGroup;
   improvementOptions: any[] = [];
   suggestions: any[]= [];
-  medicationRequest!: IMedicationRequest;
   medicationRoutes = MedicationRoutes;
   medicationFrequencies = MedicationFrequencies;
   medicationDosages = MedicationDosages;

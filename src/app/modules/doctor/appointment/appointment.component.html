@@ -74,7 +74,7 @@
               <app-prescription [token]="token" [historyTokenId]="historyTokenId"></app-prescription>
             </p-tabPanel>
             <p-tabPanel header="Vitals">
-              <app-vitals [token]="token" [historyTokenId]="historyTokenId"></app-vitals>
+              <app-vitals [token]="token" [historyTokenId]="historyTokenId" [vitalRequest]="vitals"></app-vitals>
             </p-tabPanel>
             <p-tabPanel header="Medication">
               <app-medication [token]="token" [historyTokenId]="historyTokenId"></app-medication>
@@ -89,9 +89,13 @@
             </p-tabPanel>
           </p-tabView>
         </div>
+        <div class="m-4 pl-5">
+          <p-button class="w-1/6" [label]="'Save'" (onClick)="openUploadFileDialog()" ></p-button>
+        </div>
         
-        <div class="mb-4 pl-5">
-          <p-fileUpload mode="basic" chooseLabel="Upload a file" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" [maxFileSize]="1000000" (onUpload)="null"></p-fileUpload>
+        <div class="m-4 pl-5">
+          <p-button class="w-1/6" [label]="'Upload a file'" (onClick)="openUploadFileDialog()" [icon]="'https://www.primefaces.org/cdn/api/upload.php'" ></p-button>
+          <!-- <p-fileUpload mode="basic" chooseLabel="Upload a file" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" [maxFileSize]="1000000" (onUpload)="null"></p-fileUpload> -->
         </div>
         <div>    <p-button [label]="'Print Prescription'" (onClick)="openPrescriptionPrintDialogue()"></p-button>
         </div>

@@ -28,12 +28,12 @@ export class VitalsComponent
   @Input() token!: IToken;
   @Input() historyVital!: IVital | null;
   @Input() historyTokenId!: string;
+  @Input() vitalRequest!: IVitalRequest;
 
   vitalForm!: FormGroup;
   showMenu: string = '';
   action = 'update';
   historyDropDown: Array<IDropDown> = [];
-  vitalRequest!: IVitalRequest;
   previousDates = [
     { name: '14/07/2023', id: '14/07/2023' },
     { name: '13/07/2023', id: '13/07/2023' },
