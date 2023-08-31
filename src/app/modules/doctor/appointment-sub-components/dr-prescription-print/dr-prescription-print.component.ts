@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MedicationDosageEnum } from 'src/app/constants/Constants/MedicationDosage';
 import { MedicationDurationEnum } from 'src/app/constants/Constants/MedicationDuration';
-import { MedicationFrequencyEnum } from 'src/app/constants/Constants/MedicationFrequency';
-import { MedicationInstructionEnum } from 'src/app/constants/Constants/MedicationInstructions';
-import { MedicationRouteEnum } from 'src/app/constants/Constants/MedicationRoute';
+import { MedicationFrequencies, MedicationFrequencyEnum } from 'src/app/constants/Constants/MedicationFrequency';
+import { MedicationInstructionEnum, MedicationInstructions } from 'src/app/constants/Constants/MedicationInstructions';
+import { MedicationRouteEnum, MedicationRoutes } from 'src/app/constants/Constants/MedicationRoute';
 import { IDoctor } from 'src/app/models/interfaces/Doctor';
 import { IMedication } from 'src/app/models/interfaces/Medication';
 import { IPrescription } from 'src/app/models/interfaces/Prescription';
@@ -20,36 +20,12 @@ import { DoctorService, LabOrderService, LoaderService, MedicationService, Presc
   styleUrls: ['./dr-prescription-print.component.scss']
 })
 export class DrPrescriptionPrintComponent {
-  
+  @ViewChild('printElement') printElement!: ElementRef;
   historyData?: IDialogData;
   medicationTableData: Array<IMedicationTableColumn> = [];
+  patient!: IPatient;
   token!: IToken;
-  medicationTableColumns: Array<ITableColumns> = [
-    {
-      name: 'Medicine',
-      property: 'name'
-    },
-    {
-      name: 'Duration',
-      property: 'duration'
-    },
-    {
-      name: 'Dosage',
-      property: 'dosage'
-    },
-    {
-      name: 'Route',
-      property: 'route'
-    },
-    {
-      name: 'Frequency',
-      property: 'frequency'
-    },
-    {
-      name: 'Instruction',
-      property: 'instruction'
-    }
-  ];
+
 
   constructor(
     private readonly dialogRef: DynamicDialogRef, 
@@ -70,7 +46,9 @@ export class DrPrescriptionPrintComponent {
     if(this.dialogConfig.data?.historyVisits){
       this.token = this.dialogConfig.data?.historyVisits;
     }
+
     if (this.dialogConfig.data?.patient){
+      this.patient = this.dialogConfig.data?.patient;
       this.historyData = {...this.historyData, patient: this.dialogConfig.data?.patient} 
     }
     
@@ -104,9 +82,9 @@ export class DrPrescriptionPrintComponent {
           name: x.medicineName,
           duration: `${x.durationValue} ${MedicationDurationEnum[x.duration]}`,
           dosage: `${x.dosageValue} ${MedicationDosageEnum[x.dosage]}`,
-          frequency: MedicationFrequencyEnum[x.frequency],
-          route: MedicationRouteEnum[x.route],
-          instruction: MedicationInstructionEnum[x.insturction]
+          frequency: MedicationFrequencies.find(y => x.frequency === y.value)?.label ?? MedicationFrequencyEnum[x.frequency],
+          route: MedicationRoutes.find(y => x.route === y.value)?.label ?? MedicationRouteEnum[x.route],
+          instruction: MedicationInstructions.find(y => x.insturction === y.value)?.label ?? MedicationInstructionEnum[x.insturction]
         } 
         return medication;
       })
@@ -174,6 +152,21 @@ export class DrPrescriptionPrintComponent {
 
       }
     })
+  }
+
+  print(){
+    const printContents = this.printElement.nativeElement.innerHTML;
+    const popupWin = window.open('', '_blank', 'width=600,height=600');
+    popupWin?.document.open();
+    popupWin?.document.write(`
+      <html>
+        <head>
+          <title>Print</title>
+        </head>
+        <body onload="window.print();window.close();">${printContents}</body>
+      </html>
+    `);
+    popupWin?.document.close();
   }
 }
 

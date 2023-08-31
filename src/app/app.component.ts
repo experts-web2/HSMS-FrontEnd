@@ -145,7 +145,7 @@ export class AppComponent implements OnInit {
   addSchedule(){
     this.pNgDialog.open(AddAppointmentComponent,{
       width: '60%',
-      height: '80%'
+      height: '80%',
     })
   }
 

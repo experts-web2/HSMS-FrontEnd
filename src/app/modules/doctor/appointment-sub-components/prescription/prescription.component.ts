@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -26,11 +26,11 @@ export class PrescriptionComponent
 {
   @Input() token!: IToken;
   @Input() historyTokenId!: string;
-
+  @Input() prescriptionRequest!: IPrescriptionRequest;
+  @Output() emitRequest: EventEmitter<IPrescriptionRequest> = new EventEmitter<IPrescriptionRequest>();
   doctorId!: string;
   patientId!: string;
   prescriptionForm!: FormGroup;
-  prescriptionRequest!: IPrescriptionRequest;
   loggedInDoctor!: ILogedInUser;
   improvementOptions: any[] = [];
   historyDropDown: Array<IDropDown> = [];
@@ -98,6 +98,8 @@ export class PrescriptionComponent
       investigation: value['investigation'],
       followUpDate: value['followUpDate']
     }
+    
+    this.emitRequest.emit(this.prescriptionRequest);
   }
 
   getPrescriptionHistoryDropDown() {
@@ -192,3 +194,7 @@ export class PrescriptionComponent
     })
   }
 }
+function OutPut(): (target: PrescriptionComponent, propertyKey: "doctorId") => void {
+  throw new Error('Function not implemented.');
+}
+

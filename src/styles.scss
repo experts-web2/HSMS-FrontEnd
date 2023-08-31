@@ -254,3 +254,21 @@ p-autoComplete {
     }
   }
 }
+
+.uploadFiles-custom-style{
+  .p-fileupload-buttonbar{
+    p-button:has(uploadicon){
+      display: none;
+    }
+    p-button{
+      margin-top: 10px;
+      width: 126px;
+    }
+  }
+}
+
+.uploadfile-card{
+  .p-card-title{
+    word-break: break-all;
+  }
+}

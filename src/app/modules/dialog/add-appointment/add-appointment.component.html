@@ -1,8 +1,9 @@
+<h2>Add Appointment</h2>
 <form [formGroup]="addAppointmentForm" class="p-3 flex flex-column gap-4">
     <div>
         <label for="">Doctor</label>
         <p-autoComplete formControlName="doctorName" [suggestions]="doctorsToShow" [dropdown]="true" (completeMethod)="filterDoctors($event)" (onSelect)="selectDoctor($event)" field="name"></p-autoComplete>
-        <p-button [icon]="'pi-plus'" [pTooltip]="'Add New Patient'"></p-button>
+        <p-button class="w-1/3" [icon]="'pi pi-plus'" [pTooltip]="'Add New Patient'" label="Add New Patient" (onClick)="addPatient()"></p-button>
     </div>
     <div>
         <label for="">Patient</label>
@@ -26,6 +27,6 @@
     </div>   
 </form>
 <div class="flex">
-    <p-button [disabled]="addAppointmentForm.invalid" label="Save" (onClick)="saveAppointment()"></p-button>
+    <p-button [disabled]="!addAppointmentForm.valid" label="Save" (onClick)="saveAppointment()"></p-button>
     <p-button label="Close" (onClick)="close()"></p-button>
 </div>

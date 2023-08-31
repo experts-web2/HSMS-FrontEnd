@@ -6,6 +6,8 @@ import {
   TemplateRef,
   ViewChild,
   SimpleChanges,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs';
@@ -28,12 +30,12 @@ export class VitalsComponent
   @Input() token!: IToken;
   @Input() historyVital!: IVital | null;
   @Input() historyTokenId!: string;
-
+  vitalRequest!: IVitalRequest;
+  @Output() emitRequest: EventEmitter<IVitalRequest> = new EventEmitter<IVitalRequest>();
   vitalForm!: FormGroup;
   showMenu: string = '';
   action = 'update';
   historyDropDown: Array<IDropDown> = [];
-  vitalRequest!: IVitalRequest;
   previousDates = [
     { name: '14/07/2023', id: '14/07/2023' },
     { name: '13/07/2023', id: '13/07/2023' },
@@ -109,6 +111,7 @@ export class VitalsComponent
       patientId: this.token.patientId,
       doctorId: this.token.doctorId
     }
+    this.emitRequest.emit(this.vitalRequest);
   }
 
   onSubmit() {

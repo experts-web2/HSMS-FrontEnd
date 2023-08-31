@@ -35,7 +35,7 @@ import { AutoFocusModule } from 'primeng/autofocus';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { FileUploadModule } from 'primeng/fileupload';
 import { AccordionModule } from 'primeng/accordion';
-
+import { CardModule } from 'primeng/card'
 @NgModule({
   declarations: [],
   imports: [CommonModule],
@@ -73,7 +73,8 @@ import { AccordionModule } from 'primeng/accordion';
     AutoFocusModule,
     ProgressSpinnerModule,
     FileUploadModule,
-    AccordionModule
+    AccordionModule,
+    CardModule
   ],
   providers: [MessageService],
 })

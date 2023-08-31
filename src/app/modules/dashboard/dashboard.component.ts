@@ -5,6 +5,7 @@ import {
   PatientService,
   AppointmentService,
   TokenService,
+  UserService,
 } from 'src/app/services';
 import EChartOption = echarts.EChartsOption;
 import { AddTokenModalComponent } from '../dialog/add-token-modal/add-token-modal.component';
@@ -32,6 +33,9 @@ export class DashboardComponent
   viewdTokens: Array<IToken> = [];
   appointmentsTotalRecords: number = 0;
   roClickAction: Function = this.rowClick.bind(this);
+
+  numberOfpatients: number = 0;
+  numberOfRegisteredUsers: number = 0;
 
   tokensData!: Array<any>;
   tokneTotalRecords: number = 0;
@@ -101,7 +105,8 @@ export class DashboardComponent
     private readonly userStateService: UserStateService,
     private readonly appointmentService: AppointmentService,
     private readonly tokenService: TokenService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly userService: UserService
   ) {
     super();
   }
@@ -111,6 +116,8 @@ export class DashboardComponent
     this.getMessagesData();
     this.getUnViewdTokens();
     this.getViewdTokens();
+    this.getTotalpatients();
+    this.getAllUsers();
     this.chartOption = this.createChartOption([17, 22, 31, 46, 12, 40, 33, 16]);
   }
 
@@ -136,6 +143,25 @@ export class DashboardComponent
         },
         error: (err) => {},
       });
+  }
+
+  getTotalpatients(){
+    this.patientService.getPatientDropDown().subscribe({
+      next: (x) => {
+        this.numberOfpatients = x.length;
+      }
+    })
+  }
+
+  getAllUsers(){
+    this.userService.getUsers().subscribe({
+      next: (x) => {
+        this.numberOfRegisteredUsers = x.length;
+      },
+      error: (err) => {
+
+      }
+    })
   }
 
   rowClick(rowData: IToken) {

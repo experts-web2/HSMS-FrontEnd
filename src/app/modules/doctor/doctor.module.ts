@@ -25,6 +25,9 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FormsModule } from '@angular/forms';
 import { DrPrescriptionPrintComponent } from './appointment-sub-components/dr-prescription-print/dr-prescription-print.component';
 import { FilesPreviewComponent } from './appointment-sub-components/files-preview/files-preview.component';
+import { AddFilesDialogComponent } from './appointment-sub-components/add-files-dialog/add-files-dialog.component';
+import { CameraComponent } from '../camera/camera.component';
+import { CameraModule } from '../camera/camera.module';
 @NgModule({
   declarations: [
     DoctorRootComponent,
@@ -40,12 +43,14 @@ import { FilesPreviewComponent } from './appointment-sub-components/files-previe
     SchedulingComponent,
     DrPrescriptionPrintComponent,
     FilesPreviewComponent,
+    AddFilesDialogComponent,
   ],
   imports: [
     CommonModule,
     DoctorRoutingModule,
     GenericTableComponent,
     MaterialModule,
+    CameraModule,
     ToastModule,
     MessagesModule,
     ButtonModule,

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -10,8 +10,8 @@ export abstract class HttpService {
   protected baseUrl = `${environment.backendurl}api`;
   constructor(private readonly httpClient: HttpClient) {}
 
-  protected post(url: string, data: any): Observable<any> {
-    return this.httpClient.post(this.baseUrl + `/${url}`, data);
+  protected post(url: string, data: any, headers?: HttpHeaders | {}): Observable<any> {
+    return this.httpClient.post(this.baseUrl + `/${url}`, data, {headers});
   }
 
   protected get(url: string): Observable<any> {

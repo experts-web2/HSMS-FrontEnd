@@ -1,11 +1,13 @@
-<div>
+<div #printElement>
     <div class="flex justify-between">
         <div class="w-20 flex items-center font-bold">
             M.B.B.S
         </div>
         <div class="flex flex-column">
-            <span><strong>Patient Name:-</strong> {{historyData?.patient?.name}}</span>
-            <span><strong>Patient Age:-</strong>{{historyData?.patient?.age}}</span>
+
+            <span><strong>Date:-</strong> {{token.createdAt | date: 'EEE MM/dd/yyyy'}}</span>
+            <span><strong>Patient Name:-</strong> {{patient.name}}</span>
+            <span><strong>Patient Age:-</strong>{{patient.age}}</span>
 
         </div>
     </div>
@@ -138,4 +140,8 @@
                 </section> -->
             </ng-container>
   
+</div>
+<div class="flex items-center justify-center">
+
+    <p-button class="w-1/6" label="Print" (onClick)="print()"></p-button>
 </div>
