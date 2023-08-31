@@ -22,6 +22,7 @@ import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequ
 import { IMedicationRequest } from '../../../models/interfaces/MedicationRequest';
 import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
 import { AddFilesDialogComponent } from '../appointment-sub-components/add-files-dialog/add-files-dialog.component';
+import { PatientVisitService } from 'src/app/services/patient visit/patient-visit.service';
 
 @Component({
   selector: 'app-appointment',
@@ -43,7 +44,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
   vitals!: IVitalRequest;
   prescription!: IPrescriptionRequest;
   medication!: IMedicationRequest;
-  laboOrder!: ILabOrderRequest;
+  labOrder!: ILabOrderRequest;
 
   constructor(
     private alertService: AlertService, 
@@ -55,8 +56,9 @@ export class AppointmentComponent implements OnInit, OnChanges {
     private readonly medicationService: MedicationService, 
     private readonly prescriptionService: PrescriptionService, 
     private readonly LabOrderService: LabOrderService, 
-    private readonly dialogService: DialogService
-    ) {
+    private readonly dialogService: DialogService,
+    private readonly patientVisitService: PatientVisitService
+  ) {
     this.route.params.subscribe({
       next: (x) => {
         this.tokenId = x["tokenId"];
@@ -108,6 +110,23 @@ export class AppointmentComponent implements OnInit, OnChanges {
       data: {
         historyVisits: this.token,
         patient: this.patient
+      }
+    })
+  }
+
+  savePatientVisitDetails(){
+    let patientVisitRequest: {prescriptionRequest: IPrescriptionRequest, vitalRequest: IVitalRequest, medicationRequest: IMedicationRequest, labOrderRequest: ILabOrderRequest} = {
+      prescriptionRequest: this.prescription,
+      vitalRequest: this.vitals,
+      medicationRequest: this.medication,
+      labOrderRequest: this.labOrder
+    }
+    this.patientVisitService.addPatientVisit(patientVisitRequest).subscribe({
+      next: (x) => {
+
+      },
+      error: (err) => {
+
       }
     })
   }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { AlertService, LabOrderService, TestCategoryService, TestService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -6,6 +6,11 @@ import { Roles } from 'src/app/constants/enums/Roles-Enum';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
+import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
+import { PatientVisitService } from 'src/app/services/patient visit/patient-visit.service';
+import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequest';
+import { IVitalRequest } from 'src/app/models/interfaces/vitalsRequest';
+import { IMedicationRequest } from 'src/app/models/interfaces/MedicationRequest';
 
 @Component({
   selector: 'app-lab-order',
@@ -14,10 +19,11 @@ import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 })
 export class LabOrderComponent extends SubscriptionManagmentDirective implements OnInit {
   @Input() token!: IToken;
+  @Output() emitRequest: EventEmitter<ILabOrderRequest> = new EventEmitter<ILabOrderRequest>()
   tabs: any[] = [];
   roles = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.LabAdmin, name: 'Lab Admin' }];
   testPriorty = [{ id: 1, name: 'Routine' }, { id: 2, name: 'Urgent' }];
-
+  labOrderRequest!: ILabOrderRequest;
   testsList: ILabTestList[] = [];
   tabsToView: ILabtestCategoriesTabs[] = [];
   testsListToShow: ILabTestList[] = [];
@@ -32,7 +38,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     private readonly testCategoryService: TestCategoryService,
     private readonly testsService: TestService,
     private readonly alertService: AlertService,
-    private readonly laborderService: LabOrderService
+    private readonly laborderService: LabOrderService,
   ) {
     super();
   }
@@ -41,6 +47,13 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
     this.getTests()
     this.getTestCategories();
+
+    this.labOrderRequest = {
+      doctorId: this.token.doctorId,
+      patientId: this.token.patientId,
+      labTestIds: []
+    }
+    this.emitRequest.emit(this.labOrderRequest);
   }
 
   getTestCategories() {
@@ -67,7 +80,6 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     })
   }
 
-
   active(id: string) {
     this.tabId = id
     this.tabsToView.map(x => {
@@ -76,7 +88,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     });
     this.getVisibleTests(id);
   }
-  
+
   getVisibleTests(categoryId: string) {
     this.testsListToShow = this.testsList.filter(x => x.testCategoryId === categoryId);
     this.selectAllChecked();
@@ -90,38 +102,40 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   selectAllCheckboxes(event: any): void {
     if (event.target.checked) {
-       this.testsListToShow.forEach(checkbox => {
+      this.testsListToShow.forEach(checkbox => {
         if (checkbox.testCategoryId === this.tabId) {
           checkbox.selected = true;
-          if(!this.selectedTestsIds.includes(checkbox.id)) this.selectedTestsIds.push(checkbox.id);
+          if (!this.selectedTestsIds.includes(checkbox.id)) this.selectedTestsIds.push(checkbox.id);
         }
       });
-      
+
     } else {
-      
+
       this.testsListToShow.forEach(checkbox => {
         if (checkbox.testCategoryId === this.tabId) {
           checkbox.selected = false;
-          if(this.selectedTestsIds.includes(checkbox.id)) this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== checkbox.id);
+          if (this.selectedTestsIds.includes(checkbox.id)) this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== checkbox.id);
         }
       });
     }
-  this.selectAllChecked()    
+    this.selectAllChecked()
 
   }
 
-  updateSelectedCheckboxes(checked: boolean, selectedValue: ILabTestList): void {    
-    if(checked) {
-      this.selectedTestsIds.push(selectedValue.id);      
+  updateSelectedCheckboxes(checked: boolean, selectedValue: ILabTestList): void {
+    if (checked) {
+      this.selectedTestsIds.push(selectedValue.id);
     }
-    else this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== selectedValue.id);   
+    else this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== selectedValue.id);
     this.selectAllChecked();
- 
+    this.labOrderRequest.labTestIds = this.selectedTestsIds;
+    this.emitRequest.emit(this.labOrderRequest);
+
   }
 
   addLabOrder() {
 
-    let labOrderPayload: {doctorId: string, patientId: string, labTestIds: Array<string>} = {
+    let labOrderPayload: ILabOrderRequest = {
       doctorId: this.token.doctorId,
       patientId: this.token.patientId,
       labTestIds: this.selectedTestsIds
@@ -131,20 +145,20 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
       next: (x) => {
         this.alertService.success('Lab Order Added Successfully.')
       },
-      error: (err) => {        
+      error: (err) => {
         this.alertService.error('Something went wrong while adding laborder.')
       }
     })
   }
 
-  selectAllChecked(){
-    for(let test of this.testsListToShow.filter(x => x.testCategoryId === this.tabId)){
+  selectAllChecked() {
+    for (let test of this.testsListToShow.filter(x => x.testCategoryId === this.tabId)) {
       let includes = this.selectedTestsIds.includes(test.id);
-      if(includes) this.allSelected = true;
-      else { 
-        this.allSelected = false; 
+      if (includes) this.allSelected = true;
+      else {
+        this.allSelected = false;
         break;
-      } 
+      }
     }
   }
 
@@ -154,6 +168,6 @@ interface ILabtestCategoriesTabs extends ILabTestCategory {
   active?: boolean;
 }
 
-interface ILabTestList extends ILabeTest{
+interface ILabTestList extends ILabeTest {
   selected?: boolean;
 }

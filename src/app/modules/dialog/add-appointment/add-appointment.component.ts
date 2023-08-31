@@ -2,22 +2,24 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
-import { DoctorService, PatientService, SchedulingService } from 'src/app/services';
+import { AlertService, DoctorService, PatientService, SchedulingService } from 'src/app/services';
 import { PrimeNgModule } from 'src/app/shared/modules';
 import * as moment from 'moment'
 import { ScheduleTypeEnum, ScheduleTypesDropDown } from 'src/app/constants/enums/scheduleType';
 import { IScheduleRequest } from 'src/app/models/interfaces/schedule-Request';
 import { AppointmentStatusEnum } from 'src/app/constants/enums/appointment-status';
+import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
+import { FormModule } from '../../forms/form.module';
 
 @Component({
   selector: 'app-add-appointment',
   templateUrl: './add-appointment.component.html',
   styleUrls: ['./add-appointment.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, PrimeNgModule],
-  providers: [DynamicDialogConfig, DynamicDialogRef, Dialog]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PrimeNgModule, FormModule],
+  providers: [DynamicDialogConfig, DynamicDialogRef, Dialog, DialogService]
 })
 export class AddAppointmentComponent implements OnInit {
   addAppointmentForm!: FormGroup;
@@ -33,7 +35,9 @@ export class AddAppointmentComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly schedulingService: SchedulingService,
     private readonly doctorService: DoctorService,
-    private readonly patientService: PatientService
+    private readonly patientService: PatientService,
+    private readonly alertService: AlertService,
+    private readonly dialog: DialogService
   ) {
     this.addAppointmentForm = this.fb.group({
       startTime: new FormControl<Date | null>(null, [Validators.required]),
@@ -100,9 +104,11 @@ export class AddAppointmentComponent implements OnInit {
 
     this.schedulingService.addSchedule(schedulingRequest).subscribe({
       next: (x) => {
-
+        this.alertService.success('Appointment Saved Successfully.');
+        this.dialogRef.close()
       },
       error: (err) => {
+        this.alertService.success('An Error Occoured While Saving Appointment.')
 
       }
     })
@@ -155,10 +161,17 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   addPatient(){
+    this.dialog.open(PatientFormComponent,{
+      width: '60%',
+      height: '80%'
+    }).onClose.subscribe({
+      next: (x) => {},
+      error: (err) => {}
+    })
   }
 
   close(){
-    this.dialogRef.close(true);
+    this.dialogRef.close();
   }
 }
 

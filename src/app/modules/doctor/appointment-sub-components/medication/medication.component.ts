@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -30,6 +30,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   @Input() token!: IToken;
   @Input() historyTokenId!: string;
   @Input() medicationRequest!: IMedicationRequest;
+  @Output() emitRequest: EventEmitter<IMedicationRequest> = new EventEmitter<IMedicationRequest>()
   historyDropDown: Array<IDropDown> = [];
   medicationForm!: FormGroup;
   loggedInDoctor!: ILogedInUser;
@@ -108,6 +109,8 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
       patientId: this.token.patientId,
       medicationNotes: value['medicationNotes']
     }
+
+    this.emitRequest.emit(this.medicationRequest);
   }
 
   search(e: any){

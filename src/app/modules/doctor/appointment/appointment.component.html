@@ -71,16 +71,21 @@
         <div>
           <p-tabView class="flex justify-between appointment">
             <p-tabPanel header="Prescription">
-              <app-prescription [token]="token" [historyTokenId]="historyTokenId"></app-prescription>
+              <app-prescription [token]="token" [historyTokenId]="historyTokenId" (emitRequest)="prescription = $event"></app-prescription>
             </p-tabPanel>
             <p-tabPanel header="Vitals">
-              <app-vitals [token]="token" [historyTokenId]="historyTokenId" [vitalRequest]="vitals"></app-vitals>
+              <app-vitals [token]="token" [historyTokenId]="historyTokenId" (emitRequest)="vitals = $event"></app-vitals>
             </p-tabPanel>
             <p-tabPanel header="Medication">
-              <app-medication [token]="token" [historyTokenId]="historyTokenId"></app-medication>
+              <app-medication [token]="token" [historyTokenId]="historyTokenId" (emitRequest)="medication = $event"></app-medication>
             </p-tabPanel>
             <p-tabPanel header="Lab Order">
-              <app-lab-order [token]="token"></app-lab-order>
+              <app-lab-order [token]="token" (emitRequest)="labOrder = $event"></app-lab-order>
+            </p-tabPanel>
+            <p-tabPanel header="Documents">
+              <p>
+                <app-files-preview [patientId]="patient.id"></app-files-preview>
+              </p>
             </p-tabPanel>
             <p-tabPanel header="Radiology Order">
               <p>
@@ -90,7 +95,7 @@
           </p-tabView>
         </div>
         <div class="m-4 pl-5">
-          <p-button class="w-1/6" [label]="'Save'" (onClick)="openUploadFileDialog()" ></p-button>
+          <p-button class="w-1/6" [label]="'Save'" (onClick)="savePatientVisitDetails()" ></p-button>
         </div>
         
         <div class="m-4 pl-5">

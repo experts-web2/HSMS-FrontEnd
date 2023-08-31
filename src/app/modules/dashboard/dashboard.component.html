@@ -10,21 +10,21 @@
   <mat-card class="dashboard_card ">
     <div class="px-3 mt-3 mb-3">
       <p>Registered Patients</p>
-      <div class="d-flex justify-content-between align-items-center"><span class="wheelchair-icon text-font">56</span><i
+      <div class="d-flex justify-content-between align-items-center"><span class="wheelchair-icon text-font">{{numberOfpatients}}</span><i
           class="fa-solid fa-wheelchair d-flex align-items-end wheelchair-icon"></i></div>
     </div>
   </mat-card>
   <mat-card class="dashboard_card ">
     <div class="px-3 mt-3 mb-3">
       <p>Patients Visited Today</p>
-      <div class="d-flex justify-content-between align-items-center"> <span class="truck-icon text-font">1</span><i
+      <div class="d-flex justify-content-between align-items-center"> <span class="truck-icon text-font">{{newTokens.length + viewdTokens.length}}</span><i
           class="fa-solid fa-truck-medical d-flex align-items-end truck-icon"></i></div>
     </div>
   </mat-card>
   <mat-card class="dashboard_card ">
     <div class="px-3 mt-3 mb-3">
       <p>Total Users</p>
-      <div class="d-flex justify-content-between align-items-center"> <span class="group-icon text-font">10</span><i
+      <div class="d-flex justify-content-between align-items-center"> <span class="group-icon text-font">{{numberOfRegisteredUsers}}</span><i
           class="fa-sharp fa-solid fa-people-line d-flex align-items-end group-icon"></i></div>
     </div>
   </mat-card>

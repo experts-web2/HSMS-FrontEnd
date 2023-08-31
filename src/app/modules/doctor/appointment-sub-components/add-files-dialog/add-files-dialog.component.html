@@ -15,6 +15,6 @@
         </ng-container>
     </form>
 </div>
-<button (click)="uploadFile($event)">UPload</button>
 
-<p-button [label]="'Take A Picture'" [icon]="'pi-camera'" (onClick)="openCamera()"></p-button>
+<p-button [label]="'Upload'" (onClick)="uploadFile($event)"></p-button>
+<p-button [label]="'Take A Picture'" (onClick)="openCamera()"></p-button>

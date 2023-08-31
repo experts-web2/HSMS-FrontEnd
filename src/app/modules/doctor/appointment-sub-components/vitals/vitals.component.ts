@@ -6,6 +6,8 @@ import {
   TemplateRef,
   ViewChild,
   SimpleChanges,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs';
@@ -28,8 +30,8 @@ export class VitalsComponent
   @Input() token!: IToken;
   @Input() historyVital!: IVital | null;
   @Input() historyTokenId!: string;
-  @Input() vitalRequest!: IVitalRequest;
-
+  vitalRequest!: IVitalRequest;
+  @Output() emitRequest: EventEmitter<IVitalRequest> = new EventEmitter<IVitalRequest>();
   vitalForm!: FormGroup;
   showMenu: string = '';
   action = 'update';
@@ -109,6 +111,7 @@ export class VitalsComponent
       patientId: this.token.patientId,
       doctorId: this.token.doctorId
     }
+    this.emitRequest.emit(this.vitalRequest);
   }
 
   onSubmit() {

@@ -44,7 +44,7 @@ export class AddFilesDialogComponent implements OnInit{
     return this.fb.group({file: new FormControl<File | null>(null, [Validators.required])});
   }
 
-  appendFile(file: File){
+  appendFile(file: File | string){
     this.filesRequest.append('files', file);
   }
 
@@ -67,15 +67,23 @@ export class AddFilesDialogComponent implements OnInit{
     this.fileUploadService.uploadFiles(this.filesRequest, this.patient.id).subscribe({
       next: (x) => {
         console.log(x);
+        this.dialogRef.close();
         
       }
     })
   }
 
   openCamera(){
-    this.dynamicDialog.open(CameraComponent, {
+    let cameraDialog = this.dynamicDialog.open(CameraComponent, {
       width: '40%',
       height: '50%',
+    })
+    cameraDialog.onClose.subscribe({
+      next: (x) => {
+        if(x){
+          this.appendFile(x);
+        }
+      }
     })
   }
 
