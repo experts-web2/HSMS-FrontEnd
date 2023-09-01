@@ -23,6 +23,7 @@ import { IMedicationRequest } from '../../../models/interfaces/MedicationRequest
 import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
 import { AddFilesDialogComponent } from '../appointment-sub-components/add-files-dialog/add-files-dialog.component';
 import { PatientVisitService } from 'src/app/services/patient visit/patient-visit.service';
+import { HttpError } from '@microsoft/signalr';
 
 @Component({
   selector: 'app-appointment',
@@ -45,6 +46,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
   prescription!: IPrescriptionRequest;
   medication!: IMedicationRequest;
   labOrder!: ILabOrderRequest;
+  currentDate: Date = new Date();
 
   constructor(
     private alertService: AlertService, 
@@ -123,10 +125,17 @@ export class AppointmentComponent implements OnInit, OnChanges {
     }
     this.patientVisitService.addPatientVisit(patientVisitRequest).subscribe({
       next: (x) => {
-
+        this.alertService.success('Patient Visit Details Saved Successfuly.')
       },
       error: (err) => {
-
+        
+    let errors = err.error.errors;
+        Object.keys(errors).forEach(x => {
+          this.alertService.error(`${errors[x].at(0)}`);
+        })
+        console.log();
+        
+        // this.alertService.error()
       }
     })
   }
