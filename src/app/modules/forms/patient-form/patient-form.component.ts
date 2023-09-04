@@ -10,6 +10,7 @@ import { AlertService } from 'src/app/services';
 import { Relations } from 'src/app/constants/Constants/PatientRelatons';
 import { takeUntil } from 'rxjs';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
+import { FileUploadService } from 'src/app/services/fileUpload/file-upload.service';
 
 @Component({
   selector: 'app-patient-form',
@@ -36,13 +37,15 @@ export class PatientFormComponent
   base64ImagStr: string = '';
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   tags: any[] = [];
+  filesToUpload: Array<File> = [];
 
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<PatientFormComponent>,
     private readonly patientService: PatientService,
-    private readonly alertService: AlertService
+    private readonly alertService: AlertService,
+    private readonly fileUploadService: FileUploadService
   ) {
     super();
     this.patientForm = this.fb.group({
@@ -83,6 +86,7 @@ export class PatientFormComponent
           this.alertService.success('Patient Added');
           this.patientForm.reset();
           this.dialogRef.close();
+          this.uploadFiles(x.id);
         },
         error: (err) => {},
       });
@@ -110,6 +114,11 @@ export class PatientFormComponent
     this.patientForm.patchValue({'age': date}); 
   }
 
+  appendFilesToUpload(event: any){
+    console.log(event);
+    
+  }
+
   remove(tag: any): void {
     const index = this.tags.indexOf(tag);
 
@@ -134,8 +143,33 @@ export class PatientFormComponent
       reader.onerror = (error) => reject(error);
     });
   }
-  async getUploadImage(file: any) {
-    let img = await this.toBase64(file.target.files[0]);
-    console.log(img);
+  
+  uploadFiles(patientId: string){
+    let formData: FormData = new FormData();
+    
+    for(let file of this.filesToUpload){
+      formData.append('files', file);
+    }
+
+    this.fileUploadService.uploadFiles(formData, patientId).subscribe({
+      next:(x) => {
+        this.alertService.success('Files Uploaded Successfully.')
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occoured While Uploading Files.')
+
+      }
+    });
+  }
+
+  getUploadImage(event: any) {
+    // let img = await this.toBase64(file.target.files[0]);
+    let files: Array<File> = event.target.files
+    console.log(files);
+    for(let file of files){
+
+      this.appendFilesToUpload(file)
+      this.filesToUpload = [...files];
+    }
   }
 }

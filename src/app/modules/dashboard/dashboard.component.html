@@ -57,7 +57,7 @@
 <div class="mt-4">
   <h2 class="text-center">Appointments Today</h2>
   <app-generic-table [data]="appointmentsData" [columns]="displayedAppointmentColumns" 
-    [totalRecords]="appointmentsTotalRecords"></app-generic-table>
+    [totalRecords]="appointmentsTotalRecords" [showPaginator]="false"></app-generic-table>
 </div>
 
 
@@ -68,7 +68,7 @@
 <div class="mt-4 text-center">
   <h2>Messages</h2>
   <app-generic-table [data]="messagesData" [columns]="displayedMessageColumns"
-    [totalRecords]="messageTotalRecords"></app-generic-table>
+    [totalRecords]="messageTotalRecords" [showPaginator]="false"></app-generic-table>
 </div>
 
 

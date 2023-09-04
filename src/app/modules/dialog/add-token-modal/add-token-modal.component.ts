@@ -32,6 +32,11 @@ import {
 import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { takeUntil } from 'rxjs';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
+import { FilterOperator } from 'primeng/api';
+import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
+import { IPatient } from 'src/app/models/interfaces/patient-model';
 
 @Component({
   selector: 'app-add-token-modal',
@@ -89,7 +94,7 @@ export class AddTokenModalComponent
 
   dropDown!: Array<{ id: number; label: string }>;
   patients: Array<IDropDown> = [];
-  patientsToShow: Array<IDropDown> = [];
+  patientsToShow: Array<IPatient> = [];
 
   paymentTypes: Array<{ id: number; label: string }> = [
     { id: PaymentTypes.Cash, label: 'Cash' },
@@ -243,22 +248,23 @@ export class AddTokenModalComponent
       .subscribe({
         next: (x) => {
           this.patients = x;
-          this.patientsToShow = x;
+          // this.patientsToShow = x;
         },
         error: (err) => {},
       });
   }
 
-  patientSelect(patient: IDropDown) {
+  patientSelect(patient: IPatient) {
     this.addTokenForm.get('patientId')?.setValue(patient.id);
     this.addTokenForm.get('patientName')?.setValue(patient.name);
   }
 
   searchPatient(event: any) {
-    let text = event.query.trim().toLowerCase();
-    this.patientsToShow = this.patients.filter((x) =>
-      x.name.toLowerCase().includes(text)
-    );
+    // let text = event.query.trim().toLowerCase();
+    // this.patientsToShow = this.patients.filter((x) =>
+    //   x.name.toLowerCase().includes(text)
+    // );
+    this.getQueryPatients(event.query);
   }
 
   addToken() {
@@ -284,6 +290,48 @@ export class AddTokenModalComponent
           },
         });
     }
+  }
+
+  getQueryPatients(searchQuery: string){
+    let query: IFetchRequest = {
+      pagedListRequest:{
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest:{
+        filtersRequest: [
+          {
+            field: 'Name',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.Or,
+            value: searchQuery,
+            ignoreCase: true
+          },
+          {
+            field: 'MRNo',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.Or,
+            value: searchQuery,
+            ignoreCase: true
+          },
+          {
+            field: 'PhoneNumber',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.Or,
+            value: searchQuery,
+            ignoreCase: true
+          },
+        ]
+      }
+    }
+    this.patientService.getPatients(query).subscribe({
+      next: (x) => {
+        this.patientsToShow = x.data;
+      },
+      error: (err) => {
+
+      }
+    })
   }
 
   getTokenDetail(): ITokenDetail {
@@ -362,7 +410,7 @@ export class AddTokenModalComponent
     );
   }
 
-  tokenTypeChange(tockenType: any) {
+  tokenTypeChange(tockenType: any) {    
     this.addTokenForm.get('tokenTypes')?.setValue(tockenType);
     let tokentype = this.addTokenForm.get('tokenTypes')?.value;
     switch (tokentype) {

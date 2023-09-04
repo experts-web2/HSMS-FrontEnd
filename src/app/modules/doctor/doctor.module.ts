@@ -28,6 +28,7 @@ import { FilesPreviewComponent } from './appointment-sub-components/files-previe
 import { AddFilesDialogComponent } from './appointment-sub-components/add-files-dialog/add-files-dialog.component';
 import { CameraComponent } from '../camera/camera.component';
 import { CameraModule } from '../camera/camera.module';
+import { HealthRecordComponent } from './health-record/health-record.component';
 @NgModule({
   declarations: [
     DoctorRootComponent,
@@ -44,6 +45,7 @@ import { CameraModule } from '../camera/camera.module';
     DrPrescriptionPrintComponent,
     FilesPreviewComponent,
     AddFilesDialogComponent,
+    HealthRecordComponent,
   ],
   imports: [
     CommonModule,

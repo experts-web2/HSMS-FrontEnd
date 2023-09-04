@@ -1,0 +1,44 @@
+<div class="flex justify-between m-4 p-1">
+    <div>
+        <label for="">Patient Name</label>
+        <p-autoComplete [minLength]="3" [field]="'name'" [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="null" placeholder="">
+            <ng-template let-patient pTemplate="item">
+                <div class="flex flex-column">
+                    <span><strong>mr#: </strong>{{patient.mrNo}}  <strong>Name: </strong>{{patient.name}} </span>
+                      <small><strong>Phone#: </strong>{{patient.phoneNumber}} <strong>Age: </strong>{{patient.age}} </small> 
+                </div>
+              </ng-template>
+        </p-autoComplete>
+    </div>
+    <div>
+        <label for="">Search</label>
+        <p-autoComplete (completeMethod)="null" (onSelect)="null" placeholder=""></p-autoComplete>
+    </div>
+    <div>
+        <label for="">Select Doctor</label>
+        <p-autoComplete [minLength]="3" [field]="'name'" [suggestions]="doctorsList" (completeMethod)="doctorQuery($event)" (onSelect)="null" placeholder=""></p-autoComplete>
+    </div>
+    <div>
+        <label for="">Date Range</label>
+        <p-calendar  selectionMode="range" appendTo="body"></p-calendar>
+    </div>
+    <div>
+        <p-button class="mt-3" icon="pi pi-plus" label="Add New Health Record"></p-button>
+    </div>
+</div>
+
+<!-- <ng-container *ngIf="">
+<ng-container *ngFor=""> -->
+    <div class="flex flex-row justify-between m-3 p-3 items-center rounded-t-lg bg-slate-200">
+        <div><span class="font-bold">Mr#:</span> {{6574}} , <span class="font-bold">Patient:</span> {{'Aslam'}}</div>
+        <div><span class="font-bold">Added By:</span> {{'Furqan'}}</div>
+        <div><span class="font-bold">Created At:</span> {{currentDate | date: 'dd MMM,yyyy'}}</div>
+        <div><span class="font-bold">Added At:</span> {{currentDate | date: 'dd/MM/yyyy hh:mm a'}}</div>
+        <div class="flex gap-3">
+          <p-button [icon]="'pi pi-file-edit'"></p-button>
+          <p-button [icon]="'pi pi-print'"></p-button>
+        </div>
+      </div>
+    <!-- </ng-container>
+    
+    </ng-container> -->

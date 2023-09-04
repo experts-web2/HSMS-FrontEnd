@@ -24,6 +24,8 @@ import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
 import { AddFilesDialogComponent } from '../appointment-sub-components/add-files-dialog/add-files-dialog.component';
 import { PatientVisitService } from 'src/app/services/patient visit/patient-visit.service';
 import { HttpError } from '@microsoft/signalr';
+import { HealtRecordService } from 'src/app/services/health-record/healt-record.service';
+import { IPatientVisitRequest } from 'src/app/models/interfaces/patientVisitRequest';
 
 @Component({
   selector: 'app-appointment',
@@ -36,7 +38,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
   token!: IToken;
   patients: Array<IDropDown> = [];
   historyToken!: IToken;
-  patientsToShow: Array<IDropDown> = [];
+  patientsToShow: Array<IPatient> = [];
   patientHistoryVisits!: Array<IToken>;
   $unsubscribe: Observable<any> = of(null);
   logedInUser!: ILogedInUser;
@@ -59,7 +61,8 @@ export class AppointmentComponent implements OnInit, OnChanges {
     private readonly prescriptionService: PrescriptionService, 
     private readonly LabOrderService: LabOrderService, 
     private readonly dialogService: DialogService,
-    private readonly patientVisitService: PatientVisitService
+    private readonly patientVisitService: PatientVisitService,
+    private readonly healthRecordService: HealtRecordService
   ) {
     this.route.params.subscribe({
       next: (x) => {
@@ -81,7 +84,11 @@ export class AppointmentComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    if (this.tokenId) this.getToken();
+    if (this.tokenId){
+
+      this.getToken();
+      this.getHealthRecordByTokenId(this.tokenId);
+    }
     else {
       this.getPatientDropDown();
     }
@@ -94,6 +101,18 @@ export class AppointmentComponent implements OnInit, OnChanges {
       },
       error: (err) => {},
     });
+  }
+
+  getHealthRecordByTokenId(tokenId: string){
+    this.healthRecordService.getHealthRecordByTokenId(tokenId).subscribe({
+      next: (x) => {
+        console.log(x);
+        
+      },
+      error: (err) => {
+
+      }
+    })
   }
 
   selectPatientHistoryVisit(visitId: any) {
@@ -117,7 +136,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
   }
 
   savePatientVisitDetails(){
-    let patientVisitRequest: {prescriptionRequest: IPrescriptionRequest, vitalRequest: IVitalRequest, medicationRequest: IMedicationRequest, labOrderRequest: ILabOrderRequest} = {
+    let patientVisitRequest: IPatientVisitRequest = {
       prescriptionRequest: this.prescription,
       vitalRequest: this.vitals,
       medicationRequest: this.medication,
@@ -220,14 +239,56 @@ export class AppointmentComponent implements OnInit, OnChanges {
     });
   }
 
+  getPatientsBySearch(searchQuery: string){
+    let query: IFetchRequest = {
+      pagedListRequest: {
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest:{
+        filtersRequest:[
+          {
+            field: 'Name',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.Or,
+            value: searchQuery,
+            ignoreCase: true
+          },
+          {
+            field: 'MRNo',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.Or,
+            value: searchQuery,
+            ignoreCase: true
+          },
+          {
+            field: 'PhoneNumber',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.Or,
+            value: searchQuery,
+            ignoreCase: true
+          },
+        ]
+      }
+    }
+
+    this.patientService.getPatients(query).subscribe({
+      next: (x)=>{
+        this.patientsToShow = x.data;
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
   getGender(gender: Genders): string {
     return Genders[gender];
   }
 
   searchPatient(queryObj: any) {
-    let query = queryObj.inputValue;
-    let text = query.toLowerCase();
-    this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(text));
+    let query = queryObj.query;
+    this.getPatientsBySearch(query);
   }
 
   patientSelect(patientId: string) {

@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
+import { ICustomActions } from 'src/app/models/interfaces/customActions';
 import { IFile } from 'src/app/models/interfaces/file';
+import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { LabOrderService } from 'src/app/services';
 import { FileUploadService } from 'src/app/services/fileUpload/file-upload.service';
 
@@ -10,7 +13,37 @@ import { FileUploadService } from 'src/app/services/fileUpload/file-upload.servi
 })
 export class FilesPreviewComponent implements OnInit{
   @Input() patientId!: string;
+  columnsToShow: Array<ITableColumns> = [
+    {
+      property: 'name',
+      name: 'File Name',
+    },
+    {
+      property: 'createdAt',
+      name: 'Uploaded On'
+    },
+    {
+      property: 'createdBy',
+      name: 'Uploaded By'
+    }
+  ]
 
+  customActions: Array<ICustomActions> = [
+    {
+      name: 'Download',
+      action: this.downloadFile.bind(this),
+      style: {
+        // width: '40%'
+      }
+    },
+    {
+      name: 'Delete',
+      action: this.deleteFile.bind(this),
+      style: {
+        // width: '40%'
+      }
+    }
+  ]
   files: Array<IFile> = []
   constructor(private readonly fileUploadService: FileUploadService){}
 
@@ -30,10 +63,10 @@ export class FilesPreviewComponent implements OnInit{
 
   }
 
-  downloadFile(fileName: string){
-    console.log(fileName);
+  downloadFile(file: IFile){
+    console.log(file.name);
     
-    this.fileUploadService.downloadFile(fileName).subscribe({
+    this.fileUploadService.downloadFile(file.name).subscribe({
       next: (x) => {
 
       },
@@ -43,10 +76,11 @@ export class FilesPreviewComponent implements OnInit{
     })
   }
 
-  deleteFile(fileId: string){
-    this.fileUploadService.deleteFile(fileId).subscribe({
+  deleteFile(file: IFile){
+    this.fileUploadService.deleteFile(file.id).subscribe({
       next: (x) => {
         this.getFiels();
+        
       },
       error: (err) => {
 

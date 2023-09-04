@@ -1,8 +1,16 @@
 <div class="patient-page mb-2">
-  <div class="grid grid-cols-1 md:grid-cols-3 m-3 gap-4 w-full md:w-1/2 items-end" *ngIf="!tokenId">
+  <div class="grid grid-cols-1 md:grid-cols-3 m-3 gap-4 w-full md:w-1/2 items-end" >
     <div class=" flex flex-col justify-content-between justify-items-center position-relative">
       <label for="patient">Patient</label>
-      <p-autoComplete #autoComplete [suggestions]="( !autoComplete || autoComplete.inputValue === '' ? patients: patientsToShow)" (completeMethod)="searchPatient(autoComplete)" (onSelect)="patientSelect(autoComplete.value.id)" field="name" [showEmptyMessage]="true"></p-autoComplete>
+      <p-autoComplete #autoComplete [suggestions]="patientsToShow" (completeMethod)="searchPatient($event)" (onSelect)="patientSelect(autoComplete.value.id)" field="name" [showEmptyMessage]="true">
+        <ng-template let-patient pTemplate="item">
+          <div class="flex flex-column">
+              <span><strong>mr#: </strong>{{patient.mrNo}}  <strong>Name: </strong>{{patient.name}} </span>
+                <small><strong>Phone#: </strong>{{patient.phoneNumber}} <strong>Age: </strong>{{patient.age}} </small> 
+                <hr class="">
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
     <div class="flex flex-col">
       <label for="visit">Visit</label>

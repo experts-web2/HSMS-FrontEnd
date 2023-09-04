@@ -23,5 +23,6 @@ export enum BaseEndPoints {
     MeicineSale = 'medicinesale',
     Scheduling = 'schedule',
     FileAttachment = 'patientattachment',
-    PatientVisit = 'patientvisit'
+    PatientVisit = 'patientvisit',
+    HealthRecord = 'healthrecord'
 }

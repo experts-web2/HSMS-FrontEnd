@@ -18,8 +18,7 @@ export class FileUploadService extends HttpService {
 
   uploadFiles(files: FormData, patientId: string): Observable<any>{
     return super.post(`${this.baseEndPoint}/uploadfiles?patientId=${patientId}`, files)
-  }
-  
+  }  
 
   getFilesByPatientId(patientId: string): Observable<Array<IFile>>{
     return this.get(`${this.baseEndPoint}/getbypatientid/${patientId}`);
