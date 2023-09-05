@@ -1,8 +1,9 @@
 export interface IMedicationRequest {
-    doctorId: string
-    patientId: string
-    medicationDetails: IMedicationDetail[]
-    medicationNotes: string
+    doctorId: string;
+    patientId: string;
+    medicationDetails: IMedicationDetail[];
+    medicationNotes: string;
+    healthRecordId: string;
   }
   
   export interface IMedicationDetail {

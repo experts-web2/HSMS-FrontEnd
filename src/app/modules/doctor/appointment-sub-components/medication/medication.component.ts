@@ -20,6 +20,8 @@ import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
 import { IMedicine } from 'src/app/models/interfaces/Medicine';
 import { PotencyUnits } from 'src/app/constants/enums/potency-units';
 import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
+import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
+import { IPrescription } from 'src/app/models/interfaces/Prescription';
 
 @Component({
   selector: 'app-medication',
@@ -27,9 +29,10 @@ import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
   styleUrls: ['./medication.component.scss']
 })
 export class MedicationComponent extends SubscriptionManagmentDirective implements OnInit, OnChanges {
-  @Input() token!: IToken;
+  @Input() healthRecord!: IHealthRecord;
   @Input() historyTokenId!: string;
   @Input() medicationRequest!: IMedicationRequest;
+  @Input() healthRecordId!: string;
   @Output() emitRequest: EventEmitter<IMedicationRequest> = new EventEmitter<IMedicationRequest>()
   historyDropDown: Array<IDropDown> = [];
   medicationForm!: FormGroup;
@@ -76,7 +79,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.getMedicationByTokenId(this.historyTokenId);
+    // this.setHistoryMedication(this.historyTokenId);
   }
 
   get medicationItems(): FormArray{
@@ -86,11 +89,11 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   ngOnInit(): void {
 
     this.getMedicine();
-    this.getMedicineHistoryDropDown();
-    this.medicationForm.get('doctorId')?.setValue(this.token.doctorId);
-    this.medicationForm.get('patientId')?.setValue(this.token.patientId);
+    // this.getMedicineHistoryDropDown();
+    this.medicationForm.get('doctorId')?.setValue(this.healthRecord.doctorId);
+    this.medicationForm.get('patientId')?.setValue(this.healthRecord.patientId);
 
-    console.log(this.token);
+    console.log(this.healthRecord);
     
     this.medicationForm.valueChanges.subscribe({
       next: (x) => {
@@ -98,16 +101,17 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
       }
     })
     
-    if (this.historyTokenId) this.getMedicationByTokenId(this.historyTokenId);
+    if (this.healthRecord.medication) this.setHistoryMedication(this.healthRecord.medication);
   }
 
   currentValueSetter(value: {[name: string]: any}){
     
     this.medicationRequest = {
       medicationDetails: this.medicationItems.value,
-      doctorId: this.token.doctorId,
-      patientId: this.token.patientId,
-      medicationNotes: value['medicationNotes']
+      doctorId: this.healthRecord.doctorId,
+      patientId: this.healthRecord.patientId,
+      medicationNotes: value['medicationNotes'],
+      healthRecordId: this.healthRecordId
     }
 
     this.emitRequest.emit(this.medicationRequest);
@@ -164,32 +168,29 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   }
 
   getMedicineHistoryDropDown(){
-    this.medicationService.getMedicationHistoryDropDown(this.token.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    this.medicationService.getMedicationHistoryDropDown(this.healthRecord.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.historyDropDown = x;
       }
     })
   }
 
-  getMedicationByTokenId(tokenId: string){
-    this.medicationService.getMedicationByTokenId(tokenId).subscribe({
-      next: (x)=> {
-        console.log({medicationDetail: x, medicationItems: this.medicationItems.value});
-        console.log(Object.entries(this.medicationItems.value[0]).every(x => x[1] !== null));
+  setHistoryMedication(medication: IMedication){
+
         this.medicationRequest = {
           medicationDetails: [],
           medicationNotes: this.medicationForm.controls['medicationNotes'].value,
-          doctorId: this.token.doctorId,
-          patientId: this.token.patientId
+          doctorId: this.healthRecord.doctorId,
+          patientId: this.healthRecord.patientId,
+          healthRecordId: this.healthRecordId
         }
         this.medicationRequest.medicationDetails = this.medicationItems.value;
-        this.historyMedication = x;
+        this.historyMedication = medication;
         this.medicationForm.disable({
           onlySelf: true
         });
-        this.formSetter(x);
-      }
-    })
+        this.formSetter(medication);
+
   }
 
   getMedicationById(medicationId: string){
@@ -283,6 +284,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
         patientId: this.medicationForm.controls['patientId'].value,
         doctorId: this.medicationForm.controls['doctorId'].value,
         medicationNotes: this.medicationForm.controls['medicationNotes'].value,
+        healthRecordId: this.healthRecordId,
         medicationDetails: this.medicationItems.value.map((x: any) => {
           let medicationDetail: IMedicationDetail = {
             medicineId: x.medicineId,

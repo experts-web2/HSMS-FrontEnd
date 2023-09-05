@@ -3,9 +3,10 @@ import { HttpService } from '../http/http.service';
 import { HttpClient } from '@angular/common/http';
 import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
-import { ObserversModule } from '@angular/cdk/observers';
 import { Observable } from 'rxjs';
 import { IHealthRecordRequest } from 'src/app/models/interfaces/healthRecordRequest';
+import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
+import { IDataSourceResponse } from 'src/app/models/interfaces/DataSourceResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,11 @@ export class HealtRecordService extends HttpService {
     super(http)
   }
 
-  addHealthRecoed(healthRecordRequest: IHealthRecordRequest){
+  addHealthRecoed(healthRecordRequest: IHealthRecordRequest): Observable<IHealthRecord>{
     return super.post(`${this.baseEndPoint}`, healthRecordRequest);
   }
 
-  getAllHealthRecords(fetchRequest: IFetchRequest = {}){
+  getAllHealthRecords(fetchRequest: IFetchRequest = {}): Observable<IDataSourceResponse<IHealthRecord>>{
     return super.post(`${this.baseEndPoint}/all`, fetchRequest);
   }
 
@@ -31,11 +32,11 @@ export class HealtRecordService extends HttpService {
     return super.delete(`${this.baseEndPoint}/${healthRecordId}`);
   }
 
-  getHealthRecordById(healthRecordId: string): Observable<any>{
+  getHealthRecordById(healthRecordId: string): Observable<IHealthRecord>{
     return super.get(`${this.baseEndPoint}/${healthRecordId}`);
   }
 
-  getHealthRecordByTokenId(tokenId: string): Observable<any>{
+  getHealthRecordByTokenId(tokenId: string): Observable<IHealthRecord>{
     return this.get(`${this.baseEndPoint}/getbytokenid/${tokenId}`);
   }
 }

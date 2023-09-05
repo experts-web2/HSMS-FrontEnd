@@ -17,6 +17,7 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { IVitalRequest } from 'src/app/models/interfaces/vitalsRequest';
 import { IVital } from 'src/app/models/vitals';
+import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 
 @Component({
   selector: 'app-vitals',
@@ -27,9 +28,10 @@ export class VitalsComponent
   extends SubscriptionManagmentDirective
   implements OnInit, OnChanges {
   @Input() tokenVitals!: ITokenVitals;
-  @Input() token!: IToken;
+  @Input() healthRecord!: IHealthRecord;
   @Input() historyVital!: IVital | null;
   @Input() historyTokenId!: string;
+  @Input() healthRecordId!: string;
   vitalRequest!: IVitalRequest;
   @Output() emitRequest: EventEmitter<IVitalRequest> = new EventEmitter<IVitalRequest>();
   vitalForm!: FormGroup;
@@ -70,12 +72,11 @@ export class VitalsComponent
   ngOnChanges(changes: SimpleChanges): void {
     let tokenId = changes['historyTokenId'].currentValue;
     console.log(tokenId);
-    this.getVitalsByTokenId(this.historyTokenId);
 
   }
 
   ngOnInit(): void {
-    this.getVitalsHistoryDropDown();
+    // this.getVitalsHistoryDropDown();
     this.vitalForm.valueChanges.subscribe({
       next: (x) => {
 
@@ -86,12 +87,11 @@ export class VitalsComponent
       }
     })
 
-    if (this.token) {
-      this.tokenVitals = <ITokenVitals>this.token.tokenDetail;
-      // this.setVitalsFromInput();
+    if (this.healthRecord.vital) {
+      this.tokenVitals = <ITokenVitals>this.healthRecord.vital;
+      this.setHistoryVital(this.healthRecord.vital)
     }
 
-    if (this.historyTokenId) this.getVitalsByTokenId(this.historyTokenId);
   }
 
   currentValueSetter(value: { [key: string]: any }) {
@@ -108,8 +108,9 @@ export class VitalsComponent
       oxygenSaturation: value['oxygenSaturation'],
       bodySurfaceArea: value['bodySurfaceArea'],
       reason: value['reason'],
-      patientId: this.token.patientId,
-      doctorId: this.token.doctorId
+      patientId: this.healthRecord.patientId,
+      doctorId: this.healthRecord.doctorId,
+      healthRecordId: this.healthRecordId
     }
     this.emitRequest.emit(this.vitalRequest);
   }
@@ -150,7 +151,7 @@ export class VitalsComponent
 
   getVitalsHistoryDropDown() {
     this.vitalService
-      .getVitalsHistoryDropDown(this.token.patientId)
+      .getVitalsHistoryDropDown(this.healthRecord.patientId)
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe({
         next: (x) => {
@@ -159,17 +160,14 @@ export class VitalsComponent
       });
   }
 
-  getVitalsByTokenId(tokenId: string) {
-    this.vitalService.getVitalsByTokenId(tokenId).subscribe({
-      next: (x) => {
-        this.historyVital = x;
-        this.formSetter(x);
+  setHistoryVital(vital: IVital) {
+
+        this.historyVital = vital;
+        this.formSetter(vital);
         console.log(this.vitalRequest)
         this.vitalForm.disable({
           onlySelf: true
         });
-      }
-    })
   }
 
   getVitalsById(vitalsId: string) {

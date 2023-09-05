@@ -10,6 +10,7 @@ export interface IMedication {
     patientId: string;
     medicationNotes: string;
     medicationDetails: IMedicationDetail[];
+    healthRecordId: string;
   }
   
   export interface IMedicationDetail {

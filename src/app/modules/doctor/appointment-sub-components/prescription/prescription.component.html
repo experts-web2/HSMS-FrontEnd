@@ -1,9 +1,9 @@
 <div [formGroup]="prescriptionForm">
     <div class="flex justify-between mb-3">
-        <select class="form-select w-full md:w-1/3" name="" id="" #prescriptionHistory (change)="onSelectHistory(prescriptionHistory.value)">
+        <!-- <select class="form-select w-full md:w-1/3" name="" id="" #prescriptionHistory (change)="onSelectHistory(prescriptionHistory.value)">
             <option [value]="null" [defaultSelected]="true" disabled>Prescriptions History</option>
             <option *ngFor="let his of historyDropDown" [value]="his.id">{{his.name | date: 'EEE MMM, dd/yyyy'}}</option>
-        </select>
+        </select> -->
 
         <p-button *ngIf="historyPrescription" label="Curent Prescription" (onClick)="currentPrescription()"></p-button>
     </div> 

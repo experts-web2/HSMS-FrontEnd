@@ -13,6 +13,7 @@ const routes: Routes = [
     {path:'appointment', component: AppointmentComponent},
     {path:'scheduling', component: SchedulingComponent},
     {path:'health_records', component: HealthRecordComponent},
+    {path: 'health_record/:healthRecordId', component: AppointmentComponent}
   ]}
 ];
 
