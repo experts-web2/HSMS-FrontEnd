@@ -4,6 +4,7 @@ import { IDoctor } from "./Doctor";
 import { IMedication } from "./Medication";
 import { IPrescription } from "./Prescription";
 import { IToken } from "./Token";
+import { ILabOrder } from "./labOrder";
 import { IPatient } from "./patient-model";
 
 export interface IHealthRecord extends IBaseResponse{
@@ -16,5 +17,5 @@ export interface IHealthRecord extends IBaseResponse{
     medication?: IMedication;
     vital?: IVital;
     prescription?: IPrescription;
-    labOrder?: {}
+    labOrder?: ILabOrder
 }

@@ -1,7 +1,9 @@
 <div class="flex justify-between m-4 p-1">
     <div>
-        <label for="">Patient Name</label>
-        <p-autoComplete [minLength]="3" [field]="'name'" [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="patientSelected($event.id)" placeholder="">
+        <label for="">Patient Name </label>
+        <!-- <p-badge *ngIf="patientsAuto.value" value="X" severity="danger" pTooltip="Clear" (onClick)="patientsAuto.clear()"></p-badge> -->
+        {{patientsAuto.value}}
+        <p-autoComplete [minLength]="3" [field]="'name'" #patientsAuto [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="patientSelected($event.id)" placeholder="" (onClear)="123">
             <ng-template let-patient pTemplate="item">
                 <div class="flex flex-column">
                     <span><strong>mr#: </strong>{{patient.mrNo}}  <strong>Name: </strong>{{patient.name}} </span>
@@ -10,22 +12,22 @@
               </ng-template>
         </p-autoComplete>
     </div>
-    <div>
-        <label for="">Search</label>
+    <!-- <div>
+        <label for="">Search </label>
         <p-autoComplete (completeMethod)="null" (onSelect)="null" placeholder=""></p-autoComplete>
+    </div> -->
+    <div>
+        <label for="">Select Doctor </label>
+        <p-autoComplete [minLength]="3" [field]="'name'" #doctorsAuto [suggestions]="doctorsList" (completeMethod)="doctorQuery($event)" (onSelect)="doctorSelected($event.id)" placeholder=""></p-autoComplete>
     </div>
     <div>
-        <label for="">Select Doctor</label>
-        <p-autoComplete [minLength]="3" [field]="'name'" [suggestions]="doctorsList" (completeMethod)="doctorQuery($event)" (onSelect)="doctorSelected($event.id)" placeholder=""></p-autoComplete>
-    </div>
-    <div>
-        <label for="">Date Range</label>
+        <label for="">Date Range </label>
         <p-calendar [(ngModel)]="dateRange" selectionMode="range" appendTo="body" (onSelect)="getByDateRange($event)"></p-calendar>
     </div>
     <div>
         <p-dialog header="Header" [(visible)]="visible" [style]="{width: '50vw', height: '60%'}">
             <div>
-                <label for="">Patient</label>
+                <label for="">Patient </label>
                 <p-autoComplete [minLength]="3" [field]="'name'" [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="null" placeholder="" (onSelect)="selectedPatient($event.id)">
                     <ng-template let-patient pTemplate="item">
                         <div class="flex flex-column">
@@ -53,13 +55,17 @@
         <div><span class="font-bold">Added At:</span> {{healthRecord.patient?.createdAt | date: 'dd/MM/yyyy hh:mm a'}}</div>
         <div class="flex gap-3">
           <p-button [icon]="'pi pi-file-edit'" (onClick)="previewHealthRecord(healthRecord.id)"></p-button>
-          <p-button [icon]="'pi pi-print'"></p-button>
+          <p-button [icon]="'pi pi-print'" (onClick)="getHealthRecord(healthRecord.id)"></p-button>
         </div>
       </div>
     </ng-container>
     
     </ng-container>
 
-    <ng-container *ngIf="">
-
-    </ng-container>
+    <div class="flex justify-center gap-3">
+        <p-button *ngIf="showPrevButton" label="Previous" (onClick)="prev()"></p-button>
+        <p-button *ngIf="showNextButton" label="Next" (onClick)="next()"></p-button>
+        <div>
+            <span><strong>Page#: </strong>{{pageNo}}</span>
+        </div>
+    </div>

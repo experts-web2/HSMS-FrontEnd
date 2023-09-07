@@ -8,7 +8,12 @@
 
     </div> -->
     <hr class="w-90 mb-2"  style="border: 1px solid #979797;">
+    <ng-container *ngIf="!newData && showEdit">
 
+        <div  class="flex flex-row-reverse m-3">
+            <p-button icon="pi pi-file-edit" (onClick)="edit()"></p-button>
+        </div>
+    </ng-container>
     <div class="d-flex flex-column col-12 border border-secondary rounded p-1" [formGroup]="medicationForm">
         <div formArrayName="medicationItems">
             <div *ngFor="let form of medicationItems.controls; let i = index" class="flex">
@@ -22,10 +27,11 @@
                             {{medicine.name}}
                           </mat-option>
                         </mat-autocomplete> -->
-                        <p-autoComplete [suggestions]="medicinesToShow" #medicines
+                        <p-autoComplete [suggestions]="medicinesToShow.length ? medicinesToShow : medicines" #medicinesToSelect
                                         (completeMethod)="search($event)"
-                                        (onSelect)="onMedicineSelect(i,medicines.value)" field="name" [minLength]="3" placeholder="Select Medicine"
+                                        (onSelect)="onMedicineSelect(i,medicinesToSelect.value)" field="name" [minLength]="3" placeholder="Select Medicine"
                                         [showEmptyMessage]="true"
+                                        formControlName="medicineName"
                         >
                         <ng-template let-medicine pTemplate="selectedItem">
                             <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}} </span>
@@ -127,4 +133,11 @@
             <p-button class="mt-4 mb-2" (click)="save()" [disabled]="!medicationForm.valid">Save</p-button>
         </div>
     </div> -->
+    <ng-container *ngIf="!newData && !showEdit">
+        <div class="flex gap-3 mb-3 mt-3">
+            <p-button label="Update" (onClick)="update()"></p-button>
+            <p-button label="Cancel" (onClick)="cancelEdit()"></p-button>
+
+        </div>
+    </ng-container>
 </div>

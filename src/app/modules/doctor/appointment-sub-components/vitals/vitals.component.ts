@@ -33,6 +33,8 @@ export class VitalsComponent
   @Input() historyTokenId!: string;
   @Input() healthRecordId!: string;
   vitalRequest!: IVitalRequest;
+  showEdit: boolean = false;
+  newData: boolean = false;
   @Output() emitRequest: EventEmitter<IVitalRequest> = new EventEmitter<IVitalRequest>();
   vitalForm!: FormGroup;
   showMenu: string = '';
@@ -71,27 +73,69 @@ export class VitalsComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     let tokenId = changes['historyTokenId'].currentValue;
-    console.log(tokenId);
 
+    if(!this.healthRecord.vital){
+      this.newData = true;
+    }else{
+      this.showEdit = true;
+      this.newData = false;
+    }
   }
 
   ngOnInit(): void {
-    // this.getVitalsHistoryDropDown();
-    this.vitalForm.valueChanges.subscribe({
-      next: (x) => {
 
-        if (!this.historyVital) {
-          console.log('chnages');
-          this.currentValueSetter(x);
-        }
-      }
-    })
-
+    this.subscribeForm();
     if (this.healthRecord.vital) {
       this.tokenVitals = <ITokenVitals>this.healthRecord.vital;
       this.setHistoryVital(this.healthRecord.vital)
     }
 
+  }
+
+  subscribeForm(){
+    this.vitalForm.valueChanges.subscribe({
+      next: (x) => {
+
+      
+          console.log('changes');
+          this.currentValueSetter(x);
+        
+      }
+    })
+  }
+
+  edit(){
+    this.showEdit = false;
+    this.subscribeForm();
+    this.vitalForm.enable();
+  }
+
+  canelEdit(){
+    this.showEdit = true;
+    this.subscribeForm();
+    this.vitalForm.disable({
+      onlySelf: true
+    })
+  }
+
+  update(){
+    let vitalId: string = '';
+    if(this.healthRecord.vital) vitalId = this.healthRecord.vital.id;
+    console.log(this.vitalRequest);
+    
+    this.vitalService.updateVitals(vitalId, this.vitalRequest).subscribe({
+      next: (x) => {
+        this.alertService.success('Vitals Updated Successfully.');
+        this.showEdit = true;
+        this.healthRecord.vital = x;
+        this.vitalForm.disable({
+          onlySelf: true
+        });
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occured While Updating Vitals');
+      }
+    })
   }
 
   currentValueSetter(value: { [key: string]: any }) {

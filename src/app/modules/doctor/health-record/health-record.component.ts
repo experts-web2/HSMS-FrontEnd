@@ -11,6 +11,8 @@ import { IHealthRecordRequest } from 'src/app/models/interfaces/healthRecordRequ
 import { IPatient } from 'src/app/models/interfaces/patient-model';
 import { AlertService, DoctorService, PatientService } from 'src/app/services';
 import { HealtRecordService } from 'src/app/services/health-record/healt-record.service';
+import { DrPrescriptionPrintComponent } from '../appointment-sub-components/dr-prescription-print/dr-prescription-print.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-health-record',
@@ -32,7 +34,7 @@ export class HealthRecordComponent implements OnInit {
   currentPageSize: number = 0;
   nextPage: number = 0;
   prevPage: number = 0;
-  showNextButton: boolean = false;
+  showNextButton: boolean = true;
   showPrevButton: boolean = false;
 
   constructor(
@@ -41,7 +43,8 @@ export class HealthRecordComponent implements OnInit {
     private readonly healthRecordService: HealtRecordService,
     private readonly router: Router,
     private readonly userStateService: UserStateService,
-    private readonly alertService: AlertService
+    private readonly alertService: AlertService,
+    private readonly dialogService: DialogService
   ){
     this.userStateService.getUserState().subscribe({
       next: (x) => {
@@ -193,7 +196,14 @@ export class HealthRecordComponent implements OnInit {
 
           this.pageNo = this.filter.pagedListRequest?.pageNo;
           this.nextPage = this.filter.pagedListRequest?.pageNo + 1;
-          if(this.filter.pagedListRequest?.pageNo >= 2) this.prevPage = this.filter.pagedListRequest?.pageNo - 1
+          if(this.filter.pagedListRequest?.pageNo >= 2) this.prevPage = this.filter.pagedListRequest?.pageNo - 1;
+          if(this.pageNo > 1 ){
+            if(x.data.length < 10)  this.showNextButton = true;
+            this.showPrevButton = true;
+          }else if(this.pageNo === 1 && this.totalRecords <= 10){
+            this.showNextButton = false;
+            this.showPrevButton = false;
+          }
         }
       },
       error: (err) => {
@@ -223,6 +233,27 @@ export class HealthRecordComponent implements OnInit {
         ]
       }
     }
+  }
+
+  openPrescriptionPrintDialogue(healthRecord: IHealthRecord){
+    this.dialogService.open(DrPrescriptionPrintComponent,{
+      width: '85%',
+      height: '100%',
+      data: {
+        healthRecord: healthRecord,
+      }
+    })
+  }
+
+  getHealthRecord(id: string){
+    this.healthRecordService.getHealthRecordById(id).subscribe({
+      next: (x) => {
+        this.openPrescriptionPrintDialogue(x);
+      },
+      error: (err) => {
+
+      }
+    })
   }
 
   getDoctors(searchQuery: string){
@@ -290,17 +321,17 @@ export class HealthRecordComponent implements OnInit {
   next(){
     if(this.filter.pagedListRequest?.pageNo){
       this.filter.pagedListRequest.pageNo++;
+      this.getHealthRecords();
     }
 
-    this.getHealthRecords();
   }
 
   prev(){
     if(this.filter.pagedListRequest?.pageNo && this.filter.pagedListRequest?.pageNo >= 2){
       this.filter.pagedListRequest.pageNo--;
+      this.getHealthRecords();
     }
 
-    this.getHealthRecords();
   }
 }
 

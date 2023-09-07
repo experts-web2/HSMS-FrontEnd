@@ -57,6 +57,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
       labTestIds: [],
       healthRecordId: this.healthRecordId
     }
+    
     this.emitRequest.emit(this.labOrderRequest);
   }
 
@@ -137,6 +138,23 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   }
 
+  edit(){
+
+  }
+
+  updateLabOrder(){
+    let labOrderId: string = '';
+    if(this.healthRecord.labOrder) labOrderId = this.healthRecord.labOrder.id;
+    this.laborderService.updateLabOrder(labOrderId ,this.labOrderRequest).subscribe({
+      next: (x) => {
+        this.alertService.success('Lab Order Updated Sucessfully.')
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occoured While Updating Lab Order.')
+      }
+    })
+  }
+
   addLabOrder() {
 
     let labOrderPayload: ILabOrderRequest = {
@@ -176,3 +194,5 @@ interface ILabtestCategoriesTabs extends ILabTestCategory {
 interface ILabTestList extends ILabeTest {
   selected?: boolean;
 }
+
+type Mode = 'edit' | 'new'; 

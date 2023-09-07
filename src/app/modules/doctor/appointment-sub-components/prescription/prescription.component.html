@@ -1,13 +1,18 @@
 <div [formGroup]="prescriptionForm">
-    <div class="flex justify-between mb-3">
+    <hr class="w-90 mb-2"  style="border: 1px solid #979797;">
+    <div class="flex flex-row-reverse">
         <!-- <select class="form-select w-full md:w-1/3" name="" id="" #prescriptionHistory (change)="onSelectHistory(prescriptionHistory.value)">
             <option [value]="null" [defaultSelected]="true" disabled>Prescriptions History</option>
             <option *ngFor="let his of historyDropDown" [value]="his.id">{{his.name | date: 'EEE MMM, dd/yyyy'}}</option>
         </select> -->
+        <ng-container *ngIf="showEdit && !newData">
+            <div class="flex flex-row-reverse">
+                <p-button (onClick)="edit()" icon="pi pi-file-edit"></p-button>
 
-        <p-button *ngIf="historyPrescription" label="Curent Prescription" (onClick)="currentPrescription()"></p-button>
+            </div>
+        </ng-container>
+        <!-- <p-button *ngIf="historyPrescription" label="Curent Prescription" (onClick)="currentPrescription()"></p-button> -->
     </div> 
-    <hr class="w-90 mb-2"  style="border: 1px solid #979797;">
 
     <div class="prrescription-input">
         <label htmlFor="medicalHistory">Medical History</label>
@@ -76,4 +81,11 @@
         <p-button class="mr-4" (click)="savePrescription(true)">Save & Print</p-button>
         <p-button (click)="savePrescription()">Save</p-button>
     </div> -->
+    <ng-container *ngIf="!showEdit && !newData">
+        <div class="flex gap-3 mb-3 mt-3">
+            <p-button (onClick)="update()" label="Update"></p-button>
+            <p-button (onClick)="cancelEdit()" label="Cancel"></p-button>
+        </div>
+    </ng-container>
+    <hr>
 </div>

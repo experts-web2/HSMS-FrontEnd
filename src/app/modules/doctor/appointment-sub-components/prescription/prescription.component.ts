@@ -32,6 +32,8 @@ export class PrescriptionComponent
   @Output() emitRequest: EventEmitter<IPrescriptionRequest> = new EventEmitter<IPrescriptionRequest>();
   @Input() doctorId!: string;
   patientId!: string;
+  newData: boolean = false;
+  showEdit: boolean = false;
   prescriptionForm!: FormGroup;
   loggedInDoctor!: ILogedInUser;
   improvementOptions: any[] = [];
@@ -73,13 +75,20 @@ export class PrescriptionComponent
       this.doctorId = this.healthRecord.doctorId;
     }
 
+    if(!this.healthRecord.prescription){
+      this.newData = true;
+      this.showEdit = false;
+    }else{
+      this.newData = false;
+      this.showEdit = true;
+    }
+
     this.prescriptionForm.valueChanges.subscribe({
       next: (x) => {
 
-        if(!this.historyPrescription){
           console.log('chnaged') 
           this.currentValueSetter(x);
-      }
+      
         
       }
     });
@@ -181,6 +190,36 @@ export class PrescriptionComponent
     this.historyPrescription = null;
   }
 
+  edit(){
+    this.showEdit = false;
+    this.prescriptionForm.enable();
+  }
+
+  cancelEdit(){
+    this.showEdit = true;
+    this.prescriptionForm.disable({
+      onlySelf: true
+    });
+  }
+
+  update(){
+    let prescriptionId: string = '';
+    if(this.healthRecord.prescription) prescriptionId = this.healthRecord.prescription.id;
+    this.prescriptionService.updatePrescriptionById(prescriptionId, this.prescriptionRequest).subscribe({
+      next: (x) => {
+        this.alertService.success('Prescription Updated Successfully.');
+        this.showEdit = true;
+        this.healthRecord.prescription = x;
+        this.prescriptionForm.disable({
+          onlySelf: true
+        });
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occoured While Updating.');
+      }
+    })
+  }
+
   formSetter(prescription: IPrescriptionRequest){
     this.prescriptionForm.patchValue({
       medicalHistory: prescription.medicalHistory,
@@ -194,7 +233,5 @@ export class PrescriptionComponent
     })
   }
 }
-function OutPut(): (target: PrescriptionComponent, propertyKey: "doctorId") => void {
-  throw new Error('Function not implemented.');
-}
+
 
