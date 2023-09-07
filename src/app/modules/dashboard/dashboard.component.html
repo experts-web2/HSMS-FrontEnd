@@ -44,10 +44,20 @@
 </div>
 <div echarts [options]="chartOption" class=""></div>
 
+  <div class=" mt-4 text-center">
+    <h2>Tokens Today</h2>
+    <app-generic-table [data]="newTokens" [columns]="displayedTokensColumns" [clickableRow]="true" [rowClickAction]="roClickAction"
+      [totalRecords]="tokneTotalRecords" [showPaginator]="false"></app-generic-table>  
+  </div>
+  <div class=" mt-4 text-center">
+    <h2>Tokens Viewed Today</h2>
+    <app-generic-table [data]="viewdTokens" [columns]="displayedTokensColumns" [clickableRow]="true" [rowClickAction]="roClickAction"
+      [totalRecords]="tokneTotalRecords" [showPaginator]="false"></app-generic-table>
+  </div>
 <div class="mt-4">
-  <h3>Appointments Today</h3>
+  <h2 class="text-center">Appointments Today</h2>
   <app-generic-table [data]="appointmentsData" [columns]="displayedAppointmentColumns" 
-    [totalRecords]="appointmentsTotalRecords"></app-generic-table>
+    [totalRecords]="appointmentsTotalRecords" [showPaginator]="false"></app-generic-table>
 </div>
 
 
@@ -55,24 +65,11 @@
 
 
 
-<div class="mt-4">
-  <h3>Messages</h3>
+<div class="mt-4 text-center">
+  <h2>Messages</h2>
   <app-generic-table [data]="messagesData" [columns]="displayedMessageColumns"
-    [totalRecords]="messageTotalRecords"></app-generic-table>
+    [totalRecords]="messageTotalRecords" [showPaginator]="false"></app-generic-table>
 </div>
 
 
 
-
-<div class="mt-4">
-  <h3>Tokens Today</h3>
-  <app-generic-table [data]="newTokens" [columns]="displayedTokensColumns" [clickableRow]="true" [rowClickAction]="roClickAction"
-    [totalRecords]="tokneTotalRecords"></app-generic-table>
-
-
-</div>
-<div class="mt-4">
-  <h3>Tokens Viewed Today</h3>
-  <app-generic-table [data]="viewdTokens" [columns]="displayedTokensColumns" [clickableRow]="true" [rowClickAction]="roClickAction"
-    [totalRecords]="tokneTotalRecords"></app-generic-table>
-</div>

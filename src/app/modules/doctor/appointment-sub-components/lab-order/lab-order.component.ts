@@ -11,6 +11,7 @@ import { PatientVisitService } from 'src/app/services/patient visit/patient-visi
 import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequest';
 import { IVitalRequest } from 'src/app/models/interfaces/vitalsRequest';
 import { IMedicationRequest } from 'src/app/models/interfaces/MedicationRequest';
+import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 
 @Component({
   selector: 'app-lab-order',
@@ -19,7 +20,9 @@ import { IMedicationRequest } from 'src/app/models/interfaces/MedicationRequest'
 })
 export class LabOrderComponent extends SubscriptionManagmentDirective implements OnInit {
   @Input() token!: IToken;
-  @Output() emitRequest: EventEmitter<ILabOrderRequest> = new EventEmitter<ILabOrderRequest>()
+  @Input() healthRecordId!: string;
+  @Output() emitRequest: EventEmitter<ILabOrderRequest> = new EventEmitter<ILabOrderRequest>();
+  @Input() healthRecord!: IHealthRecord;
   tabs: any[] = [];
   roles = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.LabAdmin, name: 'Lab Admin' }];
   testPriorty = [{ id: 1, name: 'Routine' }, { id: 2, name: 'Urgent' }];
@@ -49,10 +52,12 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     this.getTestCategories();
 
     this.labOrderRequest = {
-      doctorId: this.token.doctorId,
-      patientId: this.token.patientId,
-      labTestIds: []
+      doctorId: this.healthRecord.doctorId,
+      patientId: this.healthRecord.patientId,
+      labTestIds: [],
+      healthRecordId: this.healthRecordId
     }
+    
     this.emitRequest.emit(this.labOrderRequest);
   }
 
@@ -133,12 +138,30 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   }
 
+  edit(){
+
+  }
+
+  updateLabOrder(){
+    let labOrderId: string = '';
+    if(this.healthRecord.labOrder) labOrderId = this.healthRecord.labOrder.id;
+    this.laborderService.updateLabOrder(labOrderId ,this.labOrderRequest).subscribe({
+      next: (x) => {
+        this.alertService.success('Lab Order Updated Sucessfully.')
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occoured While Updating Lab Order.')
+      }
+    })
+  }
+
   addLabOrder() {
 
     let labOrderPayload: ILabOrderRequest = {
       doctorId: this.token.doctorId,
       patientId: this.token.patientId,
-      labTestIds: this.selectedTestsIds
+      labTestIds: this.selectedTestsIds,
+      healthRecordId: this.healthRecordId
     }
 
     this.laborderService.addMedication(labOrderPayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
@@ -171,3 +194,5 @@ interface ILabtestCategoriesTabs extends ILabTestCategory {
 interface ILabTestList extends ILabeTest {
   selected?: boolean;
 }
+
+type Mode = 'edit' | 'new'; 

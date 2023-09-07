@@ -23,6 +23,10 @@ import { IMedicationRequest } from '../../../models/interfaces/MedicationRequest
 import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
 import { AddFilesDialogComponent } from '../appointment-sub-components/add-files-dialog/add-files-dialog.component';
 import { PatientVisitService } from 'src/app/services/patient visit/patient-visit.service';
+import { HttpError } from '@microsoft/signalr';
+import { HealtRecordService } from 'src/app/services/health-record/healt-record.service';
+import { IPatientVisitRequest } from 'src/app/models/interfaces/patientVisitRequest';
+import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 
 @Component({
   selector: 'app-appointment',
@@ -35,7 +39,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
   token!: IToken;
   patients: Array<IDropDown> = [];
   historyToken!: IToken;
-  patientsToShow: Array<IDropDown> = [];
+  patientsToShow: Array<IPatient> = [];
   patientHistoryVisits!: Array<IToken>;
   $unsubscribe: Observable<any> = of(null);
   logedInUser!: ILogedInUser;
@@ -45,7 +49,10 @@ export class AppointmentComponent implements OnInit, OnChanges {
   prescription!: IPrescriptionRequest;
   medication!: IMedicationRequest;
   labOrder!: ILabOrderRequest;
-
+  currentDate: Date = new Date();
+  healthRecordId!: string;
+  healthRecord!: IHealthRecord;
+  saved: boolean = true;
   constructor(
     private alertService: AlertService, 
     private readonly route: ActivatedRoute, 
@@ -57,11 +64,15 @@ export class AppointmentComponent implements OnInit, OnChanges {
     private readonly prescriptionService: PrescriptionService, 
     private readonly LabOrderService: LabOrderService, 
     private readonly dialogService: DialogService,
-    private readonly patientVisitService: PatientVisitService
+    private readonly patientVisitService: PatientVisitService,
+    private readonly healthRecordService: HealtRecordService
   ) {
     this.route.params.subscribe({
       next: (x) => {
         this.tokenId = x["tokenId"];
+        this.healthRecordId = x["healthRecordId"] ?? '';
+        console.log({healthRecordId: x["healthRecordId"], params: x});
+        
       }
     });
 
@@ -79,7 +90,15 @@ export class AppointmentComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    if (this.tokenId) this.getToken();
+    if (this.tokenId){
+
+      this.getToken();
+      this.getHealthRecordByTokenId(this.tokenId);
+    } else if(this.healthRecordId){
+      console.log(this.healthRecordId);
+      
+      this.getHealthRecordById(this.healthRecordId)
+    }
     else {
       this.getPatientDropDown();
     }
@@ -92,6 +111,35 @@ export class AppointmentComponent implements OnInit, OnChanges {
       },
       error: (err) => {},
     });
+  }
+
+  getHealthRecordByTokenId(tokenId: string){
+    this.healthRecordService.getHealthRecordByTokenId(tokenId).subscribe({
+      next: (x) => {
+        console.log(x);
+        this.healthRecord = x;
+        this.healthRecordId = x.id;
+        if(x.patient) this.patient = x.patient;
+        if(x.vital) this.tokenVitals = x.vital;
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  getHealthRecordById(healthRecordId: string){
+    this.healthRecordService.getHealthRecordById(healthRecordId).subscribe({
+      next: (x) => {
+        this.healthRecord = x;
+        this.healthRecordId = x.id;
+        if(x.patient) this.patient = x.patient;
+        if(x.vital) this.tokenVitals = x.vital;
+      },
+      error: (err) => {
+
+      }
+    })
   }
 
   selectPatientHistoryVisit(visitId: any) {
@@ -108,27 +156,19 @@ export class AppointmentComponent implements OnInit, OnChanges {
       width: '85%',
       height: '100%',
       data: {
-        historyVisits: this.token,
-        patient: this.patient
+        healthRecord: this.healthRecord,
       }
     })
   }
 
   savePatientVisitDetails(){
-    let patientVisitRequest: {prescriptionRequest: IPrescriptionRequest, vitalRequest: IVitalRequest, medicationRequest: IMedicationRequest, labOrderRequest: ILabOrderRequest} = {
-      prescriptionRequest: this.prescription,
-      vitalRequest: this.vitals,
-      medicationRequest: this.medication,
-      labOrderRequest: this.labOrder
-    }
-    this.patientVisitService.addPatientVisit(patientVisitRequest).subscribe({
-      next: (x) => {
-
-      },
-      error: (err) => {
-
-      }
-    })
+    console.log(this.labOrder);
+    
+    if(this.prescription && !this.healthRecord.prescription) this.addPrescription();
+    if(this.vitals && !this.healthRecord.vital) this.addVitals();
+    if(this.medication && !this.healthRecord.medication) this.addMedication();
+    if(this.labOrder && !this.healthRecord.labOrder) this.addLabOrder();
+  
   }
 
   getPatientHistorvisits(patientId: string) {
@@ -211,14 +251,56 @@ export class AppointmentComponent implements OnInit, OnChanges {
     });
   }
 
+  getPatientsBySearch(searchQuery: string){
+    let query: IFetchRequest = {
+      pagedListRequest: {
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest:{
+        filtersRequest:[
+          {
+            field: 'Name',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.Or,
+            value: searchQuery,
+            ignoreCase: true
+          },
+          {
+            field: 'MRNo',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.Or,
+            value: searchQuery,
+            ignoreCase: true
+          },
+          {
+            field: 'PhoneNumber',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.Or,
+            value: searchQuery,
+            ignoreCase: true
+          },
+        ]
+      }
+    }
+
+    this.patientService.getPatients(query).subscribe({
+      next: (x)=>{
+        this.patientsToShow = x.data;
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
   getGender(gender: Genders): string {
     return Genders[gender];
   }
 
   searchPatient(queryObj: any) {
-    let query = queryObj.inputValue;
-    let text = query.toLowerCase();
-    this.patientsToShow = this.patients.filter(x => x.name.toLowerCase().includes(text));
+    let query = queryObj.query;
+    this.getPatientsBySearch(query);
   }
 
   patientSelect(patientId: string) {
@@ -268,9 +350,10 @@ export class AppointmentComponent implements OnInit, OnChanges {
   addPrescription(){
     this.prescriptionService.addPrescription(this.prescription).subscribe({
       next: (x) => {
-
+        this.alertService.success('Presctiption Saved Successfully.')
       },
       error: (err) => {
+        this.alertService.error('An Error Occoured While Saving Prescription.')
 
       }
     })
@@ -279,9 +362,10 @@ export class AppointmentComponent implements OnInit, OnChanges {
   addVitals(){
     this.vitalsService.addVitals(this.vitals).subscribe({
       next: (x) => {
-
+        this.alertService.success('Vitals Saved Successfully.')
       },
       error: (err) => {
+        this.alertService.error('An Error Occoured While Saving Vitals.')
 
       }
     })
@@ -290,16 +374,25 @@ export class AppointmentComponent implements OnInit, OnChanges {
   addMedication(){
     this.medicationService.addMedication(this.medication).subscribe({
       next: (x) => {
-
+        this.alertService.success('Medication Saved Successfully.')
       },
       error: (err) => {
+        this.alertService.error('An Error Occoured While Saving Medication.')
 
       }
     })
   }
 
   addLabOrder(){
-    this.LabOrderService.addMedication
+    this.LabOrderService.addMedication(this.labOrder).subscribe({
+      next: (x) => {
+        this.alertService.success('Lab Order Saved Successfully.')
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occoured While Saving Lab Order.')
+
+      }
+    })
   }
 
   openHistoryView(){

@@ -7,6 +7,7 @@ import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequ
 import { IVitalRequest } from 'src/app/models/interfaces/vitalsRequest';
 import { Observable } from 'rxjs';
 import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
+import { IPatientVisitRequest } from 'src/app/models/interfaces/patientVisitRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class PatientVisitService extends HttpService{
     super(http)
   }
 
-  addPatientVisit(patientVisit: {medicationRequest: IMedicationRequest, prescriptionRequest: IPrescriptionRequest, vitalRequest: IVitalRequest, labOrderRequest: ILabOrderRequest}): Observable<any>{
+  addPatientVisit(patientVisit: IPatientVisitRequest): Observable<any>{
     return this.post(`${this.baseEndPoint}`, patientVisit);
   }
 

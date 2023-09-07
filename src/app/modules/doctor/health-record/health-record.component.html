@@ -1,0 +1,71 @@
+<div class="flex justify-between m-4 p-1">
+    <div>
+        <label for="">Patient Name </label>
+        <!-- <p-badge *ngIf="patientsAuto.value" value="X" severity="danger" pTooltip="Clear" (onClick)="patientsAuto.clear()"></p-badge> -->
+        {{patientsAuto.value}}
+        <p-autoComplete [minLength]="3" [field]="'name'" #patientsAuto [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="patientSelected($event.id)" placeholder="" (onClear)="123">
+            <ng-template let-patient pTemplate="item">
+                <div class="flex flex-column">
+                    <span><strong>mr#: </strong>{{patient.mrNo}}  <strong>Name: </strong>{{patient.name}} </span>
+                      <small><strong>Phone#: </strong>{{patient.phoneNumber}} <strong>Age: </strong>{{patient.age}} </small> 
+                </div>
+              </ng-template>
+        </p-autoComplete>
+    </div>
+    <!-- <div>
+        <label for="">Search </label>
+        <p-autoComplete (completeMethod)="null" (onSelect)="null" placeholder=""></p-autoComplete>
+    </div> -->
+    <div>
+        <label for="">Select Doctor </label>
+        <p-autoComplete [minLength]="3" [field]="'name'" #doctorsAuto [suggestions]="doctorsList" (completeMethod)="doctorQuery($event)" (onSelect)="doctorSelected($event.id)" placeholder=""></p-autoComplete>
+    </div>
+    <div>
+        <label for="">Date Range </label>
+        <p-calendar [(ngModel)]="dateRange" selectionMode="range" appendTo="body" (onSelect)="getByDateRange($event)"></p-calendar>
+    </div>
+    <div>
+        <p-dialog header="Header" [(visible)]="visible" [style]="{width: '50vw', height: '60%'}">
+            <div>
+                <label for="">Patient </label>
+                <p-autoComplete [minLength]="3" [field]="'name'" [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="null" placeholder="" (onSelect)="selectedPatient($event.id)">
+                    <ng-template let-patient pTemplate="item">
+                        <div class="flex flex-column">
+                            <span><strong>mr#: </strong>{{patient.mrNo}}  <strong>Name: </strong>{{patient.name}} </span>
+                              <small><strong>Phone#: </strong>{{patient.phoneNumber}} <strong>Age: </strong>{{patient.age}} </small> 
+                        </div>
+                      </ng-template>
+                </p-autoComplete>
+            </div>
+            <div class="flex gap-2 m-2">
+                <p-button label="Close" (onClick)="selectPatientForHealthRecord()"></p-button>
+                <p-button label="Create" (onClick)="addHealthRecord()"></p-button>
+            </div>
+        </p-dialog>
+        <p-button class="mt-3" icon="pi pi-plus" label="Add New Health Record" (onClick)="selectPatientForHealthRecord()"></p-button>
+    </div>
+</div>
+
+<ng-container *ngIf="healthRecords">
+<ng-container *ngFor="let healthRecord of healthRecords">
+    <div class="flex flex-row justify-between m-3 p-3 items-center rounded-t-lg bg-slate-200">
+        <div><span class="font-bold">Mr#:</span> {{healthRecord.patient?.mrNo}} , <span class="font-bold">Patient:</span> {{healthRecord.patient?.name}}</div>
+        <div><span class="font-bold">Added By:</span> {{healthRecord.patient?.createdBy}}</div>
+        <div><span class="font-bold">Created At:</span> {{healthRecord.patient?.createdAt | date: 'dd MMM,yyyy'}}</div>
+        <div><span class="font-bold">Added At:</span> {{healthRecord.patient?.createdAt | date: 'dd/MM/yyyy hh:mm a'}}</div>
+        <div class="flex gap-3">
+          <p-button [icon]="'pi pi-file-edit'" (onClick)="previewHealthRecord(healthRecord.id)"></p-button>
+          <p-button [icon]="'pi pi-print'" (onClick)="getHealthRecord(healthRecord.id)"></p-button>
+        </div>
+      </div>
+    </ng-container>
+    
+    </ng-container>
+
+    <div class="flex justify-center gap-3">
+        <p-button *ngIf="showPrevButton" label="Previous" (onClick)="prev()"></p-button>
+        <p-button *ngIf="showNextButton" label="Next" (onClick)="next()"></p-button>
+        <div>
+            <span><strong>Page#: </strong>{{pageNo}}</span>
+        </div>
+    </div>

@@ -17,6 +17,7 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IToken } from 'src/app/models/interfaces/Token';
 import { IVitalRequest } from 'src/app/models/interfaces/vitalsRequest';
 import { IVital } from 'src/app/models/vitals';
+import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 
 @Component({
   selector: 'app-vitals',
@@ -27,10 +28,13 @@ export class VitalsComponent
   extends SubscriptionManagmentDirective
   implements OnInit, OnChanges {
   @Input() tokenVitals!: ITokenVitals;
-  @Input() token!: IToken;
+  @Input() healthRecord!: IHealthRecord;
   @Input() historyVital!: IVital | null;
   @Input() historyTokenId!: string;
+  @Input() healthRecordId!: string;
   vitalRequest!: IVitalRequest;
+  showEdit: boolean = false;
+  newData: boolean = false;
   @Output() emitRequest: EventEmitter<IVitalRequest> = new EventEmitter<IVitalRequest>();
   vitalForm!: FormGroup;
   showMenu: string = '';
@@ -69,29 +73,69 @@ export class VitalsComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     let tokenId = changes['historyTokenId'].currentValue;
-    console.log(tokenId);
-    this.getVitalsByTokenId(this.historyTokenId);
 
+    if(!this.healthRecord.vital){
+      this.newData = true;
+    }else{
+      this.showEdit = true;
+      this.newData = false;
+    }
   }
 
   ngOnInit(): void {
-    this.getVitalsHistoryDropDown();
+
+    this.subscribeForm();
+    if (this.healthRecord.vital) {
+      this.tokenVitals = <ITokenVitals>this.healthRecord.vital;
+      this.setHistoryVital(this.healthRecord.vital)
+    }
+
+  }
+
+  subscribeForm(){
     this.vitalForm.valueChanges.subscribe({
       next: (x) => {
 
-        if (!this.historyVital) {
-          console.log('chnages');
+      
+          console.log('changes');
           this.currentValueSetter(x);
-        }
+        
       }
     })
+  }
 
-    if (this.token) {
-      this.tokenVitals = <ITokenVitals>this.token.tokenDetail;
-      // this.setVitalsFromInput();
-    }
+  edit(){
+    this.showEdit = false;
+    this.subscribeForm();
+    this.vitalForm.enable();
+  }
 
-    if (this.historyTokenId) this.getVitalsByTokenId(this.historyTokenId);
+  canelEdit(){
+    this.showEdit = true;
+    this.subscribeForm();
+    this.vitalForm.disable({
+      onlySelf: true
+    })
+  }
+
+  update(){
+    let vitalId: string = '';
+    if(this.healthRecord.vital) vitalId = this.healthRecord.vital.id;
+    console.log(this.vitalRequest);
+    
+    this.vitalService.updateVitals(vitalId, this.vitalRequest).subscribe({
+      next: (x) => {
+        this.alertService.success('Vitals Updated Successfully.');
+        this.showEdit = true;
+        this.healthRecord.vital = x;
+        this.vitalForm.disable({
+          onlySelf: true
+        });
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occured While Updating Vitals');
+      }
+    })
   }
 
   currentValueSetter(value: { [key: string]: any }) {
@@ -108,8 +152,9 @@ export class VitalsComponent
       oxygenSaturation: value['oxygenSaturation'],
       bodySurfaceArea: value['bodySurfaceArea'],
       reason: value['reason'],
-      patientId: this.token.patientId,
-      doctorId: this.token.doctorId
+      patientId: this.healthRecord.patientId,
+      doctorId: this.healthRecord.doctorId,
+      healthRecordId: this.healthRecordId
     }
     this.emitRequest.emit(this.vitalRequest);
   }
@@ -150,7 +195,7 @@ export class VitalsComponent
 
   getVitalsHistoryDropDown() {
     this.vitalService
-      .getVitalsHistoryDropDown(this.token.patientId)
+      .getVitalsHistoryDropDown(this.healthRecord.patientId)
       .pipe(takeUntil(this.componetDestroyed))
       .subscribe({
         next: (x) => {
@@ -159,17 +204,14 @@ export class VitalsComponent
       });
   }
 
-  getVitalsByTokenId(tokenId: string) {
-    this.vitalService.getVitalsByTokenId(tokenId).subscribe({
-      next: (x) => {
-        this.historyVital = x;
-        this.formSetter(x);
+  setHistoryVital(vital: IVital) {
+
+        this.historyVital = vital;
+        this.formSetter(vital);
         console.log(this.vitalRequest)
         this.vitalForm.disable({
           onlySelf: true
         });
-      }
-    })
   }
 
   getVitalsById(vitalsId: string) {

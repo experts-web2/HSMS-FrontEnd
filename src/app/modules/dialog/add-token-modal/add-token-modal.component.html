@@ -18,9 +18,17 @@
                         (input)="searchPatient(patientSearch.value)" formControlName="patientName">
                     <mat-icon class="cursor-pointer position-absolute search-icon">search</mat-icon> -->
                     <p-autoComplete [suggestions]="patientsToShow" #patient dropdownIcon="pi pi-search"
-                        (completeMethod)="searchPatient($event)" [dropdown]="true"
-                        (onSelect)="patientSelect(patient.value)" placeholder="Search by Name" field="name"
-                        dropdownIcon="pi pi-search" [minLength]="3" [showEmptyMessage]="true"></p-autoComplete>
+                        (completeMethod)="searchPatient($event)" 
+                        (onSelect)="patientSelect(patient.value)" placeholder="Search a Patient" field="name"
+                         [minLength]="3" [showEmptyMessage]="true">
+                    
+                         <ng-template let-patient pTemplate="item">
+                            <div class="flex flex-column">
+                                <span><strong>mr#: </strong>{{patient.mrNo}}  <strong>Name: </strong>{{patient.name}} </span>
+                                  <small><strong>Phone#: </strong>{{patient.phoneNumber}} <strong>Age: </strong>{{patient.age}} </small> 
+                            </div>
+                          </ng-template>
+                    </p-autoComplete>
                 </div>
                 <!-- <mat-autocomplete #auto="matAutocomplete" (optionSelected)="patientSelect($event.option.value)">
                     <mat-option *ngFor="let patient of patientsToShow" [value]="patient">
@@ -36,12 +44,13 @@
             <div>
                 <div *ngIf="display">
                     <p><b>Appointment fields</b></p>
-                    <div class="d-flex justify-content-between mt-4 flex-col md:flex-row">
+                    <div class="d-flex gap-5 mt-4 flex-col md:flex-row ">
                         <label for="token">Token Type</label>
-                        <p-autoComplete [suggestions]="tokenToShow" #token dropdownIcon="pi pi-search"
+                        <!-- <p-autoComplete class="w-1/3" [suggestions]="tokenToShow" #token dropdownIcon="pi pi-search"
                             (completeMethod)="searchToken($event)" [dropdown]="true"
                             (onSelect)="tokenTypeChange(token.value.value)" placeholder="Select a token type" field="label" dropdownIcon="pi pi-search"
-                            [minLength]="3" [showEmptyMessage]="true"></p-autoComplete>
+                            [minLength]="3" [showEmptyMessage]="true"></p-autoComplete> -->
+                                <p-dropdown [options]="tokentypes" #token optionLabel="label" optionValue="value" placeholder="Select a token type" (onChange)="tokenTypeChange(token.value)"></p-dropdown>
                     </div>
                     <!-- <div class="d-flex justify-content-between mt-4 " *ngIf="addTokenForm.controls['tokenTypes'].value == 1">
                 <label for="doctor">Doctor</label>
@@ -57,7 +66,7 @@
                             <input formControlName="pulseHeartRate" pInputText class="pulse" type="number" name="pulse">
                         </div>
                         <div class="d-flex flex-column">
-                            <label for="temp">Temperature</label>
+                            <label for="temp">Temperature C°</label>
                             <input formControlName="temperature" pInputText class="pulse" type="number" name="temp">
                         </div>
                         <div class="d-flex flex-column">
@@ -74,7 +83,7 @@
                             <input formControlName="bloodSugar" pInputText class="pulse" type="number" name="sugar">
                         </div>
                         <div class="d-flex flex-column">
-                            <label for="weigth">Weight</label>
+                            <label for="weigth">Weight (Kg)</label>
                             <input formControlName="weight" pInputText class="pulse" type="number" name="weight">
                         </div>
                         <div class="d-flex flex-column">
@@ -86,7 +95,7 @@
                             <input formControlName="bodyMassIndex" pInputText class="pulse" type="number" name="bmi">
                         </div>
                         <div class="d-flex flex-column">
-                            <label for="bsa">Body surface area</label>
+                            <label for="bsa">Body surface area cm<sup>2</sup></label>
                             <input formControlName="bodySurfaceArea" pInputText class="pulse" type="number"
                                 name="bodySurfaceArea">
                         </div>
@@ -146,7 +155,7 @@
 
                 </div>
                 <p-button (click)="addNewInvoiceItem()" class="d-flex mb-4 md:mb-0 align-items-center w-fit"
-                *ngIf="addTokenForm.controls['tokenTypes'].value !== 1"><span>Item +</span></p-button>
+                ><span>Item +</span></p-button>
                 <div class="grid lg:grid-cols-2 gap-5">
                     <div>
                     <div class="flex flex-col md:flex-row my-4 flex-col lg:flex-row">
@@ -162,8 +171,8 @@
                         <input formControlName="patientCheckedIn" type="checkbox" name="checked_in">
                     </div>
                     <div>
-                        <input formControlName="confirmation" class="me-4" type="checkbox" name="confirmation">
-                        <label for="confirmation">Send Confirmation</label>
+                        <label for=" confirmation">Send Confirmation</label>
+                        <input formControlName="confirmation" class="ml-9 me-4" type="checkbox" name="confirmation">
                     </div>
                 </div>
               <div>
@@ -210,6 +219,7 @@
                     [disabled]="!invoiceItems.length || invoiceItems.invalid || doctorId.invalid || patientId.invalid || tokenTypes.invalid || amountPaid.invalid || paymentType.invalid">Save
                     & Print</p-button>
             </div>
+            <!-- {{'invoiceItems.length' + invoiceItems.length}} {{ 'invoiceItems.invalid'+ invoiceItems.invalid}} {{'doctorId.invalid'+ doctorId.invalid}} {{ 'patientId.invalid'+patientId.invalid}} {{ 'tokenTypes.invalid' + tokenTypes.invalid }} {{ 'amountPaid.invalid' + amountPaid.invalid}} {{'paymentType.invalid' + paymentType.invalid}} -->
         </div>
     </form>
 </p-tabView>

@@ -1,5 +1,6 @@
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <ng-container *ngFor="let file of files">
+<div class="">
+    <app-generic-table [columns]="columnsToShow" [data]="files" [showPaginator]="false" [totalRecords]="files.length" [additionalActions]="customActions" [showActions]="true"></app-generic-table>
+    <!-- <ng-container *ngFor="let file of files">
         
         <p-card class="gap-4 uploadfile-card" header="{{file.name}}" subheader="" >
             <ng-template pTemplate="header">
@@ -15,5 +16,5 @@
                 </div>
             </ng-template>
         </p-card>
-    </ng-container>
+    </ng-container> -->
 </div>

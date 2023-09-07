@@ -36,12 +36,14 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { FileUploadModule } from 'primeng/fileupload';
 import { AccordionModule } from 'primeng/accordion';
 import { CardModule } from 'primeng/card'
+import { BadgeModule } from 'primeng/badge'
 @NgModule({
   declarations: [],
   imports: [CommonModule],
   exports: [
     MessageModule,
     MessagesModule,
+    BadgeModule,
     ToastModule,
     InputMaskModule,
     InputNumberModule,

@@ -9,6 +9,7 @@ import { IDoctor } from 'src/app/models/interfaces/Doctor';
 import { IMedication } from 'src/app/models/interfaces/Medication';
 import { IPrescription } from 'src/app/models/interfaces/Prescription';
 import { IToken } from 'src/app/models/interfaces/Token';
+import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 import { IPatient } from 'src/app/models/interfaces/patient-model';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { IVital } from 'src/app/models/vitals';
@@ -25,11 +26,11 @@ export class DrPrescriptionPrintComponent {
   medicationTableData: Array<IMedicationTableColumn> = [];
   patient!: IPatient;
   token!: IToken;
-
+  healthRecord!: IHealthRecord;
 
   constructor(
     private readonly dialogRef: DynamicDialogRef, 
-    private readonly dialogConfig: DynamicDialogConfig<{historyVisits: IToken, patient: IPatient}>,
+    private readonly dialogConfig: DynamicDialogConfig<{healthRecord: IHealthRecord}>,
     private readonly medicationService: MedicationService,
     private readonly vitalsService: VitalService,
     private readonly prescriptionService: PrescriptionService,
@@ -43,36 +44,16 @@ export class DrPrescriptionPrintComponent {
     let tokenId = '';
     let doctorId = '';
     console.log(this.dialogConfig.data);
-    if(this.dialogConfig.data?.historyVisits){
-      this.token = this.dialogConfig.data?.historyVisits;
+    if(this.dialogConfig.data?.healthRecord){
+      this.healthRecord = this.dialogConfig.data?.healthRecord;
+      if(this.healthRecord.patient ) this.patient = this.healthRecord.patient;
+      
+      this.historyData = {...this.historyData, patient: this.patient, medication: this.healthRecord.medication, prescription: this.healthRecord.prescription, vitals: this.healthRecord.vital} 
     }
-
-    if (this.dialogConfig.data?.patient){
-      this.patient = this.dialogConfig.data?.patient;
-      this.historyData = {...this.historyData, patient: this.dialogConfig.data?.patient} 
-    }
-    
-    this.historyData = {
-      token: this.dialogConfig.data?.historyVisits
-    }
-
-    if(this.historyData.token) { 
-      tokenId = this.historyData.token?.id;
-      doctorId = this.historyData.token.doctorId
-    }
-
-    this.getAllData(tokenId, doctorId);
+    this.medicationMapper();
   }
 
-  getAllData(tokenId: string, doctorId: string){
-    console.log({tokenId, doctorId});
-    
-    this.getLabOrder(tokenId);
-    this.getMedication(tokenId);
-    this.getPrescription(tokenId);
-    this.getVitals(tokenId);
-    this.getDoctor(doctorId);
-  }
+
 
   medicationMapper(){
     if (this.historyData?.medication?.medicationDetails) {

@@ -13,4 +13,5 @@
     reason?: string;
     patientId: string;
     doctorId: string;
+    healthRecordId: string;
   }

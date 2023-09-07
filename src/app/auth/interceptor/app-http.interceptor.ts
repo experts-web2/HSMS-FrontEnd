@@ -6,7 +6,7 @@ import {
   HttpRequest
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Observable, catchError, finalize, tap, throwError } from 'rxjs';
 import { EncryptionService, LoaderService } from 'src/app/services';
 import { AuthService } from 'src/app/services';
 
@@ -26,8 +26,10 @@ export class AppHttpInterceptor implements HttpInterceptor {
     }
     return next.handle(request).pipe(
       tap((response: HttpEvent<any>) => {
-        this.loaderService.hide()
         return response;
+      }),
+      finalize(() => {
+        this.loaderService.hide();        
       }),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {

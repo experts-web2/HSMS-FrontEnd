@@ -57,48 +57,22 @@
         <div class="input_Divs">
             <mat-label>Registration Date</mat-label>
             <div class="date-div">
-                <p-calendar formControlName="completionDate" [showButtonBar]="true" [showIcon]="true" formControlName="registrationDate">
+                <p-calendar formControlName="completionDate" appendTo="body" [showButtonBar]="true" [showIcon]="true" formControlName="registrationDate">
             </p-calendar>
                 <!-- <input readonly class=" inpt-Date" matInput [matDatepicker]="picker" formControlName="registrationDate">
                 <mat-datepicker-toggle class="datepickerIcon" matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker> -->
             </div>
         </div>
-        <div class="input_Divs">
-            <mat-label>Add Tags</mat-label>
-           <div>
-            <mat-chip-grid class="form-control" #chipGrid aria-label="Fruit selection">
-                <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
-                  {{tag}}
-                  <button matChipRemove>
-                    <mat-icon>cancel</mat-icon>
-                  </button>
-                </mat-chip>
-                <input class="inpt-chips" placeholder="Add tag value and press enter"
-                       [matChipInputFor]="chipGrid"
-                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                       [matChipInputAddOnBlur]="addOnBlur"
-                       (matChipInputTokenEnd)="add($event)">
-              </mat-chip-grid>
-           </div>
-        </div>
-        <div class="input_Divs">
-            <mat-label>Select Tags</mat-label>
-            <div>
-                <mat-select class="form-control " placeholder="Select Tags" >
-                    <mat-option *ngFor="let tag of tags" [value]="tag">
-                        {{tag}}
-                    </mat-option>
-                    </mat-select>
-            </div>
-        </div>
+
+
         <div class="input_Divs">
             <mat-label>Add Photo</mat-label>
             <img *ngIf="base64ImagStr" [src]="base64ImagStr" style="height: 300px; width:300px;">
             <div class="d-flex justify-content-between">
                 <input class="form-control form-control-sm inpt-Fieldcam" type="button" (click)="openCamera()" value="Take Picture" >
                 <span class="slash">/</span>
-                <input class="form-control form-control-sm inpt-FieldPic" type="file"  accept="image/png, image/jpeg, application/pdf" placeholder="Add Photo" (change)="getUploadImage($event)" formControlName="addPhoto">
+                <input class="form-control form-control-sm inpt-FieldPic" type="file"   placeholder="Add Photo" (change)="getUploadImage($event)" multiple formControlName="addPhoto">
             </div>
         </div>
         <div class="patient-btn">

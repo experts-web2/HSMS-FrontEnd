@@ -1,21 +1,88 @@
 <div #printElement>
-    <div class="flex justify-between">
+    <div class="flex justify-between m-3">
         <div class="w-20 flex items-center font-bold">
-            M.B.B.S
+            {{healthRecord.doctor?.qualification}}
         </div>
-        <div class="flex flex-column">
+        <div class="grid grid-cols-2 gap-4">
 
-            <span><strong>Date:-</strong> {{token.createdAt | date: 'EEE MM/dd/yyyy'}}</span>
-            <span><strong>Patient Name:-</strong> {{patient.name}}</span>
-            <span><strong>Patient Age:-</strong>{{patient.age}}</span>
+            <div class="flex flex-column">
+                
+                <span><strong>Date:-</strong></span> 
+                <span><strong>Patient Name:-</strong></span> 
+                <span><strong>Patient Age:-</strong></span> 
+            </div>
+            <div class="flex flex-column">
+                <span class="text-end"> {{healthRecord.createdAt | date: 'EEE MM/dd/yyyy'}}</span>
+                <span class="text-end"> {{patient.name}}</span>
+                <span class="text-end"> {{patient.age}}</span>
+            </div>
 
         </div>
     </div>
        
         <div class="flex justify-center items-center bg-black p-2">
-            <h1 class="text-3xl bold dr-name text-white">{{historyData?.doctor?.name}}</h1>
+            <h1 class="text-3xl bold dr-name text-white">{{healthRecord?.doctor?.name}}</h1>
         </div>
             <ng-container *ngIf="historyData">
+                <div >
+                    <div>
+                        <div class="text-center">
+
+                            <h2 class="text-center">Vitals</h2>
+                        </div>
+                        <div class="grid grid-cols-6 gap-1 md:grid-cols-6 gap-1">
+                            <div>
+                                <h3>Pulse heart rate</h3>
+                                <span class="text-black">{{historyData.vitals?.pulseHeartRate ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Temperature °C To °F</h3>
+                                <span class="text-black">{{historyData.vitals?.temperature ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Blood pressure</h3>
+                                <span class="text-black">{{historyData.vitals?.bloodPressure ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Diastolic Blood Pressure</h3>
+                                <span class="text-black">{{historyData.vitals?.diastolicBloodPressure ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Respiratory Rate</h3>
+                                <span class="text-black">{{historyData.vitals?.respiratoryRate ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Blood Sugar</h3>
+                                <span class="text-black">{{historyData.vitals?.bloodSugar ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Weight(in kg e.g:70)</h3>
+                                <span class="text-black">{{historyData.vitals?.weight ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Height Feet To Cm</h3>
+                                <span class="text-black">{{historyData.vitals?.height ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Body Mass Index (BMI)</h3>
+                                <span class="text-black">{{historyData.vitals?.bodyMassIndex ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Oxygen Saturation</h3>
+                                <span class="text-black">{{historyData.vitals?.oxygenSaturation ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Body Surface Area (BSA)</h3>
+                                <span class="text-black">{{historyData.vitals?.bodySurfaceArea ?? 'N/A'}}</span>                    
+                            </div>
+                            <div>
+                                <h3>Reason</h3>
+                                <span class="text-black">{{historyData.vitals?.reason ?? 'N/A'}}</span>                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 <div class="flex flex-row">
                 <section class="w-1/4">
                     <div class="">
@@ -51,64 +118,7 @@
                             </div>
                         </div>
                     </div>
-                    <div >
-                        <div>
-                            <div class="text-center">
-    
-                                <h2 class="text-center">Vitals</h2>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <h3>Pulse heart rate</h3>
-                                    <span class="text-black">{{'90'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Temperature °C To °F</h3>
-                                    <span class="text-black">{{'37.5'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Blood pressure</h3>
-                                    <span class="text-black">{{'170/90'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Diastolic Blood Pressure</h3>
-                                    <span class="text-black">{{'180/120'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Respiratory Rate</h3>
-                                    <span class="text-black">{{'90'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Blood Sugar</h3>
-                                    <span class="text-black">{{'95'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Weight(in kg e.g:70)</h3>
-                                    <span class="text-black">{{historyData.vitals?.weight ?? '90'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Height Feet To Cm</h3>
-                                    <span class="text-black">{{historyData.vitals?.height ?? '177'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Body Mass Index (BMI)</h3>
-                                    <span class="text-black">{{historyData.vitals?.bodyMassIndex ?? '26.9'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Oxygen Saturation</h3>
-                                    <span class="text-black">{{historyData.vitals?.oxygenSaturation ?? '90'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Body Surface Area (BSA)</h3>
-                                    <span class="text-black">{{historyData.vitals?.bodySurfaceArea ?? '765'}}</span>                    
-                                </div>
-                                <div>
-                                    <h3>Reason</h3>
-                                    <span class="text-black">{{historyData.vitals?.reason ?? 'High Cholestrol'}}</span>                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   
                 </section>
             
                 <section class="w-3/4 border-l p-4">

@@ -4,13 +4,16 @@ import { AppointmentComponent } from './appointment/appointment.component';
 import { DoctorRootComponent } from './doctor-root/doctor-root.component';
 import { DoctorDashboardComponent } from './doctor-dashboard/doctor-dashboard.component';
 import { SchedulingComponent } from './scheduling/scheduling.component';
+import { HealthRecordComponent } from './health-record/health-record.component';
 
 const routes: Routes = [
   {path:'', component: DoctorRootComponent, children:[
-    {path:'', redirectTo: 'health_record', pathMatch: 'full'},
+    {path:'', redirectTo: 'appointment', pathMatch: 'full'},
     {path:'appointment/:tokenId', component: AppointmentComponent},
-    {path:'health_records', component: AppointmentComponent},
-    {path:'scheduling', component: SchedulingComponent}
+    {path:'appointment', component: AppointmentComponent},
+    {path:'scheduling', component: SchedulingComponent},
+    {path:'health_records', component: HealthRecordComponent},
+    {path: 'health_record/:healthRecordId', component: AppointmentComponent}
   ]}
 ];
 

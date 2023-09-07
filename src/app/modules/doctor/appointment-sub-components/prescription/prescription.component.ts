@@ -14,6 +14,7 @@ import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequ
 import { IToken } from 'src/app/models/interfaces/Token';
 import { AlertService, PrescriptionService } from 'src/app/services';
 import { IPrescription } from 'src/app/models/interfaces/Prescription';
+import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 
 @Component({
   selector: 'app-prescription',
@@ -24,12 +25,15 @@ export class PrescriptionComponent
   extends SubscriptionManagmentDirective
   implements OnInit
 {
-  @Input() token!: IToken;
+  @Input() healthRecord!: IHealthRecord;
   @Input() historyTokenId!: string;
   @Input() prescriptionRequest!: IPrescriptionRequest;
+  @Input() healthRecordId!: string;
   @Output() emitRequest: EventEmitter<IPrescriptionRequest> = new EventEmitter<IPrescriptionRequest>();
-  doctorId!: string;
+  @Input() doctorId!: string;
   patientId!: string;
+  newData: boolean = false;
+  showEdit: boolean = false;
   prescriptionForm!: FormGroup;
   loggedInDoctor!: ILogedInUser;
   improvementOptions: any[] = [];
@@ -65,24 +69,31 @@ export class PrescriptionComponent
   }
 
   ngOnInit(): void {
-    this.getPrescriptionHistoryDropDown();
-    if (this.token) {
-      this.patientId = this.token.patientId;
-      this.doctorId = this.token.doctorId;
+    // this.getPrescriptionHistoryDropDown();
+    if (this.healthRecord) {
+      this.patientId = this.healthRecord.patientId;
+      this.doctorId = this.healthRecord.doctorId;
+    }
+
+    if(!this.healthRecord.prescription){
+      this.newData = true;
+      this.showEdit = false;
+    }else{
+      this.newData = false;
+      this.showEdit = true;
     }
 
     this.prescriptionForm.valueChanges.subscribe({
       next: (x) => {
 
-        if(!this.historyPrescription){
           console.log('chnaged') 
           this.currentValueSetter(x);
-      }
+      
         
       }
     });
 
-    if(this.historyTokenId) this.getPrescriptionByTokenId(this.historyTokenId);
+    if(this.healthRecord.prescription) this.setHistoryPrescription(this.healthRecord.prescription);
   }
 
   currentValueSetter(value: {[name: string]: any}){
@@ -96,30 +107,28 @@ export class PrescriptionComponent
       clinicNotes: value['clinicNotes'],
       advice: value['advice'],
       investigation: value['investigation'],
-      followUpDate: value['followUpDate']
+      followUpDate: value['followUpDate'],
+      healthRecordId: this.healthRecordId
     }
     
     this.emitRequest.emit(this.prescriptionRequest);
   }
 
   getPrescriptionHistoryDropDown() {
-    this.prescriptionService.getPrescriptionHistoryDropDown(this.token.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
+    this.prescriptionService.getPrescriptionHistoryDropDown(this.healthRecord.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.historyDropDown = x;
       }
     })
   }
 
-  getPrescriptionByTokenId(tokenId: string){
-    this.prescriptionService.getPrescriptionByTokenId(tokenId).subscribe({
-      next: (x)=>{
-        this.historyPrescription = x;
-        this.formSetter(x);
+  setHistoryPrescription(prescription: IPrescription){
+
+        this.historyPrescription = prescription;
+        this.formSetter(prescription);
         this.prescriptionForm.disable({
           onlySelf: true
         });
-      }
-    })
   }
 
   getPrescription(prescriptionId: string) {
@@ -181,6 +190,36 @@ export class PrescriptionComponent
     this.historyPrescription = null;
   }
 
+  edit(){
+    this.showEdit = false;
+    this.prescriptionForm.enable();
+  }
+
+  cancelEdit(){
+    this.showEdit = true;
+    this.prescriptionForm.disable({
+      onlySelf: true
+    });
+  }
+
+  update(){
+    let prescriptionId: string = '';
+    if(this.healthRecord.prescription) prescriptionId = this.healthRecord.prescription.id;
+    this.prescriptionService.updatePrescriptionById(prescriptionId, this.prescriptionRequest).subscribe({
+      next: (x) => {
+        this.alertService.success('Prescription Updated Successfully.');
+        this.showEdit = true;
+        this.healthRecord.prescription = x;
+        this.prescriptionForm.disable({
+          onlySelf: true
+        });
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occoured While Updating.');
+      }
+    })
+  }
+
   formSetter(prescription: IPrescriptionRequest){
     this.prescriptionForm.patchValue({
       medicalHistory: prescription.medicalHistory,
@@ -194,7 +233,5 @@ export class PrescriptionComponent
     })
   }
 }
-function OutPut(): (target: PrescriptionComponent, propertyKey: "doctorId") => void {
-  throw new Error('Function not implemented.');
-}
+
 

@@ -34,6 +34,10 @@ export class MedicationService extends HttpService {
     return this.get(`${this.baseEndPoint}/getbytokenid/${tokenId}`)
   }
 
+  updateMedication(id: string, medicationRequest: IMedicationRequest): Observable<IMedication>{
+    return this.put(`${this.baseEndPoint}/${id}`, medicationRequest);
+  }
+
   // deleteMedicine(deleteMedicine: any){
   //   return this.delete(`${this.baseEndPoint}/delete/${deleteMedicine.id}`)
   // }

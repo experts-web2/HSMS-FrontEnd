@@ -30,7 +30,7 @@ export class PrescriptionService extends HttpService {
   }
 
   updatePrescriptionById(id: string, prescription: IPrescriptionRequest): Observable<any>{
-    return this.post(`${BaseEndPoints.Prescription}/${id}`, prescription)
+    return this.put(`${BaseEndPoints.Prescription}/${id}`, prescription)
   }
   
   getPrescriptionHistoryDropDown(patientId: string): Observable<Array<IDropDown>>{
