@@ -48,7 +48,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     this.collectionForm = this.fb.group({
       patientId: new FormControl<string | null>(null, [Validators.required]),
       testItems: this.fb.array(
-        [this.invoiceDescriptionForm],
+        [],
         Validators.required
       ),
     });
@@ -77,6 +77,16 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
       }
     })
+  }
+
+  getLabTestItem(): FormGroup{
+    return this.fb.group({
+      testId: new FormControl<string | null>(null, [Validators.required]),
+      labTest: new FormControl<ILabTest | null>(null),
+      sample: new FormControl<number | null>(null),
+      sampleId: new FormControl<string | null>(null, [Validators.required]),
+      patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
+    });
   }
 
   selectCategory(categoryId: string) {
@@ -131,6 +141,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     this.patientTestService.getLabtestsBytodayInvoicedByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.tests = x;
+        this.loadPatientTests(x);
       }
     })
   }
@@ -155,6 +166,22 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     // if (searchTerm.length >= 3) {
     this.testCategoryToShow = this.testCategory.filter(x => x.name.toLowerCase().includes(searchTerm));
     // }
+  }
+
+  loadPatientTests(tests: Array<ILabTest>){
+    for (const test of tests) {
+      this.testMapper(test);
+    }
+  }
+
+  testMapper(test: ILabTest){
+    let testRow = this.getLabTestItem();
+    let valueSetter = (controllName: string, value: any) => testRow.controls[controllName].setValue(value);
+    valueSetter("testId", test.id);
+    valueSetter("sample", test.testSample);
+    valueSetter("patientTestInvoiceItemId", test.patientTestInvoiceItemId);
+    valueSetter("labTest", test);
+    this.testItems.push(testRow);
   }
 
   get f() {
@@ -197,23 +224,12 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   }
 
   addNewInvoiceItem() {
-    let newForm = this.fb.group({
-      sample: new FormControl<string | null>(null, [Validators.required]),
-      sampleId: new FormControl<string | null>(null, [Validators.required]),
-      patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
-      testId: new FormControl<string | null>(null, [Validators.required]),
-    });
-    this.testItems.push(newForm);
+    this.testItems.push(this.getLabTestItem());
   }
 
   removeinvoiceItem(index: number) {
     this.testItems.removeAt(index);
-    let newForm = this.fb.group({
-      testId: new FormControl<string | null>(null, [Validators.required]),
-      sample: new FormControl<string | null>(null, [Validators.required]),
-      sampleId: new FormControl<string | null>(null, [Validators.required]),
-      patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
-    });
-    if (this.testItems.length < 1) this.testItems.push(newForm);
+
+    if (this.testItems.length < 1) this.testItems.push(this.getLabTestItem());
   }
 }

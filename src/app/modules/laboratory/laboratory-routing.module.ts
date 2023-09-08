@@ -9,11 +9,11 @@ import { AddPatientTestComponent } from './add-patient-test/add-patient-test.com
 const routes: Routes = [{
   path: '',  component: LaboratoryRootComponent,
    children: [
+    { path: '', redirectTo: 'lab_report_list', pathMatch: "full" },
     { path: 'lab_report', component: LabTestReportComponent },
     { path: 'lab_report_list', component: LabReportListComponent },
     { path: 'add_patient_test', component: AddPatientTestComponent },
     { path: 'collect_lab_sample', component: CollectLabSampleComponent },
-    { path: "", redirectTo: "add_patient_test", pathMatch: "full" }
   ]
 }];
 

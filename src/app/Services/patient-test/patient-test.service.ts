@@ -4,7 +4,7 @@ import { HttpService } from 'src/app/services';
 import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { Observable } from 'rxjs';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
-import { ITestReport } from 'src/app/models/interfaces/addOrUpdate-test';
+import { ILabTest, ITestReport } from 'src/app/models/interfaces/addOrUpdate-test';
 
 
 @Injectable({
@@ -22,7 +22,7 @@ export class PatientTestService extends HttpService {
     return this.get(`${this.baseEndPoint}/testdropdownbytodayinvoiced?patientId=${patientId}`);
   }
 
-  getLabtestsBytodayInvoicedByPatientid(patientId: string){
+  getLabtestsBytodayInvoicedByPatientid(patientId: string): Observable<Array<ILabTest>>{
     return this.get(`${this.baseEndPoint}/labtestsbytodayinvoiced?patientId=${patientId}`);
   }
 

@@ -13,6 +13,7 @@ import { AlertService, DoctorService, PatientService } from 'src/app/services';
 import { HealtRecordService } from 'src/app/services/health-record/healt-record.service';
 import { DrPrescriptionPrintComponent } from '../appointment-sub-components/dr-prescription-print/dr-prescription-print.component';
 import { DialogService } from 'primeng/dynamicdialog';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-health-record',
@@ -288,16 +289,19 @@ export class HealthRecordComponent implements OnInit {
 
   getByDateRange(pageNo: number = 1){
     if(!this.dateRange.length || this.dateRange.some(x => x === null)) return;
+    console.log(this.dateRange);
+    console.log({startDate: moment(this.dateRange[0]).startOf('day').toDate(), endDate: moment(this.dateRange[1]).endOf('day').toDate()});
+    
        let filtersRequest: Array<IFiltersRequest> = [
           {
             field: 'CreatedAt',
-            value: this.dateRange[0],
+            value: moment(this.dateRange[0]).startOf('day').toDate(),
             matchMode: FiltersMatchModes.GreaterThanOrEqual,
             operator: FiltersOperators.And
           },
           {
             field: 'CreatedAt',
-            value: this.dateRange[1],
+            value: moment(this.dateRange[1]).endOf('day').toDate(),
             matchMode: FiltersMatchModes.LessThanOrEqual,
             operator: FiltersOperators.And
           }

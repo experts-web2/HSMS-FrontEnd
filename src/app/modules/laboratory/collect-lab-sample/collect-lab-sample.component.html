@@ -85,20 +85,21 @@
                   dropdownIcon="pi pi-search"
                   [minLength]="1"
                   [showEmptyMessage]="true"
+                  formControlName="labTest"
                 >
                 </p-autoComplete>
               </div>
-              <div
+              <!-- <div
                 class="text-danger"
                 *ngIf="
-                  (invoiceDescriptionForm.controls['testId'].errors &&
+                  (testItems.at(i)?.controls['testId'].errors &&
                     invoiceDescriptionForm.controls['testId'].touched) ||
                   (invoiceDescriptionForm.controls['testId'].touched &&
                     !invoiceDescriptionForm.controls['testId'].valid)
                 "
               >
                 <small>patient Id required.</small>
-              </div>
+              </div> -->
             </div>
             <div
               class="d-flex justify-content-center w-full flex-column"
@@ -124,7 +125,7 @@
                 formControlName="sampleId"
                 required
               />
-              <div
+              <!-- <div
                 class="text-danger"
                 *ngIf="
                   (invoiceDescriptionForm.controls['sampleId'].errors &&
@@ -134,7 +135,7 @@
                 "
               >
                 <small>sample Id is required.</small>
-              </div>
+              </div> -->
             </div>
 
         <div class="ml-3 mt-3 md:mt-0">
@@ -147,7 +148,7 @@
       </div>
       <p-button
         (click)="addNewInvoiceItem()"
-        class="d-flex mb-4 md:mb-0 w-fit align-items-center"
+        class="d-flex mb-4 md:mb-0 w-fit align-items-center pt-2"
       >
       <span>Item +</span>
       </p-button>

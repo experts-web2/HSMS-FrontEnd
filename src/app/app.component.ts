@@ -92,6 +92,8 @@ export class AppComponent implements OnInit {
         routerLink: '/admin',
     })
     }
+    }else{
+      this.navItemToShow = this.navitems;
     }
   }
 
