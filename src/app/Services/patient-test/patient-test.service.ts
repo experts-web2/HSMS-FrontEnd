@@ -23,8 +23,8 @@ export class PatientTestService extends HttpService {
     return this.get(`${this.baseEndPoint}/testdropdownbytodayinvoiced?patientId=${patientId}`);
   }
 
-  getLabtestsBytodayInvoicedByPatientid(patientId: string): Observable<Array<ILabTest>>{
-    return this.get(`${this.baseEndPoint}/labtestsbytodayinvoiced?patientId=${patientId}`);
+  getLabtestsBytodayInvoicedByPatientid(invoiceId: string): Observable<Array<ILabTest>>{
+    return this.get(`${this.baseEndPoint}/labtestsbytodayinvoiced?invoiceId=${invoiceId}`);
   }
 
   getLabTestInvoiceById(invoiceId: string): Observable<ILabInvoice>{

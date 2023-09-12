@@ -135,8 +135,8 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   }
 
 
-  onPatientSelection(selectPatient: string, patientId: string) {
-    this.patientTestService.getLabtestsBytodayInvoicedByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
+  onPatientSelection(invoiceId: string, patientId: string) {
+    this.patientTestService.getLabtestsBytodayInvoicedByPatientid(invoiceId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.tests = x;
         this.clearForm();
