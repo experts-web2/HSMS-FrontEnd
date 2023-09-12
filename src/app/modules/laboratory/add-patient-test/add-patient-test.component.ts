@@ -19,10 +19,15 @@ import {
   PatientTestService,
   TestService,
 } from 'src/app/services';
-import { ILabTest } from 'src/app/models/interfaces/addOrUpdate-test';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
 import { MatDialog } from '@angular/material/dialog';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
+import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
+import { IPatient } from 'src/app/models/interfaces/patient-model';
+import { ILabeTest } from 'src/app/models/interfaces/labTest';
+import { LabOrderService } from '../../../services/lab-order/lab-order.service';
 
 
 @Component({
@@ -32,15 +37,13 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class AddPatientTestComponent
   extends SubscriptionManagmentDirective
-  implements OnInit
-{
+  implements OnInit {
   addPatientTestForm!: FormGroup;
-  invoiceDescriptionForm!: FormGroup;
   currentDate: Date = new Date();
   doctors: Array<IDropDown> = [];
-  tests: Array<ILabTest> = [];
+  tests: Array<ILabeTest> = [];
   totalDiscountType: number = 1;
-  testToView: Array<ILabTest> = [];
+  testToView: Array<ILabeTest> = [];
   radiology: Array<IDropDown> = [];
   discountTypes = [
     {
@@ -53,7 +56,7 @@ export class AddPatientTestComponent
     },
   ];
   patients: Array<IDropDown> = [];
-  patientsToShow: Array<IDropDown> = [];
+  patientsToShow: Array<IPatient> = [];
 
   paymentTypes: Array<{ id: number, label: string }> = [{ id: PaymentTypes.Cash, label: 'Cash' }, { id: PaymentTypes.DebitCreditCard, label: 'Card' }, { id: PaymentTypes.OnlinePayment, label: 'Online Payment' }, { id: PaymentTypes.Cheque, label: 'Cheque' }]
   testPriority: Array<{ value: string, label: string }> = [{ value: 'Routine', label: 'Routine' }, { value: 'Urgent', label: 'Urgent' }]
@@ -72,22 +75,14 @@ export class AddPatientTestComponent
     private readonly patientTestService: PatientTestService,
     public dialogService: DialogService,
     private dialog: MatDialog,
-
+    private readonly labOrderService: LabOrderService
 
   ) {
     super();
-    this.invoiceDescriptionForm = this.fb.group({
-      paidAmount: new FormControl<number | null>(null, [Validators.required]),
-      description: new FormControl<number | null>(null, [Validators.required]),
-      discountAmount: new FormControl<number | null>(0, [Validators.required]),
-      discountType: new FormControl<number | null>(1, [Validators.required]),
-      testId: new FormControl<string | null>(null, [Validators.required]),
-      reportingHours: new FormControl<string | null>(null, [Validators.required]),
-      othersType: new FormControl<number | null>(null),
-      othersName: new FormControl<string | null>(null),
-    });
+
     this.addPatientTestForm = this.fb.group({
       doctorId: new FormControl<string | null>(null),
+      patient: new FormControl<IPatient | null>(null),
       // otherName: new FormControl<string | null>(null, [Validators.required]),
       patientId: new FormControl<string | null>(null, [Validators.required]),
       totalDiscount: new FormControl<number | null>(0, [Validators.required]),
@@ -102,7 +97,7 @@ export class AddPatientTestComponent
       ]),
       invoiceNote: new FormControl<string | null>(null, [Validators.required]),
       totalDiscountType: new FormControl<number | null>(1),
-      invoiceItems: this.fb.array([this.invoiceDescriptionForm]),
+      invoiceItems: this.fb.array([this.getInvoiceItem()]),
     });
   }
 
@@ -118,7 +113,6 @@ export class AddPatientTestComponent
 
   ngOnInit(): void {
     this.getDoctors();
-    this.getTests();
   }
 
   getDoctors() {
@@ -132,11 +126,41 @@ export class AddPatientTestComponent
     })
   }
 
-  getTests() {
-    this.testService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
+  getInvoiceItem(): FormGroup{
+    return this.fb.group({
+      paidAmount: new FormControl<number | null>(null, [Validators.required]),
+      description: new FormControl<number | null>(null, [Validators.required]),
+      discountAmount: new FormControl<number | null>(0, [Validators.required]),
+      discountType: new FormControl<number | null>(1, [Validators.required]),
+      testId: new FormControl<string | null>(null, [Validators.required]),
+      reportingHours: new FormControl<string | null>(null, [Validators.required]),
+      othersType: new FormControl<number | null>(null),
+      othersName: new FormControl<string | null>(null),
+    });
+  }
+
+  getTests(searchString: string) {
+    let query: IFetchRequest = {
+      pagedListRequest: {
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest: {
+        filtersRequest: [
+          {
+            field: 'Name',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.And,
+            value: searchString
+          }
+        ]
+      }
+    }
+    this.testService.getTests(query).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         console.log(x);
         this.labTest = x.data;
+        this.testToView = x.data
       },
       error: (err) => {
       }
@@ -146,25 +170,44 @@ export class AddPatientTestComponent
   onPatientSearch(event: { query: string }): void {
     const searchTerm = event.query.trim().toLowerCase();
     console.log(searchTerm)
-    if (searchTerm.length >= 3) {
-      this.patientService.getPatientsDropdown(searchTerm).pipe(takeUntil(this.componetDestroyed)).subscribe({
-        next: (x) => {
-          this.patientsToShow = x;
-        },
-        error: (err) => {
-        }
-      })
+
+    let query: IFetchRequest = {
+      pagedListRequest: {
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest: {
+        filtersRequest: [
+          {
+            field: 'Name',
+            matchMode: FiltersMatchModes.Contains,
+            operator: FiltersOperators.And,
+            value: event.query
+          }
+        ]
+      }
     }
+
+    this.patientService.getPatients(query).pipe(takeUntil(this.componetDestroyed)).subscribe({
+      next: (x) => {
+        this.patientsToShow = x.data;
+      },
+      error: (err) => {
+      }
+    })
+
   }
 
   search(event: any) {
     console.log(event.query);
-    const query = event.query.trim().toLowerCase();
-    this.testToView = this.tests.filter(
-      (test) =>
-        test.name.toLowerCase().includes(query) || // Filter by name
-        test.code.toString().includes(query) // Filter by code
-    );
+    console.log(this.tests);
+      this.getTests(event.query);
+    // const query = event.query.trim().toLowerCase();
+    // this.testToView = this.tests.filter(
+    //   (test) =>
+    //     test.name.toLowerCase().includes(query) || // Filter by name
+    //     test.code.toString().includes(query) // Filter by code
+    // );
   }
 
   onSearchDoctor(event: any) {
@@ -186,14 +229,14 @@ export class AddPatientTestComponent
     this.calculate();
   }
 
-  onPatientSelection(selectPatient:string) {
+  onPatientSelection(selectPatient: string) {
     console.log('selectPatient', selectPatient);
     this.addPatientTestForm.get('patientId')?.setValue(selectPatient);
 
     this.testService.getTestByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
-        console.log('this.labTest',this.labTest)
-        this.tests = x.length ? x : this.labTest ;
+        console.log('this.labTest', this.labTest)
+        this.tests = x.length ? x : this.labTest;
 
         console.log('this.descriptions', this.testToView);
         console.log({ x });
@@ -202,10 +245,24 @@ export class AddPatientTestComponent
   }
 
 
-  onDoctorSelection(doctorId:string){
+  onDoctorSelection(doctorId: string) {
     this.addPatientTestForm.get('doctorId')?.setValue(doctorId);
   }
 
+  labOrderSearch(event: {query: string}){
+    this.labOrderService.getLabOrderByTokenId('').subscribe({
+      next: (x) => {
+
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  onLaborderSelection(event: any){
+
+  }
 
   addPatientTest() {
     if (this.addPatientTestForm.controls['amountPaid']?.value >= this.addPatientTestForm.controls['grandTotal'].value) {
@@ -214,20 +271,29 @@ export class AddPatientTestComponent
         this.submitSpinner = true;
         this.patientTestService.addPatientTest(this.addPatientTestForm.value).pipe(takeUntil(this.componetDestroyed)).subscribe(
           {
-          next: (x) => {
-            console.log(x);
-            this.submitSpinner = false;
-            this.addPatientTestForm.reset();
-            this.alertService.success('Patient Test add successfully', 'Success');
-          },
-          error: (err) => {
-            this.submitSpinner = false;
-            this.alertService.error('Something went wrong while adding patient Test.', 'Error');
-          }
-        })
+            next: (x) => {
+              console.log(x);
+              this.submitSpinner = false;
+              this.addPatientTestForm.reset();
+              this.invoiceItems.clear();
+              this.invoiceItems.push(this.getInvoiceItem());
+              this.alertService.success('Patient Test add successfully', 'Success');
+            },
+            error: (err) => {
+              this.submitSpinner = false;
+              this.alertService.error('Something went wrong while adding patient Test.', 'Error');
+            }
+          })
       }
     } else {
       this.alertService.error('add payment greater than total', 'Error');
+    }
+  }
+
+  testRowsResetter(){
+    
+    for (let index in this.invoiceItems){
+      
     }
   }
 
@@ -255,36 +321,13 @@ export class AddPatientTestComponent
   }
 
   addNewInvoiceItem() {
-    let newForm = this.fb.group({
-      paidAmount: new FormControl<number | null>(null, [Validators.required]),
-      description: new FormControl<number | null>(null, [Validators.required]),
-      discountAmount: new FormControl<number | null>(0, [Validators.required]),
-      discountType: new FormControl<number | null>(1, [Validators.required]),
-      testId: new FormControl<string | null>(null, [Validators.required]),
-      reportingHours: new FormControl<string | null>(null, [
-        Validators.required,
-      ]),
-      othersType: new FormControl<number | null>(null),
-      othersName: new FormControl<string | null>(null),
-    });
-    this.invoiceItems.push(newForm);
+
+    this.invoiceItems.push(this.getInvoiceItem());
   }
 
   removeinvoiceItem(index: number) {
     this.invoiceItems.removeAt(index);
-    let newForm = this.fb.group({
-      paidAmount: new FormControl<number | null>(null, [Validators.required]),
-      description: new FormControl<number | null>(null, [Validators.required]),
-      discountAmount: new FormControl<number | null>(0, [Validators.required]),
-      discountType: new FormControl<number | null>(1, [Validators.required]),
-      testId: new FormControl<string | null>(null, [Validators.required]),
-      reportingHours: new FormControl<string | null>(null, [
-        Validators.required,
-      ]),
-      othersType: new FormControl<number | null>(null),
-      othersName: new FormControl<string | null>(null),
-    });
-    if (this.invoiceItems.length < 1) this.invoiceItems.push(newForm);
+    if (this.invoiceItems.length < 1) this.invoiceItems.push(this.getInvoiceItem());
     this.calculate();
   }
 
@@ -306,11 +349,11 @@ export class AddPatientTestComponent
       let discountType = invItem?.get('discountType')?.value;
       let discount =
         !invItem.get('discountAmount')?.value ||
-        invItem.get('discountAmount')?.value === 0
+          invItem.get('discountAmount')?.value === 0
           ? 0
           : discountType === 1
-          ? invItem.get('discountAmount')?.value
-          : (invItem.get('discountAmount')?.value / 100) * amount;
+            ? invItem.get('discountAmount')?.value
+            : (invItem.get('discountAmount')?.value / 100) * amount;
       totalGrandTotal += amount;
       totalDiscountTotal += discount;
     }
@@ -321,9 +364,9 @@ export class AddPatientTestComponent
 
     grandTotal?.setValue(
       totalGrandTotal -
-        (totalDiscountType?.value === 2
-          ? totalDiscount?.value * (totalGrandTotal / 100)
-          : totalDiscountTotal)
+      (totalDiscountType?.value === 2
+        ? totalDiscount?.value * (totalGrandTotal / 100)
+        : totalDiscountTotal)
     );
     totalDiscount?.setValue(totalDiscountTotal);
   }
@@ -334,7 +377,7 @@ export class AddPatientTestComponent
     });
 
     dialogRef.afterClosed().subscribe({
-      next: (x:any) => {
+      next: (x: any) => {
       },
     });
   }

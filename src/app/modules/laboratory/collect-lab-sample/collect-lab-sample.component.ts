@@ -13,6 +13,9 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { TestService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { ILabTest } from 'src/app/models/interfaces/addOrUpdate-test';
+import { DialogService } from 'primeng/dynamicdialog';
+import { SampleCollectionPrintComponent } from '../lab-prints/sample-collection-print/sample-collection-print.component';
+import { ITestSample } from 'src/app/models/interfaces/test-samples';
 
 @Component({
   selector: 'app-collect-lab-sample',
@@ -21,12 +24,11 @@ import { ILabTest } from 'src/app/models/interfaces/addOrUpdate-test';
 })
 export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   collectionForm!: FormGroup;
-  invoiceDescriptionForm!: FormGroup;
   tests: Array<ILabTest> = [];
   testToView: Array<ILabTest> = [];
   patients: Array<IDropDown> = [];
   testCategory: Array<IDropDown> = [];
-  patientsToShow: Array<IDropDown> = [];
+  patientsToShow: Array<any> = [];
   submitted = false;
   category='';
   testCategoryToShow: Array<IDropDown> = [];
@@ -37,14 +39,9 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     private readonly testCategoryService: TestCategoryService,
     private readonly alertService: AlertService,
     private readonly patientTestService: PatientTestService,
+    private readonly dialogService: DialogService
   ) {
     super();
-    this.invoiceDescriptionForm = this.fb.group({
-      testId: new FormControl<string | null>(null, [Validators.required]),
-      sample: new FormControl<number | null>(null),
-      sampleId: new FormControl<string | null>(null, [Validators.required]),
-      patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
-    });
     this.collectionForm = this.fb.group({
       patientId: new FormControl<string | null>(null, [Validators.required]),
       testItems: this.fb.array(
@@ -83,6 +80,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     return this.fb.group({
       testId: new FormControl<string | null>(null, [Validators.required]),
       labTest: new FormControl<ILabTest | null>(null),
+      testCategory: new FormControl<string | null>(null),
       sample: new FormControl<number | null>(null),
       sampleId: new FormControl<string | null>(null, [Validators.required]),
       patientTestInvoiceItemId: new FormControl<string | null>(null, [Validators.required]),
@@ -94,11 +92,12 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     this.category = categoryId;
   }
 
-  GenerateSampleID() {
+  generateSampleID(category?: string) {
     let payload = {
       patientId: this.collectionForm.controls['patientId'].value,
-      testCategoryId: this.category
+      testCategoryId: category ?? this.category
     }
+
     this.patientTestService.generateTestSampleID(payload).pipe(takeUntil(this.componetDestroyed)).subscribe(
       {
         next: (x) => {
@@ -136,14 +135,20 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   }
 
 
-  onPatientSelection(selectPatient: string) {
-    this.collectionForm.get('patientId')?.setValue(selectPatient);
+  onPatientSelection(selectPatient: string, patientId: string) {
     this.patientTestService.getLabtestsBytodayInvoicedByPatientid(selectPatient).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.tests = x;
+        this.clearForm();
+        this.collectionForm.get('patientId')?.setValue(patientId);
         this.loadPatientTests(x);
       }
     })
+  }
+
+  clearForm(){
+    this.collectionForm.reset();
+    this.testItems.clear();
   }
 
   onPatientSearch(event: { query: string }): void {
@@ -181,6 +186,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     valueSetter("sample", test.testSample);
     valueSetter("patientTestInvoiceItemId", test.patientTestInvoiceItemId);
     valueSetter("labTest", test);
+    valueSetter("testCategory", test.testCategoryId);
     this.testItems.push(testRow);
   }
 
@@ -225,6 +231,34 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
   addNewInvoiceItem() {
     this.testItems.push(this.getLabTestItem());
+  }
+
+  GenerateSampleIDForField(index: number){
+    let category = this.testItems.at(index).get('testCategory')?.value ?? '';
+    let payload = {
+      patientId: this.collectionForm.controls['patientId'].value,
+      testCategoryId: category
+    }
+
+    this.patientTestService.generateTestSampleID(payload).pipe(takeUntil(this.componetDestroyed)).subscribe(
+      {
+        next: (x) => {
+          this.testItems.at(index).get('sampleId')?.setValue(x.sampleId)
+          this.alertService.success('Sample Id Generate successfully', 'Success');
+        },
+        error: (err) => {
+          this.alertService.error('Something went wrong while generating sample id.', 'Error');
+        }
+      }
+    )
+  }
+
+  saveAndPrint(invoiceId: string, testSamples: Array<ITestSample>){
+    this.dialogService.open(SampleCollectionPrintComponent,{
+      width: '70%',
+      height: '90%',
+      data: {invoiceId: invoiceId, samples: testSamples}
+    })
   }
 
   removeinvoiceItem(index: number) {

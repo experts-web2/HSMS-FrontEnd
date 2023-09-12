@@ -5,6 +5,7 @@ import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { Observable } from 'rxjs';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { ILabTest, ITestReport } from 'src/app/models/interfaces/addOrUpdate-test';
+import { ILabInvoice } from 'src/app/models/interfaces/lab-Invoice';
 
 
 @Injectable({
@@ -24,6 +25,10 @@ export class PatientTestService extends HttpService {
 
   getLabtestsBytodayInvoicedByPatientid(patientId: string): Observable<Array<ILabTest>>{
     return this.get(`${this.baseEndPoint}/labtestsbytodayinvoiced?patientId=${patientId}`);
+  }
+
+  getLabTestInvoiceById(invoiceId: string): Observable<ILabInvoice>{
+    return this.get(`${'patienttestinvoice'}/${invoiceId}`);
   }
 
   getpendingsamplecollections(fetchRequest: IFetchRequest = {}){
@@ -55,7 +60,7 @@ export class PatientTestService extends HttpService {
   }
 
   patientTestInvoice(patientSerch?:string): Observable<any>{
-    return this.get(`${BaseEndPoints.Patienttestinvoice}/patientdropdownbytodayinvoiced?search=${patientSerch}`);
+    return this.get(`${BaseEndPoints.Patienttestinvoice}/patientinfobyfilter?search=${patientSerch}`);
   }
 
   addPatientTest(test:any){

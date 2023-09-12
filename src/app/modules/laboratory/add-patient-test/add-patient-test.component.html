@@ -16,7 +16,13 @@
       <div class="d-flex w-1/3 justify-content-center flex">
         <p-autoComplete [suggestions]="patientsToShow" #patient [dropdown]="true" field="name"
           (completeMethod)="onPatientSearch($event)" (onSelect)="onPatientSelection(patient.value.id)"
-          placeholder="Search Patient" dropdownIcon="pi pi-search" [showEmptyMessage]="true">
+          placeholder="Search Patient" dropdownIcon="pi pi-search" [showEmptyMessage]="true" formControlName="patient" [minLength]="3">
+          <ng-template let-patient pTemplate="item">
+            <div class="flex flex-column">
+                <span><strong>mr#: </strong>{{patient.mrNo}}  <strong>Name: </strong>{{patient.name}} </span>
+                  <small><strong>Phone#: </strong>{{patient.phoneNumber}} <strong>Age: </strong>{{patient.age}} </small> 
+            </div>
+          </ng-template>
         </p-autoComplete>
         <p-button class="d-flex keep-all ms-4 text-wrap align-items-center" (click)="addPatient()">
           <i class="fa-solid fa-plus me-2"></i><span class="whitespace-nowrap">Add Patient</span>
@@ -29,7 +35,7 @@
           <div [formGroupName]="i" class="flex flex-col md:flex-row">
             <div class="grid md:grid-cols-6 gap-x-5 gap-y-5 justify-between items-end">
               <div class="d-flex justify-content-center flex-column w-full md:pr-2">
-                <p-autoComplete [suggestions]="testToView" #test [dropdown]="true" field="name"
+                <p-autoComplete [suggestions]="testToView" #test [dropdown]="true" field="name" [minLength]="3"
                   (completeMethod)="search($event)" (onSelect)="onTestSelect(i, test.value)"
                   placeholder="Test Name/Code" dropdownIcon="pi pi-search" [minLength]="1" [showEmptyMessage]="true">
                 </p-autoComplete>

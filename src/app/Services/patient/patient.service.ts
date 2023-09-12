@@ -8,6 +8,7 @@ import { IAddOrUpdatePatient } from 'src/app/models/interfaces/addOrUodate-Patie
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { IPatient } from 'src/app/models/interfaces/patient-model';
+import { IDataSourceResponse } from 'src/app/models/interfaces/DataSourceResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class PatientService extends HttpService{
    return this.post(`${this.baseEndPoint}`, data);
   }
 
-  getPatients(fetchRequest: IFetchRequest = {}): Observable<any>{
+  getPatients(fetchRequest: IFetchRequest = {}): Observable<IDataSourceResponse<IPatient>>{
     return this.post(`${this.baseEndPoint}/all`, fetchRequest);
   }
 
