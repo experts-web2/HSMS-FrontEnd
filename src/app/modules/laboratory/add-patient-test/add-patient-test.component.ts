@@ -28,6 +28,8 @@ import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
 import { IPatient } from 'src/app/models/interfaces/patient-model';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { LabOrderService } from '../../../services/lab-order/lab-order.service';
+import { LabInvoicePrintComponent } from '../lab-prints/lab-invoice-print/lab-invoice-print.component';
+import { ILabInvoice } from 'src/app/models/interfaces/lab-Invoice';
 
 
 @Component({
@@ -264,7 +266,7 @@ export class AddPatientTestComponent
 
   }
 
-  addPatientTest() {
+  addPatientTest( print: boolean = false ) {
     if (this.addPatientTestForm.controls['amountPaid']?.value >= this.addPatientTestForm.controls['grandTotal'].value) {
       if (this.addPatientTestForm.controls['amountPaid']?.value) {
         console.log('this.addPatientTestForm.value', this.addPatientTestForm.value);
@@ -277,6 +279,7 @@ export class AddPatientTestComponent
               this.addPatientTestForm.reset();
               this.invoiceItems.clear();
               this.invoiceItems.push(this.getInvoiceItem());
+              this.print(x.id)
               this.alertService.success('Patient Test add successfully', 'Success');
             },
             error: (err) => {
@@ -331,6 +334,16 @@ export class AddPatientTestComponent
     this.calculate();
   }
 
+  print(invoiceId: string){
+    
+    this.dialogService.open(LabInvoicePrintComponent, {
+      width: '80%',
+      height: '90%',
+      data: {
+        invoiceId: invoiceId
+      }
+    })
+  }
 
   calculate(totalInput?: boolean) {
     let totalDiscountType = this.addPatientTestForm.get('totalDiscountType');

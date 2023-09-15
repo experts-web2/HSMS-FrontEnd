@@ -15,7 +15,7 @@ import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscri
 import { ILabTest } from 'src/app/models/interfaces/addOrUpdate-test';
 import { DialogService } from 'primeng/dynamicdialog';
 import { SampleCollectionPrintComponent } from '../lab-prints/sample-collection-print/sample-collection-print.component';
-import { ITestSample } from 'src/app/models/interfaces/test-samples';
+import { IPatientSample } from 'src/app/models/interfaces/testSample';
 
 @Component({
   selector: 'app-collect-lab-sample',
@@ -33,6 +33,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
   category='';
   testCategoryToShow: Array<IDropDown> = [];
   generateId: string='';
+  invoiceId!: string;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -136,6 +137,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
 
 
   onPatientSelection(invoiceId: string, patientId: string) {
+    this.invoiceId = invoiceId;
     this.patientTestService.getLabtestsBytodayInvoicedByPatientid(invoiceId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.tests = x;
@@ -194,7 +196,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     return this.collectionForm.controls;
   }
 
-  addTestSample() {
+  addTestSample(print: boolean = false) {
     this.submitted = true;
     if (this.collectionForm.invalid) {
       return;
@@ -205,6 +207,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
           this.alertService.success('Test Sample added successfully', 'Success');
           this.collectionForm.reset();
           console.log(x);
+          this.saveAndPrint(this.invoiceId, x);
 
         },
         error: (err) => {
@@ -253,7 +256,7 @@ export class CollectLabSampleComponent extends SubscriptionManagmentDirective {
     )
   }
 
-  saveAndPrint(invoiceId: string, testSamples: Array<ITestSample>){
+  saveAndPrint(invoiceId: string, testSamples: Array<IPatientSample>){
     this.dialogService.open(SampleCollectionPrintComponent,{
       width: '70%',
       height: '90%',

@@ -272,3 +272,9 @@ p-autoComplete {
     word-break: break-all;
   }
 }
+
+@media print {
+  button {
+    display: none;
+  }
+}

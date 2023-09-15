@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { ILabTest, ITestReport } from 'src/app/models/interfaces/addOrUpdate-test';
 import { ILabInvoice } from 'src/app/models/interfaces/lab-Invoice';
+import { IPatientSampleRequest } from 'src/app/models/interfaces/test-sample-request';
+import { IPatientSample } from 'src/app/models/interfaces/testSample';
 
 
 @Injectable({
@@ -51,8 +53,8 @@ export class PatientTestService extends HttpService {
     return this.get(`${BaseEndPoints.PatientSample}/generate/sampleid?patientId=${sampleIdPayload.patientId}&testTypeId=${sampleIdPayload.testCategoryId}`);
   }
 
-  addPatientTestSamples(fetchRequest: IFetchRequest = {}){
-    return this.post(`${BaseEndPoints.PatientSample}`, fetchRequest);
+  addPatientTestSamples(sampleRequest: IPatientSampleRequest): Observable<Array<IPatientSample>>{
+    return this.post(`${BaseEndPoints.PatientSample}`, sampleRequest);
   }
 
   addPatientTestReport(fetchRequest:ITestReport){
@@ -63,7 +65,7 @@ export class PatientTestService extends HttpService {
     return this.get(`${BaseEndPoints.Patienttestinvoice}/patientinfobyfilter?search=${patientSerch}`);
   }
 
-  addPatientTest(test:any){
+  addPatientTest(test:any): Observable<ILabInvoice>{
     return this.post(`${BaseEndPoints.Patienttestinvoice}`, test);
   }
 }

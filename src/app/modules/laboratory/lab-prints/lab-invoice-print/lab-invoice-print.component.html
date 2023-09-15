@@ -1,37 +1,55 @@
-<p>lab-invoice-print works!</p>
-<div class="flex justify between">
-    <div>
-        <span><strong>Invoice Date: </strong> {{invoice.createdAt | date: 'EEE MMM, dd/yyyy'}}</span>
-        <span><strong>Inv#: </strong> {{invoice.invoiceNumber}}</span>
-    </div>
-    <div>
-        <h2>Sample Collection Slip</h2>
-    </div>
-    <div>
-        <span><strong>Patient Name: </strong>{{invoice.patient.name}}</span>
-        <span><strong>Gender: </strong> {{invoice.patient.gender}}</span>
-        <span><strong>Age: </strong> {{invoice.patient.age}}</span>
-    </div>
-</div>
-<table>
-    <thead>
-        <tr>
-            <th>Test Name</th>
-            <th>Test Category</th>
-            <th>Sample</th>
-            <th>Sample Id</th>
-        </tr>
-    </thead>
-    <tbody>
-        <ng-container *ngFor="let invItem of invoice.invoiceItems">
-            <tr>
-                <td>{{invItem.labTest.name}}</td>
-                <td>{{invItem.labTest.categoryName}}</td>
-                <td>{{invItem.labTest.testSample}}</td>
-                <td>{{'sampleId'}}</td>
-            </tr>
-        </ng-container>
-    </tbody>
-</table>
+<!-- <p>sample-collection-print works!</p> -->
+<div class="h-full relative">
+    <ng-container *ngIf="invoice">
+        <div class="flex justify-between pb-3">
+            <div class="flex flex-column">
+                <span><strong>Invoice Date: </strong> {{invoice.createdAt | date: 'EEE MMM, dd/yyyy'}}</span>
+                <span><strong>Inv#: </strong> {{invoice.invoiceNumber}}</span>
+            </div>
+            <div>
+                <h2>Laboratory Invoice</h2>
+            </div>
+            <div class="flex flex-column">
+                <span><strong>Patient Name: </strong>{{invoice.patient.name}}</span>
+                <span><strong>Gender: </strong> {{invoice.patient.gender}}</span>
+                <span><strong>Age: </strong> {{invoice.patient.age}}</span>
+            </div>
+        </div>
+        <hr class="w-full pb-2">
+        <div class="flex justify-center">
+    
+            <app-generic-table [columns]="columns" [data]="testsToShow" [totalRecords]="invoice.invoiceItems.length" [showPaginator]="false"></app-generic-table>
+        </div>
+        <div class="flex flex-row-reverse mt-3">
+            <div class="w=1/2">
 
-<div></div>
+                <div class="flex justify-apart">
+                    <span>Totals</span>
+                    <span></span>
+                </div>
+                <hr>
+                <div class="flex justify-apart">
+                    <span>Gross Total:</span>
+                    <span>{{invoice.grandTotal + invoice.totalDiscount}}</span>
+                </div>
+                <div class="flex justify-apart">
+                    <span>Total Discount:</span>
+                    <span>{{invoice.totalDiscount}}</span>
+                </div>
+                <div class="flex justify-apart">
+                    <span>Net Total:</span>
+                    <span>{{invoice.grandTotal - invoice.totalDiscount}}</span>
+                </div>
+                <div class="flex justify-apart">
+                    <span>Amount Paid:</span>
+                    <span>{{invoice.amountPaid}}</span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<div class="gap-2 flex " p-dialog-footer>
+    <p-button (onClick)="print()" [label]="'Print'"></p-button>
+    <p-button (onClick)="close()" [label]="'Close'"></p-button>
+</div>
