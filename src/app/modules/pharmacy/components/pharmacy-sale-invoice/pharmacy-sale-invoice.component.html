@@ -1,21 +1,20 @@
-<div class="generictable-customstyle">
+<div class="generictable-customstyle" id="printableSection">
     <h1>Medicine Sale Invoice</h1>
     <div class="flex justify-between">
-        <div>Customer Name</div>
+        <div>Customer Name: {{medicineSaleinvoice?.customerName ?? ''}}</div>
         <div> {{billDate | date: 'EEE MMM, dd/yyyy'}}</div>
     </div>
 
-    <app-generic-table [columns]="tableColumns" [data]="medicines" [showActions]="false" [showPaginator]="false"></app-generic-table>
+    <app-generic-table [columns]="tableColumns" [data]="medicines" [showActions]="false" [showPaginator]="false" [totalRecords]="medicines.length"></app-generic-table>
     <div class="my-4 md:w-1/2 ml-auto" >
-        <ng-container *ngIf="medicineSaleinvoice && medicineSaleinvoice.totalAmount && medicineSaleinvoice.discountAmount">
+        <ng-container>
             <div class="flex items-center justify-between py-2"><span  class="font-bold">Items#:</span> <span  class="font-bold">{{medicines.length}}</span></div>
-            <div class="flex items-center justify-between py-2"><span  class="font-bold">Total Discount:</span> <span  class="font-bold">{{medicineSaleinvoice.discountAmount}}</span>  </div>
-            <div class="flex items-center justify-between py-2"><span  class="font-bold">Gross Total:</span> <span  class="font-bold">{{medicineSaleinvoice.totalAmount}}</span></div>
-            <div class="flex items-center justify-between py-2 total-wrapper"><span  class="font-bold">Net Total:</span> <span  class="font-bold">{{medicineSaleinvoice.totalAmount - medicineSaleinvoice.discountAmount}}</span></div>
+            <div class="flex items-center justify-between py-2"><span  class="font-bold">Total Discount:</span> <span  class="font-bold">{{medicineSaleinvoice?.discountAmount ?? ''}}</span>  </div>
+            <div class="flex items-center justify-between py-2"><span  class="font-bold">Gross Total:</span> <span  class="font-bold">{{medicineSaleinvoice?.totalAmount ?? ''}}</span></div>
+            <div class="flex items-center justify-between py-2 total-wrapper"><span  class="font-bold">Net Total:</span> <span  class="font-bold">{{medicineSaleinvoice ? (medicineSaleinvoice?.totalAmount ?? 0) - (medicineSaleinvoice?.discountAmount ?? 0) : ''}}</span></div>
         </ng-container>
     </div>
     <div class="flex items-center justify-between py-2 md:w-1/2 ml-auto">
-        <p-button>Cancel</p-button>
-        <p-button>Print</p-button>
+        <p-button (onClick)="print()">Print</p-button>
     </div>
 </div>

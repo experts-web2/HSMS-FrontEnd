@@ -44,6 +44,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   medicationItem!: FormGroup;
   improvementOptions: any[] = [];
   suggestions: any[]= [];
+  medicineNameBinding: 'name' | 'medicineName' = 'name';
   medicationRoutes = MedicationRoutes;
   medicationFrequencies = MedicationFrequencies;
   medicationDosages = MedicationDosages;
@@ -60,6 +61,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
     });
 
     this.medicationItem = this.fb.group({
+      medicine: new FormControl<IMedicine | null>(null),
       medicineId: new FormControl<string | null>(null, [Validators.required]),
       medicineName: new FormControl<string | null>(null),
       dosage: new FormControl<number | null>(null, [Validators.required]),
@@ -69,7 +71,6 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
       instruction: new FormControl<number | null>(null, [Validators.required]),
       durationValue: new FormControl<number | null>(null, [Validators.required]),
       dosageValue: new FormControl<number | null>(null, [Validators.required]),
-      medicine: new FormControl<IMedicine | null>(null)
     });
 
     this.medicationForm = this.fb.group({
@@ -307,6 +308,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
   addMedicationItem(){
     let medicationForm = this.fb.group({
+      medicine: new FormControl<IMedicine | null>(null),
       medicineId: new FormControl<string | null>(null, [Validators.required]),
       medicineName: new FormControl<string | null>(null),
       dosage: new FormControl<number | null>(null, [Validators.required]),
@@ -402,7 +404,8 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
           duration: x.duration,
           instruction: x.insturction,
           durationValue:x.durationValue,
-          dosageValue: x.dosageValue
+          dosageValue: x.dosageValue,
+          medicine: x.medicineResponse
         })
 
       if(medication.medicationDetails.length > this.medicationItems.length) this.addMedicationItem();

@@ -1,3 +1,5 @@
+import { IMedicine } from "./Medicine";
+
 export interface IMedicationRequest {
     doctorId: string;
     patientId: string;
@@ -15,4 +17,5 @@ export interface IMedicationRequest {
     route: number
     frequency: number
     insturction: number
+    medicineResponse?: IMedicine
   }

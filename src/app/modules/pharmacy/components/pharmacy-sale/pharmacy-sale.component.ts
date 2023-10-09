@@ -14,6 +14,7 @@ import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
 import { PotencyUnits } from 'src/app/constants/enums/potency-units';
 import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
 import { StockService } from 'src/app/services/stock/stock.service';
+import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
 
 @Component({
   selector: 'app-pharmacy-sale',
@@ -22,6 +23,7 @@ import { StockService } from 'src/app/services/stock/stock.service';
 })
 export class PharmacySaleComponent extends SubscriptionManagmentDirective implements OnInit {
 
+  currentDate: Date = new Date();
   saleMedicineForm!: FormGroup;
   vendorDropDowns: Array<IDropDown> = [];
   medicinesList: Array<IMedicine> = [];
@@ -52,7 +54,7 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
       discountAmount: new FormControl<number | null>(0 ,[Validators.required]),
       totalAmount: new FormControl<number>(0, [Validators.required]),
       netTotalAmount: new FormControl<number>(0, [Validators.required]), 
-      discountInp: new FormControl<number | null>(null, [Validators.required]) 
+      discountInp: new FormControl<number | null>(0, [Validators.required]) 
     })
   }
 
@@ -143,13 +145,20 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
     })
   }
 
-  saveMedicine() {
+  saveMedicine(print: boolean = false) {
     console.log(JSON.stringify(this.saleMedicineForm.value));
     let saleInvoicePayload: IMedicineSaleRequest = this.saleMedicineForm.value;
     saleInvoicePayload.medicineSaleItems = this.medicines.value;
     this.medicineSaleService.addMedicineSaleInvoice(saleInvoicePayload).subscribe({
       next: (x) => {
-        this.openDialog({invoice: x, medicines: this.medicinesList})
+        if(print) this.openDialog({invoice: x, medicines: this.medicinesList});
+        this.saleMedicineForm.reset();
+
+        for (let i = 0; i < this.medicines.length; i++) {
+          this.medicines.removeAt(i);          
+        }
+
+        this.addMedicine()
       },
       error: (err: Error) => {
 
@@ -172,7 +181,8 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
             field: 'MedicineId',
             value: medicine.id,
             matchMode: FiltersMatchModes.Equal
-          }
+          },
+          
         ]
       }
     };
@@ -202,7 +212,15 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
             field: 'Name',
             matchMode: FiltersMatchModes.Contains,
             value: query,
-            ignoreCase: true
+            ignoreCase: true,
+            operator: FiltersOperators.Or
+          },
+          {
+            field: 'Salt',
+            matchMode: FiltersMatchModes.Contains,
+            value: query,
+            ignoreCase: true,
+            operator: FiltersOperators.Or
           }
         ]
       }

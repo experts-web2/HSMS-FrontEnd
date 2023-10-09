@@ -35,6 +35,8 @@ import { VendorListComponent } from './vendor/vendor-list/vendor-list.component'
 import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
 import { BrandFormComponent } from './medicine-brand/brand-form/brand-form.component';
 import { BrandListComponent } from './medicine-brand/brand-list/brand-list.component';
+import { MedicineSaltsListComponent } from './medicine-salts/medicine-salts-list/medicine-salts-list.component';
+import { MedicineSaltsFormComponent } from './medicine-salts/medicine-salts-form/medicine-salts-form.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { BrandListComponent } from './medicine-brand/brand-list/brand-list.compo
     VendorListComponent,
     AddVendorComponent,
     BrandFormComponent,
-    BrandListComponent
+    BrandListComponent,
+    MedicineSaltsListComponent,
+    MedicineSaltsFormComponent,
   ],
   imports: [
     CommonModule,

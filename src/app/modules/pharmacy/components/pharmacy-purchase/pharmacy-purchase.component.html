@@ -5,12 +5,20 @@
     <div class="mt-5">
         <div class="p-5">
             <form [formGroup]="purchaseMedicineForm">
-                <div class="mb-5 w-1/3">
-                    <label class="w-full" for="category">Vendor :<span class="text-danger"></span></label>
-                    <p-autoComplete [suggestions]="vendorsToView" #vendor dropdownIcon="pi pi-search"
-                        (completeMethod)="onSearchVendor($event)" [dropdown]="true"
-                        (onSelect)="onVendorSelection(vendor.value.id)" field="name" dropdownIcon="pi pi-search"
-                        [minLength]="3" [showEmptyMessage]="true"></p-autoComplete>
+                <div class="flex justify-between">
+                    <div class="mb-5 w-1/3">
+                        <label class="w-full" for="category">Vendor :<span class="text-danger">*</span></label>
+                        <div class="flex justify-between">
+                            <p-autoComplete [suggestions]="vendorsToView" #vendor dropdownIcon="pi pi-search"
+                                (completeMethod)="onSearchVendor($event)" [dropdown]="true"
+                                (onSelect)="onVendorSelection(vendor.value.id)" field="name" dropdownIcon="pi pi-search" formControlName="vendor"
+                                [minLength]="3" [showEmptyMessage]="true"></p-autoComplete>
+                                <p-button class="ml-4" [pTooltip]="'Add vendor'" icon="pi pi-plus" (onClick)="addVendorPopup()"></p-button>
+                        </div>
+                    </div>
+                    <span>
+                        {{invoiceDate | date: 'HH:mm EEE, MMM dd/yyyy'}}
+                    </span>
                 </div>
                 <div class="flex flex-column" formArrayName="medicinePurchaseItems">
                     <div *ngFor="let form of medicines.controls; let i = index" class="flex mb-3">
@@ -102,8 +110,8 @@
                 <div class="flex flex-row-reverse">
                     <div class="flex flex-col p-2 w-full items-end">
                         <div class="w-1/3 flex justify-between p-2"><strong>Number Of Medicines:</strong> <span class="ml-4">{{medicines.length}}</span></div>
-                        <div class="w-1/3 flex justify-between p-2"><strong>Dicount Amount:</strong> <span class="ml-4">{{purchaseMedicineForm.controls['discountAmount'].value}}</span></div>
                         <div class="w-1/3 flex justify-between p-2"><strong>Gross Total:</strong> <span class="ml-4">{{purchaseMedicineForm.controls['totalAmount'].value}}</span></div>
+                        <div class="w-1/3 flex justify-between p-2"><strong>Dicount Amount:</strong> <span class="ml-4">{{purchaseMedicineForm.controls['discountAmount'].value}}</span></div>
                         <div class="w-1/3 flex justify-between p-2"><strong>Net Total:</strong> <span class="ml-4">{{purchaseMedicineForm.controls['netTotalAmount'].value}}</span></div>
                     </div>
                 </div>
@@ -112,12 +120,10 @@
                 <p-button (click)="saveMedicine()">
                     Save
                 </p-button>
-                <p-button class="ml-3">Save
+                <p-button class="ml-3" (click)="saveMedicine(true)">Save
                     & Print</p-button>
             </div>
         </div>
     </div>
 
 </div>
-
-<app-pharmacy-purchase-invoice></app-pharmacy-purchase-invoice>

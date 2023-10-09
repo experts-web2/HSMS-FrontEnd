@@ -49,6 +49,8 @@ export class AddVendorComponent implements OnInit {
           phoneNumber: this.vendor.phoneNumber,
           address: this.vendor.address,
         });
+    }else {
+      this.action = 'add'
     }
   }
 

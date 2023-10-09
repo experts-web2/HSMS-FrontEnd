@@ -31,7 +31,7 @@
                                         (completeMethod)="search($event)"
                                         (onSelect)="onMedicineSelect(i,medicinesToSelect.value)" field="name" [minLength]="3" placeholder="Select Medicine"
                                         [showEmptyMessage]="true"
-                                        formControlName="medicineName"
+                                        formControlName="medicine"
                         >
                         <ng-template let-medicine pTemplate="selectedItem">
                             <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}} </span>

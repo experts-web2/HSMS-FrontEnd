@@ -25,5 +25,6 @@ export enum BaseEndPoints {
     FileAttachment = 'patientattachment',
     PatientVisit = 'patientvisit',
     HealthRecord = 'healthrecord',
-    Stock = 'stock'
+    Stock = 'stock',
+    salt = 'salt'
 }
