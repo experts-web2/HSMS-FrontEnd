@@ -18,12 +18,24 @@
                                 <div>
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine
                                         Name</label>
-                                    <p-autoComplete [suggestions]="medicinesToShow" #medicine dropdownIcon="pi pi-search"
-                                        (completeMethod)="onSearchMedicine($event)" [dropdown]="true"
-                                        (onSelect)="onMedicineSelection(i,medicine.value.id)" field="name"
-                                        dropdownIcon="pi pi-search" [minLength]="3" placeholder="select medicine"
-                                        [showEmptyMessage]="true"></p-autoComplete>
+                                    <p-autoComplete [suggestions]="medicinesToShow" #medicine 
+                                        (completeMethod)="onSearchMedicine($event)" 
+                                        (onSelect)="onMedicineSelection(i,medicine.value)" field="name"
+                                         [minLength]="3" placeholder="select medicine"
+                                        [showEmptyMessage]="true">
+                                        <ng-template let-medicine pTemplate="selectedItem">
+                                            <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}} </span>
+                                            <small>{{medicine.potency}} {{getPotencyUnit(medicine.potencyUnits)}} ({{medicine.salt}})</small>
+                                          </ng-template>
+                                          <ng-template let-medicine pTemplate="item">
+                                            <div class="flex flex-column">
+                                                <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}}</span>
+                                                  <small>{{medicine.potency}} {{getPotencyUnit(medicine.potencyUnits)}} ({{medicine.salt}})  <strong>Stock:</strong> ({{medicine.stockQuantity}})</small> 
+                                            </div>
+                                          </ng-template>
+                                    </p-autoComplete>
                                 </div>
+
                                 <div>
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">#qty (Units)
                                         </label>

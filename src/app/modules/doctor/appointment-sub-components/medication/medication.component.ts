@@ -68,7 +68,8 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
       duration: new FormControl<number | null>(null, [Validators.required]),
       instruction: new FormControl<number | null>(null, [Validators.required]),
       durationValue: new FormControl<number | null>(null, [Validators.required]),
-      dosageValue: new FormControl<number | null>(null, [Validators.required])
+      dosageValue: new FormControl<number | null>(null, [Validators.required]),
+      medicine: new FormControl<IMedicine | null>(null)
     });
 
     this.medicationForm = this.fb.group({
@@ -156,8 +157,6 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
       }
     })
-    // let text  = e.toLowerCase();
-    // this.medicinesToShow = this.medicines.filter(x => x.name.toLowerCase().includes(text));
     
   }
 
@@ -195,7 +194,8 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
     console.log({index,medicine});
     
     this.medicationItems.at(index).get('medicineName')?.setValue(medicine.name);
-    this.medicationItems.at(index).get('medicineId')?.setValue(medicine.id);    
+    this.medicationItems.at(index).get('medicineId')?.setValue(medicine.id);   
+
   }
 
   getPotencyUnit(potency: number): string{
@@ -222,12 +222,15 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
           doctorId: this.healthRecord.doctorId,
           patientId: this.healthRecord.patientId,
           healthRecordId: this.healthRecordId
-        }
+        } 
+
         this.medicationRequest.medicationDetails = this.medicationItems.value;
         this.historyMedication = medication;
+
         this.medicationForm.disable({
           onlySelf: true
         });
+
         this.formSetter(medication);
 
   }

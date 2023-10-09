@@ -9,6 +9,11 @@ import { IMedicinePurchaseRequest } from 'src/app/models/interfaces/MedicinePurc
 import { DialogService } from 'primeng/dynamicdialog';
 import { PharmacyPurchaseInvoiceComponent } from '../pharmacy-purchase-invoice/pharmacy-purchase-invoice.component';
 import { IMedicinePurchase } from 'src/app/models/interfaces/MedicinePurchase';
+import { IMedicine } from 'src/app/models/interfaces/Medicine';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
+import { PotencyUnits } from 'src/app/constants/enums/potency-units';
+import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
 
 @Component({
   selector: 'app-pharmacy-purchase',
@@ -21,8 +26,8 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
   vendors: Array<IDropDown> = [];
   vendorsToView: Array<IDropDown> = [];
   medicinesList!: Array<IDropDown>;
-  medicinesToShow!: Array<IDropDown>;
-  medicineToView: Array<any> = [];
+  medicinesToShow!: Array<IMedicine>;
+  medicineToView: Array<IMedicine> = [];
   brandToView: Array<IDropDown> = [];
   medicineList: Array<any> = [];
   brandList: Array<IDropDown> = [];
@@ -139,8 +144,8 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
     this.purchaseMedicineForm.get('vendorId')?.setValue(vendorId);
   }
 
-  onMedicineSelection(index: number, medicineId: string) {
-    this.medicines.at(index).get('medicineId')?.setValue(medicineId);
+  onMedicineSelection(index: number, medicine: IMedicine) {
+    this.medicines.at(index).get('medicineId')?.setValue(medicine.id);
   }
 
   onBrandSelection(index: number, brandId: string) {
@@ -196,11 +201,25 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
 
   onSearchMedicine(event: any) {
     const query = event.query.trim().toLowerCase();
-    this.medicineToView = this.medicinesList.filter(
-      (medicine) =>
-        medicine.name.toLowerCase().includes(query)
-    );
     
+    let request: IFetchRequest = {
+      pagedListRequest: {
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest: {
+        filtersRequest: [
+          {
+            field: 'Name',
+            matchMode: FiltersMatchModes.Contains,
+            value: query,
+            ignoreCase: true
+          }
+        ]
+      }
+    }
+    
+    this.getMedicineDropDown(request);   
   }
 
   onSearchBrand(event: any) {
@@ -212,11 +231,11 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
     
   }
 
-  getMedicineDropDown(){
-    this.medicineService.getMedicineDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
+  getMedicineDropDown(query: IFetchRequest = {}){
+    this.medicineService.getMedicine(query).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
-        this.medicinesList = x;
-        this.medicinesToShow = x;
+        this.medicinesList = x.data;
+        this.medicinesToShow = x.data;
 
       },
       error: (err: Error)=>{
@@ -272,6 +291,15 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
   packPriceChange(packPrice: any, index: number){
     this.calculateUnitPrice(index);   
     this.calculate(); 
+  }
+
+  
+  getPotencyUnit(potency: number): string{
+    return PotencyUnits[potency];
+  }
+
+  getMedicineType(potency: number): string{
+    return MedicineType[potency];
   }
 
   calculateUnitPrice(index: number){

@@ -12,6 +12,9 @@ import { IFiltersRequest } from 'src/app/models/interfaces/filterRequst';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { IDoctor } from 'src/app/models/interfaces/Doctor';
 import { IPatient } from 'src/app/models/interfaces/patient-model';
+import { SortOrder } from '../../../constants/enums/SortOrder';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lab-orders',
@@ -19,9 +22,11 @@ import { IPatient } from 'src/app/models/interfaces/patient-model';
   styleUrls: ['./lab-orders.component.scss']
 })
 export class LabOrdersComponent implements OnInit {
-  labOrders: Array<ILabOrder> = [];
+  labOrders: Array<LabOrderData> = [];
+  filtersForm!: FormGroup;
   dateRange: Array<Date> = [];
   doctors: Array<IDoctor> = [];
+  rowClickAction: ((data: LabOrderData) => void) = this.rowClick.bind(this); 
   patients: Array<IPatient> = [];
   defaultFetchRequest: IFetchRequest = {
     pagedListRequest: {
@@ -35,7 +40,7 @@ export class LabOrdersComponent implements OnInit {
   tableColumns: Array<ITableColumns> = [
     {
       property: 'patientName',
-      name: 'PatientName',
+      name: 'Patient Name',
       columnType: DataTypesEnum.String
     },
     {
@@ -49,24 +54,48 @@ export class LabOrdersComponent implements OnInit {
       columnType: DataTypesEnum.String
     },
     {
-      property: 'labOrderDetails',
+      property: 'tests',
       name: "Tests",
-      valueToShow: this.getTestsList.bind(this)
     }
   ]
 
-  constructor(private readonly labOrderService: LabOrderService, private readonly doctorService: DoctorService, private readonly patientService: PatientService) {
-
+  constructor(
+    private readonly labOrderService: LabOrderService, 
+    private readonly doctorService: DoctorService, 
+    private readonly patientService: PatientService,
+    private readonly formBuilber: FormBuilder,
+    private readonly router: Router
+  ) {
+    this.filtersForm = this.formBuilber.group({
+      doctor: new FormControl<IDoctor | null>(null),
+      patient: new FormControl<IPatient | null>(null),
+      dateRange: new FormControl<any | null>(null),
+      labOrderId: new FormControl<string | null>(null)
+    })
   }
 
   ngOnInit(): void {
     this.getLabOrders();
+    this.filtersForm.valueChanges.subscribe(x => {
+      console.log('form Value', x);
+      
+    })
   }
 
   getLabOrders(fetchRequest: IFetchRequest = this.defaultFetchRequest) {
     this.labOrderService.getLabOrders(fetchRequest).subscribe({
       next: (x) => {
-        this.labOrders = x.data;
+        this.labOrders = x.data.map(y => {
+          let obj: LabOrderData = {
+            doctorName: y.doctor?.name ?? '',
+            patientName: y.patient?.name ?? '',
+            createdAt: y.createdAt,
+            tests: y.labOrderDetails.map(z => z.labTestName).join(' | '),
+            labOrderId: y.id
+          } 
+          return obj;
+        });
+
       },
       error: (err) => {
 
@@ -109,6 +138,11 @@ export class LabOrdersComponent implements OnInit {
 
   }
 
+  rowClick(data: LabOrderData): void{
+    console.log(data);
+    
+  }
+
   patientSelect(patientId: string) {
 
   }
@@ -140,6 +174,7 @@ export class LabOrdersComponent implements OnInit {
   }
 
   searchPatient(searchQuery: string) {
+    
     let query: IFetchRequest = {
       pagedListRequest: {
         pageNo: 1,
@@ -148,18 +183,52 @@ export class LabOrdersComponent implements OnInit {
       queryOptionsRequest: {
         filtersRequest: [
           {
-            field: 'PatientId',
+            field: 'name',
             operator: FiltersOperators.And,
-            value: ['12964e4d-106b-4509-af76-22a3fb78f949', '3032ad4f-3ad0-467e-a3d8-507dd6d9dbd7'],
+            value: searchQuery,
             matchMode: FiltersMatchModes.Contains,
             ignoreCase: true
           }
         ]
       }
     }
-    this.getLabOrders(query)
+    // this.getLabOrders(query)
 
-    // this.getPatients(query);
+    this.getPatients(query);
+  }
+
+  createDoctorQuery(id: string){
+    let query: IFiltersRequest = {
+      field: 'DoctorId',
+      value: id,
+      matchMode: FiltersMatchModes.Equal,
+      operator: FiltersOperators.And
+    }
+  }
+
+  createPatientQuery(id: string){
+    let query: IFiltersRequest = {
+      field: 'PatientId',
+      value: id,
+      matchMode: FiltersMatchModes.Equal,
+      operator: FiltersOperators.And
+    }
+  }
+
+  createDateRangeQuery(startDate: Date, endDate: Date){
+    let startDateQuery: IFiltersRequest = {
+      field: 'CreatedAt',
+      value: startDate,
+      matchMode: FiltersMatchModes.GreaterThanOrEqual,
+      operator: FiltersOperators.And
+    }
+
+    let endDateQuery: IFiltersRequest = {
+      field: 'CreatedAt',
+      value: endDate,
+      matchMode: FiltersMatchModes.LessThanOrEqual,
+      operator: FiltersOperators.And
+    }
   }
 
   getDoctors(fetchRequest: IFetchRequest = {}) {
@@ -183,23 +252,43 @@ export class LabOrdersComponent implements OnInit {
       }
     })
   }
-  // filterBuilder(filterRequet: Array<IFiltersRequest> = [], filterOperation: FilterOperation = 'Add', pageNo: number = 1){
-  //   if(this.filter.queryOptionsRequest?.filtersRequest) {
-  //     this.filter.queryOptionsRequest.filtersRequest = this.filter.queryOptionsRequest.filtersRequest.filter(x => !filterRequet.map(y => y.field).includes(x.field))
-  //     if(filterOperation === 'Add') this.filter.queryOptionsRequest.filtersRequest = [...this.filter.queryOptionsRequest.filtersRequest, ...filterRequet]
-  //     if(filterOperation === 'Remove') this.filter.queryOptionsRequest.filtersRequest = this.filter.queryOptionsRequest.filtersRequest.filter(x => !filterRequet.map(y => y.field).includes(x.field));
-  //   }
 
-  //   if(this.filter.pagedListRequest){
-  //     this.filter.pagedListRequest.pageNo = pageNo;
-  //   }
-  // }
+  filterBuilder(filterRequet: Array<IFiltersRequest> = [], filterOperation: FilterOperation = 'Add', pageNo: number = 1){
+    let filters = this.defaultFetchRequest.queryOptionsRequest?.filtersRequest;
+    
+    for (let filter of filterRequet) {
+      if(filters?.includes(filter)){
+        filters = filters.filter(x => x.field === filter.field && x.value) 
+      }
+      
+    }
 
-  // prev(){
-  //   if(this.filter.pagedListRequest?.pageNo && this.filter.pagedListRequest?.pageNo >= 2){
-  //     this.filter.pagedListRequest.pageNo--;
-  //     this.getHealthRecords();
-  //   }
+    if(filters) {
+      filters = filters.filter(x => !filterRequet.map(y => y.field).includes(x.field))
+      if(filterOperation === 'Add') filters = [...filters, ...filterRequet]
+      if(filterOperation === 'Remove') filters= filters.filter(x => !filterRequet.map(y => y.field).includes(x.field));
+    }
 
-  // }
+    if(this.defaultFetchRequest.pagedListRequest){
+      this.defaultFetchRequest.pagedListRequest.pageNo = pageNo;
+    }
+  }
+
+  prev(){
+    if(this.defaultFetchRequest.pagedListRequest?.pageNo && this.defaultFetchRequest.pagedListRequest?.pageNo >= 2){
+      this.defaultFetchRequest.pagedListRequest.pageNo--;
+      // this.getHealthRecords();
+    }
+
+  }
+}
+
+type FilterOperation = 'Add' | 'Remove';
+
+interface LabOrderData{
+  patientName: string;
+  doctorName: string;
+  createdAt: Date;
+  tests: string;
+  labOrderId: string;
 }

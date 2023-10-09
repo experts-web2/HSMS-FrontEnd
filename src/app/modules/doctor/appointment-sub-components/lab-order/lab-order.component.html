@@ -38,7 +38,7 @@
     <div class="ms-4 w-full test-type_detail">
             <div>
                 <label>
-                    <input type="checkbox" [checked]="allSelected" (change)="selectAllCheckboxes($event)"> Select All
+                    <input type="checkbox" [(ngModel)]="allSelected" (change)="selectAllCheckboxes($event)"> Select All
                 </label>
             </div>
             <div  class="grid grid-cols-3 gap-x-3 gap-y-3 my-2">

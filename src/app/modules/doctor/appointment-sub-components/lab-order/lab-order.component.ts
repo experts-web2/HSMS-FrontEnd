@@ -76,8 +76,13 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   getTests(): void {
     this.testsService.getTests().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x: any) => {
-        this.testsList = x.data;
+      next: (x) => {
+        this.testsList = x.data.map(y => {
+          return {
+            ...y,
+            selected: false
+          }
+        });
       },
       error: (err: Error) => {
         this.alertService.error('Somthing went wrong while getting Lab Tests.', 'Error');
@@ -96,7 +101,14 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   getVisibleTests(categoryId: string) {
     this.testsListToShow = this.testsList.filter(x => x.testCategoryId === categoryId);
-    this.selectAllChecked();
+    if(this.testsListToShow.every(y => y.selected) && this.testsListToShow.length){
+      this.allSelected = true;
+      console.log(true);
+      
+    }else{
+      this.allSelected = false;
+      console.log(false);
+    }
   }
 
   selectLabTest(event: any) {
@@ -107,12 +119,18 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   selectAllCheckboxes(event: any): void {
     if (event.target.checked) {
-      this.testsListToShow.forEach(checkbox => {
-        if (checkbox.testCategoryId === this.tabId) {
-          checkbox.selected = true;
-          if (!this.selectedTestsIds.includes(checkbox.id)) this.selectedTestsIds.push(checkbox.id);
-        }
+      this.testsList.forEach(test => {
+        if(test.testCategoryId === this.tabId) test.selected = event.target.checked;
       });
+
+      this.testsListToShow.filter(checkbox => {
+        if (checkbox.testCategoryId === this.tabId) {
+          return checkbox
+        }
+        return null;
+      });
+
+
 
     } else {
 
@@ -128,11 +146,19 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
   }
 
   updateSelectedCheckboxes(checked: boolean, selectedValue: ILabTestList): void {
+    this.testsList.forEach(x => {
+      if(x.id === selectedValue.id) x.selected = checked;
+    })
     if (checked) {
       this.selectedTestsIds.push(selectedValue.id);
     }
     else this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== selectedValue.id);
+   
     this.selectAllChecked();
+
+    if(this.testsListToShow.every(test => test.selected)) this.allSelected = true;
+    else this.allSelected = false;
+
     this.labOrderRequest.labTestIds = this.selectedTestsIds;
     this.emitRequest.emit(this.labOrderRequest);
 

@@ -1,32 +1,36 @@
 <div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10 mb-3">
-    
-        <div>
-            <p-autoComplete [suggestions]="patients"  field="name" (completeMethod)="searchPatient($event.query)" (onSelect)="patientSelect($event.id)"
-                placeholder="Search Patient"  [minLength]="3" [showEmptyMessage]="true">
-                <ng-template let-patient pTemplate="item">
-                    <div class="flex flex-column">
-                        <span><strong>mr#: </strong>{{patient.mrNo}}  <strong>Name: </strong>{{patient.name}} </span>
-                          <small><strong>Phone#: </strong>{{patient.phoneNumber}} <strong>Age: </strong>{{patient.age}} </small> 
-                    </div>
-                  </ng-template>
-            </p-autoComplete>
-        </div>
-    
-        <div class="p-fluid p-grid p-formgrid">
+    <form [formGroup]="filtersForm">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10 mb-3 mt-6">
+        
             <div>
-                <p-calendar selectionMode="range" 
-                    [showIcon]="true" [showButtonBar]="true" inputId="range" [showTime]="true">
-                </p-calendar>
+                <p-autoComplete [suggestions]="patients" #patientSearch field="name" (completeMethod)="searchPatient($event.query)" formControlName="patient" (onSelect)="patientSelect($event.id)"
+                    placeholder="Search Patient"  [minLength]="3" [showEmptyMessage]="true">
+                    <ng-template let-patient pTemplate="item">
+                        <div class="flex flex-column">
+                            <span><strong>mr#: </strong>{{patient.mrNo}}  <strong>Name: </strong>{{patient.name}} </span>
+                              <small><strong>Phone#: </strong>{{patient.phoneNumber}} <strong>Age: </strong>{{patient.age}} </small> 
+                        </div>
+                      </ng-template>
+                </p-autoComplete>
+     {{patientSearch.inputValue }}
+            </div>
+        
+            <div class="p-fluid p-grid p-formgrid">
+                <div>
+                    <p-calendar selectionMode="range"  formControlName="dateRange"
+                        [showIcon]="true" [showButtonBar]="true" inputId="range" [showTime]="true">
+                    </p-calendar>
+                </div>
+            </div>
+        
+            <div>
+                <p-autoComplete [suggestions]="doctors" [dropdown]="true" field="name" formControlName="doctor" placeholder="Search Doctor" (completeMethod)="searchDoctor($event.query)" (onSelect)="doctorSelect($event.id)"
+                    dropdownIcon="pi pi-search" [minLength]="3" [showEmptyMessage]="true" >
+                </p-autoComplete>
             </div>
         </div>
-    
-        <div>
-            <p-autoComplete [suggestions]="doctors" [dropdown]="true" field="name" placeholder="Search Doctor" (completeMethod)="searchDoctor($event.query)" (onSelect)="doctorSelect($event.id)"
-                dropdownIcon="pi pi-search" [minLength]="3" [showEmptyMessage]="true">
-            </p-autoComplete>
-        </div>
-    </div>
+
+    </form>
 </div>
 
-<app-generic-table [columns]="tableColumns" [data]="labOrders"></app-generic-table>
+<app-generic-table [columns]="tableColumns" [data]="labOrders" [clickableRow]="true" [rowClickAction]="rowClickAction"></app-generic-table>
