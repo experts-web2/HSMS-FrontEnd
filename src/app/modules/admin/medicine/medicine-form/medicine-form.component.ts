@@ -8,6 +8,10 @@ import { PotencyUnits } from 'src/app/constants/enums/potency-units';
 import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
 import { AlertService, MedicineService, MedicineBrandService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { ISalt } from 'src/app/models/interfaces/salt';
+import { MedicineSaltsService } from 'src/app/services/medicine-salts/medicine-salts.service';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
 
 
 @Component({
@@ -17,7 +21,8 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 })
 export class MedicineFormComponent extends SubscriptionManagmentDirective implements OnInit {
   medicineForm!: FormGroup;
-
+  selectedSalts: Array<ISalt> = [];
+  saltsList: Array<ISalt> = [];
   medicineTypes = [
     { label: 'Tablets', value: MedicineType.Tablets },
     { label: 'Injection', value: MedicineType.Inject },
@@ -44,6 +49,7 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
     public config: DynamicDialogConfig,
     public ref: DynamicDialogRef,
     private readonly medicineBrandService: MedicineBrandService,
+    private readonly medicineSaltService: MedicineSaltsService
   ) {
     super();
     this.medicine = this.config.data.medicine;
@@ -58,7 +64,8 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
       medicineType: new FormControl(null, [Validators.required]),
       salt: new FormControl('', [Validators.required]),
       price: new FormControl(null, [Validators.required]),
-      medicineBrandId: new FormControl(null, [Validators.required])
+      medicineBrandId: new FormControl(null, [Validators.required]),
+      selectedSalts: new FormControl<Array<ISalt>>([])
     })
     if (this.action === 'update' && this.medicine) {
       this.medicineForm.patchValue(
@@ -80,6 +87,34 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
         this.brandList = x;
       }
     })
+  }
+
+  filterSalts(event: {filter: string}){
+    let query: IFetchRequest = {
+      pagedListRequest:{
+        pageNo: 1,
+        pageSize: 1000
+      },
+      queryOptionsRequest: {
+        filtersRequest: [
+          {
+            field: 'Name',
+            value: event.filter,
+            matchMode: FiltersMatchModes.Contains,
+          }
+        ]
+      }
+    }
+
+    this.medicineSaltService.getSaltsList(query).subscribe({
+      next: (x) => {
+        this.saltsList = x.data
+      },
+      error: (err) => {
+
+      }
+    })
+    
   }
 
   get f() { return this.medicineForm.controls; }

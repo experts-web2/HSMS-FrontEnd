@@ -27,11 +27,11 @@ export class MedicineService extends HttpService {
   }
 
   deleteMedicine(deleteMedicine: any) {
-    return this.delete(`${this.baseEndPoint}/delete/${deleteMedicine.id}`);
+    return this.delete(`${this.baseEndPoint}/${deleteMedicine.id}`);
   }
 
   updateMedicine(id: string, medicine: IMedicinerequest) {
-    return this.put(`${this.baseEndPoint}/update/${id}`, medicine);
+    return this.put(`${this.baseEndPoint}/${id}`, medicine);
   }
 
   getMedicineDropDown(): Observable<Array<IDropDown>> {

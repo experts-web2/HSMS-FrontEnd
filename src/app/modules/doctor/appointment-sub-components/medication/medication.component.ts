@@ -60,18 +60,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
       }
     });
 
-    this.medicationItem = this.fb.group({
-      medicine: new FormControl<IMedicine | null>(null),
-      medicineId: new FormControl<string | null>(null, [Validators.required]),
-      medicineName: new FormControl<string | null>(null),
-      dosage: new FormControl<number | null>(null, [Validators.required]),
-      frequency: new FormControl<number | null>(null, [Validators.required]),
-      route: new FormControl<number | null>(null, [Validators.required]),
-      duration: new FormControl<number | null>(null, [Validators.required]),
-      instruction: new FormControl<number | null>(null, [Validators.required]),
-      durationValue: new FormControl<number | null>(null, [Validators.required]),
-      dosageValue: new FormControl<number | null>(null, [Validators.required]),
-    });
+    this.medicationItem = this.getMedicationItemForm();
 
     this.medicationForm = this.fb.group({
       medicationItems: this.fb.array([this.medicationItem],[Validators.required]),
@@ -99,12 +88,6 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
     console.log(this.healthRecord);
     
-    this.medicationForm.valueChanges.subscribe({
-      next: (x) => {
-        if (!this.historyMedication) this.currentValueSetter(x);
-      }
-    })
-    
     if (this.healthRecord.medication) {
       this.showEdit = true; 
       this.newData = false;
@@ -113,6 +96,12 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
       this.newData = true;
       this.showEdit = false; 
     }
+    
+    this.medicationForm.valueChanges.subscribe({
+      next: (x) => {
+         this.currentValueSetter(x);
+      }
+    })
   }
 
   currentValueSetter(value: {[name: string]: any}){
@@ -161,6 +150,21 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
     
   }
 
+  getMedicationItemForm(): FormGroup{
+    return this.fb.group({
+      medicine: new FormControl<IMedicine | null>(null),
+      medicineId: new FormControl<string | null>(null, [Validators.required]),
+      medicineName: new FormControl<string | null>(null),
+      dosage: new FormControl<number | null>(null, [Validators.required]),
+      frequency: new FormControl<number | null>(null, [Validators.required]),
+      route: new FormControl<number | null>(null, [Validators.required]),
+      duration: new FormControl<number | null>(null, [Validators.required]),
+      instruction: new FormControl<number | null>(null, [Validators.required]),
+      durationValue: new FormControl<number | null>(null, [Validators.required]),
+      dosageValue: new FormControl<number | null>(null, [Validators.required]),
+    });
+  }
+
   edit(){
     this.showEdit = false;
     this.medicationForm.enable();
@@ -175,7 +179,9 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
   update(){
     let medicationId: string = '';
+
     if(this.healthRecord.medication) medicationId = this.healthRecord.medication.id;
+
     this.medicationService.updateMedication(medicationId, this.medicationRequest).subscribe({
       next: (x) => {
         this.alertService.success('Medication Updated Successfully.');
@@ -192,8 +198,6 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   }
 
   onMedicineSelect(index: number, medicine: IMedicine){
-    console.log({index,medicine});
-    
     this.medicationItems.at(index).get('medicineName')?.setValue(medicine.name);
     this.medicationItems.at(index).get('medicineId')?.setValue(medicine.id);   
 
@@ -307,18 +311,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   }
 
   addMedicationItem(){
-    let medicationForm = this.fb.group({
-      medicine: new FormControl<IMedicine | null>(null),
-      medicineId: new FormControl<string | null>(null, [Validators.required]),
-      medicineName: new FormControl<string | null>(null),
-      dosage: new FormControl<number | null>(null, [Validators.required]),
-      frequency: new FormControl<number | null>(null, [Validators.required]),
-      route: new FormControl<number | null>(null, [Validators.required]),
-      duration: new FormControl<number | null>(null, [Validators.required]),
-      instruction: new FormControl<number | null>(null, [Validators.required]),
-      durationValue: new FormControl<number | null>(null, [Validators.required]),
-      dosageValue: new FormControl<number | null>(null, [Validators.required])
-    })
+    let medicationForm = this.getMedicationItemForm();
     this.medicationItems.push(medicationForm);
   }
 

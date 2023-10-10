@@ -9,9 +9,9 @@
     <div class="my-4 md:w-1/2 ml-auto" >
         <ng-container>
             <div class="flex items-center justify-between py-2"><span  class="font-bold">Items#:</span> <span  class="font-bold">{{medicines.length}}</span></div>
-            <div class="flex items-center justify-between py-2"><span  class="font-bold">Total Discount:</span> <span  class="font-bold">{{medicineSaleinvoice?.discountAmount ?? ''}}</span>  </div>
-            <div class="flex items-center justify-between py-2"><span  class="font-bold">Gross Total:</span> <span  class="font-bold">{{medicineSaleinvoice?.totalAmount ?? ''}}</span></div>
-            <div class="flex items-center justify-between py-2 total-wrapper"><span  class="font-bold">Net Total:</span> <span  class="font-bold">{{medicineSaleinvoice ? (medicineSaleinvoice?.totalAmount ?? 0) - (medicineSaleinvoice?.discountAmount ?? 0) : ''}}</span></div>
+            <div class="flex items-center justify-between py-2"><span  class="font-bold">Total Discount:</span> <span  class="font-bold">{{medicineSaleinvoice?.discountAmount | number: ".0-2"}}</span>  </div>
+            <div class="flex items-center justify-between py-2"><span  class="font-bold">Gross Total:</span> <span  class="font-bold">{{medicineSaleinvoice?.totalAmount | number: ".0-2"}}</span></div>
+            <div class="flex items-center justify-between py-2 total-wrapper"><span  class="font-bold">Net Total:</span> <span  class="font-bold">{{(medicineSaleinvoice ? (medicineSaleinvoice?.totalAmount ?? 0) - (medicineSaleinvoice?.discountAmount ?? 0) : 0)  | number: ".0-2"}}</span></div>
         </ng-container>
     </div>
     <div class="flex items-center justify-between py-2 md:w-1/2 ml-auto">

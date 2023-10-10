@@ -35,11 +35,11 @@ export class DoctorService extends HttpService {
 
 
   updateDoctor(data: IAddOrUpdateDoctorRequest,id:string): Observable<any>{
-    return this.put(`${this.baseEndPoints}/update/${id}`, data);
+    return this.put(`${this.baseEndPoints}/${id}`, data);
   }
 
   deleteDoctor(doctor: any){
-    return this.delete(`${this.baseEndPoints}/delete/${doctor.id}`);
+    return this.delete(`${this.baseEndPoints}/${doctor.id}`);
   }
 
   isEmailInUse(email: string): Observable<boolean>{

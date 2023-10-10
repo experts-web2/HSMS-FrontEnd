@@ -1,1 +1,2 @@
-<p>medicine-salts-list works!</p>
+<div class="text-center inside-header"><h1>Medicine Salt</h1> <p-button (click)="addSalt()"><i class="pi pi-plus me-2"></i>Add Medicine Salt</p-button></div>
+<app-generic-table [data]="medicineSaltList" [columns]="columns" (edit)="edit($event)" (delete)="delete($event)" [actionsToShow]="actionsToShow" [totalRecords]="totalRecords" [showActions]="true"></app-generic-table>

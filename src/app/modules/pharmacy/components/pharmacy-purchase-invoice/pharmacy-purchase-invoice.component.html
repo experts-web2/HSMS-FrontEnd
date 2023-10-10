@@ -9,8 +9,8 @@
     <app-generic-table [columns]="tableColumns" [data]="medicines" [showActions]="false" [showPaginator]="false" [totalRecords]="medicines.length"></app-generic-table>
     <div class="my-4 md:w-1/2 ml-auto">
         <div class="flex items-center justify-between py-2"><span class="font-bold">Items#:</span> <span class="font-bold">{{medicines.length}}</span></div>
-        <div class="flex items-center justify-between py-2"><span class="font-bold">Total Discount:</span> <span class="font-bold">{{medicinePurchaseInvoice?.discountAmount}}</span>  </div>
-        <div class="flex items-center justify-between py-2 total-wrapper"><span class="font-bold">Net Total:</span> <span class="font-bold">{{medicinePurchaseInvoice?.totalAmount }}</span></div>
+        <div class="flex items-center justify-between py-2"><span class="font-bold">Total Discount:</span> <span class="font-bold">{{medicinePurchaseInvoice?.discountAmount | number: ".0-2"}}</span>  </div>
+        <div class="flex items-center justify-between py-2 total-wrapper"><span class="font-bold">Net Total:</span> <span class="font-bold">{{medicinePurchaseInvoice?.totalAmount  | number: ".0-2"}}</span></div>
     </div>
     <div class="flex items-center justify-between py-2 md:w-1/2 ml-auto">
         <!-- <p-button>Cancel</p-button> -->

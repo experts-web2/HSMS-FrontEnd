@@ -1,1 +1,11 @@
-<p>medicine-salts-form works!</p>
+<h3 class="text-center"><b>{{action === 'add'?'Add Salt':'Update Salt'}}</b></h3>
+<form class="d-flex flex-column gap-2" (ngSubmit)="formSubmit($event)" [formGroup]="medicineSaltForm">
+<div class="d-flex flex-column gap-2">
+    <label for="name">Salt Name <span class="text-danger">*</span></label>
+    <input pInputText type="text" name="" id="name" formControlName="name" required>
+    <div class="text-danger" *ngIf="(medicineSaltForm.controls['name'].errors && medicineSaltForm.controls['name'].touched) || (medicineSaltForm.controls['name'].touched && !medicineSaltForm.controls['name'].valid)"><small>Please enter Salt name.</small></div>
+</div>
+<div style="text-align: end;">
+    <p-button class="mt-3" type="submit" [disabled]="!medicineSaltForm.controls['name'].valid">{{action === 'add'?'Add Salt +':'Update Salt +'}}</p-button>
+</div>
+</form>

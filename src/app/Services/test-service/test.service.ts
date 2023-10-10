@@ -26,11 +26,11 @@ export class TestService extends HttpService {
   }
  
   deleteTest(test: ILabeTest){
-    return this.delete(`${this.baseEndPoint}/delete/${test.id}`);
+    return this.delete(`${this.baseEndPoint}/${test.id}`);
   }
 
   updateTest(id: string, test: IAddOrUpdateTest){
-    return this.put(`${this.baseEndPoint}/update/${id}`, test)
+    return this.put(`${this.baseEndPoint}/${id}`, test)
   }
 
   getTests(fetchRequest: IFetchRequest = {}): Observable<IDataSourceResponse<ILabeTest>>{

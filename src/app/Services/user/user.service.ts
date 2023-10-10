@@ -36,7 +36,7 @@ export class UserService extends HttpService {
 
   updateUser(id: string, data: any): Observable<any> {
     return super.put(
-      `${this.baseEndpoint}/update/${data.accountId}/${id}`,
+      `${this.baseEndpoint}/${data.accountId}/${id}`,
       data
     );
   }
@@ -48,6 +48,6 @@ export class UserService extends HttpService {
   }
 
   deleteUser(user: IUser) {
-    return this.delete(`${this.baseEndpoint}/delete/${user.id}`);
+    return this.delete(`${this.baseEndpoint}/${user.id}`);
   }
 }
