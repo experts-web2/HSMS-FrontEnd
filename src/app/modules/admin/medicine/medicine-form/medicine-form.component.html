@@ -68,6 +68,8 @@
 </div>
 
 <ng-template #saltSelector>
-    <p-multiSelect [options]="saltsList" [(ngModel)]="selectedSalts" (onFilter)="filterSalts($event)" defaultLabel="Select Medicine Salts" optionLabel="name" display="chip"></p-multiSelect>
-
+    <div class="flex justify-between">
+        <p-multiSelect [options]="saltsList" pTooltip="Add Medicine Salt" [(ngModel)]="selectedSalts" (onFilter)="filterSalts($event)" (onChange)="saltChanges()" defaultLabel="Select Medicine Salts" optionLabel="name" display="chip"></p-multiSelect>
+        <p-button icon="pi pi-plus" (onClick)="addSalts()"></p-button>
+    </div>
 </ng-template>
