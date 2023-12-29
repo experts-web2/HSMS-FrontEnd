@@ -39,7 +39,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   newData: boolean = false;
   medicationForm!: FormGroup;
   loggedInDoctor!: ILogedInUser;
-  medicines: Array<IDropDown> = [];
+  medicines: Array<IMedicine> = [];
   medicinesToShow: Array<IMedicine> = [];
   medicationItem!: FormGroup;
   improvementOptions: any[] = [];
@@ -82,7 +82,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
   ngOnInit(): void {
 
-    this.getMedicine();
+    // this.getMedicine();
     this.medicationForm.get('doctorId')?.setValue(this.healthRecord.doctorId);
     this.medicationForm.get('patientId')?.setValue(this.healthRecord.patientId);
 
@@ -261,7 +261,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   getMedicine(){
     this.medicineService.getMedicineDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
-        this.medicines = x;
+        // this.medicines = x;
         
         // this.medicinesToShow = x;
 
@@ -385,12 +385,14 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
         dosageValue: x.dosageValue,
         medicines: this.medicines
       });
+
       this.medicationItems.at(i).disable({
         onlySelf: true
       })
+      
       this.medicationItems.at(i).patchValue({
         medicineId: x.medicineId,
-          medicineName:   '',
+          medicineName: '',
           dosage: x.dosage,
           frequency: x.frequency,
           route: x.route,

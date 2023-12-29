@@ -55,4 +55,8 @@ export class PatientService extends HttpService{
   getPatientDropDown(): Observable<Array<IDropDown>>{
     return this.get(`${this.baseEndPoint}/dropdown`);
   }
+
+  generateMrNo(): Observable<string>{
+    return this.get(`${this.baseEndPoint}/generate/mrno`)
+  }
 }

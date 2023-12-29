@@ -25,7 +25,7 @@
         <p-calendar [(ngModel)]="dateRange" selectionMode="range" appendTo="body" (onSelect)="getByDateRange($event)"></p-calendar>
     </div>
     <div>
-        <p-dialog header="Header" [(visible)]="visible" [style]="{width: '50vw', height: '60%'}">
+        <p-dialog header="Add Health Record" [(visible)]="visible" [modal]="true" [style]="{width: '50vw', height: '60%'}">
             <div>
                 <label for="">Patient </label>
                 <p-autoComplete [minLength]="3" [field]="'name'" [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="null" placeholder="" (onSelect)="selectedPatient($event.id)">

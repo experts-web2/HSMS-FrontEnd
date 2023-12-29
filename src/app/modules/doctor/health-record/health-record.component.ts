@@ -14,6 +14,7 @@ import { HealtRecordService } from 'src/app/services/health-record/healt-record.
 import { DrPrescriptionPrintComponent } from '../appointment-sub-components/dr-prescription-print/dr-prescription-print.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import * as moment from 'moment';
+import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 
 @Component({
   selector: 'app-health-record',
@@ -24,6 +25,7 @@ export class HealthRecordComponent implements OnInit {
   currentDate: Date = new Date();
   doctorsList: Array<IDoctor> = [];
   patientList: Array<IPatient> = [];
+  selectedDoctor!: IDoctor;
   visible: boolean = false;
   doctorId!: string;
   patientIdForHealthRecord!: string;
@@ -37,6 +39,7 @@ export class HealthRecordComponent implements OnInit {
   prevPage: number = 0;
   showNextButton: boolean = true;
   showPrevButton: boolean = false;
+  logedInUser!: ILogedInUser;
 
   constructor(
     private readonly patientService: PatientService,
@@ -50,8 +53,11 @@ export class HealthRecordComponent implements OnInit {
     this.userStateService.getUserState().subscribe({
       next: (x) => {
         if(x.entityIds){
-          this.doctorId = x.entityIds['DoctorId']
+          
+          this.doctorId = x.entityIds['DoctorId'];
         }
+        console.log(x);
+        this.logedInUser = x;
       },
       error: (err) => {
 
@@ -161,15 +167,25 @@ export class HealthRecordComponent implements OnInit {
     this.getHealthRecords();
   }
 
-  doctorSelected(doctorId: string){
-    let filterRequests:Array<IFiltersRequest> = [
+  doctorSelected(doctorId: string, forFilters: boolean = true) {
+    if (!forFilters) {
+      let selectedDoctor = this.doctorsList.find(x => x.id === doctorId);
+
+      if (selectedDoctor) this.selectedDoctor = selectedDoctor;
+      else {
+        this.alertService.error('Please Select Doctor.')
+      }
+      return;
+    }
+
+    let filterRequests: Array<IFiltersRequest> = [
       {
         field: 'DoctorId',
         value: doctorId,
         matchMode: FiltersMatchModes.Equal,
         operator: FiltersOperators.And
       }
-    ] 
+    ]
 
     this.filterBuilder(filterRequests);
     this.getHealthRecords();
@@ -289,8 +305,6 @@ export class HealthRecordComponent implements OnInit {
 
   getByDateRange(pageNo: number = 1){
     if(!this.dateRange.length || this.dateRange.some(x => x === null)) return;
-    console.log(this.dateRange);
-    console.log({startDate: moment(this.dateRange[0]).startOf('day').toDate(), endDate: moment(this.dateRange[1]).endOf('day').toDate()});
     
        let filtersRequest: Array<IFiltersRequest> = [
           {
@@ -305,7 +319,8 @@ export class HealthRecordComponent implements OnInit {
             matchMode: FiltersMatchModes.LessThanOrEqual,
             operator: FiltersOperators.And
           }
-        ];    
+        ];
+
         this.filterBuilder(filtersRequest);
         this.getHealthRecords();
   }

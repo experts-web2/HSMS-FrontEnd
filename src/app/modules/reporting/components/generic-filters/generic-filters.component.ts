@@ -113,7 +113,7 @@ export class GenericFiltersComponent implements OnInit {
         this.router.navigate(['doctor/health_record', x.id])
       },
       error: (err) => {
-        this.alertService.success('An Error Occoured while Creating Health Record.');
+        this.alertService.error('An Error Occoured while Creating Health Record.');
       }
     })
   }

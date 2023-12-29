@@ -25,7 +25,11 @@
         <p-calendar [(ngModel)]="dateRange" selectionMode="range" appendTo="body" (onSelect)="getByDateRange($event)"></p-calendar>
     </div>
     <div>
-        <p-dialog header="Header" [(visible)]="visible" [style]="{width: '50vw', height: '60%'}">
+        <p-dialog header="Add New Health Record" [modal]="true" [(visible)]="visible" [draggable]="false" [resizable]="false" [style]="{width: '50vw'}">
+            <div *ngIf="logedInUser.roles.includes('Admin')" class="mb-3">
+                <label for="">Doctor </label>
+                <p-autoComplete [minLength]="3" [field]="'name'" #doctorsAuto [suggestions]="doctorsList" (completeMethod)="doctorQuery($event)" (onSelect)="doctorSelected($event.id, false)" placeholder=""></p-autoComplete>
+            </div>
             <div>
                 <label for="">Patient </label>
                 <p-autoComplete [minLength]="3" [field]="'name'" [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="null" placeholder="" (onSelect)="selectedPatient($event.id)">
