@@ -154,7 +154,7 @@ export class UserFormComponent
       // const data = userToAdd;
       // const { password, roles, ...rest } = data;
       this.userService
-        .updateUserData(this.user.id, userToAdd)
+        .updateUser(this.user.id, userToAdd)
         .pipe(takeUntil(this.componetDestroyed))
         .subscribe({
           next: (x: any) => {

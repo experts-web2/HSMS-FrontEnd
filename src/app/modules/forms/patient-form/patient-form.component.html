@@ -18,15 +18,18 @@
             <mat-label>Name<span class="text-danger">*</span></mat-label>
             <div>
                 <input class="form-control" [ngClass]="{'ng-invalid ng-dirty': name.touched && name.invalid}" pInputText placeholder="Name" formControlName="name" required>
-                <small class="text-danger" *ngIf="name.touched && name.invalid">Name is required.</small>
+                <small class="text-danger" *ngIf="(name.touched && name.invalid)">Name is required.</small>
             </div>
         </div>
         <div class="input_Divs">
             <mat-label>Phone#<span class="text-danger">*</span></mat-label>
             <div class="inpt-phone">
-                <input class="form-control inpt-Ph-rel " [ngClass]="{ 'ng-invalid ng-dirty' :phoneNum.touched && phoneNum.invalid}" pInputText placeholder="+923212345667" formControlName="phoneNum">
+                <div class="flex flex-column">
+                    <input class="form-control inpt-Ph-rel w-full p-1 " [ngClass]="{ 'ng-invalid ng-dirty' :phoneNum.touched && phoneNum.invalid}" pInputText placeholder="+923212345667" formControlName="phoneNum">
+                    <small class="text-danger" *ngIf="(phoneNum.touched && phoneNum.invalid)">Phone# is required.</small>
+                </div>
                 <span class="plus-sign">+</span>
-                <mat-select class="form-control inpt-Ph-rel" [ngClass]="{ 'ng-invalid ng-dirty' :relation   .touched && relation.invalid}"  placeholder="Select Relation" formControlName="relation">
+                <mat-select class="form-control inpt-Ph-rel" [ngClass]="{ 'ng-invalid ng-dirty' :relation.touched && relation.invalid}"  placeholder="Select Relation" formControlName="relation">
                 <mat-option *ngFor="let relation of relations" [value]="relation.value">
                         {{relation.label}}
                 </mat-option>
@@ -48,11 +51,9 @@
         </div>
         <div class="input_Divs">
             <mat-label>Age<span class="text-danger">*</span></mat-label>
-            <div class="inpt-phone">
-                <input class="form-control " [ngClass]="{'ng-invalid ng-dirty': phoneNum.touched && phoneNum.invalid}" pInputText placeholder="Years" #years (input)="concatDate(years.value)">
-                <!-- <input class="form-control inpt-age" pInputText placeholder="Months" #months (input)="concatDate(years.value, months.value, days.value)"> -->
-                <!-- <input class="form-control inpt-age" pInputText placeholder="Days" #days (input)="concatDate(years.value, months.value, days.value)"> -->
-                <input hidden class="" formControlName="age">
+            <div class="inpt-phone flex flex-column">
+                <input class="form-control " formControlName="age" [ngClass]="{'ng-invalid ng-dirty': age.touched && age.invalid}" pInputText placeholder="Age" >
+                <small class="text-danger" *ngIf="(age.touched && age.invalid)">Age is required.</small>
             </div>
         </div>
         <div class="input_Divs">
@@ -60,9 +61,6 @@
             <div class="date-div">
                 <p-calendar  [ngClass]="{'ng-invalid ng-dirty': registrationDate.invalid && registrationDate.touched }" appendTo="body"  [showButtonBar]="true" [showIcon]="true" formControlName="registrationDate">
             </p-calendar>
-                <!-- <input readonly class=" inpt-Date" matInput [matDatepicker]="picker" formControlName="registrationDate">
-                <mat-datepicker-toggle class="datepickerIcon" matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker> -->
             </div>
         </div>
 

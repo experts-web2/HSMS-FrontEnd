@@ -89,14 +89,14 @@
                         </div>
                         <div class="d-flex flex-column">
                             <label for="weigth">Weight (Kg)</label>
-                            <input formControlName="weight" pInputText class="pulse" type="number" name="weight">
+                            <input formControlName="weight" pInputText class="pulse" type="number" name="weight" (input)="calculateBmi()">
                         </div>
                         <div class="d-flex flex-column">
                             <label for="height">Heigth</label>
                             <!-- <input formControlName="height" pInputText class="pulse" type="number" name="height"> -->
                             <div class="flex flex-row">
-                                <input formControlName="feet" style="width: 80px" pInputText class="pulse" type="number" name="Feet" placeholder="Feet">
-                                <input formControlName="inches" style="width: 80px" pInputText class="pulse" type="number" name="Inches" placeholder="Inches">
+                                <input formControlName="feet" style="width: 80px" pInputText class="pulse" type="number" name="Feet" placeholder="Feet" (input)="calculateBmi()">
+                                <input formControlName="inches" style="width: 90px" pInputText class="pulse" type="number" name="Inches" placeholder="Inches" (input)="calculateBmi()">
                             </div>
                         </div>
                         <div class="d-flex flex-column">
@@ -214,9 +214,9 @@
             <div class="md:w-2/4 ms-auto mt-5 md:mt-0 flex  justify-end">
                 <p-button class=" mr-4" (click)="addToken()"
                     [disabled]="!invoiceItems.length || invoiceItems.invalid || doctorId.invalid || patientId.invalid || tokenTypes.invalid || amountPaid.invalid || paymentType.invalid">Save</p-button>
-                <p-button  (click)="addToken()"
+                <!-- <p-button  (click)="addToken()"
                     [disabled]="!invoiceItems.length || invoiceItems.invalid || doctorId.invalid || patientId.invalid || tokenTypes.invalid || amountPaid.invalid || paymentType.invalid">Save
-                    & Print</p-button>
+                    & Print</p-button> -->
             </div>
             <!-- {{'invoiceItems.length' + invoiceItems.length}} {{ 'invoiceItems.invalid'+ invoiceItems.invalid}} {{'doctorId.invalid'+ doctorId.invalid}} {{ 'patientId.invalid'+patientId.invalid}} {{ 'tokenTypes.invalid' + tokenTypes.invalid }} {{ 'amountPaid.invalid' + amountPaid.invalid}} {{'paymentType.invalid' + paymentType.invalid}} -->
         </div>

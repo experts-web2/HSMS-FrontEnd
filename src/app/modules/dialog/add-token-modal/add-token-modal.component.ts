@@ -138,30 +138,18 @@ export class AddTokenModalComponent
       paymentType: new FormControl<number | null>(1, [Validators.required]),
       amountPaid: new FormControl<number | null>(null, [Validators.required]),
       grandTotal: new FormControl<number | null>(null, [Validators.required]),
-      pulseHeartRate: new FormControl<number | null>(null, [
-        Validators.required,
-      ]),
-      temperature: new FormControl<number | null>(null, [Validators.required]),
-      bloodPressure: new FormControl<string | null>(null, [
-        Validators.required,
-      ]),
-      respiratoryRate: new FormControl<number | null>(null, [
-        Validators.required,
-      ]),
-      bloodSugar: new FormControl<number | null>(null, [Validators.required]),
-      weight: new FormControl<number | null>(null, [Validators.required]),
-      height: new FormControl<number | null>(null, [Validators.required]),
-      feet: new FormControl<number | null>(null, [Validators.required]),
-      inches: new FormControl<number | null>(null, [Validators.required]),
-      bodyMassIndex: new FormControl<number | null>(null, [
-        Validators.required,
-      ]),
-      bodySurfaceArea: new FormControl<number | null>(null, [
-        Validators.required,
-      ]),
-      oxygenSaturation: new FormControl<number | null>(null, [
-        Validators.required,
-      ]),
+      pulseHeartRate: new FormControl<number | null>(null),
+      temperature: new FormControl<number | null>(null),
+      bloodPressure: new FormControl<string | null>(null),
+      respiratoryRate: new FormControl<number | null>(null),
+      bloodSugar: new FormControl<number | null>(null),
+      weight: new FormControl<number | null>(null, [Validators.min(0)]),
+      height: new FormControl<number | null>(null),
+      feet: new FormControl<number | null>(null, [Validators.min(0)]),
+      inches: new FormControl<number | null>(null, [Validators.min(0), Validators.max(11)]),
+      bodyMassIndex: new FormControl<number | null>(null),
+      bodySurfaceArea: new FormControl<number | null>(null),
+      oxygenSaturation: new FormControl<number | null>(null),
       payment_notification: new FormControl<boolean | null>(null, [
         Validators.required,
       ]),
@@ -198,6 +186,22 @@ export class AddTokenModalComponent
 
   get patient(): AbstractControl {
     return this.addTokenForm.get('patient') as AbstractControl;
+  }
+
+  get feet(): AbstractControl {
+    return this.addTokenForm.get('feet') as AbstractControl;
+  }
+
+  get inches(): AbstractControl {
+    return this.addTokenForm.get('inches') as AbstractControl;
+  }
+
+  get weight(): AbstractControl {
+    return this.addTokenForm.get('weight') as AbstractControl;
+  }
+
+  get bodyMassIndex(): AbstractControl {
+    return this.addTokenForm.get('bodyMassIndex') as AbstractControl;
   }
 
   get amountPaid(): AbstractControl {
@@ -264,6 +268,26 @@ export class AddTokenModalComponent
         error: (err) => {},
       });
   }
+
+  calculateBmi(){
+    let bmi = 0;       
+    let meters = this.feetAndInchesToCentimeters(this.feet.value ?? 0, this.inches.value ?? 0) / 100; 
+    bmi =  (this.weight.value ?? 0) / (meters * meters);
+    this.bodyMassIndex.setValue(bmi);
+  }
+
+  feetAndInchesToCentimeters(feet: number, inches: number): number {
+    // Convert feet to centimeters
+    const feetInCentimeters = feet * 30.48;
+
+    // Convert inches to centimeters
+    const inchesInCentimeters = inches * 2.54;
+
+    // Total length in centimeters
+    const totalCentimeters = feetInCentimeters + inchesInCentimeters;
+
+    return totalCentimeters;
+}
 
   patientSelect(patient: IPatient) {
     this.addTokenForm.get('patientId')?.setValue(patient.id);
