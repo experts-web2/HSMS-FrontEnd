@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MedicineService, VendorService, MedicineBrandService } from 'src/app/services';
+import { MedicineService, VendorService, MedicineBrandService, AlertService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { takeUntil } from 'rxjs';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -9,6 +9,15 @@ import { IMedicinePurchaseRequest } from 'src/app/models/interfaces/MedicinePurc
 import { DialogService } from 'primeng/dynamicdialog';
 import { PharmacyPurchaseInvoiceComponent } from '../pharmacy-purchase-invoice/pharmacy-purchase-invoice.component';
 import { IMedicinePurchase } from 'src/app/models/interfaces/MedicinePurchase';
+import { IMedicine } from 'src/app/models/interfaces/Medicine';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
+import { PotencyUnits } from 'src/app/constants/enums/potency-units';
+import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
+import { HttpErrorResponse } from '@angular/common/http';
+import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
+import { IVendor } from 'src/app/models/interfaces/vendorRequest';
+import { AddVendorComponent } from 'src/app/modules/admin/vendor/add-vendor/add-vendor.component';
 
 @Component({
   selector: 'app-pharmacy-purchase',
@@ -18,17 +27,26 @@ import { IMedicinePurchase } from 'src/app/models/interfaces/MedicinePurchase';
 export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective implements OnInit {
 
   purchaseMedicineForm!: FormGroup;
+  invoiceDate: Date = new Date();
   vendors: Array<IDropDown> = [];
   vendorsToView: Array<IDropDown> = [];
   medicinesList!: Array<IDropDown>;
-  medicinesToShow!: Array<IDropDown>;
-  medicineToView: Array<any> = [];
+  medicinesToShow!: Array<IMedicine>;
+  medicineToView: Array<IMedicine> = [];
   brandToView: Array<IDropDown> = [];
   medicineList: Array<any> = [];
   brandList: Array<IDropDown> = [];
   discountTypes: Array<{label: string, value: number}> = [{label: 'Amount', value: 1}, {label: 'Percentage %', value: 2}];
 
-  constructor(private readonly fb: FormBuilder, private readonly vendorService: VendorService, private readonly medicineService: MedicineService, private readonly medicaineBrandService: MedicineBrandService, private readonly medicinePurchaseService: MedicinePurchaseService, private readonly dialogService: DialogService){
+  constructor(
+    private readonly fb: FormBuilder, 
+    private readonly vendorService: VendorService, 
+    private readonly medicineService: MedicineService, 
+    private readonly medicaineBrandService: MedicineBrandService, 
+    private readonly medicinePurchaseService: MedicinePurchaseService, 
+    private readonly dialogService: DialogService,
+    private readonly alertService: AlertService
+  ){
     super();
     let initialMedicine = this.fb.group({
       medicineId: new FormControl<string | null>(null, [Validators.required]),
@@ -45,12 +63,13 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
 
     this.purchaseMedicineForm = this.fb.group({
       vendorId: new FormControl<string | null>(null, [Validators.required]),
+      vendor: new FormControl<IVendor | null>(null),
       medicinePurchaseItems: this.fb.array([initialMedicine]),
       disountType: new FormControl<number>(1, [Validators.required]),
       discountAmount: new FormControl<number | null>(0 ,[Validators.required]),
       totalAmount: new FormControl<number>(0, [Validators.required]),
       netTotalAmount: new FormControl<number>(0, [Validators.required]), 
-      discountInp: new FormControl<number | null>(null, [Validators.required]) 
+      discountInp: new FormControl<number | null>(0, [Validators.required]) 
     })
   }
 
@@ -135,12 +154,22 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
     }
   }
 
+  addVendorPopup(){
+    this.dialogService.open(AddVendorComponent, {
+      width: '50%'
+    }).onClose.subscribe(x => {
+      if(x){
+        this.getVendorsDropDown();
+      }      
+    })
+  }
+
   onVendorSelection(vendorId: string) {
     this.purchaseMedicineForm.get('vendorId')?.setValue(vendorId);
   }
 
-  onMedicineSelection(index: number, medicineId: string) {
-    this.medicines.at(index).get('medicineId')?.setValue(medicineId);
+  onMedicineSelection(index: number, medicine: IMedicine) {
+    this.medicines.at(index).get('medicineId')?.setValue(medicine.id);
   }
 
   onBrandSelection(index: number, brandId: string) {
@@ -196,11 +225,33 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
 
   onSearchMedicine(event: any) {
     const query = event.query.trim().toLowerCase();
-    this.medicineToView = this.medicinesList.filter(
-      (medicine) =>
-        medicine.name.toLowerCase().includes(query)
-    );
     
+    let request: IFetchRequest = {
+      pagedListRequest: {
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest: {
+        filtersRequest: [
+          {
+            field: 'Name',
+            matchMode: FiltersMatchModes.Contains,
+            value: query,
+            ignoreCase: true,
+            operator: FiltersOperators.Or            
+          },
+          {
+            field: 'Salt',
+            matchMode: FiltersMatchModes.Contains,
+            value: query,
+            ignoreCase: true,
+            operator: FiltersOperators.Or
+          }
+        ]
+      }
+    }
+    
+    this.getMedicineDropDown(request);   
   }
 
   onSearchBrand(event: any) {
@@ -212,11 +263,11 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
     
   }
 
-  getMedicineDropDown(){
-    this.medicineService.getMedicineDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
+  getMedicineDropDown(query: IFetchRequest = {}){
+    this.medicineService.getMedicine(query).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
-        this.medicinesList = x;
-        this.medicinesToShow = x;
+        this.medicinesList = x.data;
+        this.medicinesToShow = x.data;
 
       },
       error: (err: Error)=>{
@@ -236,16 +287,30 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
     })
   }
 
-  saveMedicine() {
-    console.log(JSON.stringify(this.purchaseMedicineForm.value));
+  saveMedicine(print: boolean = false) {
     let purchaseInvoicePayload: IMedicinePurchaseRequest = this.purchaseMedicineForm.value;
     purchaseInvoicePayload.medicinePurchaseItems = this.medicines.value;
     this.medicinePurchaseService.addMedicinePurchaseInvoice(purchaseInvoicePayload).subscribe({
       next: (x) => {
-        this.openDialog({invoice: x, medicines: this.medicineList})
-      },
-      error: (err: Error) => {
+        this.alertService.success('Success', 'Medicine purchase invoice saved successfully.')
+       if(print) this.openDialog({invoice: x, medicines: this.medicineList});
+       this.purchaseMedicineForm.reset();
+       
+       for(let i = 0; i < this.medicines.length; i++){
+        this.medicines.removeAt(i);
+       }
 
+       this.addMedicine()
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log({error: err.error});
+        let errorMessage = 'These fields are required.';
+        let errorFields = '';
+        Object.entries(err.error.errors).forEach(x => {
+          errorFields = errorFields + `, ${x.at(0)}`;
+        });
+
+        this.alertService.error('Error', `(${errorFields}). ${errorMessage}`)
       }
     })
   }
@@ -272,6 +337,15 @@ export class PharmacyPurchaseComponent extends SubscriptionManagmentDirective im
   packPriceChange(packPrice: any, index: number){
     this.calculateUnitPrice(index);   
     this.calculate(); 
+  }
+
+  
+  getPotencyUnit(potency: number): string{
+    return PotencyUnits[potency];
+  }
+
+  getMedicineType(potency: number): string{
+    return MedicineType[potency];
   }
 
   calculateUnitPrice(index: number){

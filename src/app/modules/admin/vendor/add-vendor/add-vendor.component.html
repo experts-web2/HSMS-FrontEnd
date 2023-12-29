@@ -28,11 +28,11 @@
 </div>
 <div style="text-align: end;">
     <p-button class="mt-3" type="submit" [disabled]="
-    !vendorForm.controls['firstName'].valid &&
-    !vendorForm.controls['lastName'].valid &&
-    !vendorForm.controls['companyName'].valid &&
-    !vendorForm.controls['phoneNumber'].valid &&
-    !vendorForm.controls['address'].valid
+    vendorForm.controls['firstName'].invalid ||
+    vendorForm.controls['lastName'].invalid ||
+    vendorForm.controls['companyName'].invalid ||
+    vendorForm.controls['phoneNumber'].invalid ||
+    vendorForm.controls['address'].invalid
     ">{{action === 'add'?'Add Vendor +':'Update Vendor +'}}</p-button>
 </div>
 </form>

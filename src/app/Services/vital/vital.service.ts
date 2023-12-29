@@ -6,6 +6,7 @@ import { IVital } from '../../models/vitals';
 import { Observable } from 'rxjs';
 import { IDropDown } from '../../models/interfaces/Dropdown';
 import { IVitalRequest } from '../../models/interfaces/vitalsRequest';
+import { IDataSourceResponse } from 'src/app/models/interfaces/DataSourceResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +24,11 @@ export class VitalService extends HttpService {
     return this.post(`${this.baseEndpoint}`, vital);
   }
 
-   getVitals(): Observable<any>{
+   getVitals(): Observable<IDataSourceResponse<IVital>>{
     return this.get(`${this.baseEndpoint}/all`);
   }
 
-   getPreviousVisits(): Observable<any>{
+   getPreviousVisits(): Observable<IDataSourceResponse<IVital>>{
     return this.get(`${this.baseEndpoint}/all`);
    }
   getVitalsHistoryDropDown(patientId: string): Observable<Array<IDropDown>>{

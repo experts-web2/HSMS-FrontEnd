@@ -9,4 +9,5 @@ export interface IMedicine extends IBaseResponse {
   brandID?: string;
   medicineType: number;
   potencyUnits: number;
+  stockQuantity: number;
 }

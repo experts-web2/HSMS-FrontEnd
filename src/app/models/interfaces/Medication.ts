@@ -1,3 +1,5 @@
+import { IMedicine } from "./Medicine";
+
 export interface IMedication {
     id: string;
     createdAt: Date;
@@ -31,4 +33,5 @@ export interface IMedication {
     frequency: number;
     insturction: number;
     medicineName: string;
+    medicineResponse: IMedicine
   }

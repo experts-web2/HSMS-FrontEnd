@@ -21,6 +21,7 @@ import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
 import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
 import { BrandFormComponent } from './medicine-brand/brand-form/brand-form.component';
 import { BrandListComponent } from './medicine-brand/brand-list/brand-list.component';
+import { MedicineSaltsListComponent } from './medicine-salts/medicine-salts-list/medicine-salts-list.component';
 
 const routes: Routes = [
   {path:'', component: AdminRootComponent, children:[
@@ -43,7 +44,7 @@ const routes: Routes = [
     {path: 'HR', component: HumanRecourcesComponent},
     {path: 'data-import-export', component: DataImpExpComponent},
     {path: 'doctors-form', component: DoctorFormComponent},
-
+    {path: 'medicine-salt-list', component: MedicineSaltsListComponent},
   ]}
 ];
 

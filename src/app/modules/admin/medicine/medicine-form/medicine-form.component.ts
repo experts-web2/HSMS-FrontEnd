@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { takeUntil } from 'rxjs';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
@@ -8,6 +8,11 @@ import { PotencyUnits } from 'src/app/constants/enums/potency-units';
 import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
 import { AlertService, MedicineService, MedicineBrandService } from 'src/app/services';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
+import { ISalt } from 'src/app/models/interfaces/salt';
+import { MedicineSaltsService } from 'src/app/services/medicine-salts/medicine-salts.service';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
+import { MedicineSaltsFormComponent } from '../../medicine-salts/medicine-salts-form/medicine-salts-form.component';
 
 
 @Component({
@@ -17,7 +22,8 @@ import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 })
 export class MedicineFormComponent extends SubscriptionManagmentDirective implements OnInit {
   medicineForm!: FormGroup;
-
+  selectedSalts: Array<ISalt> = [];
+  saltsList: Array<ISalt> = [];
   medicineTypes = [
     { label: 'Tablets', value: MedicineType.Tablets },
     { label: 'Injection', value: MedicineType.Inject },
@@ -44,12 +50,19 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
     public config: DynamicDialogConfig,
     public ref: DynamicDialogRef,
     private readonly medicineBrandService: MedicineBrandService,
+    private readonly medicineSaltService: MedicineSaltsService,
+    private readonly dialogService: DialogService
   ) {
     super();
     this.medicine = this.config.data.medicine;
     this.action = this.config.data.action
     this.getMedicineBrandDropDown();
   }
+
+  get salt(): AbstractControl<string>{
+    return this.medicineForm.get('salt') as AbstractControl<string>;
+  }
+
   ngOnInit(): void {
     this.medicineForm = this.fb.group({
       name: new FormControl('', [Validators.required]),
@@ -58,7 +71,8 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
       medicineType: new FormControl(null, [Validators.required]),
       salt: new FormControl('', [Validators.required]),
       price: new FormControl(null, [Validators.required]),
-      medicineBrandId: new FormControl(null, [Validators.required])
+      medicineBrandId: new FormControl(null, [Validators.required]),
+      selectedSalts: new FormControl<Array<ISalt>>([])
     })
     if (this.action === 'update' && this.medicine) {
       this.medicineForm.patchValue(
@@ -80,6 +94,41 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
         this.brandList = x;
       }
     })
+  }
+
+  filterSalts(event: {filter: string}){
+    let query: IFetchRequest = {
+      pagedListRequest:{
+        pageNo: 1,
+        pageSize: 1000
+      },
+      queryOptionsRequest: {
+        filtersRequest: [
+          {
+            field: 'Name',
+            value: event.filter,
+            matchMode: FiltersMatchModes.Contains,
+          }
+        ]
+      }
+    }
+
+    this.medicineSaltService.getSaltsList(query).subscribe({
+      next: (x) => {
+        this.saltsList = x.data
+      },
+      error: (err) => {
+
+      }
+    })
+    
+  }
+
+  saltChanges(){
+    let saltValue = this.selectedSalts.length ? this.selectedSalts.map(x => x.name).join(' | ') : '';
+    this.salt.setValue(saltValue);
+    console.log({saltVlaue: this.salt.value});
+    
   }
 
   get f() { return this.medicineForm.controls; }
@@ -118,5 +167,19 @@ export class MedicineFormComponent extends SubscriptionManagmentDirective implem
         }
       })
     }
+  }
+
+  addSalts(){
+    this.dialogService.open(MedicineSaltsFormComponent,{
+      width: '30%',
+      height: '60%',
+      data: {
+        action: 'add',
+      },
+    }).onClose.subscribe({
+      next: (x) => {
+
+      }
+    })
   }
 }

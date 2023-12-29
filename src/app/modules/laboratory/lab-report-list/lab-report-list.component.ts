@@ -102,8 +102,8 @@ export class LabReportListComponent
   testsToShow: Array<ILabeTest> = [];
   sampleTests: Array<IPatientReport> =[];
   sampleTestPending: Array<IPatientReport> =[];
-  sampleTestPendingTotalRecords: any;
   testCompleted: Array<IPatientReport> =[];
+  sampleTestPendingTotalRecords: any;
   testCompletedTotalRecords: any;
   constructor(
     public readonly dialogService: DialogService,

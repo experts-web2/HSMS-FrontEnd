@@ -25,7 +25,11 @@
         <p-calendar [(ngModel)]="dateRange" selectionMode="range" appendTo="body" (onSelect)="getByDateRange($event)"></p-calendar>
     </div>
     <div>
-        <p-dialog header="Header" [(visible)]="visible" [style]="{width: '50vw', height: '60%'}">
+        <p-dialog header="Add New Health Record" [modal]="true" [(visible)]="visible" [draggable]="false" [resizable]="false" [style]="{width: '50vw'}">
+            <div *ngIf="logedInUser.roles.includes('Admin')" class="mb-3">
+                <label for="">Doctor </label>
+                <p-autoComplete [minLength]="3" [field]="'name'" #doctorsAuto [suggestions]="doctorsList" (completeMethod)="doctorQuery($event)" (onSelect)="doctorSelected($event.id, false)" placeholder=""></p-autoComplete>
+            </div>
             <div>
                 <label for="">Patient </label>
                 <p-autoComplete [minLength]="3" [field]="'name'" [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="null" placeholder="" (onSelect)="selectedPatient($event.id)">
@@ -51,8 +55,8 @@
     <div class="flex flex-row justify-between m-3 p-3 items-center rounded-t-lg bg-slate-200">
         <div><span class="font-bold">Mr#:</span> {{healthRecord.patient?.mrNo}} , <span class="font-bold">Patient:</span> {{healthRecord.patient?.name}}</div>
         <div><span class="font-bold">Added By:</span> {{healthRecord.patient?.createdBy}}</div>
-        <div><span class="font-bold">Created At:</span> {{healthRecord.patient?.createdAt | date: 'dd MMM,yyyy'}}</div>
-        <div><span class="font-bold">Added At:</span> {{healthRecord.patient?.createdAt | date: 'dd/MM/yyyy hh:mm a'}}</div>
+        <div><span class="font-bold">Created At:</span> {{healthRecord.createdAt | date: 'dd MMM,yyyy'}}</div>
+        <div><span class="font-bold">Added At:</span> {{healthRecord.createdAt | date: 'dd/MM/yyyy hh:mm a'}}</div>
         <div class="flex gap-3">
           <p-button [icon]="'pi pi-file-edit'" (onClick)="previewHealthRecord(healthRecord.id)"></p-button>
           <p-button [icon]="'pi pi-print'" (onClick)="getHealthRecord(healthRecord.id)"></p-button>

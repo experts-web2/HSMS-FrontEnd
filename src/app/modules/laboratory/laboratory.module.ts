@@ -17,6 +17,9 @@ import {
 } from 'primeng/dynamicdialog';
 import { CollectLabSampleComponent } from './collect-lab-sample/collect-lab-sample.component';
 import { AddPatientTestComponent } from './add-patient-test/add-patient-test.component';
+import { LabOrdersComponent } from './lab-orders/lab-orders.component';
+import { SampleCollectionPrintComponent } from './lab-prints/sample-collection-print/sample-collection-print.component';
+import { LabInvoicePrintComponent } from './lab-prints/lab-invoice-print/lab-invoice-print.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,9 @@ import { AddPatientTestComponent } from './add-patient-test/add-patient-test.com
     LabReportListComponent,
     AddPatientTestComponent,
     CollectLabSampleComponent,
+    LabOrdersComponent,
+    SampleCollectionPrintComponent,
+    LabInvoicePrintComponent,
   ],
   imports: [
     CommonModule,

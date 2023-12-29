@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -11,6 +11,7 @@ import { Relations } from 'src/app/constants/Constants/PatientRelatons';
 import { takeUntil } from 'rxjs';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { FileUploadService } from 'src/app/services/fileUpload/file-upload.service';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-patient-form',
@@ -41,7 +42,7 @@ export class PatientFormComponent
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private dialog: DialogService,
     public dialogRef: MatDialogRef<PatientFormComponent>,
     private readonly patientService: PatientService,
     private readonly alertService: AlertService,
@@ -49,27 +50,72 @@ export class PatientFormComponent
   ) {
     super();
     this.patientForm = this.fb.group({
-      mrNum: [null],
-      name: [null, Validators.required],
-      phoneNum: [null, Validators.required],
-      relation: [null],
-      gender: ['Male'],
-      age: [null],
-      registrationDate: [null],
-      addTags: [this.tags],
-      addPhoto: [this.base64ImagStr]
+      mrNum: new FormControl({value: null, disabled: true}, [Validators.required]),
+      name: new FormControl(null, [Validators.required]),
+      phoneNum: new FormControl('+92', [Validators.required, this.validatePakistaniPhoneNumber]),
+      relation: new FormControl(Relations.Self, [Validators.required]),
+      gender: new FormControl('Male', [Validators.required]),
+      age: new FormControl(null, [Validators.required]),
+      registrationDate: new FormControl(new Date(), [Validators.required]),
+      addPhoto: new FormControl(this.base64ImagStr)
     });    
+  }
+
+  get mrNum(): AbstractControl{
+    return this.patientForm.get('mrNum') as AbstractControl;
+  }
+
+  get name(): AbstractControl{
+    return this.patientForm.get('name') as AbstractControl;
+  }
+
+  get phoneNum(): AbstractControl{
+    return this.patientForm.get('phoneNum') as AbstractControl;
+  }
+
+  get relation(): AbstractControl{
+    return this.patientForm.get('relation') as AbstractControl;
+  }
+
+  get gender(): AbstractControl{
+    return this.patientForm.get('gender') as AbstractControl;
+  }
+
+  get age(): AbstractControl{
+    return this.patientForm.get('age') as AbstractControl;
+  }
+
+  get registrationDate(): AbstractControl{
+    return this.patientForm.get('registrationDate') as AbstractControl;
   }
   
   ngOnInit(): void {
+    this.generateMrNo();
   }
 
+  generateMrNo(){
+    this.patientService.generateMrNo().subscribe({
+      next: (x) => {
+        // this.alertService.info(x);
+        this.mrNum.setValue(x);
+      },
+      error: (err) => {
+
+      }
+    })
+  }
 
   onSubmit() {
     console.log(this.patientForm.value);
+    
+    if(this.patientForm.invalid){
+      this.alertService.error('Please Fill In All Required Fields.');
+      return;
+    }
+
     let values = this.patientForm.value;
     let patient: IAddOrUpdatePatient = {
-      mrNo: values['mrNum'],
+      mrNo: this.mrNum.value,
       name: values['name'],
       phoneNumber: values['phoneNum'],
       age: values['age'],
@@ -85,10 +131,12 @@ export class PatientFormComponent
         next: (x) => {
           this.alertService.success('Patient Added');
           this.patientForm.reset();
-          this.dialogRef.close();
           this.uploadFiles(x.id);
+          this.dialogRef.close(x);
         },
-        error: (err) => {},
+        error: (err) => {
+          this.alertService.error('An Error Accoured While Adding Patient.')
+        },
       });
   }
 
@@ -129,8 +177,7 @@ export class PatientFormComponent
   openCamera() {
     const camera = this.dialog.open(CameraComponent, {
       width: '400px',
-    });
-    camera.afterClosed().subscribe((data) => {
+    }).onClose.subscribe((data) => {
       this.base64ImagStr = data._imageAsDataUrl;
       this.patientForm.value.addPhoto = this.base64ImagStr ?? '';
     });
@@ -150,7 +197,7 @@ export class PatientFormComponent
     for(let file of this.filesToUpload){
       formData.append('files', file);
     }
-
+    if(!this.filesToUpload.length) return;
     this.fileUploadService.uploadFiles(formData, patientId).subscribe({
       next:(x) => {
         this.alertService.success('Files Uploaded Successfully.')
@@ -171,5 +218,13 @@ export class PatientFormComponent
       this.appendFilesToUpload(file)
       this.filesToUpload = [...files];
     }
+  }
+
+  validatePakistaniPhoneNumber(control: AbstractControl): ValidationErrors | null {
+    const phoneNumberRegex = /^(\+92|03)\d{9}$/; // Adjust the regex as needed
+    if (control.value && !phoneNumberRegex.test(control.value)) {
+      return { invalidPhoneNumber: true };
+    }
+    return null;
   }
 }

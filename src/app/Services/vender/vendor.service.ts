@@ -32,11 +32,11 @@ export class VendorService extends HttpService {
   }
 
   deleteVendor(test: any){
-    return this.delete(`${this.baseEndPoint}/delete/${test.id}`);
+    return this.delete(`${this.baseEndPoint}/${test.id}`);
   }
 
   updateVendor(id: string, test: IVendorRequest){
-    return this.put(`${this.baseEndPoint}/update/${id}`, test)
+    return this.put(`${this.baseEndPoint}/${id}`, test)
   }
 
 }

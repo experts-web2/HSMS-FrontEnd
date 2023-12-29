@@ -1,15 +1,6 @@
 <div class="d-flex col-12 flex-column">
-    <!-- <div class="flex justify-between mb-3">
-        <select class="form-select w-1/3" name="" id="" #medicationHistorys (change)="onHistorySelection(medicationHistorys.value)" >
-            <option [value]="''" [defaultSelected]="true" disabled>Selct Mediaction History</option>
-            <option *ngFor="let his of historyDropDown" [value]="his.id">{{his.name | date: 'EEE MMM, dd/yyyy'}}</option>
-        </select>
-        <p-button *ngIf="historyMedication" label="Curent Prescription" (onClick)="currentMedication()"></p-button>
-
-    </div> -->
     <hr class="w-90 mb-2"  style="border: 1px solid #979797;">
     <ng-container *ngIf="!newData && showEdit">
-
         <div  class="flex flex-row-reverse m-3">
             <p-button icon="pi pi-file-edit" (onClick)="edit()"></p-button>
         </div>
@@ -21,17 +12,11 @@
                 <div [formGroupName]="i" class="grid grid-cols-1 md:grid-cols-7 justify-content-between gap-x-8 gap-y-2 p-2 w-full">
                     <div class="d-flex flex-column">
                         <label htmlFor="name">Name</label>
-                        <!-- <input type="text" pInputText  [matAutocomplete]="auto" #mediceineSerch (input)="search(mediceineSerch.value)"  formControlName="medicineName">
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onMedicineSelect(i,$event.option.value)">
-                          <mat-option *ngFor="let medicine of medicinesToShow" [value]="medicine">
-                            {{medicine.name}}
-                          </mat-option>
-                        </mat-autocomplete> -->
                         <p-autoComplete [suggestions]="medicinesToShow.length ? medicinesToShow : medicines" #medicinesToSelect
                                         (completeMethod)="search($event)"
                                         (onSelect)="onMedicineSelect(i,medicinesToSelect.value)" field="name" [minLength]="3" placeholder="Select Medicine"
                                         [showEmptyMessage]="true"
-                                        formControlName="medicineName"
+                                        formControlName="medicine"
                         >
                         <ng-template let-medicine pTemplate="selectedItem">
                             <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}} </span>
@@ -47,7 +32,6 @@
                         <div *ngIf="form.get('medicineId')?.invalid && form.get('medicineId')?.touched">
                             <div class="text-danger" *ngIf="form.get('medicineId')?.errors">Medicine is required.</div>
                           </div>
-                        <!-- <p-autoComplete name="name" class="name-input" [suggestions]="medicines" [dropdown]="true" (completeMethod)="search($event)" formControlName="medicineId"></p-autoComplete> -->
                     </div>
                     <div class="d-flex flex-column">
                         <label htmlFor="duration">Duration</label>
@@ -62,7 +46,6 @@
                         <div *ngIf="form.get('duration')?.invalid && form.get('duration')?.touched">
                             <div class="text-danger" *ngIf="form.get('duration')?.errors">Duration period is required.</div>
                           </div>
-                        <!-- <p-treeSelect class="md:w-20rem w-full mt-4" containerStyleClass="w-full" placeholder="Select Duration" formControlName="duration" [options]="medicationDurations"  (onNodeSelect)="setDuration(i,$event)"></p-treeSelect> -->
                     </div>
                     <div class="d-flex flex-column">
                         <label htmlFor="dosage">Dosage</label>
@@ -77,7 +60,6 @@
                         <div *ngIf="form.get('dosage')?.invalid && form.get('dosage')?.touched">
                             <div class="text-danger" *ngIf="form.get('dosage')?.errors">Dosage size is required.</div>
                           </div>
-                        <!-- <p-treeSelect class="md:w-20rem w-full mt-4" containerStyleClass="w-full" placeholder="Select Dosage" [options]="medicationDosages" formControlName="dosage"></p-treeSelect> -->
                     </div>
                     <div class="d-flex flex-column">
                         <label htmlFor="route">Route</label>
@@ -88,7 +70,6 @@
                         <div *ngIf="form.get('route')?.invalid && form.get('route')?.touched">
                             <div class="text-danger" *ngIf="form.get('route')?.errors">Route is required.</div>
                           </div>
-                        <!-- <p-treeSelect id="route" class="md:w-20rem w-full" containerStyleClass="w-full" placeholder="Select Route" [options]="medicationRoutes" formControlName="route"></p-treeSelect> -->
                     </div>
                     <div class="d-flex flex-column">
                         <label htmlFor="frequency">Frequency</label>
@@ -99,45 +80,32 @@
                         <div *ngIf="form.get('frequency')?.invalid && form.get('frequency')?.touched">
                             <div class="text-danger" *ngIf="form.get('frequency')?.errors">Frequency is required.</div>
                           </div>
-                        <!-- <p-treeSelect id="frequency" class="md:w-20rem w-full" containerStyleClass="w-full" placeholder="Select Frequency" [options]="medicationFrequencies" formControlName="frequency"></p-treeSelect> -->
                     </div>
                     <div class="d-flex flex-column">
                         <label htmlFor="instruction">Instruction</label>
-                        <select class="form-select" type="number" name="" id="" formControlName="instruction">
+                        <select class="form-select" formControlName="instruction">
                             <option [value]="null" desabled>Select An Instruction</option>
-                            <option *ngFor="let instruction of medicationInstructions" [ngValue]="instruction.value">{{instruction.label}}</option>
+                            <option *ngFor="let instruction of medicationInstructions" [value]="instruction.value">{{instruction.label}}</option>
                         </select>
                         <div *ngIf="form.get('instruction')?.invalid && form.get('instruction')?.touched">
                             <div class="text-danger" *ngIf="form.get('instruction')?.errors">Instruction is required.</div>
                           </div>
-                        <!-- <p-treeSelect id="instruction" class="md:w-20rem w-full" containerStyleClass="w-full" placeholder="Select Instruction" [options]="medicationInstructions" formControlName="instruction"></p-treeSelect> -->
-
                     </div>
-                    <div class="text-center" *ngIf="!historyMedication">
+                    <div class="text-center" *ngIf="newData || !showEdit">
                         <button (click)="removeMedicationItem(i)"><i class="fas fa-trash mt-4"></i></button>
                     </div>
                 </div>               
             </div>
         </div>
-        <div *ngIf="!historyMedication" class="w-fit">
-
+        <div *ngIf="newData || !showEdit" class="w-fit">
             <p-button class="mt-4 mb-2" (click)="addMedicationItem()"><i class="pi pi-plus"></i> Drug</p-button>
         </div>
         <textarea rows="2" cols="93" class="mb-4 mt-2" placeholder="Medication Notes" id="investigation" pInputTextarea formControlName="medicationNotes"></textarea>
     </div>
-    <!-- <div *ngIf="!historyMedication">
-        <div>
-            <p-checkbox  [binary]="true" inputId="reminder" ></p-checkbox><label class="m-x-2 ml-3" for="reminder">Send Reminder</label>
-        </div>
-        <div class="d-flex flex-row-reverse">
-            <p-button class="mt-4 mb-2" (click)="save()" [disabled]="!medicationForm.valid">Save</p-button>
-        </div>
-    </div> -->
     <ng-container *ngIf="!newData && !showEdit">
         <div class="flex gap-3 mb-3 mt-3">
             <p-button label="Update" (onClick)="update()"></p-button>
             <p-button label="Cancel" (onClick)="cancelEdit()"></p-button>
-
         </div>
     </ng-container>
 </div>

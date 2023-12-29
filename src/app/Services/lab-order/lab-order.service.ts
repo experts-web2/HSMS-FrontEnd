@@ -4,6 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
+import { IDataSourceResponse } from 'src/app/models/interfaces/DataSourceResponse';
+import { ILabOrder } from 'src/app/models/interfaces/labOrder';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 
 
 @Injectable({
@@ -28,9 +31,10 @@ export class LabOrderService extends HttpService{
   updateLabOrder(laborderId: string, laborder: ILabOrderRequest): Observable<any>{
     return this.put(`${this.baseEndPoint}/${laborderId}`, laborder);
   }
-//   getMedicationHistoryDropDown(patientId: string): Observable<Array<IDropDown>>{
-//     return this.get(`${this.baseEndPoint}/dropdownbypatientid/${patientId}`);
-//   }
+
+  getLabOrders(fetchRequest: IFetchRequest = {}): Observable<IDataSourceResponse<ILabOrder>>{
+    return this.post(`${this.baseEndPoint}/all`, fetchRequest);
+  }
 
 //   getMedicationById(medicationId: string): Observable<any>{
 //     return this.get(`${this.baseEndPoint}/${medicationId}`)

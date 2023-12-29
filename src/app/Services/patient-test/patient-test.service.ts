@@ -4,7 +4,10 @@ import { HttpService } from 'src/app/services';
 import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { Observable } from 'rxjs';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
-import { ITestReport } from 'src/app/models/interfaces/addOrUpdate-test';
+import { ILabTest, ITestReport } from 'src/app/models/interfaces/addOrUpdate-test';
+import { ILabInvoice } from 'src/app/models/interfaces/lab-Invoice';
+import { IPatientSampleRequest } from 'src/app/models/interfaces/test-sample-request';
+import { IPatientSample } from 'src/app/models/interfaces/testSample';
 
 
 @Injectable({
@@ -22,8 +25,12 @@ export class PatientTestService extends HttpService {
     return this.get(`${this.baseEndPoint}/testdropdownbytodayinvoiced?patientId=${patientId}`);
   }
 
-  getLabtestsBytodayInvoicedByPatientid(patientId: string){
-    return this.get(`${this.baseEndPoint}/labtestsbytodayinvoiced?patientId=${patientId}`);
+  getLabtestsBytodayInvoicedByPatientid(invoiceId: string): Observable<Array<ILabTest>>{
+    return this.get(`${this.baseEndPoint}/labtestsbytodayinvoiced?invoiceId=${invoiceId}`);
+  }
+
+  getLabTestInvoiceById(invoiceId: string): Observable<ILabInvoice>{
+    return this.get(`${'patienttestinvoice'}/${invoiceId}`);
   }
 
   getpendingsamplecollections(fetchRequest: IFetchRequest = {}){
@@ -46,8 +53,8 @@ export class PatientTestService extends HttpService {
     return this.get(`${BaseEndPoints.PatientSample}/generate/sampleid?patientId=${sampleIdPayload.patientId}&testTypeId=${sampleIdPayload.testCategoryId}`);
   }
 
-  addPatientTestSamples(fetchRequest: IFetchRequest = {}){
-    return this.post(`${BaseEndPoints.PatientSample}`, fetchRequest);
+  addPatientTestSamples(sampleRequest: IPatientSampleRequest): Observable<Array<IPatientSample>>{
+    return this.post(`${BaseEndPoints.PatientSample}`, sampleRequest);
   }
 
   addPatientTestReport(fetchRequest:ITestReport){
@@ -55,10 +62,10 @@ export class PatientTestService extends HttpService {
   }
 
   patientTestInvoice(patientSerch?:string): Observable<any>{
-    return this.get(`${BaseEndPoints.Patienttestinvoice}/patientdropdownbytodayinvoiced?search=${patientSerch}`);
+    return this.get(`${BaseEndPoints.Patienttestinvoice}/patientinfobyfilter?search=${patientSerch}`);
   }
 
-  addPatientTest(test:any){
+  addPatientTest(test:any): Observable<ILabInvoice>{
     return this.post(`${BaseEndPoints.Patienttestinvoice}`, test);
   }
 }

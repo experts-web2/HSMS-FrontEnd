@@ -34,10 +34,10 @@ export class MedicineBrandService extends HttpService {
   }
 
   deleteBrand(test: any){
-    return this.delete(`${this.baseEndPoint}/delete/${test.id}`);
+    return this.delete(`${this.baseEndPoint}/${test.id}`);
   }
 
   updateBrand(id: string, test: IAddOrUpdateBrand){
-    return this.put(`${this.baseEndPoint}/update/${id}`, test)
+    return this.put(`${this.baseEndPoint}/${id}`, test)
   }
 }

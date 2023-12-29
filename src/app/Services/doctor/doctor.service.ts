@@ -7,6 +7,7 @@ import { IAddOrUpdateDoctorRequest } from 'src/app/models/interfaces/addOrUpdate
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { HttpService } from '../http/http.service';
 import { IDoctor } from 'src/app/models/interfaces/Doctor';
+import { IDataSourceResponse } from 'src/app/models/interfaces/DataSourceResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class DoctorService extends HttpService {
   }
 
 
-  getDoctors(fetchRequest: IFetchRequest = {}): Observable<any>{
+  getDoctors(fetchRequest: IFetchRequest = {}): Observable<IDataSourceResponse<IDoctor>>{
     return this.post(`${this.baseEndPoints}/all`, fetchRequest);
   }
 
@@ -34,11 +35,11 @@ export class DoctorService extends HttpService {
 
 
   updateDoctor(data: IAddOrUpdateDoctorRequest,id:string): Observable<any>{
-    return this.put(`${this.baseEndPoints}/update/${id}`, data);
+    return this.put(`${this.baseEndPoints}/${id}`, data);
   }
 
   deleteDoctor(doctor: any){
-    return this.delete(`${this.baseEndPoints}/delete/${doctor.id}`);
+    return this.delete(`${this.baseEndPoints}/${doctor.id}`);
   }
 
   isEmailInUse(email: string): Observable<boolean>{

@@ -15,6 +15,7 @@
           <a mat-menu-item routerLink="/laboratory/collect_lab_sample">Collection Lab Sample</a>
           <a mat-menu-item routerLink="/laboratory/lab_report">Lab Test Report</a>
           <a mat-menu-item routerLink="/laboratory/lab_report_list">Lab Test Lists</a>
+          <a mat-menu-item routerLink="/laboratory/lab_orders">Lab Orders</a>
         </mat-menu>
 
         <p-menu #menu [model]="items" [popup]="true"></p-menu>
@@ -98,6 +99,7 @@
             <a mat-menu-item routerLink="/laboratory/collect_lab_sample">Collection Lab Sample</a>
             <a mat-menu-item routerLink="/laboratory/lab_report">Lab Test Report</a>
             <a mat-menu-item routerLink="/laboratory/lab_report_list">Lab Test Lists</a>
+            <a mat-menu-item routerLink="/laboratory/lab_orders">Lab Orders</a>
           </mat-menu>
           <p-menu #menu [model]="items" [popup]="true"></p-menu>
           <a class="creat-drop cursor-pointer text-white mt-3 justify-center" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)">Pharmacy<mat-icon

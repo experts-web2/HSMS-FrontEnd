@@ -13,6 +13,7 @@ export interface ILabTest {
     testCategoryId: string
     name: string
     description: string
+    categoryName?: string
     price: number
     normalValues: string
     testSample: string

@@ -20,7 +20,7 @@
                     <p-autoComplete [suggestions]="patientsToShow" #patient dropdownIcon="pi pi-search"
                         (completeMethod)="searchPatient($event)" 
                         (onSelect)="patientSelect(patient.value)" placeholder="Search a Patient" field="name"
-                         [minLength]="3" [showEmptyMessage]="true">
+                         [minLength]="3" [showEmptyMessage]="true" formControlName="patient">
                     
                          <ng-template let-patient pTemplate="item">
                             <div class="flex flex-column">
@@ -62,24 +62,29 @@
                     </div> -->
                     <div class="my-6 appointmentField grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
                         <div class="d-flex flex-column">
-                            <label for="pulse">Pulse heart rate</label>
+                            <label for="pulse">Pulse heart rate (per mint)</label>
                             <input formControlName="pulseHeartRate" pInputText class="pulse" type="number" name="pulse">
                         </div>
                         <div class="d-flex flex-column">
-                            <label for="temp">Temperature C°</label>
+                            <label for="temp">Temperature F°</label>
                             <input formControlName="temperature" pInputText class="pulse" type="number" name="temp">
                         </div>
                         <div class="d-flex flex-column">
-                            <label for="bp">Blood Pressure</label>
+                            <label for="bp">Blood Pressure (mmHg)</label>
                             <input formControlName="bloodPressure" pInputText class="pulse" type="text" name="bp">
                         </div>
                         <div class="d-flex flex-column">
-                            <label for="respiratory">Respiratory rate</label>
+                            <label for="respiratory">Respiratory rate (per mint)</label>
                             <input formControlName="respiratoryRate" pInputText class="pulse" type="number"
                                 name="respiratory">
                         </div>
                         <div class="d-flex flex-column">
-                            <label for="sugar">Blood sugar</label>
+                            <label for="saturation">Oxygen saturation %</label>
+                            <input formControlName="oxygenSaturation" pInputText class="pulse" type="number"
+                                name="oxygenSaturation">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label for="sugar">Blood sugar (mg/dl)</label>
                             <input formControlName="bloodSugar" pInputText class="pulse" type="number" name="sugar">
                         </div>
                         <div class="d-flex flex-column">
@@ -87,22 +92,16 @@
                             <input formControlName="weight" pInputText class="pulse" type="number" name="weight">
                         </div>
                         <div class="d-flex flex-column">
-                            <label for="height">Heigth (cm)</label>
-                            <input formControlName="height" pInputText class="pulse" type="number" name="height">
+                            <label for="height">Heigth</label>
+                            <!-- <input formControlName="height" pInputText class="pulse" type="number" name="height"> -->
+                            <div class="flex flex-row">
+                                <input formControlName="feet" style="width: 80px" pInputText class="pulse" type="number" name="Feet" placeholder="Feet">
+                                <input formControlName="inches" style="width: 80px" pInputText class="pulse" type="number" name="Inches" placeholder="Inches">
+                            </div>
                         </div>
                         <div class="d-flex flex-column">
-                            <label for="bmi">Body mass index</label>
+                            <label for="bmi">Body mass index (kg/cm)</label>
                             <input formControlName="bodyMassIndex" pInputText class="pulse" type="number" name="bmi">
-                        </div>
-                        <div class="d-flex flex-column">
-                            <label for="bsa">Body surface area cm<sup>2</sup></label>
-                            <input formControlName="bodySurfaceArea" pInputText class="pulse" type="number"
-                                name="bodySurfaceArea">
-                        </div>
-                        <div class="d-flex flex-column">
-                            <label for="saturation">Oxygen saturation</label>
-                            <input formControlName="oxygenSaturation" pInputText class="pulse" type="number"
-                                name="oxygenSaturation">
                         </div>
                     </div>
                 </div>

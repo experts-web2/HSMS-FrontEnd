@@ -78,21 +78,7 @@ export class AppComponent implements OnInit {
 
     this.checkLoggedIn();
 
-    if (this.isDoctor || this.isAdmin) {
-      this.navItemToShow= [{
-        label: 'Messages',
-        icon: 'fa-solid fa-message',
-        routerLink: '/register',
-        styleClass:"navButton cursor-pointer",
-    }, ...this.navitems, ]
-    if (this.isAdmin) {
-      this.navItemToShow.unshift({
-        label: 'Admin',
-        icon: 'fa-solid fa-user',
-        routerLink: '/admin',
-    })
-    }
-    }
+
   }
 
   checkLoggedIn() {
@@ -106,7 +92,27 @@ export class AppComponent implements OnInit {
         this.isDoctor = x?.roles.includes('Doctor');
         if(x?.roles.includes('LabTechnician')){
           this.isLabTechnician = true;
-          this.router.navigate(['/laboratory/add_patient_test'])
+        }
+
+        if (this.isDoctor || this.isAdmin) {
+          this.navItemToShow= [{
+            label: 'Messages',
+            icon: 'fa-solid fa-message',
+            routerLink: '/register',
+            styleClass:"navButton cursor-pointer",
+        }, ...this.navitems, ]
+        if (this.isAdmin) {
+          this.navItemToShow.unshift({
+            label: 'Admin',
+            icon: 'fa-solid fa-user',
+            routerLink: '/admin',
+        })
+        }else{
+
+          this.navItemToShow = this.navitems;
+        }
+        }else{
+          this.navItemToShow = this.navitems;
         }
       },
       error: (err: Error) => {},

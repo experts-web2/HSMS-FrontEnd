@@ -129,6 +129,7 @@ export class AddTokenModalComponent
     this.addTokenForm = this.fb.group({
       patientId: new FormControl<string | null>(null, [Validators.required]),
       patientName: new FormControl<string | null>(null),
+      patient: new FormControl<any | null>(null),
       tokenTypes: new FormControl<number | null>(null, [Validators.required]),
       doctorId: new FormControl<string | null>(null, [Validators.required]),
       totalDiscount: new FormControl<number | null>(null, [
@@ -150,6 +151,8 @@ export class AddTokenModalComponent
       bloodSugar: new FormControl<number | null>(null, [Validators.required]),
       weight: new FormControl<number | null>(null, [Validators.required]),
       height: new FormControl<number | null>(null, [Validators.required]),
+      feet: new FormControl<number | null>(null, [Validators.required]),
+      inches: new FormControl<number | null>(null, [Validators.required]),
       bodyMassIndex: new FormControl<number | null>(null, [
         Validators.required,
       ]),
@@ -187,6 +190,14 @@ export class AddTokenModalComponent
 
   get patientId(): AbstractControl {
     return this.addTokenForm.get('patientId') as AbstractControl;
+  }
+
+  get patientName(): AbstractControl {
+    return this.addTokenForm.get('patientName') as AbstractControl;
+  }
+
+  get patient(): AbstractControl {
+    return this.addTokenForm.get('patient') as AbstractControl;
   }
 
   get amountPaid(): AbstractControl {
@@ -460,8 +471,10 @@ export class AddTokenModalComponent
     });
 
     dialogRef.afterClosed().subscribe({
-      next: (x) => {
-        this.getPatients();
+      next: (x: IPatient) => {
+        this.patientId.setValue(x.id);
+        this.patientName.setValue(x.name);
+        this.patient.setValue(x);
       },
     });
   }

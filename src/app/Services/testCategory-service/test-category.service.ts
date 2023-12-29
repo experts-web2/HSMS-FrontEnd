@@ -21,11 +21,11 @@ export class TestCategoryService extends HttpService {
   }
 
   deleteCategory(deleteCategory: IAddOrUpdateCategoryRequest){
-    return this.delete(`${this.baseEndPoint}/delete/${deleteCategory.id}`);
+    return this.delete(`${this.baseEndPoint}/${deleteCategory.id}`);
   }
 
   updateCategory(id: string, category: IAddOrUpdateCategory){
-    return this.put(`${this.baseEndPoint}/update/${id}`, category)
+    return this.put(`${this.baseEndPoint}/${id}`, category)
   }
 
   getCategories(fetchRequest: IFetchRequest = {}){

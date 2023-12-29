@@ -9,27 +9,28 @@
     <p-tabView>
     <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
         <div class="input_Divs">
-            <mat-label>MR#</mat-label>
+            <mat-label>MR#<span class="text-danger">*</span></mat-label>
             <div>
-                <input class="form-control" pInputText type="number"  placeholder="MR#" formControlName="mrNum">
+                <input class="form-control " [ngClass]="{'ng-invalid ng-dirty':mrNum.touched && mrNum.invalid}" pInputText type="number"  placeholder="MR#" formControlName="mrNum" required>
             </div>
         </div>
          <div class="input_Divs">
             <mat-label>Name<span class="text-danger">*</span></mat-label>
             <div>
-                <input class="form-control" pInputText placeholder="Name" formControlName="name">
+                <input class="form-control" [ngClass]="{'ng-invalid ng-dirty': name.touched && name.invalid}" pInputText placeholder="Name" formControlName="name" required>
+                <small class="text-danger" *ngIf="name.touched && name.invalid">Name is required.</small>
             </div>
         </div>
         <div class="input_Divs">
             <mat-label>Phone#<span class="text-danger">*</span></mat-label>
             <div class="inpt-phone">
-                <input class="form-control inpt-Ph-rel" pInputText placeholder="Phone#" formControlName="phoneNum">
-                    <span class="plus-sign">+</span>
-                    <mat-select class="form-control inpt-Ph-rel"  placeholder="Select Relation" formControlName="relation">
-                    <mat-option *ngFor="let relation of relations" [value]="relation.value">
+                <input class="form-control inpt-Ph-rel " [ngClass]="{ 'ng-invalid ng-dirty' :phoneNum.touched && phoneNum.invalid}" pInputText placeholder="+923212345667" formControlName="phoneNum">
+                <span class="plus-sign">+</span>
+                <mat-select class="form-control inpt-Ph-rel" [ngClass]="{ 'ng-invalid ng-dirty' :relation   .touched && relation.invalid}"  placeholder="Select Relation" formControlName="relation">
+                <mat-option *ngFor="let relation of relations" [value]="relation.value">
                         {{relation.label}}
-                    </mat-option>
-                    </mat-select>
+                </mat-option>
+                </mat-select>
             </div>
         </div>
         <div class="input_Divs">
@@ -46,18 +47,18 @@
             </div>
         </div>
         <div class="input_Divs">
-            <mat-label>Age</mat-label>
+            <mat-label>Age<span class="text-danger">*</span></mat-label>
             <div class="inpt-phone">
-                <input class="form-control " pInputText placeholder="Years" #years (input)="concatDate(years.value)">
+                <input class="form-control " [ngClass]="{'ng-invalid ng-dirty': phoneNum.touched && phoneNum.invalid}" pInputText placeholder="Years" #years (input)="concatDate(years.value)">
                 <!-- <input class="form-control inpt-age" pInputText placeholder="Months" #months (input)="concatDate(years.value, months.value, days.value)"> -->
                 <!-- <input class="form-control inpt-age" pInputText placeholder="Days" #days (input)="concatDate(years.value, months.value, days.value)"> -->
                 <input hidden class="" formControlName="age">
             </div>
         </div>
         <div class="input_Divs">
-            <mat-label>Registration Date</mat-label>
+            <mat-label>Registration Date<span class="text-danger">*</span></mat-label>
             <div class="date-div">
-                <p-calendar formControlName="completionDate" appendTo="body" [showButtonBar]="true" [showIcon]="true" formControlName="registrationDate">
+                <p-calendar  [ngClass]="{'ng-invalid ng-dirty': registrationDate.invalid && registrationDate.touched }" appendTo="body"  [showButtonBar]="true" [showIcon]="true" formControlName="registrationDate">
             </p-calendar>
                 <!-- <input readonly class=" inpt-Date" matInput [matDatepicker]="picker" formControlName="registrationDate">
                 <mat-datepicker-toggle class="datepickerIcon" matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -76,7 +77,7 @@
             </div>
         </div>
         <div class="patient-btn">
-            <p-button type="submit">Add Patient +</p-button>
+            <p-button type="submit" [disabled]="patientForm.invalid">Add Patient +</p-button>
         </div>        
     </form>
     </p-tabView>

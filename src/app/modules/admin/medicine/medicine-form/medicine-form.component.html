@@ -27,6 +27,10 @@
         </div>
         <div class="d-flex flex-column gap-2">
             <label for="salts">Active Ingredeint<span class="text-danger">*</span></label>
+            <!-- <p-multiSelect [options]="saltsList" [(ngModel)]="selectedSalts" (onFilter)="filterSalts($event)" defaultLabel="Select Medicine Salts" optionLabel="name" display="chip"></p-multiSelect> -->
+            <ng-container [ngTemplateOutlet]="saltSelector">
+
+            </ng-container>
             <input pInputText type="text" id="salts" formControlName="salt" required>
             <div class="text-danger" *ngIf="(f['salt'].errors && f['salt'].touched) || (f['salt'].dirty && f['salt'].errors)">Please add salt.</div>
         </div>
@@ -62,3 +66,10 @@
         </div>
     </form>
 </div>
+
+<ng-template #saltSelector>
+    <div class="flex justify-between">
+        <p-multiSelect [options]="saltsList" pTooltip="Add Medicine Salt" [(ngModel)]="selectedSalts" (onFilter)="filterSalts($event)" (onChange)="saltChanges()" defaultLabel="Select Medicine Salts" optionLabel="name" display="chip"></p-multiSelect>
+        <p-button icon="pi pi-plus" (onClick)="addSalts()"></p-button>
+    </div>
+</ng-template>

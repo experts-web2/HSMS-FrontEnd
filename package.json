@@ -10,7 +10,8 @@
     "dev:ssr": "ng run HSMS:serve-ssr",
     "serve:ssr": "node dist/HSMS/server/main.js",
     "build:ssr": "ng build && ng run HSMS:server",
-    "prerender": "ng run HSMS:prerender"
+    "prerender": "ng run HSMS:prerender",
+    "build:prod": "ng build --configuration=production"
   },
   "private": true,
   "dependencies": {

@@ -5,10 +5,13 @@
     <div class="mt-5">
         <div class="px-5 pb-5">
             <form [formGroup]="saleMedicineForm">
-                <div class="mb-5">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Customer Name: </label>
-                    <input pInputText type="text" formControlName="customerName">
-                </div> 
+                <div class="flex justify-between">
+                    <div class="mb-5">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="">Customer Name: </label>
+                        <input pInputText type="text" formControlName="customerName">
+                    </div> 
+                    <span>{{currentDate | date: 'HH:mm EEE, MMM dd/yyyy'}}</span>
+                </div>
                 <div class="flex flex-column" formArrayName="medicineSaleItems">
                     <div *ngFor="let form of medicines.controls; let i = index" class="flex pt-5 pb-2"
                         [ngClass]="i === 0 ?'pt-5':'pt-16 border-t'">
@@ -18,14 +21,26 @@
                                 <div>
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">Medicine
                                         Name</label>
-                                    <p-autoComplete [suggestions]="medicinesToShow" #medicine dropdownIcon="pi pi-search"
-                                        (completeMethod)="onSearchMedicine($event)" [dropdown]="true"
-                                        (onSelect)="onMedicineSelection(i,medicine.value.id)" field="name"
-                                        dropdownIcon="pi pi-search" [minLength]="3" placeholder="select medicine"
-                                        [showEmptyMessage]="true"></p-autoComplete>
+                                    <p-autoComplete [suggestions]="medicinesToShow" #medicine 
+                                        (completeMethod)="onSearchMedicine($event)" 
+                                        (onSelect)="onMedicineSelection(i,medicine.value)" field="name"
+                                         [minLength]="3" placeholder="select medicine"
+                                        [showEmptyMessage]="true">
+                                        <ng-template let-medicine pTemplate="selectedItem">
+                                            <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}} </span>
+                                            <small>{{medicine.potency}} {{getPotencyUnit(medicine.potencyUnits)}} ({{medicine.salt}})</small>
+                                          </ng-template>
+                                          <ng-template let-medicine pTemplate="item">
+                                            <div class="flex flex-column">
+                                                <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}}</span>
+                                                  <small>{{medicine.potency}} {{getPotencyUnit(medicine.potencyUnits)}} ({{medicine.salt}})  <strong>Stock:</strong> ({{medicine.stockQuantity}})</small> 
+                                            </div>
+                                          </ng-template>
+                                    </p-autoComplete>
                                 </div>
+
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">#qty (Units)
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">#Qty (Units)
                                         </label>
                                     <input
                                         class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -37,27 +52,7 @@
                                         class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         type="number" formControlName="unitPrice">
                                 </div>
-                                <!-- <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price Of A
-                                        Unit</label>
-                                    <input
-                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        type="number" formControlName="unitPrice">
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">MFG: Date</label>
-                                    <p-calendar [showIcon]="true" formControlName="mfgDate"></p-calendar>
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">EXP: Date</label>
-                                    <p-calendar [showIcon]="true" formControlName="expDate"></p-calendar>
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Brand</label>
-                                    <input
-                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        type="text" formControlName="brandId">
-                                </div> -->
+
                             </div>
                             <div>
                                 <span (click)="removeMedicine(i)"><i class="fa fa-trash"></i></span>
@@ -83,16 +78,16 @@
             <div class="flex flex-row-reverse">
                 <div class="flex flex-col p-2 w-full items-end">
                     <div class="w-1/3 flex justify-between p-2"><strong>Number Of Medicines:</strong> <span class="ml-4">{{medicines.length}}</span></div>
-                    <div class="w-1/3 flex justify-between p-2"><strong>Dicount Amount:</strong> <span class="ml-4">{{saleMedicineForm.controls['discountAmount'].value}}</span></div>
-                    <div class="w-1/3 flex justify-between p-2"><strong>Gross Total:</strong> <span class="ml-4">{{saleMedicineForm.controls['totalAmount'].value}}</span></div>
-                    <div class="w-1/3 flex justify-between p-2"><strong>Net Total:</strong> <span class="ml-4">{{saleMedicineForm.controls['netTotalAmount'].value}}</span></div>
+                    <div class="w-1/3 flex justify-between p-2"><strong>Gross Total:</strong> <span class="ml-4">{{saleMedicineForm.controls['totalAmount'].value | number: ".0-2"}}</span></div>
+                    <div class="w-1/3 flex justify-between p-2"><strong>Dicount Amount:</strong> <span class="ml-4">{{saleMedicineForm.controls['discountAmount'].value | number: ".0-2"}}</span></div>
+                    <div class="w-1/3 flex justify-between p-2"><strong>Net Total:</strong> <span class="ml-4">{{saleMedicineForm.controls['netTotalAmount'].value | number: ".0-2"}}</span></div>
                 </div>
             </div>
             <div class="flex justify-end">
                 <p-button (onClick)="saveMedicine()">
                     Save
                 </p-button>
-                <p-button class="ml-3"> Save
+                <p-button class="ml-3" (onClick)="saveMedicine(true)"> Save
                     & Print</p-button>
             </div>
         </div>
