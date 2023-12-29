@@ -14,7 +14,7 @@
                         <label htmlFor="name">Name</label>
                         <p-autoComplete [suggestions]="medicinesToShow.length ? medicinesToShow : medicines" #medicinesToSelect
                                         (completeMethod)="search($event)"
-                                        (onSelect)="onMedicineSelect(i,medicinesToSelect.value)" field="name" [minLength]="3" placeholder="Select Medicine"
+                                        (onSelect)="onMedicineSelect(i,medicinesToSelect.value)" [field]="'name'" [minLength]="3" placeholder="Select Medicine"
                                         [showEmptyMessage]="true"
                                         formControlName="medicine"
                         >
@@ -106,6 +106,12 @@
         <div class="flex gap-3 mb-3 mt-3">
             <p-button label="Update" (onClick)="update()"></p-button>
             <p-button label="Cancel" (onClick)="cancelEdit()"></p-button>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="newData && !showEdit">
+        <div class="flex gap-3 mb-3 mt-3">
+            <p-button label="Save" (onClick)="save()"></p-button>
+            <!-- <p-button label="Cancel" (onClick)="cancelEdit()"></p-button> -->
         </div>
     </ng-container>
 </div>

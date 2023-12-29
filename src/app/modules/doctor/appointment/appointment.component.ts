@@ -225,6 +225,11 @@ export class AppointmentComponent implements OnInit, OnChanges {
 
   }
 
+  activeChange(event: any){
+    console.log(event);
+    
+  }
+
   getToken() {
     this.tokenService.getTokenById(this.tokenId).subscribe({
       next: (x) => {

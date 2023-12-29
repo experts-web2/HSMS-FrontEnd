@@ -166,6 +166,10 @@ export class PrescriptionComponent
     this.prescriptionService.addPrescription(this.prescriptionRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.alertService.success('Prescription Saved Successfully.');
+        this.newData = false;
+        this.showEdit = true;
+        this.prescriptionForm.disable({onlySelf: true})
+        this.emitRequest.emit(x);
       },
       error: (err) => {
 
