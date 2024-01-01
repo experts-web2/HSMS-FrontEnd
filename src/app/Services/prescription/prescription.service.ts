@@ -17,7 +17,7 @@ export class PrescriptionService extends HttpService {
     super(http)
    }
 
-  addPrescription(prescription: IPrescriptionRequest): Observable<any>{
+  addPrescription(prescription: IPrescriptionRequest): Observable<IPrescription>{
     return this.post(`${BaseEndPoints.Prescription}`, prescription);
   }
 

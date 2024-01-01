@@ -18,7 +18,7 @@ export class MedicationService extends HttpService {
 
   private baseEndPoint = BaseEndPoints.Medication;
 
-  addMedication(medication: IMedicationRequest): Observable<any>{
+  addMedication(medication: IMedicationRequest): Observable<IMedication>{
     return this.post(`${this.baseEndPoint}`, medication);
   }
 
