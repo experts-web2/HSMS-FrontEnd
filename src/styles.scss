@@ -301,3 +301,13 @@ p-autoComplete {
     }
   }
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+// .p-menu.p-component.p-menu-overlay{
+//   position: fixed !important;
+//   display: block !important;
+// }

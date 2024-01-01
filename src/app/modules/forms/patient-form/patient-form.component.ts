@@ -39,6 +39,7 @@ export class PatientFormComponent
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   tags: any[] = [];
   filesToUpload: Array<File> = [];
+  minDate = new Date;
 
   constructor(
     private fb: FormBuilder,

@@ -1,12 +1,14 @@
 <p-tabView>
     <form [formGroup]="addTokenForm">
         <div class="position-relative h-20">
-            <mat-icon mat-dialog-close class="close-icon absolute right-4 top-4" color="warn">close</mat-icon>
+            <i mat-dialog-close class="fa-solid fa-xmark close-icon absolute right-4 top-4" color="warn"></i>
+            <!-- <mat-icon mat-dialog-close class="close-icon absolute right-4 top-4" color="warn">close</mat-icon> -->
             <div class="flex justify-center h-full items-end">
                 <h2 class="h-10 m-0">Add Token</h2>
             </div>
         </div>
-        <mat-divider></mat-divider>
+        <!-- <mat-divider></mat-divider> -->
+        <div class="w-full border"></div>
         <div class="px-md-5 px-2 pb-5">
             <!-- <ng-template *ngIf="display"> -->
             <div *ngIf="display"

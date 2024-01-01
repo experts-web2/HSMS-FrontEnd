@@ -8,6 +8,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { GenericTableComponent } from 'src/app/shared/components';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -18,6 +20,8 @@ import { GenericTableComponent } from 'src/app/shared/components';
   imports: [
     CommonModule,
     DashboardRoutingModule,
+    DropdownModule,
+    FormsModule,
     MatCardModule,
     GenericTableComponent,
     MatSelectModule,

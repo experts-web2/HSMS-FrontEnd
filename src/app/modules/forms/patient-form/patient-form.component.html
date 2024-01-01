@@ -1,7 +1,8 @@
 
 <div mat-dialog-title class="dialog-title">
     <div class="relative w-full flex justify-center pt-4">
-        <mat-icon  mat-dialog-close class="close-icon absolute right-4 top-4" color="warn">close</mat-icon>
+        <i  mat-dialog-close class="fa-solid fa-xmark close-icon absolute right-4 top-4" color="warn"></i>
+        <!-- <mat-icon  mat-dialog-close class="close-icon absolute right-4 top-4" color="warn">close</mat-icon> -->
         <span>Add Patient</span>
     </div>
  </div>
@@ -9,64 +10,89 @@
     <p-tabView>
     <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
         <div class="input_Divs">
-            <mat-label>MR#<span class="text-danger">*</span></mat-label>
+            <label>MR#<span class="text-danger">*</span></label>
             <div>
                 <input class="form-control " [ngClass]="{'ng-invalid ng-dirty':mrNum.touched && mrNum.invalid}" pInputText type="number"  placeholder="MR#" formControlName="mrNum" required>
             </div>
         </div>
          <div class="input_Divs">
-            <mat-label>Name<span class="text-danger">*</span></mat-label>
+            <label>Name<span class="text-danger">*</span></label>
             <div>
                 <input class="form-control" [ngClass]="{'ng-invalid ng-dirty': name.touched && name.invalid}" pInputText placeholder="Name" formControlName="name" required>
                 <small class="text-danger" *ngIf="(name.touched && name.invalid)">Name is required.</small>
             </div>
         </div>
         <div class="input_Divs">
-            <mat-label>Phone#<span class="text-danger">*</span></mat-label>
-            <div class="inpt-phone">
+            <label>Phone#<span class="text-danger">*</span></label>
+            <div class="inpt-phone items-start">
                 <div class="flex flex-column">
-                    <input class="form-control inpt-Ph-rel w-full p-1 " [ngClass]="{ 'ng-invalid ng-dirty' :phoneNum.touched && phoneNum.invalid}" pInputText placeholder="+923212345667" formControlName="phoneNum">
+                    <input type="text" pattern="[0-9]*" class="form-control w-full p-1" [ngClass]="{ 'ng-invalid ng-dirty' :phoneNum.touched && phoneNum.invalid}" pInputText placeholder="+923212345667" formControlName="phoneNum">
                     <small class="text-danger" *ngIf="(phoneNum.touched && phoneNum.invalid)">Phone# is required.</small>
                 </div>
-                <span class="plus-sign">+</span>
-                <mat-select class="form-control inpt-Ph-rel" [ngClass]="{ 'ng-invalid ng-dirty' :relation.touched && relation.invalid}"  placeholder="Select Relation" formControlName="relation">
+                <span class="plus-sign mx-1">+</span>
+                <p-dropdown
+                class="inpt-Ph-rel relation-ship-dropdown"
+                [ngClass]="{ 'ng-invalid ng-dirty': relation.touched && relation.invalid }"
+                placeholder="Select Relation"
+                formControlName="relation"
+                [options]="relations"
+                optionLabel="label"
+                optionValue="value"
+              ></p-dropdown>     
+               <!-- <mat-select class="form-control inpt-Ph-rel" [ngClass]="{ 'ng-invalid ng-dirty' :relation.touched && relation.invalid}"  placeholder="Select Relation" formControlName="relation">
                 <mat-option *ngFor="let relation of relations" [value]="relation.value">
                         {{relation.label}}
                 </mat-option>
-                </mat-select>
+                </mat-select> -->
             </div>
         </div>
         <div class="input_Divs">
 
         </div>
         <div class="input_Divs">
-            <mat-label>Gender</mat-label>
-            <div class="inpt-phone">
-                <mat-radio-group class="inpt-radio" aria-label="Select an option" formControlName="gender">
+            <label>Gender</label>
+            <div class="inpt-phone items-center">
+                <!-- <mat-radio-group class="inpt-radio" aria-label="Select an option" formControlName="gender">
                     <mat-radio-button value="Male">Male</mat-radio-button>
                     <mat-radio-button value="Female">Female</mat-radio-button>
                     <mat-radio-button value="Other">Other</mat-radio-button>
-                  </mat-radio-group>
+                  </mat-radio-group> -->
+                  <div class="flex items-center gap-2">
+                    <div class="flex items-center">
+                        <p-radioButton name="gender" value="Male" formControlName="gender" inputId="male"></p-radioButton>
+                        <label for="male" class="ml-2">Male</label>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <p-radioButton name="gender" value="Female" formControlName="gender" inputId="female"></p-radioButton>
+                        <label for="Female" class="ml-2">Female</label>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <p-radioButton name="gender" value="Other" formControlName="gender" inputId="other"></p-radioButton>
+                        <label for="other" class="ml-2">Other</label>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="input_Divs">
-            <mat-label>Age<span class="text-danger">*</span></mat-label>
-            <div class="inpt-phone flex flex-column">
-                <input class="form-control " formControlName="age" [ngClass]="{'ng-invalid ng-dirty': age.touched && age.invalid}" pInputText placeholder="Age" >
+            <label>Age<span class="text-danger">*</span></label>
+            <div class="inpt-phone items-center flex flex-column">
+                <input type="number" class="form-control " formControlName="age" [ngClass]="{'ng-invalid ng-dirty': age.touched && age.invalid}" pInputText placeholder="Age" >
                 <small class="text-danger" *ngIf="(age.touched && age.invalid)">Age is required.</small>
             </div>
         </div>
         <div class="input_Divs">
-            <mat-label>Registration Date<span class="text-danger">*</span></mat-label>
+            <label>Registration Date<span class="text-danger">*</span></label>
             <div class="date-div">
-                <p-calendar  [ngClass]="{'ng-invalid ng-dirty': registrationDate.invalid && registrationDate.touched }" appendTo="body"  [showButtonBar]="true" [showIcon]="true" formControlName="registrationDate">
+                <p-calendar [minDate]="minDate" [ngClass]="{'ng-invalid ng-dirty': registrationDate.invalid && registrationDate.touched }" appendTo="body"  [showButtonBar]="true" [showIcon]="true" formControlName="registrationDate">
             </p-calendar>
             </div>
         </div>
 
 
         <div class="input_Divs">
-            <mat-label>Add Photo</mat-label>
+            <label>Add Photo</label>
             <img *ngIf="base64ImagStr" [src]="base64ImagStr" style="height: 300px; width:300px;">
             <div class="d-flex justify-content-between">
                 <input class="form-control form-control-sm inpt-Fieldcam" type="button" (click)="openCamera()" value="Take Picture" >

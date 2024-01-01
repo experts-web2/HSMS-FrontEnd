@@ -35,6 +35,37 @@ export class AppComponent implements OnInit {
       command: this.logOut.bind(this),
   },
   ]
+  laboratoryMenuItems = [
+    { label: 'Add Patient Test', routerLink: '/laboratory/add_patient_test' },
+    { label: 'Collection Lab Sample', routerLink: '/laboratory/collect_lab_sample' },
+    { label: 'Lab Test Report', routerLink: '/laboratory/lab_report' },
+    { label: 'Lab Test Lists', routerLink: '/laboratory/lab_report_list' },
+    { label: 'Lab Orders', routerLink: '/laboratory/lab_orders' },
+  ];
+
+  createMenuItems = [
+    {
+      label: 'Token',
+      command: () => {
+          this.addToken();
+      }
+    },
+    {
+      label: 'Patient',
+      command: () => {
+          this.addPatient();
+      }
+    },
+    {
+      label: 'Schedule',
+      command: () => {
+          this.addSchedule();
+      }
+    },
+    {
+      label: 'Health Record',
+    },
+  ];
   navItemToShow: Array<MenuItem> = []
   step = '';
   logedIn: boolean = false;

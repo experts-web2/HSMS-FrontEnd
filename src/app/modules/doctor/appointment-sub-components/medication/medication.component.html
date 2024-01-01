@@ -9,90 +9,92 @@
         <div formArrayName="medicationItems">
             <div *ngFor="let form of medicationItems.controls; let i = index" class="flex">
                 <p class="text-2xl mr-2 font-bold">{{i+1}}</p>
-                <div [formGroupName]="i" class="grid grid-cols-1 md:grid-cols-7 justify-content-between gap-x-8 gap-y-2 p-2 w-full">
-                    <div class="d-flex flex-column">
-                        <label htmlFor="name">Name</label>
-                        <p-autoComplete [suggestions]="medicinesToShow.length ? medicinesToShow : medicines" #medicinesToSelect
-                                        (completeMethod)="search($event)"
-                                        (onSelect)="onMedicineSelect(i,medicinesToSelect.value)" [field]="'name'" [minLength]="3" placeholder="Select Medicine"
-                                        [showEmptyMessage]="true"
-                                        formControlName="medicine"
-                        >
-                        <ng-template let-medicine pTemplate="selectedItem">
-                            <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}} </span>
-                            <small>{{medicine.potency}} {{getPotencyUnit(medicine.potencyUnits)}} ({{medicine.salt}})</small>
-                          </ng-template>
-                          <ng-template let-medicine pTemplate="item">
-                            <div class="flex flex-column">
-                                <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}}</span>
-                                  <small>{{medicine.potency}} {{getPotencyUnit(medicine.potencyUnits)}} ({{medicine.salt}})</small> 
-                            </div>
-                          </ng-template>
-                        </p-autoComplete>
-                        <div *ngIf="form.get('medicineId')?.invalid && form.get('medicineId')?.touched">
-                            <div class="text-danger" *ngIf="form.get('medicineId')?.errors">Medicine is required.</div>
-                          </div>
+                <div [formGroupName]="i" class="flex flex-col md:flex-row items-start gap-2">
+                    <div class="grid grid-cols-1 md:grid-cols-6 justify-content-between gap-x-5 gap-y-2 p-2 w-full">
+                        <div class="d-flex flex-column">
+                            <label htmlFor="name">Name</label>
+                            <p-autoComplete [suggestions]="medicinesToShow.length ? medicinesToShow : medicines" #medicinesToSelect
+                                            (completeMethod)="search($event)"
+                                            (onSelect)="onMedicineSelect(i,medicinesToSelect.value)" [field]="'name'" [minLength]="3" placeholder="Select Medicine"
+                                            [showEmptyMessage]="true"
+                                            formControlName="medicine"
+                            >
+                            <ng-template let-medicine pTemplate="selectedItem">
+                                <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}} </span>
+                                <small>{{medicine.potency}} {{getPotencyUnit(medicine.potencyUnits)}} ({{medicine.salt}})</small>
+                              </ng-template>
+                              <ng-template let-medicine pTemplate="item">
+                                <div class="flex flex-column">
+                                    <span>{{medicine.name}} {{getMedicineType(medicine.medicineType)}}</span>
+                                      <small>{{medicine.potency}} {{getPotencyUnit(medicine.potencyUnits)}} ({{medicine.salt}})</small> 
+                                </div>
+                              </ng-template>
+                            </p-autoComplete>
+                            <div *ngIf="form.get('medicineId')?.invalid && form.get('medicineId')?.touched">
+                                <div class="text-danger" *ngIf="form.get('medicineId')?.errors">Medicine is required.</div>
+                              </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label htmlFor="duration">Duration</label>
+                            <input pInputText type="number" name="" id="duration" formControlName="durationValue">
+                            <div *ngIf="form.get('durationValue')?.invalid && form.get('durationValue')?.touched">
+                                <div class="text-danger" *ngIf="form.get('durationValue')?.errors">Duration Value is required.</div>
+                              </div>
+                            <select class="form-select mt-2" type="number" name="" id="" formControlName="duration">
+                                <option [value]="null" disabled >Select A Duration</option>
+                                <option *ngFor="let duration of medicationDurations" [ngValue]="duration.value">{{duration.label}}</option>
+                            </select>
+                            <div *ngIf="form.get('duration')?.invalid && form.get('duration')?.touched">
+                                <div class="text-danger" *ngIf="form.get('duration')?.errors">Duration period is required.</div>
+                              </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label htmlFor="dosage">Dosage</label>
+                            <input pInputText type="number" name="" id="dosage"  formControlName="dosageValue">
+                            <div *ngIf="form.get('dosageValue')?.invalid && form.get('dosageValue')?.touched">
+                                <div class="text-danger" *ngIf="form.get('dosageValue')?.errors">Dosage value is required.</div>
+                              </div>
+                            <select class="form-select mt-2" type="number" name="" id="" formControlName="dosage">
+                                <option [value]="null" desabled>Select A Dosage</option>
+                                <option *ngFor="let dosage of medicationDosages" [ngValue]="dosage.value">{{dosage.label}}</option>
+                            </select>
+                            <div *ngIf="form.get('dosage')?.invalid && form.get('dosage')?.touched">
+                                <div class="text-danger" *ngIf="form.get('dosage')?.errors">Dosage size is required.</div>
+                              </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label htmlFor="route">Route</label>
+                            <select class="form-select" type="number" name="" id="" formControlName="route">
+                                <option [value]="null" desabled>Select A Route</option>
+                                <option *ngFor="let route of medicationRoutes" [ngValue]="route.value">{{route.label}}</option>
+                            </select>
+                            <div *ngIf="form.get('route')?.invalid && form.get('route')?.touched">
+                                <div class="text-danger" *ngIf="form.get('route')?.errors">Route is required.</div>
+                              </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label htmlFor="frequency">Frequency</label>
+                            <select class="form-select" type="number" name="" id="" formControlName="frequency">
+                                <option [value]="null" desabled>Select A Frequency</option>
+                                <option *ngFor="let frequency of medicationFrequencies" [ngValue]="frequency.value">{{frequency.label}}</option>
+                            </select>
+                            <div *ngIf="form.get('frequency')?.invalid && form.get('frequency')?.touched">
+                                <div class="text-danger" *ngIf="form.get('frequency')?.errors">Frequency is required.</div>
+                              </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label htmlFor="instruction">Instruction</label>
+                            <select class="form-select" formControlName="instruction">
+                                <option [value]="null" desabled>Select An Instruction</option>
+                                <option *ngFor="let instruction of medicationInstructions" [value]="instruction.value">{{instruction.label}}</option>
+                            </select>
+                            <div *ngIf="form.get('instruction')?.invalid && form.get('instruction')?.touched">
+                                <div class="text-danger" *ngIf="form.get('instruction')?.errors">Instruction is required.</div>
+                              </div>
+                        </div>
                     </div>
-                    <div class="d-flex flex-column">
-                        <label htmlFor="duration">Duration</label>
-                        <input pInputText type="number" name="" id="duration" formControlName="durationValue">
-                        <div *ngIf="form.get('durationValue')?.invalid && form.get('durationValue')?.touched">
-                            <div class="text-danger" *ngIf="form.get('durationValue')?.errors">Duration Value is required.</div>
-                          </div>
-                        <select class="form-select mt-2" type="number" name="" id="" formControlName="duration">
-                            <option [value]="null" disabled >Select A Duration</option>
-                            <option *ngFor="let duration of medicationDurations" [ngValue]="duration.value">{{duration.label}}</option>
-                        </select>
-                        <div *ngIf="form.get('duration')?.invalid && form.get('duration')?.touched">
-                            <div class="text-danger" *ngIf="form.get('duration')?.errors">Duration period is required.</div>
-                          </div>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <label htmlFor="dosage">Dosage</label>
-                        <input pInputText type="number" name="" id="dosage"  formControlName="dosageValue">
-                        <div *ngIf="form.get('dosageValue')?.invalid && form.get('dosageValue')?.touched">
-                            <div class="text-danger" *ngIf="form.get('dosageValue')?.errors">Dosage value is required.</div>
-                          </div>
-                        <select class="form-select mt-2" type="number" name="" id="" formControlName="dosage">
-                            <option [value]="null" desabled>Select A Dosage</option>
-                            <option *ngFor="let dosage of medicationDosages" [ngValue]="dosage.value">{{dosage.label}}</option>
-                        </select>
-                        <div *ngIf="form.get('dosage')?.invalid && form.get('dosage')?.touched">
-                            <div class="text-danger" *ngIf="form.get('dosage')?.errors">Dosage size is required.</div>
-                          </div>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <label htmlFor="route">Route</label>
-                        <select class="form-select" type="number" name="" id="" formControlName="route">
-                            <option [value]="null" desabled>Select A Route</option>
-                            <option *ngFor="let route of medicationRoutes" [ngValue]="route.value">{{route.label}}</option>
-                        </select>
-                        <div *ngIf="form.get('route')?.invalid && form.get('route')?.touched">
-                            <div class="text-danger" *ngIf="form.get('route')?.errors">Route is required.</div>
-                          </div>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <label htmlFor="frequency">Frequency</label>
-                        <select class="form-select" type="number" name="" id="" formControlName="frequency">
-                            <option [value]="null" desabled>Select A Frequency</option>
-                            <option *ngFor="let frequency of medicationFrequencies" [ngValue]="frequency.value">{{frequency.label}}</option>
-                        </select>
-                        <div *ngIf="form.get('frequency')?.invalid && form.get('frequency')?.touched">
-                            <div class="text-danger" *ngIf="form.get('frequency')?.errors">Frequency is required.</div>
-                          </div>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <label htmlFor="instruction">Instruction</label>
-                        <select class="form-select" formControlName="instruction">
-                            <option [value]="null" desabled>Select An Instruction</option>
-                            <option *ngFor="let instruction of medicationInstructions" [value]="instruction.value">{{instruction.label}}</option>
-                        </select>
-                        <div *ngIf="form.get('instruction')?.invalid && form.get('instruction')?.touched">
-                            <div class="text-danger" *ngIf="form.get('instruction')?.errors">Instruction is required.</div>
-                          </div>
-                    </div>
-                    <div class="text-center" *ngIf="newData || !showEdit">
-                        <button (click)="removeMedicationItem(i)"><i class="fas fa-trash mt-4"></i></button>
+                    <div class="text-center w-full md:w-fit" *ngIf="newData || !showEdit">
+                        <button (click)="removeMedicationItem(i)"><i class="fas fa-trash mt-10 delete-icon mb-2"></i></button>
                     </div>
                 </div>               
             </div>
