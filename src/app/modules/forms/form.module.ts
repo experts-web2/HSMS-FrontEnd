@@ -23,6 +23,9 @@ import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dy
     PrimeNgModule
     
   ],
+  exports:[
+    PatientFormComponent
+  ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
     useValue: { color: '#0d6efd' },

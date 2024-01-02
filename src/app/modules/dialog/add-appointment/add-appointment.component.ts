@@ -19,7 +19,7 @@ import { FormModule } from '../../forms/form.module';
   styleUrls: ['./add-appointment.component.scss'],
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, PrimeNgModule, FormModule],
-  providers: [DynamicDialogConfig, DynamicDialogRef, Dialog, DialogService]
+  providers: [DynamicDialogConfig, Dialog]
 })
 export class AddAppointmentComponent implements OnInit {
   addAppointmentForm!: FormGroup;
@@ -162,7 +162,8 @@ export class AddAppointmentComponent implements OnInit {
 
   addPatient(){
     this.dialog.open(PatientFormComponent,{
-      width: '60%',
+      header: 'Add Patient',
+      width: 'fit-content',
       height: '80%'
     }).onClose.subscribe({
       next: (x) => {},

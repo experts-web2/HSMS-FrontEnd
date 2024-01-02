@@ -270,7 +270,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
       break;
       case 3:
         let healthRecordLabTests = this.healthRecord.labOrder?.labOrderDetails.map(x => x.labTestId) ?? [];
-        if(this.healthRecord.labOrder && !(this.labOrder.labTestIds.length === healthRecordLabTests?.length) && !this.labOrder.labTestIds.every(x => healthRecordLabTests.includes(x))){
+        if(this.healthRecord.labOrder && !(this.labOrder.labTestIds?.length === healthRecordLabTests?.length) && !this.labOrder.labTestIds?.every(x => healthRecordLabTests.includes(x))){
           console.log('update laborder');
           
         } else if (!this.healthRecord.labOrder) {

@@ -1,11 +1,11 @@
 
 <div mat-dialog-title class="dialog-title">
-    <div class="relative w-full flex justify-center pt-4">
-        <i  mat-dialog-close class="fa-solid fa-xmark close-icon absolute right-4 top-4" color="warn"></i>
+    <!-- <div class="relative w-full flex justify-center pt-4">
+        <i  mat-dialog-close class="fa-solid fa-xmark close-icon absolute right-4 top-4" color="warn"></i> -->
         <!-- <mat-icon  mat-dialog-close class="close-icon absolute right-4 top-4" color="warn">close</mat-icon> -->
-        <span>Add Patient</span>
+        <!-- <span>Add Patient</span>
     </div>
- </div>
+ </div> -->
 <div mat-dialog-content class="matDialogContent">
     <p-tabView>
     <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
@@ -26,7 +26,7 @@
             <label>Phone#<span class="text-danger">*</span></label>
             <div class="inpt-phone items-start">
                 <div class="flex flex-column">
-                    <input type="text" pattern="[0-9]*" class="form-control w-full p-1" [ngClass]="{ 'ng-invalid ng-dirty' :phoneNum.touched && phoneNum.invalid}" pInputText placeholder="+923212345667" formControlName="phoneNum">
+                    <input type="number" pattern="[0-9]*" class="form-control w-full p-1" [ngClass]="{ 'ng-invalid ng-dirty' :phoneNum.touched && phoneNum.invalid}" pInputText placeholder="3212345667" formControlName="phoneNum">
                     <small class="text-danger" *ngIf="(phoneNum.touched && phoneNum.invalid)">Phone# is required.</small>
                 </div>
                 <span class="plus-sign mx-1">+</span>

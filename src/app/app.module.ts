@@ -17,6 +17,8 @@ import { AppHttpInterceptor } from './auth/interceptor/app-http.interceptor';
 import { PrimeNgModule, MaterialModule } from 'src/app/shared/modules';
 import { GlobalSearchComponent } from './Shared/components/global-search/global-search.component';
 import { DialogService } from 'primeng/dynamicdialog';
+import { AddAppointmentComponent } from './modules/dialog/add-appointment/add-appointment.component';
+import { FormModule } from './modules/forms/form.module';
 
 @NgModule({
   declarations: [AppComponent, AddTokenModalComponent,GlobalSearchComponent],
@@ -46,6 +48,8 @@ import { DialogService } from 'primeng/dynamicdialog';
     GenericTableComponent,
     LoaderComponent,
     PrimeNgModule,
+    AddAppointmentComponent,
+    FormModule
   ],
 })
 export class AppModule implements OnInit {

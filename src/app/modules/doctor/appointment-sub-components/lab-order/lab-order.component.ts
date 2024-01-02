@@ -198,7 +198,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     }
 
     this.laborderService.addMedication(labOrderPayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
+      next: (x) => {        
         this.alertService.success('Lab Order Added Successfully.');
         this.emitRequest.emit(x);
         this.newData = false

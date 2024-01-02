@@ -37,6 +37,7 @@ import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
 import { FilterOperator } from 'primeng/api';
 import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
 import { IPatient } from 'src/app/models/interfaces/patient-model';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-add-token-modal',
@@ -105,9 +106,12 @@ export class AddTokenModalComponent
   display = true;
 
   constructor(
-    public dialogRef: MatDialogRef<AddTokenModalComponent>,
-    private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogService: DialogService,
+    private config: DynamicDialogConfig,
+    private dialogRef:DynamicDialogRef,
+    // public dialogRef: MatDialogRef<AddTokenModalComponent>,
+    // private dialog: MatDialog,
+    // @Inject(MAT_DIALOG_DATA) public data: any,
     private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
     private readonly doctorService: DoctorService,
@@ -116,7 +120,7 @@ export class AddTokenModalComponent
     private readonly alertService: AlertService
   ) {
     super();
-    this.display = this.data.display;
+    this.display = this.config.data.display;
 
     this.invoiceDescriptionForm = this.fb.group({
       paidAmount: new FormControl<number | null>(null, [Validators.required]),
@@ -490,11 +494,12 @@ export class AddTokenModalComponent
   }
 
   addPatient() {
-    const dialogRef = this.dialog.open(PatientFormComponent, {
+    const dialogRef = this.dialogService.open(PatientFormComponent, {
+      header: 'Add Patient',
       width: '600px',
     });
 
-    dialogRef.afterClosed().subscribe({
+    dialogRef.onClose.subscribe({
       next: (x: IPatient) => {
         this.patientId.setValue(x.id);
         this.patientName.setValue(x.name);

@@ -98,7 +98,7 @@ export class AppComponent implements OnInit {
   isLabTechnician = false;
 
   constructor(
-    private dialog: MatDialog,
+    // private dialog: MatDialog,
     private readonly authService: AuthService,
     private readonly userStateService: UserStateService,
     private router: Router,
@@ -151,29 +151,30 @@ export class AppComponent implements OnInit {
   }
 
   addPatient() {
-    const dialogRef = this.dialog.open(PatientFormComponent, {
+    const dialogRef = this.pNgDialog.open(PatientFormComponent, {
+      header: "Add Token",
       width: '600px',
     });
   }
 
-  addPatientTest() {
-    this.dialog.open(AddPatientTestComponent, {
-      // maxWidth: '100vw',
-      width: '90vw',
-      maxWidth: '',
-      height: '90vh',
-      data: {},
-    });
-  }
-  collectionLabSample() {
-    this.dialog.open(CollectLabSampleComponent, {
-      // maxWidth: '100vw',
-      width: '50vw',
-      maxWidth: '',
-      height: '50vh',
-      data: {},
-    });
-  }
+  // addPatientTest() {
+  //   this.dialog.open(AddPatientTestComponent, {
+  //     // maxWidth: '100vw',
+  //     width: '90vw',
+  //     maxWidth: '',
+  //     height: '90vh',
+  //     data: {},
+  //   });
+  // }
+  // collectionLabSample() {
+  //   this.dialog.open(CollectLabSampleComponent, {
+  //     // maxWidth: '100vw',
+  //     width: '50vw',
+  //     maxWidth: '',
+  //     height: '50vh',
+  //     data: {},
+  //   });
+  // }
 
   logOut() {
     this.authService.logOut();
@@ -181,6 +182,7 @@ export class AppComponent implements OnInit {
 
   addSchedule(){
     this.pNgDialog.open(AddAppointmentComponent,{
+      header: "Add Appointement",
       width: '60%',
       height: '80%',
     })
@@ -191,10 +193,9 @@ export class AppComponent implements OnInit {
   }
 
   addToken() {
-    this.dialog.open(AddTokenModalComponent, {
-      // maxWidth: '100vw',
+    this.pNgDialog.open(AddTokenModalComponent, {
+      header: "Add Token",
       width: '90vw',
-      maxWidth: '',
       height: '90vh',
       data: { display: true },
     });
