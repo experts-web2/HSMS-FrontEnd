@@ -87,5 +87,10 @@
             <p-button (onClick)="cancelEdit()" label="Cancel"></p-button>
         </div>
     </ng-container>
+    <ng-container *ngIf="!showEdit && newData">
+        <div class="flex gap-3 mb-3 mt-3">
+            <p-button (onClick)="savePrescription()" label="Save"></p-button>
+        </div>
+    </ng-container>
     <hr>
 </div>

@@ -11,7 +11,7 @@ import { Relations } from 'src/app/constants/Constants/PatientRelatons';
 import { takeUntil } from 'rxjs';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { FileUploadService } from 'src/app/services/fileUpload/file-upload.service';
-import { DialogService } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-patient-form',
@@ -39,20 +39,22 @@ export class PatientFormComponent
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   tags: any[] = [];
   filesToUpload: Array<File> = [];
+  minDate = new Date;
 
   constructor(
     private fb: FormBuilder,
     private dialog: DialogService,
-    public dialogRef: MatDialogRef<PatientFormComponent>,
+    // public dialogRef: MatDialogRef<PatientFormComponent>,
+    private dialogRef: DynamicDialogRef,
     private readonly patientService: PatientService,
     private readonly alertService: AlertService,
-    private readonly fileUploadService: FileUploadService
+    private readonly fileUploadService: FileUploadService,
   ) {
     super();
     this.patientForm = this.fb.group({
       mrNum: new FormControl({value: null, disabled: true}, [Validators.required]),
       name: new FormControl(null, [Validators.required]),
-      phoneNum: new FormControl('+92', [Validators.required, this.validatePakistaniPhoneNumber]),
+      phoneNum: new FormControl('', [Validators.required, this.validatePakistaniPhoneNumber]),
       relation: new FormControl(Relations.Self, [Validators.required]),
       gender: new FormControl('Male', [Validators.required]),
       age: new FormControl(null, [Validators.required]),
@@ -177,7 +179,7 @@ export class PatientFormComponent
   openCamera() {
     const camera = this.dialog.open(CameraComponent, {
       width: '400px',
-    }).onClose.subscribe((data) => {
+    }).onClose.subscribe((data) => {      
       this.base64ImagStr = data._imageAsDataUrl;
       this.patientForm.value.addPhoto = this.base64ImagStr ?? '';
     });
@@ -221,7 +223,7 @@ export class PatientFormComponent
   }
 
   validatePakistaniPhoneNumber(control: AbstractControl): ValidationErrors | null {
-    const phoneNumberRegex = /^(\+92|03)\d{9}$/; // Adjust the regex as needed
+    const phoneNumberRegex = /^3\d{9}$/; // Adjust the regex as needed
     if (control.value && !phoneNumberRegex.test(control.value)) {
       return { invalidPhoneNumber: true };
     }

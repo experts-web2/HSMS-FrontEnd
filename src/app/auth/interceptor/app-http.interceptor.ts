@@ -32,6 +32,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
         this.loaderService.hide();        
       }),
       catchError((error: HttpErrorResponse) => {
+        this.loaderService.hide();        
         if (error.status === 401) {
           this.authService.logOut();
         }

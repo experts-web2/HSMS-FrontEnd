@@ -23,11 +23,11 @@ import { IMedicationRequest } from '../../../models/interfaces/MedicationRequest
 import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
 import { AddFilesDialogComponent } from '../appointment-sub-components/add-files-dialog/add-files-dialog.component';
 import { PatientVisitService } from 'src/app/services/patient visit/patient-visit.service';
-import { HttpError } from '@microsoft/signalr';
 import { HealtRecordService } from 'src/app/services/health-record/healt-record.service';
 import { IPatientVisitRequest } from 'src/app/models/interfaces/patientVisitRequest';
 import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
-
+import {Dictionary, isEqual, isEqualWith} from 'lodash';
+import { AutomapperService } from '../../../services/mapper/automapper.service';
 @Component({
   selector: 'app-appointment',
   templateUrl: './appointment.component.html',
@@ -36,6 +36,7 @@ import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 export class AppointmentComponent implements OnInit, OnChanges {
   tokenId!: string;
   patient!: IPatient;
+  previousTabIndex: number = 0;
   token!: IToken;
   patients: Array<IDropDown> = [];
   historyToken!: IToken;
@@ -65,7 +66,8 @@ export class AppointmentComponent implements OnInit, OnChanges {
     private readonly LabOrderService: LabOrderService, 
     private readonly dialogService: DialogService,
     private readonly patientVisitService: PatientVisitService,
-    private readonly healthRecordService: HealtRecordService
+    private readonly healthRecordService: HealtRecordService,
+    private readonly automapperService: AutomapperService
   ) {
     this.route.params.subscribe({
       next: (x) => {
@@ -221,8 +223,76 @@ export class AppointmentComponent implements OnInit, OnChanges {
 
   }
 
+  changeTab(tabindex: number){
+    console.log(tabindex);
+
+    switch(this.previousTabIndex){
+      case 0:
+        if (this.healthRecord.prescription && !isEqual(this.prescription, this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription))) {
+          console.log('update prescription');
+          
+        } else if (!this.healthRecord.prescription) {
+          console.log('add prescription');
+          this.addPrescription()
+        }else{
+          console.log('do nothing');
+
+        }
+        
+      break;
+      case 1:
+        console.log({vitalReq: this.vitals, healthRecordVital: this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals)});
+        
+        if (this.healthRecord.vital && !isEqual(this.vitals, this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals))) {
+          console.log('update vitals');
+        } else if (!this.healthRecord.vital) {
+          console.log('add vitals');
+          this.addVitals()
+        } else {
+          console.log('do nothing');
+          
+        }
+
+      break;
+      case 2:
+        if (this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication))) {
+          console.log('update medication');
+          
+        } else if (!this.healthRecord.medication){
+          console.log('add medication');
+          this.addMedication()
+
+        }else {
+          console.log('do nothing');
+
+        }
+
+      break;
+      case 3:
+        let healthRecordLabTests = this.healthRecord.labOrder?.labOrderDetails.map(x => x.labTestId) ?? [];
+        if(this.healthRecord.labOrder && !(this.labOrder.labTestIds?.length === healthRecordLabTests?.length) && !this.labOrder.labTestIds?.every(x => healthRecordLabTests.includes(x))){
+          console.log('update laborder');
+          
+        } else if (!this.healthRecord.labOrder) {
+          console.log('add laborder');
+          this.addLabOrder();
+        }
+
+      break;
+      default:
+      break;
+    }
+
+    this.previousTabIndex = tabindex;    
+  }
+
   getHistoryMedications(tokenId: string){
 
+  }
+
+  activeChange(event: any){
+    console.log(event);
+    
   }
 
   getToken() {
@@ -351,6 +421,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
     this.prescriptionService.addPrescription(this.prescription).subscribe({
       next: (x) => {
         this.alertService.success('Presctiption Saved Successfully.')
+        this.healthRecord.prescription = x;
       },
       error: (err) => {
         this.alertService.error('An Error Occoured While Saving Prescription.')
@@ -363,6 +434,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
     this.vitalsService.addVitals(this.vitals).subscribe({
       next: (x) => {
         this.alertService.success('Vitals Saved Successfully.')
+        this.healthRecord.vital = x;
       },
       error: (err) => {
         this.alertService.error('An Error Occoured While Saving Vitals.')
@@ -375,6 +447,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
     this.medicationService.addMedication(this.medication).subscribe({
       next: (x) => {
         this.alertService.success('Medication Saved Successfully.')
+        this.healthRecord.medication = x;
       },
       error: (err) => {
         this.alertService.error('An Error Occoured While Saving Medication.')
@@ -387,6 +460,59 @@ export class AppointmentComponent implements OnInit, OnChanges {
     this.LabOrderService.addMedication(this.labOrder).subscribe({
       next: (x) => {
         this.alertService.success('Lab Order Saved Successfully.')
+        this.healthRecord.labOrder = x;
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occoured While Saving Lab Order.')
+
+      }
+    })
+  }
+
+  updatePrescription(prescriptionId: string){
+    this.prescriptionService.updatePrescriptionById(prescriptionId, this.prescription).subscribe({
+      next: (x) => {
+        this.alertService.success('Presctiption Saved Successfully.')
+        this.healthRecord.prescription = x;
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occoured While Saving Prescription.')
+
+      }
+    })
+  }
+
+  updateVitals(vitalsId: string){
+    this.vitalsService.updateVitals(vitalsId, this.vitals).subscribe({
+      next: (x) => {
+        this.alertService.success('Vitals Saved Successfully.')
+        this.healthRecord.vital = x;
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occoured While Saving Vitals.')
+
+      }
+    })
+  }
+
+  updateMedication(medicationId: string){
+    this.medicationService.updateMedication(medicationId, this.medication).subscribe({
+      next: (x) => {
+        this.alertService.success('Medication Saved Successfully.')
+        this.healthRecord.medication = x;
+      },
+      error: (err) => {
+        this.alertService.error('An Error Occoured While Saving Medication.')
+
+      }
+    })
+  }
+
+  updateLabOrder(labOrderId: string){
+    this.LabOrderService.updateLabOrder(labOrderId, this.labOrder).subscribe({
+      next: (x) => {
+        this.alertService.success('Lab Order Saved Successfully.')
+        this.healthRecord.labOrder = x;
       },
       error: (err) => {
         this.alertService.error('An Error Occoured While Saving Lab Order.')

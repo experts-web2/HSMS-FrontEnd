@@ -10,7 +10,6 @@ import { MedicationRouteEnum, MedicationRoutes } from 'src/app/constants/Constan
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IMedicationDetail, IMedicationRequest } from 'src/app/models/interfaces/MedicationRequest';
-import { IToken } from 'src/app/models/interfaces/Token';
 import { AlertService, MedicationService, MedicineService } from 'src/app/services';
 import { MedicationDurations } from '../../../../constants/Constants/MedicationDuration';
 import { IMedication } from 'src/app/models/interfaces/Medication';
@@ -21,7 +20,6 @@ import { IMedicine } from 'src/app/models/interfaces/Medicine';
 import { PotencyUnits } from 'src/app/constants/enums/potency-units';
 import { MedicineType } from 'src/app/constants/enums/Medicine-Type-Enum';
 import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
-import { IPrescription } from 'src/app/models/interfaces/Prescription';
 
 @Component({
   selector: 'app-medication',
@@ -341,7 +339,12 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
       this.medicationService.addMedication(medicationRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
         next: (x) => {
-          this.alertService.success('Medication Saved.')
+          this.alertService.success('Medication Saved.');
+          this.newData = false;
+          this.showEdit = true;
+          this.medicationForm.disable({
+            onlySelf: true
+          });
         },
         error: (err) => {
           this.alertService.error('There was an error while saving medication.')

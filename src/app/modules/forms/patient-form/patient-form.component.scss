@@ -52,7 +52,6 @@
 .inpt-phone {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     width: 75%
 }
 
@@ -115,6 +114,16 @@
         outline: none;
     }
   }
-  
+
+::ng-deep{
+    .relation-ship-dropdown{
+        .p-dropdown.p-component{
+            width: -webkit-fill-available;
+            .p-element.p-dropdown-label{
+                padding: 5px;
+            } 
+        }
+      }
+}  
  
   

@@ -9,7 +9,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { AlertService, LoaderService, VitalService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -62,14 +62,22 @@ export class VitalsComponent
       bloodSugar: new FormControl<number | null>(null),
       weight: new FormControl<number | null>(null),
       height: new FormControl<number | null>(null),
+      feet: new FormControl<number | null>(null),
+      inches: new FormControl<number | null>(null),
       bodyMassIndex: new FormControl<number | null>(null),
       oxygenSaturation: new FormControl<number | null>(null),
       bodySurfaceArea: new FormControl<number | null>(null),
       reason: new FormControl<string | null>(null),
     });
+
+    this.bodyMassIndex.disable({onlySelf: true})
   }
 
   get f() { return this.vitalForm.controls; }
+  get feet(): AbstractControl { return this.vitalForm.get('feet') as AbstractControl }
+  get inches(): AbstractControl { return this.vitalForm.get('inches') as AbstractControl }
+  get weight(): AbstractControl { return this.vitalForm.get('weight') as AbstractControl }
+  get bodyMassIndex(): AbstractControl { return this.vitalForm.get('bodyMassIndex') as AbstractControl }
 
   ngOnChanges(changes: SimpleChanges): void {
     let tokenId = changes['historyTokenId'].currentValue;
@@ -103,6 +111,25 @@ export class VitalsComponent
       }
     })
   }
+  calculateBmi(){
+    let bmi = 0;       
+    let meters = this.feetAndInchesToCentimeters(this.feet.value ?? 0, this.inches.value ?? 0) / 100; 
+    bmi =  (this.weight.value ?? 0) / (meters * meters);
+    this.bodyMassIndex.setValue(bmi);
+  }
+
+  feetAndInchesToCentimeters(feet: number, inches: number): number {
+    // Convert feet to centimeters
+    const feetInCentimeters = feet * 30.48;
+
+    // Convert inches to centimeters
+    const inchesInCentimeters = inches * 2.54;
+
+    // Total length in centimeters
+    const totalCentimeters = feetInCentimeters + inchesInCentimeters;
+
+    return totalCentimeters;
+}
 
   edit(){
     this.showEdit = false;
@@ -131,6 +158,7 @@ export class VitalsComponent
         this.vitalForm.disable({
           onlySelf: true
         });
+        this.emitRequest.emit(x);
       },
       error: (err) => {
         this.alertService.error('An Error Occured While Updating Vitals');
@@ -165,6 +193,13 @@ export class VitalsComponent
     this.vitalService.addVitals(this.vitalRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.alertService.success('Vitals added successfully', 'Success');
+        this.newData = false;
+        this.showEdit = true;
+        this.vitalForm.disable({
+          onlySelf: true
+        });
+        this.emitRequest.emit(x);
+
 
       }, error: (err) => {
 

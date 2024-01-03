@@ -50,11 +50,11 @@
 
         </div>
     </div>
-    <ng-container *ngIf="">
-        <p-button label="Update" (onClick)="null"></p-button>
+    <ng-container *ngIf="!newData">
+        <p-button label="Update" (onClick)="updateLabOrder()"></p-button>
     </ng-container>
-    <!-- <div class="bottom">
+    <div class="bottom" *ngIf="newData">
         <div class="d-flex ml-auto">
             <p-button (click)="addLabOrder()">Save</p-button>
         </div>
-    </div> -->
+    </div>

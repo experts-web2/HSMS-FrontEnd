@@ -20,7 +20,7 @@ export class LabOrderService extends HttpService{
 
   private baseEndPoint = BaseEndPoints.LabOrder;
 
-  addMedication(LabOrder: ILabOrderRequest): Observable<any>{
+  addMedication(LabOrder: ILabOrderRequest): Observable<ILabOrder>{
     return this.post(`${this.baseEndPoint}`, LabOrder);
   }
 

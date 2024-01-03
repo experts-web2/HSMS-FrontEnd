@@ -34,9 +34,9 @@ export class UserService extends HttpService {
     return this.get(`${this.baseEndpoint}/byaccountid`);
   }
 
-  updateUser(id: string, data: any): Observable<any> {
+  updateUser(id: string, data: IAddOrUpdateUser): Observable<any> {
     return super.put(
-      `${this.baseEndpoint}/${data.accountId}/${id}`,
+      `${BaseEndPoints.User}/${id}`,
       data
     );
   }

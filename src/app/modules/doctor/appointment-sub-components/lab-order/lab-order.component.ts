@@ -7,10 +7,6 @@ import { IToken } from 'src/app/models/interfaces/Token';
 import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
-import { PatientVisitService } from 'src/app/services/patient visit/patient-visit.service';
-import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequest';
-import { IVitalRequest } from 'src/app/models/interfaces/vitalsRequest';
-import { IMedicationRequest } from 'src/app/models/interfaces/MedicationRequest';
 import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 
 @Component({
@@ -29,8 +25,10 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
   labOrderRequest!: ILabOrderRequest;
   testsList: ILabTestList[] = [];
   tabsToView: ILabtestCategoriesTabs[] = [];
+  selectedTestIds: Array<string> = [];
   testsListToShow: ILabTestList[] = [];
   allSelected: boolean = false;
+  newData: boolean = true;
 
   checkboxes: any[] = [];
   tabId: string = '';
@@ -50,6 +48,10 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
     this.getTests()
     this.getTestCategories();
+    if(this.healthRecord.labOrder){
+      this.newData = false;
+      this.selectedTestIds = this.healthRecord.labOrder.labOrderDetails.map(x => x.labTestId);
+    }
 
     this.labOrderRequest = {
       doctorId: this.healthRecord.doctorId,
@@ -58,7 +60,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
       healthRecordId: this.healthRecordId
     }
     
-    this.emitRequest.emit(this.labOrderRequest);
+    // this.emitRequest.emit(this.labOrderRequest);
   }
 
   getTestCategories() {
@@ -101,6 +103,9 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   getVisibleTests(categoryId: string) {
     this.testsListToShow = this.testsList.filter(x => x.testCategoryId === categoryId);
+    this.testsListToShow.forEach(x => {
+      if(this.selectedTestsIds.includes(x.id)) x.selected = true;
+    });
     if(this.testsListToShow.every(y => y.selected) && this.testsListToShow.length){
       this.allSelected = true;
       console.log(true);
@@ -173,7 +178,9 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     if(this.healthRecord.labOrder) labOrderId = this.healthRecord.labOrder.id;
     this.laborderService.updateLabOrder(labOrderId ,this.labOrderRequest).subscribe({
       next: (x) => {
-        this.alertService.success('Lab Order Updated Sucessfully.')
+        this.alertService.success('Lab Order Updated Sucessfully.');
+        this.emitRequest.emit(x);
+        this.newData = false;
       },
       error: (err) => {
         this.alertService.error('An Error Occoured While Updating Lab Order.')
@@ -184,15 +191,17 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
   addLabOrder() {
 
     let labOrderPayload: ILabOrderRequest = {
-      doctorId: this.token.doctorId,
-      patientId: this.token.patientId,
+      doctorId: this.healthRecord.doctorId,
+      patientId: this.healthRecord.patientId,
       labTestIds: this.selectedTestsIds,
       healthRecordId: this.healthRecordId
     }
 
     this.laborderService.addMedication(labOrderPayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.alertService.success('Lab Order Added Successfully.')
+      next: (x) => {        
+        this.alertService.success('Lab Order Added Successfully.');
+        this.emitRequest.emit(x);
+        this.newData = false
       },
       error: (err) => {
         this.alertService.error('Something went wrong while adding laborder.')

@@ -278,3 +278,36 @@ p-autoComplete {
     display: none;
   }
 }
+
+
+.p-dialog .p-dialog-footer{
+  display: flex;
+  gap: 10px;
+  justify-content: end;
+  .p-button {
+    justify-content: center;
+    padding: 8px 1.25rem;
+    border-radius: 4px;
+    border: 2px solid $green-btnborder;
+    outline: 0;
+    box-shadow: none;
+    background-color: $green-theme-WhiteTextColor;
+    &.p-confirm-dialog-reject {
+      color: $green-theme-BlackTextColor;
+    }
+    &.p-confirm-dialog-accept{
+      color: $green-theme-WhiteTextColor;
+      background: $ctrlbg ;
+    }
+  }
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+// .p-menu.p-component.p-menu-overlay{
+//   position: fixed !important;
+//   display: block !important;
+// }

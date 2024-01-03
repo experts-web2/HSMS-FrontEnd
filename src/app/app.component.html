@@ -8,19 +8,15 @@
           [routerLinkActive]="['menu-active']">Dashboard</a>
         <a class="navButton md:px-2 xl:px-8 cursor-pointer" *ngIf="isDoctor || isAdmin" routerLink="doctor/health_records"
           [routerLinkActive]="['menu-active']">Health Records</a>
-        <a class="navButton md:px-2 xl:px-8 cursor-pointer" *ngIf="isLabTechnician || isAdmin" [matMenuTriggerFor]="more">Laboratory<mat-icon
-            class="arrow-height">arrow_drop_down</mat-icon></a>
-        <mat-menu #more="matMenu">
-          <a mat-menu-item routerLink="/laboratory/add_patient_test">Add Patient Test</a>
-          <a mat-menu-item routerLink="/laboratory/collect_lab_sample">Collection Lab Sample</a>
-          <a mat-menu-item routerLink="/laboratory/lab_report">Lab Test Report</a>
-          <a mat-menu-item routerLink="/laboratory/lab_report_list">Lab Test Lists</a>
-          <a mat-menu-item routerLink="/laboratory/lab_orders">Lab Orders</a>
-        </mat-menu>
+        <a class="navButton md:px-2 xl:px-8 cursor-pointer" *ngIf="isLabTechnician || isAdmin" (click)="laboratory.toggle($event)">Laboratory <i class="fa-solid fa-caret-down ml-2"></i></a>
+        <p-menu #laboratory [model]="laboratoryMenuItems" [popup]="true" appendTo="body">
+          <ng-template pTemplate="item" let-item>
+            <a routerLink="{{item.routerLink}}" class="whitespace-nowrap">{{ item.label }}</a>
+          </ng-template>
+        </p-menu>
 
-        <p-menu #menu [model]="items" [popup]="true"></p-menu>
-        <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)">Pharmacy<mat-icon
-          class="arrow-height">arrow_drop_down</mat-icon></a>
+        <p-menu #menu [model]="items" [popup]="true" appendTo="body"></p-menu>
+        <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)">Pharmacy <i class="fa-solid fa-caret-down ml-2"></i></a>
         <!-- <a class="navButton px-2 xl:px-4 2xl:px-8 cursor-pointer" [matMenuTriggerFor]="lab" *ngIf="!isDoctor">More<mat-icon
             class="arrow-height">arrow_drop_down</mat-icon></a>
         <mat-menu #lab="matMenu">
@@ -31,14 +27,9 @@
 
       </div>
       <div class="hidden md:flex align-items-center ">
-        <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" [matMenuTriggerFor]="creat">Create<mat-icon
-            class="arrow-height">arrow_drop_down</mat-icon></a>
-        <mat-menu #creat="matMenu">
-          <a mat-menu-item (click)="addToken()">Token</a>
-          <a mat-menu-item (click)="addPatient()">Patient</a>
-          <a mat-menu-item (click)="addSchedule()">Schedule</a>
-          <a mat-menu-item>Health Record</a>
-        </mat-menu>
+        <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" (click)="create.toggle($event)">Create <i class="fa-solid fa-caret-down ml-2"></i></a>
+        <p-menu #create [model]="createMenuItems" [popup]="true" appendTo="body">
+        </p-menu>
         <app-global-search></app-global-search>
         <!-- <div
         class="search-wrapper-home mx-2 hidden md:flex flex-row justify-content-between"
@@ -61,8 +52,7 @@
       </div> -->
         <a class="navButton cursor-pointer" (click)="logoutmenu.toggle($event)"><span
             class="span-elpis user-name">{{logedInUser.firstName.substring(0, 1).toUpperCase() +
-            logedInUser.lastName.substring(0, 1).toUpperCase()}}</span><mat-icon
-            class="arrow-height">arrow_drop_down</mat-icon></a>
+            logedInUser.lastName.substring(0, 1).toUpperCase()}}</span><i class="fa-solid fa-caret-down ml-2"></i></a>
         <p-menu #logoutmenu [model]="navItemToShow" [popup]="true"></p-menu>
         <!-- <div *ngFor="let h of [1,2,3]">{{h}}</div> -->
         <!-- <div>
@@ -72,7 +62,8 @@
       </div>
     </div>
     <div class="flex lg:hidden">
-      <mat-icon class="search-icon text-3xl mr-4" (click)="mobileSerchBar = !mobileSerchBar">search</mat-icon>
+      <i class="fa-solid fa-magnifying-glass text-xl mr-4" (click)="mobileSerchBar = !mobileSerchBar"></i>
+      <!-- <mat-icon class="search-icon text-3xl " (click)="mobileSerchBar = !mobileSerchBar">search</mat-icon> -->
       <div *ngIf="mobileSerchBar" [ngClass]="mobileSerchBar === true ? 'fixed left-0 right-10 mobile-search-bar':''">
         <app-global-search [mobileSerchBarData]="mobileSerchBar" (mobileSerchBar)="mobileSerchBar = !mobileSerchBar"></app-global-search>
       </div>
@@ -92,28 +83,18 @@
             [routerLinkActive]="['menu-active']">Dashboard</a>
           <a class="navButton mt-3 cursor-pointer" routerLink="doctor/health_records"
             [routerLinkActive]="['menu-active']">Health Records</a>
-          <a class="navButton mt-3 cursor-pointer" [matMenuTriggerFor]="more" *ngIf="isLabTechnician || isAdmin">Laboratory<mat-icon
-              class="arrow-height">arrow_drop_down</mat-icon></a>
-          <mat-menu #more="matMenu">
-            <a mat-menu-item routerLink="/laboratory/add_patient_test">Add Patient Test</a>
-            <a mat-menu-item routerLink="/laboratory/collect_lab_sample">Collection Lab Sample</a>
-            <a mat-menu-item routerLink="/laboratory/lab_report">Lab Test Report</a>
-            <a mat-menu-item routerLink="/laboratory/lab_report_list">Lab Test Lists</a>
-            <a mat-menu-item routerLink="/laboratory/lab_orders">Lab Orders</a>
-          </mat-menu>
+          <a class="navButton mt-3 cursor-pointer" *ngIf="isLabTechnician || isAdmin" (click)="laboratory.toggle($event)">Laboratory<i class="fa-solid fa-caret-down ml-2"></i></a>
+          <p-menu #laboratory [model]="laboratoryMenuItems" [popup]="true" appendTo="body">
+            <ng-template pTemplate="item" let-item>
+              <a routerLink="{{item.routerLink}}" class="whitespace-nowrap">{{ item.label }}</a>
+            </ng-template>
+          </p-menu>
           <p-menu #menu [model]="items" [popup]="true"></p-menu>
-          <a class="creat-drop cursor-pointer text-white mt-3 justify-center" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)">Pharmacy<mat-icon
-            class="arrow-height">arrow_drop_down</mat-icon></a>
+          <a class="creat-drop cursor-pointer text-white mt-3 justify-center" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)">Pharmacy<i class="fa-solid fa-caret-down ml-2"></i></a>
 
-            <a class="creat-drop cursor-pointer mt-3 text-white justify-center" [matMenuTriggerFor]="creat">Create<mat-icon
-              class="arrow-height">arrow_drop_down</mat-icon></a>
-          <mat-menu #creat="matMenu">
-            <a mat-menu-item (click)="addPatient()">Patient</a>
-            <a mat-menu-item (click)="addToken()">Token</a>
-            <a mat-menu-item>Invoice</a>
-            <a mat-menu-item>Health Record</a>
-          </mat-menu>
-  
+            <a class="creat-drop cursor-pointer mt-3 text-white justify-center" (click)="create.toggle($event)">Create<i class="fa-solid fa-caret-down ml-2"></i></a>
+            <p-menu #create [model]="createMenuItems" [popup]="true" appendTo="body">
+            </p-menu>
         </div>
       </div>
   </div>

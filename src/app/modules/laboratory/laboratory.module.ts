@@ -46,6 +46,9 @@ import { LabInvoicePrintComponent } from './lab-prints/lab-invoice-print/lab-inv
     GenericTableComponent,
     ReactiveFormsModule,
   ],
+  exports:[
+    AddPatientTestComponent
+  ],
   providers: [DialogService, DynamicDialogRef, DynamicDialogConfig,DatePipe],
 })
 export class LaboratoryModule {}

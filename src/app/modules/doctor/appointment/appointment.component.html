@@ -81,7 +81,7 @@
     <section class="d-flex flex-column col-span-3 xl:order-1">
       <div class=" flex-column bg-white align-items-center p-3 rounded-3">
         <div>
-          <p-tabView class="flex justify-between appointment">
+          <p-tabView class="flex justify-between appointment" (activeIndexChange)="changeTab($event)">
             <p-tabPanel header="Prescription">
               <app-prescription [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="prescription = $event"
                 [healthRecordId]="healthRecordId"></app-prescription>
@@ -103,18 +103,18 @@
                 <app-files-preview [patientId]="patient.id"></app-files-preview>
               </p>
             </p-tabPanel>
-            <p-tabPanel header="Radiology Order">
+            <!-- <p-tabPanel header="Radiology Order">
               <p>
                 At vero eos et
               </p>
-            </p-tabPanel>
+            </p-tabPanel> -->
           </p-tabView>
         </div>
         <div class="flex">
 
-          <div class="m-1 ">
+          <!-- <div class="m-1 ">
             <p-button class="" [label]="'Save'" (onClick)="savePatientVisitDetails()" *ngIf="saved"></p-button>
-          </div>
+          </div> -->
   
           <div class="m-1">
             <p-button class="" [label]="'Upload a file'" (onClick)="openUploadFileDialog()"
