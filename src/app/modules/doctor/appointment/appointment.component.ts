@@ -508,6 +508,11 @@ export class AppointmentComponent implements OnInit, OnChanges {
     })
   }
 
+  handleSectionVisibility(event: { isVisible: boolean; sectionId: string }) {
+    console.log(`${event.sectionId} is now ${event.isVisible ? 'visible' : 'hidden'}`);
+    // Perform actions based on the section visibility
+  }
+
   updateLabOrder(labOrderId: string){
     this.LabOrderService.updateLabOrder(labOrderId, this.labOrder).subscribe({
       next: (x) => {

@@ -78,37 +78,62 @@
         </p-panel>
       </div>
     </section>
-    <section class="d-flex flex-column col-span-3 xl:order-1">
-      <div class=" flex-column bg-white align-items-center p-3 rounded-3">
-        <div>
-          <p-tabView class="flex justify-between appointment" (activeIndexChange)="changeTab($event)">
-            <p-tabPanel header="Prescription">
-              <app-prescription [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="prescription = $event"
+    <section appSectionVisibility (sectionVisible)="handleSectionVisibility($event)" class="d-flex flex-column col-span-3 xl:order-1 h-1/5 overflow-scroll">
+      <div class=" flex-column bg-white align-items-center p-3 rounded-3 ">
+        <!-- <p-tabView class="flex justify-between appointment" (activeIndexChange)="changeTab($event)">
+          <p-tabPanel header="Prescription">
+            <app-prescription [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="prescription = $event"
+              [healthRecordId]="healthRecordId"></app-prescription>
+          </p-tabPanel>
+          <p-tabPanel header="Vitals">
+            <app-vitals [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="vitals = $event"
+              [healthRecordId]="healthRecordId"></app-vitals>
+          </p-tabPanel>
+          <p-tabPanel header="Medication">
+            <app-medication [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="medication = $event"
+              [healthRecordId]="healthRecordId"></app-medication>
+          </p-tabPanel>
+          <p-tabPanel header="Lab Order">
+            <app-lab-order [token]="token" (emitRequest)="labOrder = $event" [healthRecord]="healthRecord"
+              [healthRecordId]="healthRecordId"></app-lab-order>
+          </p-tabPanel>
+          <p-tabPanel header="Documents">
+            <p>
+              <app-files-preview [patientId]="patient.id"></app-files-preview>
+            </p>
+          </p-tabPanel>
+          <p-tabPanel header="Radiology Order">
+            <p>
+              At vero eos et
+            </p>
+          </p-tabPanel>
+        </p-tabView> -->
+        <div class="gap-3	" >
+          <section id="Prescription">
+            <h2>Prescription</h2>
+            <app-prescription [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="prescription = $event"
                 [healthRecordId]="healthRecordId"></app-prescription>
-            </p-tabPanel>
-            <p-tabPanel header="Vitals">
-              <app-vitals [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="vitals = $event"
+          </section>
+          <section id="Vitals">
+            <h2>Vitals</h2>
+            <app-vitals [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="vitals = $event"
                 [healthRecordId]="healthRecordId"></app-vitals>
-            </p-tabPanel>
-            <p-tabPanel header="Medication">
-              <app-medication [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="medication = $event"
+          </section>
+          <section id="Medication">
+            <h2>Medication</h2>
+            <app-medication [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="medication = $event"
                 [healthRecordId]="healthRecordId"></app-medication>
-            </p-tabPanel>
-            <p-tabPanel header="Lab Order">
-              <app-lab-order [token]="token" (emitRequest)="labOrder = $event" [healthRecord]="healthRecord"
-                [healthRecordId]="healthRecordId"></app-lab-order>
-            </p-tabPanel>
-            <p-tabPanel header="Documents">
-              <p>
-                <app-files-preview [patientId]="patient.id"></app-files-preview>
-              </p>
-            </p-tabPanel>
-            <!-- <p-tabPanel header="Radiology Order">
-              <p>
-                At vero eos et
-              </p>
-            </p-tabPanel> -->
-          </p-tabView>
+          </section>
+          <section id="LabOrder">
+            <h2>Lab Order</h2>
+            <app-lab-order [token]="token" (emitRequest)="labOrder = $event" [healthRecord]="healthRecord"
+            [healthRecordId]="healthRecordId"></app-lab-order>
+          </section>
+          <section id="Documents">
+            <h2>Documents</h2>
+            <app-files-preview [patientId]="patient.id"></app-files-preview>
+
+          </section>
         </div>
         <div class="flex">
 

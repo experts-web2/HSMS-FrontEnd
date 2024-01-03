@@ -29,6 +29,7 @@ import { AddFilesDialogComponent } from './appointment-sub-components/add-files-
 import { CameraComponent } from '../camera/camera.component';
 import { CameraModule } from '../camera/camera.module';
 import { HealthRecordComponent } from './health-record/health-record.component';
+import { SectionVisibilityDirective } from 'src/app/shared/directive/section_visibility/section-visibility.directive';
 @NgModule({
   declarations: [
     DoctorRootComponent,
@@ -59,6 +60,7 @@ import { HealthRecordComponent } from './health-record/health-record.component';
     AddPrescriptionDialogueComponent,
     PrimeNgModule,
     FlatpickrModule,
+    SectionVisibilityDirective,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

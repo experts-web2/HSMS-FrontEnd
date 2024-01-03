@@ -84,7 +84,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
     this.medicationForm.get('doctorId')?.setValue(this.healthRecord.doctorId);
     this.medicationForm.get('patientId')?.setValue(this.healthRecord.patientId);
 
-    console.log(this.healthRecord);
+    // console.log(this.healthRecord);
     
     if (this.healthRecord.medication) {
       this.showEdit = true; 
@@ -137,7 +137,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
     this.medicineService.getMedicine(medicineRequest).subscribe({
       next: (x) => {
-        console.log(x);
+        // console.log(x);
         this.medicinesToShow = x.data;
         
       },
@@ -368,7 +368,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   }
 
   formSetter(medication: IMedicationRequest){
-    console.log('form setter');
+    // console.log('form setter');
     
     this.medicationForm.patchValue({
       medicationNotes: medication.medicationNotes,
@@ -376,18 +376,18 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
     })
 
     medication.medicationDetails.forEach((x, i) => {    
-      console.log({
-        medicineId: x.medicineId,
-        medicineName: this.medicines.find(y => y.id === x.medicineId)?.name,
-        dosage: x.dosage,
-        frequency: x.frequency,
-        route: x.route,
-        duration: x.duration,
-        instruction: x.insturction,
-        durationValue:x.durationValue,
-        dosageValue: x.dosageValue,
-        medicines: this.medicines
-      });
+      // console.log({
+      //   medicineId: x.medicineId,
+      //   medicineName: this.medicines.find(y => y.id === x.medicineId)?.name,
+      //   dosage: x.dosage,
+      //   frequency: x.frequency,
+      //   route: x.route,
+      //   duration: x.duration,
+      //   instruction: x.insturction,
+      //   durationValue:x.durationValue,
+      //   dosageValue: x.dosageValue,
+      //   medicines: this.medicines
+      // });
 
       this.medicationItems.at(i).disable({
         onlySelf: true

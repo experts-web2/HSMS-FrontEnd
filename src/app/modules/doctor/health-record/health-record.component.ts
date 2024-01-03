@@ -109,7 +109,7 @@ export class HealthRecordComponent implements OnInit {
 
   addHealthRecord(){
     let healthRecordRequest: IHealthRecordRequest = {
-      doctorId: this.doctorId,
+      doctorId: this.doctorId ?? this.selectedDoctor.id,
       patientId: this.patientIdForHealthRecord
     }
     this.healthRecordService.addHealthRecoed(healthRecordRequest).subscribe({
