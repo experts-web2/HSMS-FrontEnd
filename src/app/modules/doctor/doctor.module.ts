@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DoctorRoutingModule } from './doctor-routing.module';
 import { DoctorRootComponent } from './doctor-root/doctor-root.component';
 import { AppointmentComponent } from './appointment/appointment.component';
-import { MaterialModule, PrimeNgModule } from 'src/app/shared/modules';
+import { PrimeNgModule } from 'src/app/shared/modules';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 import { ButtonModule } from 'primeng/button';
@@ -22,7 +22,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DrPrescriptionPrintComponent } from './appointment-sub-components/dr-prescription-print/dr-prescription-print.component';
 import { FilesPreviewComponent } from './appointment-sub-components/files-preview/files-preview.component';
 import { AddFilesDialogComponent } from './appointment-sub-components/add-files-dialog/add-files-dialog.component';
@@ -51,7 +51,6 @@ import { HealthRecordComponent } from './health-record/health-record.component';
     CommonModule,
     DoctorRoutingModule,
     GenericTableComponent,
-    MaterialModule,
     CameraModule,
     ToastModule,
     MessagesModule,
@@ -59,6 +58,7 @@ import { HealthRecordComponent } from './health-record/health-record.component';
     AddPrescriptionDialogueComponent,
     PrimeNgModule,
     FlatpickrModule,
+    ReactiveFormsModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

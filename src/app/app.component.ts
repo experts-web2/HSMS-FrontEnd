@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services';
 import { UserStateService } from './State/user/user.service';
 import { ILogedInUser } from './models/interfaces/Iloggedinuser';
@@ -98,7 +97,6 @@ export class AppComponent implements OnInit {
   isLabTechnician = false;
 
   constructor(
-    // private dialog: MatDialog,
     private readonly authService: AuthService,
     private readonly userStateService: UserStateService,
     private router: Router,

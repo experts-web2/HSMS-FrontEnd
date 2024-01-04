@@ -35,11 +35,6 @@
   <div class="d-flex">
     <span style="margin-right: 15px; margin-top: 15px;">Patient Visits</span>
     <p-dropdown [options]="filter" [(ngModel)]="selectedFilter" name="filterString" placeholder="Select an option"></p-dropdown>
-    <!-- <mat-form-field>
-      <mat-select name="filterString" >
-        <mat-option *ngFor="let item of filter" [value]="selectedFilter">{{item.label}}</mat-option>
-      </mat-select>
-    </mat-form-field> -->
   </div>
 </div>
 <div echarts [options]="chartOption" class=""></div>
