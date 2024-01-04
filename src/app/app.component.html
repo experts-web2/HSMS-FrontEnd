@@ -17,39 +17,12 @@
 
         <p-menu #menu [model]="items" [popup]="true" appendTo="body"></p-menu>
         <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)">Pharmacy <i class="fa-solid fa-caret-down ml-2"></i></a>
-        <!-- <a class="navButton px-2 xl:px-4 2xl:px-8 cursor-pointer" [matMenuTriggerFor]="lab" *ngIf="!isDoctor">More<mat-icon
-            class="arrow-height">arrow_drop_down</mat-icon></a>
-        <mat-menu #lab="matMenu">
-          <a mat-menu-item>Item 1</a>
-          <a mat-menu-item>Item 2</a>
-        </mat-menu> -->
-        <!-- <a class="navButton" routerLink="/laboratory">Laboratory</a> -->
-
       </div>
       <div class="hidden md:flex align-items-center ">
         <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" (click)="create.toggle($event)">Create <i class="fa-solid fa-caret-down ml-2"></i></a>
         <p-menu #create [model]="createMenuItems" [popup]="true" appendTo="body">
         </p-menu>
         <app-global-search></app-global-search>
-        <!-- <div
-        class="search-wrapper-home mx-2 hidden md:flex flex-row justify-content-between"
-      >
-        <div class="relative search-bar-wrapper">
-          <div class="search-input-wrapper">
-            <input
-              placeholder="Search"
-              class="search-input text-sm"
-            />
-            <mat-icon class="absolute search-icon">search</mat-icon>
-          </div>
-          <span class="search-divider"> | </span>
-          <div
-            class="items-center text-sm flex select-search-category cursor-pointer w-28"
-          >
-            Doctor <mat-icon>keyboard_arrow_down</mat-icon>
-          </div>
-        </div>
-      </div> -->
         <a class="navButton cursor-pointer" (click)="logoutmenu.toggle($event)"><span
             class="span-elpis user-name">{{logedInUser.firstName.substring(0, 1).toUpperCase() +
             logedInUser.lastName.substring(0, 1).toUpperCase()}}</span><i class="fa-solid fa-caret-down ml-2"></i></a>
@@ -63,7 +36,6 @@
     </div>
     <div class="flex lg:hidden">
       <i class="fa-solid fa-magnifying-glass text-xl mr-4" (click)="mobileSerchBar = !mobileSerchBar"></i>
-      <!-- <mat-icon class="search-icon text-3xl " (click)="mobileSerchBar = !mobileSerchBar">search</mat-icon> -->
       <div *ngIf="mobileSerchBar" [ngClass]="mobileSerchBar === true ? 'fixed left-0 right-10 mobile-search-bar':''">
         <app-global-search [mobileSerchBarData]="mobileSerchBar" (mobileSerchBar)="mobileSerchBar = !mobileSerchBar"></app-global-search>
       </div>

@@ -1,12 +1,6 @@
 
-<div mat-dialog-title class="dialog-title">
-    <!-- <div class="relative w-full flex justify-center pt-4">
-        <i  mat-dialog-close class="fa-solid fa-xmark close-icon absolute right-4 top-4" color="warn"></i> -->
-        <!-- <mat-icon  mat-dialog-close class="close-icon absolute right-4 top-4" color="warn">close</mat-icon> -->
-        <!-- <span>Add Patient</span>
-    </div>
- </div> -->
-<div mat-dialog-content class="matDialogContent">
+<div class="dialog-title">
+<div class="matDialogContent">
     <p-tabView>
     <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
         <div class="input_Divs">
@@ -39,11 +33,6 @@
                 optionLabel="label"
                 optionValue="value"
               ></p-dropdown>     
-               <!-- <mat-select class="form-control inpt-Ph-rel" [ngClass]="{ 'ng-invalid ng-dirty' :relation.touched && relation.invalid}"  placeholder="Select Relation" formControlName="relation">
-                <mat-option *ngFor="let relation of relations" [value]="relation.value">
-                        {{relation.label}}
-                </mat-option>
-                </mat-select> -->
             </div>
         </div>
         <div class="input_Divs">
@@ -52,11 +41,6 @@
         <div class="input_Divs">
             <label>Gender</label>
             <div class="inpt-phone items-center">
-                <!-- <mat-radio-group class="inpt-radio" aria-label="Select an option" formControlName="gender">
-                    <mat-radio-button value="Male">Male</mat-radio-button>
-                    <mat-radio-button value="Female">Female</mat-radio-button>
-                    <mat-radio-button value="Other">Other</mat-radio-button>
-                  </mat-radio-group> -->
                   <div class="flex items-center gap-2">
                     <div class="flex items-center">
                         <p-radioButton name="gender" value="Male" formControlName="gender" inputId="male"></p-radioButton>

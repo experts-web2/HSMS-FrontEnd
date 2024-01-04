@@ -4,7 +4,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { AddTokenModalComponent } from './modules/dialog/add-token-modal/add-token-modal.component';
 import { RegistrationModule } from './modules/registration/registration.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -14,7 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 import { LoaderComponent, GenericTableComponent } from './shared/components';
 import { AppHttpInterceptor } from './auth/interceptor/app-http.interceptor';
-import { PrimeNgModule, MaterialModule } from 'src/app/shared/modules';
+import { PrimeNgModule } from 'src/app/shared/modules';
 import { GlobalSearchComponent } from './Shared/components/global-search/global-search.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { AddAppointmentComponent } from './modules/dialog/add-appointment/add-appointment.component';
@@ -40,8 +39,6 @@ import { FormModule } from './modules/forms/form.module';
     BrowserAnimationsModule,
     RegistrationModule,
     ReactiveFormsModule,
-    MatAutocompleteModule,
-    MaterialModule,
     HttpClientModule,
     ToastModule,
     MessagesModule,

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CameraComponent } from 'src/app/modules/camera/camera.component';
 import { PatientService } from 'src/app/services';
 import { IAddOrUpdatePatient } from 'src/app/models/interfaces/addOrUodate-Patient';
@@ -146,7 +144,7 @@ export class PatientFormComponent
     this.patientForm.reset();
   }
 
-  add(event: MatChipInputEvent): void {
+  add(event: any): void {
     const value = (event.value || '').trim();
 
     // Add our tag

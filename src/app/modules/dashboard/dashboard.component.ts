@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import * as echarts from 'echarts';
 import {
   PatientService,
@@ -16,6 +15,7 @@ import { IToken } from 'src/app/models/interfaces/Token';
 import { Router } from '@angular/router';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { takeUntil } from 'rxjs';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-dashboard',
@@ -101,12 +101,13 @@ export class DashboardComponent
 
   constructor(
     private patientService: PatientService,
-    private dialog: MatDialog,
     private readonly userStateService: UserStateService,
     private readonly appointmentService: AppointmentService,
     private readonly tokenService: TokenService,
     private readonly router: Router,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private dialog: DialogService,
+    private dialogRef:DynamicDialogRef,
   ) {
     super();
   }
@@ -242,9 +243,7 @@ export class DashboardComponent
 
   addToken() {
     this.dialog.open(AddTokenModalComponent, {
-      // maxWidth: '100vw',
       width: '90vw',
-      maxWidth: '',
       height: '90vh',
       data: { display: true },
     });
