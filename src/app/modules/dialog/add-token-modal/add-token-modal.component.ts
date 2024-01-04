@@ -7,11 +7,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import {
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-  MatDialog,
-} from '@angular/material/dialog';
 import { PatientService } from 'src/app/services';
 import { TokenTypes } from '../../../constants/Constants/TokenTypes';
 import { IDoctor } from 'src/app/models/interfaces/Doctor';
@@ -109,9 +104,6 @@ export class AddTokenModalComponent
     private dialogService: DialogService,
     private config: DynamicDialogConfig,
     private dialogRef:DynamicDialogRef,
-    // public dialogRef: MatDialogRef<AddTokenModalComponent>,
-    // private dialog: MatDialog,
-    // @Inject(MAT_DIALOG_DATA) public data: any,
     private readonly patientService: PatientService,
     private readonly fb: FormBuilder,
     private readonly doctorService: DoctorService,

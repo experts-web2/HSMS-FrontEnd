@@ -19,9 +19,8 @@ import {
   PatientTestService,
   TestService,
 } from 'src/app/services';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { PatientFormComponent } from '../../forms/patient-form/patient-form.component';
-import { MatDialog } from '@angular/material/dialog';
 import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
 import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
 import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
@@ -75,8 +74,9 @@ export class AddPatientTestComponent
     private readonly alertService: AlertService,
     private readonly testService: TestService,
     private readonly patientTestService: PatientTestService,
-    public dialogService: DialogService,
-    private dialog: MatDialog,
+     private dialog: DialogService,
+    private config: DynamicDialogConfig,
+    private dialogRef:DynamicDialogRef,
     private readonly labOrderService: LabOrderService
 
   ) {
@@ -336,7 +336,7 @@ export class AddPatientTestComponent
 
   print(invoiceId: string){
     
-    this.dialogService.open(LabInvoicePrintComponent, {
+    this.dialog.open(LabInvoicePrintComponent, {
       width: '80%',
       height: '90%',
       data: {
@@ -389,7 +389,7 @@ export class AddPatientTestComponent
       width: '600px',
     });
 
-    dialogRef.afterClosed().subscribe({
+    dialogRef.onClose.subscribe({
       next: (x: any) => {
       },
     });
