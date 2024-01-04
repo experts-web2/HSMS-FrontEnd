@@ -30,8 +30,9 @@
   <div class="flex justify-between">
     <h1 class="first-title">Current Appointment</h1>
   </div>
-  <div class="grid grid-cols-1 xl:grid-cols-4 xl:gap-x-4 gap-y-4 justify-between" *ngIf="patient || token">
-    <section class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 xl:order-2 gap-x-3 gap-y-3 justify-between">
+  <div class="flex flex-col lg:flex-row xl:gap-x-4 gap-y-4 justify-between relative" *ngIf="patient || token">
+    <i class="fa fa-solid fa-bars text-3xl user-profile-icon absolute right-4 cursor-pointer hidden lg:flex" (click)="userProfile = !userProfile"></i>
+    <section class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 xl:order-2 gap-x-3 gap-y-3 justify-between user-profile" [ngClass]="userProfile ? 'flex':'flex lg:hidden'">
       <div class="d-flex flex-column bg-white align-items-center p-3 rounded-3">
         <img
           src="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg"
@@ -57,11 +58,9 @@
                   class="fa-solid w-5 fa-light fa-ruler-vertical mr-3"></i>height:</span><span>{{tokenVitals?.height
                 ?? 'N/A'}}</span></div>
             <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa-solid w-5 fa-weight-scale mr-3"></i>Weight (in kg e.g:
-                70):</span><span>{{tokenVitals?.weight ?? 'N/A'}}</span></div>
+                  class="fa-solid w-5 fa-weight-scale mr-3"></i>Weight (kg):</span><span>{{tokenVitals?.weight ?? 'N/A'}}</span></div>
             <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa-solid w-5 fa-child mr-3"></i>Body Mass Index
-                (BMI):</span><span>{{tokenVitals?.bodyMassIndex ?? 'N/A'}}</span></div>
+                  class="fa-solid w-5 fa-child mr-3"></i>BMI:</span><span>{{tokenVitals?.bodyMassIndex ?? 'N/A'}}</span></div>
             <div class="history-item-div"><span class="patient-info-labels"><i
                   class="fa-solid w-5 fa-heart mr-3"></i>Blood Pressure:</span><span>{{tokenVitals?.bloodPressure
                 ?? 'N/A'}}</span></div>
@@ -78,8 +77,24 @@
         </p-panel>
       </div>
     </section>
-    <section appSectionVisibility (sectionVisible)="handleSectionVisibility($event)" class="d-flex flex-column col-span-3 xl:order-1 h-screen overflow-scroll">
-      <div class=" flex-column bg-white align-items-center p-3 rounded-3 ">
+    <section class="flex flex-col md:flex-row md:gap-x-4 xl:order-1">
+      <div class="flex flex-col gap-2">
+        <div class="flex active-section bg-white rounded-md px-2 py-2 mb-2 md:mb-0 md:py-4 gap-4 h-fit overflow-scroll w-full">
+          <p-button class="outline-btn">Prescription</p-button>
+          <p-button class="outline-btn">Vitals</p-button>
+          <p-button class="outline-btn">Medication</p-button>
+          <p-button class="outline-btn">Lab Order</p-button>
+          <p-button class="outline-btn">Documents</p-button>
+        </div>
+        <div class="bg-white active-section rounded-md flex flex-col gap-2 p-2">
+          <p-button class="outline-btn">Prescription</p-button>
+          <p-button class="outline-btn">Vitals</p-button>
+          <p-button class="outline-btn">Medication</p-button>
+          <p-button class="outline-btn">Lab Order</p-button>
+          <p-button class="outline-btn">Documents</p-button>
+        </div>
+      </div>
+      <div class="flex-column align-items-center">
         <!-- <p-tabView class="flex justify-between appointment" (activeIndexChange)="changeTab($event)">
           <p-tabPanel header="Prescription">
             <app-prescription [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="prescription = $event"
@@ -108,7 +123,7 @@
             </p>
           </p-tabPanel>
         </p-tabView> -->
-        <div class="gap-16 grid">
+        <div class="gap-16 grid h-screen overflow-scroll rounded-3 w-full lg:w-fit h-fit bg-white p-3" appSectionVisibility (sectionVisible)="handleSectionVisibility($event)">
           <section id="Prescription">
             <h2 class="text-2xl">Prescription</h2>
             <app-prescription [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="prescription = $event"
@@ -135,7 +150,7 @@
 
           </section>
         </div>
-        <div class="flex">
+        <div class="flex bg-white p-3 mt-2 rounded-md">
 
           <!-- <div class="m-1 ">
             <p-button class="" [label]="'Save'" (onClick)="savePatientVisitDetails()" *ngIf="saved"></p-button>
@@ -151,6 +166,7 @@
         </div>
       </div>
     </section>
+    
 
   </div>
 </div>

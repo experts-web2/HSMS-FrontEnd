@@ -54,6 +54,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
   healthRecordId!: string;
   healthRecord!: IHealthRecord;
   saved: boolean = true;
+  userProfile = true;
   constructor(
     private alertService: AlertService, 
     private readonly route: ActivatedRoute, 

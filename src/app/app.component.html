@@ -18,7 +18,7 @@
         <p-menu #menu [model]="items" [popup]="true" appendTo="body"></p-menu>
         <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" (click)="menu.toggle($event)">Pharmacy <i class="fa-solid fa-caret-down ml-2"></i></a>
       </div>
-      <div class="hidden md:flex align-items-center ">
+      <div class="hidden md:flex align-items-center">
         <a class="creat-drop cursor-pointer text-white" *ngIf="isDoctor || isAdmin" (click)="create.toggle($event)">Create <i class="fa-solid fa-caret-down ml-2"></i></a>
         <p-menu #create [model]="createMenuItems" [popup]="true" appendTo="body">
         </p-menu>
