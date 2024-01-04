@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, OnChanges, OnInit, Renderer2, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, takeUntil } from 'rxjs';
 import { UserStateService } from 'src/app/State/user/user.service';
@@ -36,7 +36,7 @@ import { AutomapperService } from '../../../services/mapper/automapper.service';
 export class AppointmentComponent implements OnInit, OnChanges {
   tokenId!: string;
   patient!: IPatient;
-  previousTabIndex: number = 0;
+  previousTabId: string = 'Prescription';
   token!: IToken;
   patients: Array<IDropDown> = [];
   historyToken!: IToken;
@@ -68,7 +68,9 @@ export class AppointmentComponent implements OnInit, OnChanges {
     private readonly dialogService: DialogService,
     private readonly patientVisitService: PatientVisitService,
     private readonly healthRecordService: HealtRecordService,
-    private readonly automapperService: AutomapperService
+    private readonly automapperService: AutomapperService,
+    private readonly el: ElementRef, 
+    private readonly renderer: Renderer2
   ) {
     this.route.params.subscribe({
       next: (x) => {
@@ -224,44 +226,44 @@ export class AppointmentComponent implements OnInit, OnChanges {
 
   }
 
-  changeTab(tabindex: number){
+  changeTab(tabindex: string){
     console.log(tabindex);
 
-    switch(this.previousTabIndex){
-      case 0:
+    switch(this.previousTabId){
+      case 'Prescription':
         if (this.healthRecord.prescription && !isEqual(this.prescription, this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription))) {
           console.log('update prescription');
           
         } else if (!this.healthRecord.prescription) {
           console.log('add prescription');
-          this.addPrescription()
+          // this.addPrescription()
         }else{
           console.log('do nothing');
 
         }
         
       break;
-      case 1:
+      case 'Vitals':
         console.log({vitalReq: this.vitals, healthRecordVital: this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals)});
         
         if (this.healthRecord.vital && !isEqual(this.vitals, this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals))) {
           console.log('update vitals');
         } else if (!this.healthRecord.vital) {
           console.log('add vitals');
-          this.addVitals()
+          // this.addVitals()
         } else {
           console.log('do nothing');
           
         }
 
       break;
-      case 2:
+      case 'Medication':
         if (this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication))) {
           console.log('update medication');
           
         } else if (!this.healthRecord.medication){
           console.log('add medication');
-          this.addMedication()
+          // this.addMedication()
 
         }else {
           console.log('do nothing');
@@ -269,14 +271,14 @@ export class AppointmentComponent implements OnInit, OnChanges {
         }
 
       break;
-      case 3:
+      case 'labOrder':
         let healthRecordLabTests = this.healthRecord.labOrder?.labOrderDetails.map(x => x.labTestId) ?? [];
         if(this.healthRecord.labOrder && !(this.labOrder.labTestIds?.length === healthRecordLabTests?.length) && !this.labOrder.labTestIds?.every(x => healthRecordLabTests.includes(x))){
           console.log('update laborder');
           
         } else if (!this.healthRecord.labOrder) {
           console.log('add laborder');
-          this.addLabOrder();
+          // this.addLabOrder();
         }
 
       break;
@@ -284,7 +286,7 @@ export class AppointmentComponent implements OnInit, OnChanges {
       break;
     }
 
-    this.previousTabIndex = tabindex;    
+    this.previousTabId = tabindex;    
   }
 
   getHistoryMedications(tokenId: string){
@@ -509,9 +511,34 @@ export class AppointmentComponent implements OnInit, OnChanges {
     })
   }
 
-  handleSectionVisibility(event: { isVisible: boolean; sectionId: string }) {
-    console.log(`${event.sectionId} is now ${event.isVisible ? 'visible' : 'hidden'}`);
+  handleSectionVisibility(sectionId: string ) {
+    if(sectionId === 'Medication' ){
+      console.log(this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication)))
+      console.log({medicationReq:this.medication,medicationHR: this.automapperService.map<IPrescriptionRequest>(this.healthRecord.medication, this.medication)});
+    }
+    if(sectionId === 'Prescription' ){
+      console.log(this.healthRecord.prescription && !isEqual(this.prescription, this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription)))
+      console.log({prescriptionReq:this.prescription,prescriptionHR: this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription)});
+      
+    }
+    if(sectionId === 'Vitals' ){
+      console.log(this.healthRecord.vital && !isEqual(this.vitals, this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals)))
+    }
+    this.changeTab(sectionId);
+    console.log(`${sectionId} is now visible the most`);
     // Perform actions based on the section visibility
+  }
+
+  scrollToSection(el: HTMLElement): void {
+    // const element = el as ElementRef
+    // if (element) {
+    //   element.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    // }
+  }
+
+  test(event:any){
+    console.log(event);
+    
   }
 
   updateLabOrder(labOrderId: string){

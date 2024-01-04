@@ -408,6 +408,31 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
       if(medication.medicationDetails.length > this.medicationItems.length) this.addMedicationItem();
     })
+
+    // if(this.medicationForm.get('patientId')?.valid && this.medicationForm.get('doctorId')?.valid){
+      let medicationRequest: IMedicationRequest = {
+        patientId: this.medicationForm.controls['patientId'].value,
+        doctorId: this.medicationForm.controls['doctorId'].value,
+        medicationNotes: this.medicationForm.controls['medicationNotes'].value,
+        healthRecordId: this.healthRecordId,
+        medicationDetails: this.medicationItems.value.map((x: any) => {
+          let medicationDetail: IMedicationDetail = {
+            medicineId: x.medicineId,
+            dosage: x.dosage,
+            dosageValue: x.dosageValue,
+            duration: x.duration,
+            durationValue: x.durationValue,
+            route: x.route,
+            frequency: x.frequency,
+            insturction: x.instruction
+          };
+
+          return medicationDetail;
+        })
+      };
+      this.emitRequest.emit(medicationRequest)
+    // }
+
   }
 
 }
