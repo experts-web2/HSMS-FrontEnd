@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnChanges, OnInit, Renderer2, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, takeUntil } from 'rxjs';
 import { UserStateService } from 'src/app/State/user/user.service';
@@ -33,10 +33,18 @@ import { AutomapperService } from '../../../services/mapper/automapper.service';
   templateUrl: './appointment.component.html',
   styleUrls: ['./appointment.component.scss'],
 })
-export class AppointmentComponent implements OnInit, OnChanges {
+export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
+  @ViewChild('Prescription') prescriptionSection!: ElementRef;
+  @ViewChild('Vitals') vitalsSection!: ElementRef;
+  @ViewChild('Medication') medicationSection!: ElementRef;
+  @ViewChild('LabOrder') labOrderSection!: ElementRef;
+  @ViewChild('Documents') documentsSection!: ElementRef;
+  @ViewChild('sectionContainer') sectionContainer!: ElementRef;
+
   tokenId!: string;
   patient!: IPatient;
   previousTabId: string = 'Prescription';
+  currentTabId: string = 'Prescription';
   token!: IToken;
   patients: Array<IDropDown> = [];
   historyToken!: IToken;
@@ -88,6 +96,10 @@ export class AppointmentComponent implements OnInit, OnChanges {
         
       }
     })
+  }
+
+  ngAfterViewInit(): void {
+    const container = this.sectionContainer?.nativeElement;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -513,6 +525,8 @@ export class AppointmentComponent implements OnInit, OnChanges {
   }
 
   handleSectionVisibility(sectionId: string ) {
+    this.currentTabId = sectionId;
+
     if(sectionId === 'Medication' ){
       console.log(this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication)))
       console.log({medicationReq:this.medication,medicationHR: this.automapperService.map<IPrescriptionRequest>(this.healthRecord.medication, this.medication)});
@@ -529,12 +543,19 @@ export class AppointmentComponent implements OnInit, OnChanges {
     console.log(`${sectionId} is now visible the most`);
     // Perform actions based on the section visibility
   }
+  
+  scrollToSection(sectionId: string): void {
+    console.log(sectionId);
+    this.currentTabId = sectionId;
+    this.changeTab(sectionId);
+    
+    const container = this.sectionContainer?.nativeElement;
+    const sectionElement = document.getElementById(sectionId);
 
-  scrollToSection(el: HTMLElement): void {
-    // const element = el as ElementRef
-    // if (element) {
-    //   element.nativeElement.scrollIntoView({ behavior: 'smooth' });
-    // }
+    if (sectionElement && container) {
+      container.scrollTo({behavior: 'smooth', top: sectionElement.offsetTop});
+    }
+  
   }
 
   test(event:any){

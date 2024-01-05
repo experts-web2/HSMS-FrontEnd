@@ -80,18 +80,18 @@
     <section class="flex flex-col md:flex-row md:gap-x-4 xl:order-1">
       <div class="flex flex-col gap-2">
         <div class="flex active-section bg-white rounded-md px-2 py-2 mb-2 md:mb-0 md:py-4 gap-4 h-fit overflow-scroll w-full">
+          <p-button [ngClass]="currentTabId === 'Prescription' ? '':'outline-btn'" (onClick)="scrollToSection('Prescription')">Prescription</p-button>
+          <p-button [ngClass]="currentTabId === 'Vitals' ? '':'outline-btn'" (onClick)="scrollToSection('Vitals')">Vitals</p-button>
+          <p-button [ngClass]="currentTabId === 'Medication' ? '':'outline-btn'" (onClick)="scrollToSection('Medication')">Medication</p-button>
+          <p-button [ngClass]="currentTabId === 'LabOrder' ? '':'outline-btn'" (onClick)="scrollToSection('LabOrder')">Lab Order</p-button>
+          <p-button [ngClass]="currentTabId === 'Documents'? '':'outline-btn'" (onClick)="scrollToSection('Documents')">Documents</p-button>
+        </div>
+        <div class="bg-white active-section rounded-md flex flex-col gap-2 p-2">
           <p-button class="outline-btn">Prescription</p-button>
           <p-button class="outline-btn">Vitals</p-button>
           <p-button class="outline-btn">Medication</p-button>
           <p-button class="outline-btn">Lab Order</p-button>
           <p-button class="outline-btn">Documents</p-button>
-        </div>
-        <div class="bg-white active-section rounded-md flex flex-col gap-2 p-2">
-          <p-button class="outline-btn" (onClick)="scrollToSection(Prescription)">Prescription</p-button>
-          <p-button class="outline-btn" (onClick)="scrollToSection(Vitals)">Vitals</p-button>
-          <p-button class="outline-btn" (onClick)="scrollToSection(Medication)">Medication</p-button>
-          <p-button class="outline-btn" (onClick)="scrollToSection(LabOrder)">Lab Order</p-button>
-          <p-button class="outline-btn" (onClick)="scrollToSection(Documents)">Documents</p-button>
         </div>
       </div>
       <div class="flex-column align-items-center">
@@ -123,7 +123,7 @@
             </p>
           </p-tabPanel>
         </p-tabView> -->
-        <div class="gap-16 grid h-screen overflow-scroll rounded-3 w-full lg:w-fit h-fit bg-white p-3" appSectionVisibility (mostVisibleSection)="handleSectionVisibility($event)">
+        <div class="gap-16 grid h-screen overflow-scroll rounded-3 w-full lg:w-fit h-fit bg-white p-3"  #sectionContainer appSectionVisibility (mostVisibleSection)="handleSectionVisibility($event)">
           <section id="Prescription" #Prescription>
             <h2 class="text-2xl">Prescription</h2>
             <app-prescription [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="prescription = $event"
