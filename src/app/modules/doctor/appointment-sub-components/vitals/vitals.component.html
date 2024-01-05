@@ -15,77 +15,77 @@
         </div>
     </ng-container>
     <form (ngSubmit)="onSubmit()" [formGroup]="vitalForm">
-        <div class="d-flex flex-column">
-            <div class="row">
-                <div class="col-3">
+        <div class="flex flex-col">
+            <div class="grid grid-cols-3 gap-2">
+                <div>
                     <label for="name"><small>Pulse heart rate (per mint)</small></label>
-                    <input class="form-control" pInputText type="number" formControlName="pulseHeartRate" name=""
+                    <input class="w-full border rounded" pInputText type="number" formControlName="pulseHeartRate" name=""
                         id="pulseHeartRate">
     
                 </div>
-                <div class="col-3">
+                <div>
                     <label for="name"><small>Temperature °F</small></label>
-                    <input class="form-control" pInputText type="number" name="" formControlName="temperature"
+                    <input class="w-full border rounded" pInputText type="number" name="" formControlName="temperature"
                         id="temperature">
                 </div>
-                <div class="col-3">
+                <div>
                     <label for="name"><small>Blood pressure (mmHg)</small></label>
-                    <input class="form-control" pInputText type="text" name="" formControlName="bloodPressure"
+                    <input class="w-full border rounded" pInputText type="text" name="" formControlName="bloodPressure"
                         id="bloodPressure" >
                 </div>
                 <!-- <div class="col-3">
                     <label for="name"><small>Diastolic Blood Pressure</small></label>
-                    <input class="form-control" pInputText type="number" name=""
+                    <input class="w-full border rounded" pInputText type="number" name=""
                         formControlName="diastolicBloodPressure" id="diastolicBloodPressure">
 
                 </div> -->
             </div>
-            <div class="row mt-3">
-                <div class="col-3">
+            <div class="grid grid-cols-4 gap-2 mt-3">
+                <div>
                     <label for="respiratoryRate"><small>Respiratory Rate (per mint)</small></label>
-                    <input class="form-control" pInputText type="number" formControlName="respiratoryRate">
+                    <input class="w-full border rounded" pInputText type="number" formControlName="respiratoryRate">
                 
                 </div>
-                <div class="col-3">
+                <div>
                     <label for="bloodSugar"><small>Blood Sugar (mg/dl)</small></label>
-                    <input class="form-control" pInputText type="number" name="" formControlName="bloodSugar" >
+                    <input class="w-full border rounded" pInputText type="number" name="" formControlName="bloodSugar" >
                     
                 </div>
-                <div class="col-3">
+                <div>
                     <label for="weight"><small>Weight (kg)</small></label>
-                    <input class="form-control" pInputText type="number" name="" formControlName="weight" id="weight">
+                    <input class="w-full border rounded" pInputText type="number" name="" formControlName="weight" id="weight">
                     
                 </div>
-                <div class="col-3">
+                <div>
                     <label for="height"><small>Height</small></label>
-                    <div class="flex flex-row">
-                        <input formControlName="feet" style="width: 80px" pInputText class="pulse" type="number" name="Feet" placeholder="Feet" (input)="calculateBmi()">
-                        <input formControlName="inches" style="width: 90px" pInputText class="pulse" type="number" name="Inches" placeholder="Inches" (input)="calculateBmi()">
+                    <div class="grid grid-cols-2 gap-1">
+                        <input formControlName="feet" pInputText class="pulse" type="number" name="Feet" placeholder="Feet" (input)="calculateBmi()">
+                        <input formControlName="inches" pInputText class="pulse" type="number" name="Inches" placeholder="Inches" (input)="calculateBmi()">
                     </div>
                     
                 </div>
             </div>
 
-            <div class="row mt-3">
-                <div class="col-4">
+            <div class="grid grid-cols-2 gap-2 mt-3">
+                <div class="w-full">
                     <label for="bodyMassIndex"><small>Body Mass Index (BMI)</small></label>
-                    <input class="form-control" pInputText type="number" formControlName="bodyMassIndex" >
+                    <input class="w-full border rounded" pInputText type="number" formControlName="bodyMassIndex" >
                     
                 </div>
-                <div class="col-4">
+                <div class="w-full">
                     <label for="oxygenSaturation"><small>Oxygen Saturation %</small></label>
-                    <input class="form-control" pInputText type="number" name="" formControlName="oxygenSaturation">
+                    <input class="w-full border rounded" pInputText type="number" name="" formControlName="oxygenSaturation">
                     
                 </div>
                 <!-- <div class="col-4">
                     <label for="bodySurfaceArea"><small>Body Surface Area (BSA)</small></label>
-                    <input class="form-control" pInputText type="number" name="" formControlName="bodySurfaceArea"
+                    <input class="w-full border rounded" pInputText type="number" name="" formControlName="bodySurfaceArea"
                         id="bodySurfaceArea" >
                 </div> -->
             </div>
             <div class="mt-3" *ngIf="!newData">
                 <label for="reason"><small>Reason</small></label>
-                <input class="form-control" pInputText type="text" name="" formControlName="reason"
+                <input class="w-full border rounded" pInputText type="text" name="" formControlName="reason"
                     id="reason" >
             </div>
 
