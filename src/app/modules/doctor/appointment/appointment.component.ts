@@ -239,8 +239,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
 
   }
 
-  changeTab(tabindex: string){
-    console.log(tabindex);
+  changeTab(){
 
     switch(this.previousTabId){
       case 'Prescription':
@@ -251,7 +250,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
           console.log('add prescription');
           // this.addPrescription()
         }else{
-          console.log('do nothing');
+          console.log('pdo nothing');
 
         }
         
@@ -299,7 +298,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
       break;
     }
 
-    this.previousTabId = tabindex;    
   }
 
   getHistoryMedications(tokenId: string){
@@ -528,26 +526,30 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
     this.currentTabId = sectionId;
 
     if(sectionId === 'Medication' ){
-      console.log(this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication)))
-      console.log({medicationReq:this.medication,medicationHR: this.automapperService.map<IPrescriptionRequest>(this.healthRecord.medication, this.medication)});
+      // console.log(this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication)))
+      // console.log({medicationReq:this.medication,medicationHR: this.automapperService.map<IPrescriptionRequest>(this.healthRecord.medication, this.medication)});
     }
     if(sectionId === 'Prescription' ){
-      console.log(this.healthRecord.prescription && !isEqual(this.prescription, this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription)))
-      console.log({prescriptionReq:this.prescription,prescriptionHR: this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription)});
+      // console.log(this.healthRecord.prescription && !isEqual(this.prescription, this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription)))
+      // console.log({prescriptionReq:this.prescription,prescriptionHR: this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription)});
       
     }
     if(sectionId === 'Vitals' ){
-      console.log(this.healthRecord.vital && !isEqual(this.vitals, this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals)))
+      // console.log(this.healthRecord.vital && !isEqual(this.vitals, this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals)))
     }
-    this.changeTab(sectionId);
-    console.log(`${sectionId} is now visible the most`);
+    // console.log(`${sectionId} is now visible the most`);
+    
+    if(sectionId !== this.previousTabId){
+      this.changeTab();
+      this.previousTabId = sectionId;
+    }
     // Perform actions based on the section visibility
   }
   
   scrollToSection(sectionId: string): void {
     console.log(sectionId);
     this.currentTabId = sectionId;
-    this.changeTab(sectionId);
+    // this.changeTab();
     
     const container = this.sectionContainer?.nativeElement;
     const sectionElement = document.getElementById(sectionId);
