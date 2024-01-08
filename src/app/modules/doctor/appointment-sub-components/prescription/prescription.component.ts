@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -23,7 +23,7 @@ import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 })
 export class PrescriptionComponent
   extends SubscriptionManagmentDirective
-  implements OnInit
+  implements OnInit, OnChanges
 {
   @Input() healthRecord!: IHealthRecord;
   @Input() historyTokenId!: string;
@@ -63,37 +63,36 @@ export class PrescriptionComponent
       investigation: new FormControl<string | null>(null),
       followUpDate: new FormControl<Date | null>(null),
       // procedure: new FormControl<Procedure | null>(null)
-    });
+    });    
+  }
 
-    
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['healthRecord']) {
+      if(!this.healthRecord.prescription){
+        this.newData = true;
+        this.showEdit = false;
+      }else{
+        this.newData = false;
+        this.showEdit = true;
+      }
+
+      if (this.healthRecord) {
+        this.patientId = this.healthRecord.patientId;
+        this.doctorId = this.healthRecord.doctorId;
+      }
+      if(this.healthRecord.prescription) this.setHistoryPrescription(this.healthRecord.prescription);
+    }
   }
 
   ngOnInit(): void {
-    // this.getPrescriptionHistoryDropDown();
-    if (this.healthRecord) {
-      this.patientId = this.healthRecord.patientId;
-      this.doctorId = this.healthRecord.doctorId;
-    }
-
-    if(!this.healthRecord.prescription){
-      this.newData = true;
-      this.showEdit = false;
-    }else{
-      this.newData = false;
-      this.showEdit = true;
-    }
 
     this.prescriptionForm.valueChanges.subscribe({
       next: (x) => {
-
-          console.log('chnaged') 
-          this.currentValueSetter(x);
-      
-        
+          console.log('log value chaneg');
+          
+          this.currentValueSetter(x);        
       }
     });
-
-    if(this.healthRecord.prescription) this.setHistoryPrescription(this.healthRecord.prescription);
   }
 
   currentValueSetter(value: {[name: string]: any}){
@@ -110,6 +109,7 @@ export class PrescriptionComponent
       followUpDate: value['followUpDate'],
       healthRecordId: this.healthRecordId
     }
+    console.log(this.prescriptionRequest);
     
     this.emitRequest.emit(this.prescriptionRequest);
   }
@@ -126,9 +126,9 @@ export class PrescriptionComponent
 
         this.historyPrescription = prescription;
         this.formSetter(prescription);
-        this.prescriptionForm.disable({
-          onlySelf: true
-        });
+        // this.prescriptionForm.disable({
+        //   onlySelf: true
+        // });
   }
 
   getPrescription(prescriptionId: string) {
@@ -136,9 +136,9 @@ export class PrescriptionComponent
       next: (x) => {
         this.historyPrescription = x;
         this.formSetter(x);
-        this.prescriptionForm.disable({
-          onlySelf: true
-        });
+        // this.prescriptionForm.disable({
+        //   onlySelf: true
+        // });
       }
     })
   }
@@ -183,9 +183,9 @@ export class PrescriptionComponent
   }
 
   currentPrescription(){
-    this.prescriptionForm.enable({
-      onlySelf: true
-    });
+    // this.prescriptionForm.enable({
+    //   onlySelf: true
+    // });
     console.log(this.prescriptionRequest);
     
     if (this.prescriptionRequest) this.formSetter(this.prescriptionRequest);
@@ -201,9 +201,9 @@ export class PrescriptionComponent
 
   cancelEdit(){
     this.showEdit = true;
-    this.prescriptionForm.disable({
-      onlySelf: true
-    });
+    // this.prescriptionForm.disable({
+    //   onlySelf: true
+    // });
   }
 
   update(){
@@ -235,6 +235,8 @@ export class PrescriptionComponent
       investigation: prescription.investigation,
       followUpDate: prescription.followUpDate
     })
+
+    this.currentValueSetter(this.prescriptionForm.value);
   }
 }
 

@@ -245,6 +245,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
       case 'Prescription':
         if (this.healthRecord.prescription && !isEqual(this.prescription, this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription))) {
           console.log('update prescription');
+          this.updatePrescription(this.healthRecord.prescription.id);
           
         } else if (!this.healthRecord.prescription) {
           console.log('add prescription');
@@ -260,9 +261,10 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
         
         if (this.healthRecord.vital && !isEqual(this.vitals, this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals))) {
           console.log('update vitals');
+          this.updateVitals(this.healthRecord.vital.id)
         } else if (!this.healthRecord.vital) {
           console.log('add vitals');
-          // this.addVitals()
+          this.addVitals()
         } else {
           console.log('do nothing');
           
@@ -271,25 +273,30 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
       break;
       case 'Medication':
         if (this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication))) {
-          console.log('update medication');
+          console.log({medicationRes: this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication), medicationReq: this.medication});
           
+          console.log('update medication');
+          this.updateMedication(this.healthRecord.medication.id);
         } else if (!this.healthRecord.medication){
           console.log('add medication');
-          // this.addMedication()
+          this.addMedication()
 
         }else {
           console.log('do nothing');
+          console.log({mappedMedication: this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication), medicationReq: this.healthRecord.medication});
+
 
         }
 
       break;
-      case 'labOrder':
+      case 'LabOrder':
         let healthRecordLabTests = this.healthRecord.labOrder?.labOrderDetails.map(x => x.labTestId) ?? [];
-        if(this.healthRecord.labOrder && !(this.labOrder.labTestIds?.length === healthRecordLabTests?.length) && !this.labOrder.labTestIds?.every(x => healthRecordLabTests.includes(x))){
+        if(this.healthRecord.labOrder && this.labOrder.labTestIds && !(this.labOrder.labTestIds?.length === healthRecordLabTests?.length) && !this.labOrder.labTestIds?.every(x => healthRecordLabTests.includes(x))){
           console.log('update laborder');
-          
+          this.updateLabOrder(this.healthRecord.labOrder.id)
         } else if (!this.healthRecord.labOrder) {
           console.log('add laborder');
+          this.addLabOrder()
           // this.addLabOrder();
         }
 

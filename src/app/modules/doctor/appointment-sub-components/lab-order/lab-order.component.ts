@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { AlertService, LabOrderService, TestCategoryService, TestService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
@@ -14,7 +14,7 @@ import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
   templateUrl: './lab-order.component.html',
   styleUrls: ['./lab-order.component.scss']
 })
-export class LabOrderComponent extends SubscriptionManagmentDirective implements OnInit {
+export class LabOrderComponent extends SubscriptionManagmentDirective implements OnInit, OnChanges {
   @Input() token!: IToken;
   @Input() healthRecordId!: string;
   @Output() emitRequest: EventEmitter<ILabOrderRequest> = new EventEmitter<ILabOrderRequest>();
@@ -44,22 +44,31 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     super();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['healthRecord']){
+
+      if(this.healthRecord.labOrder){
+        this.newData = false;
+        this.selectedTestIds = this.healthRecord.labOrder.labOrderDetails.map(x => x.labTestId) ?? [];
+      }
+
+      this.labOrderRequest = {
+        doctorId: this.healthRecord.doctorId,
+        patientId: this.healthRecord.patientId,
+        labTestIds: [],
+        healthRecordId: this.healthRecordId
+      }
+
+      if(this.tabsToView.length) this.getVisibleTests(this.tabsToView[0].id);
+      this.emitRequest.emit(this.labOrderRequest)
+    }
+    
+  }
+
   ngOnInit(): void {
 
     this.getTests()
     this.getTestCategories();
-    if(this.healthRecord.labOrder){
-      this.newData = false;
-      this.selectedTestIds = this.healthRecord.labOrder.labOrderDetails.map(x => x.labTestId);
-    }
-
-    this.labOrderRequest = {
-      doctorId: this.healthRecord.doctorId,
-      patientId: this.healthRecord.patientId,
-      labTestIds: [],
-      healthRecordId: this.healthRecordId
-    }
-    
     // this.emitRequest.emit(this.labOrderRequest);
   }
 

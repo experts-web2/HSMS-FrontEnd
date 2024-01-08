@@ -71,7 +71,18 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
   ngOnChanges(changes: SimpleChanges): void {
     // this.setHistoryMedication(this.historyTokenId);
-    
+    if(changes['healthRecord']){
+      this.medicationForm.get('doctorId')?.setValue(this.healthRecord.doctorId);
+      this.medicationForm.get('patientId')?.setValue(this.healthRecord.patientId);
+      if (this.healthRecord.medication) {
+        this.showEdit = true; 
+        this.newData = false;
+        this.setHistoryMedication(this.healthRecord.medication);
+      } else {
+        this.newData = true;
+        this.showEdit = false; 
+      }
+    }
   }
 
   get medicationItems(): FormArray{
@@ -79,33 +90,31 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   }
 
   ngOnInit(): void {
-
-    // this.getMedicine();
-    this.medicationForm.get('doctorId')?.setValue(this.healthRecord.doctorId);
-    this.medicationForm.get('patientId')?.setValue(this.healthRecord.patientId);
-
-    // console.log(this.healthRecord);
-    
-    if (this.healthRecord.medication) {
-      this.showEdit = true; 
-      this.newData = false;
-      this.setHistoryMedication(this.healthRecord.medication);
-    }else{
-      this.newData = true;
-      this.showEdit = false; 
-    }
     
     this.medicationForm.valueChanges.subscribe({
       next: (x) => {
          this.currentValueSetter(x);
       }
-    })
+    });
   }
 
   currentValueSetter(value: {[name: string]: any}){
     
     this.medicationRequest = {
-      medicationDetails: this.medicationItems.value,
+      medicationDetails: this.medicationItems.value.map((x: any) => {
+        let medicationDetail: IMedicationDetail = {
+          medicineId: x.medicineId,
+          dosage: x.dosage,
+          dosageValue: x.dosageValue,
+          duration: x.duration,
+          durationValue: x.durationValue,
+          route: x.route,
+          frequency: x.frequency,
+          insturction: x.instruction
+        };
+
+        return medicationDetail;
+      }),
       doctorId: this.healthRecord.doctorId,
       patientId: this.healthRecord.patientId,
       medicationNotes: value['medicationNotes'],
@@ -230,9 +239,9 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
         this.medicationRequest.medicationDetails = this.medicationItems.value;
         this.historyMedication = medication;
 
-        this.medicationForm.disable({
-          onlySelf: true
-        });
+        // this.medicationForm.disable({
+        //   onlySelf: true
+        // });
 
         this.formSetter(medication);
 
@@ -389,9 +398,9 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
       //   medicines: this.medicines
       // });
 
-      this.medicationItems.at(i).disable({
-        onlySelf: true
-      })
+      // this.medicationItems.at(i).disable({
+      //   onlySelf: true
+      // })
       
       this.medicationItems.at(i).patchValue({
         medicineId: x.medicineId,

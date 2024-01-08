@@ -9,11 +9,11 @@
 </div> -->
     <hr class="w-90 mb-2"  style="border: 1px solid #979797;">
 <div>
-    <ng-container *ngIf="!newData && showEdit">
+    <!-- <ng-container *ngIf="!newData && showEdit">
         <div class="flex flex-row-reverse">
             <p-button (onClick)="edit()" icon="pi pi-file-edit"></p-button>
         </div>
-    </ng-container>
+    </ng-container> -->
     <form (ngSubmit)="onSubmit()" [formGroup]="vitalForm">
         <div class="flex flex-col">
             <div class="grid grid-cols-3 gap-2">
@@ -112,7 +112,7 @@
         </div>
     </form>
 </div>
-<ng-container *ngIf="!newData && !showEdit">
+<!-- <ng-container *ngIf="!newData && !showEdit">
     <div class="flex gap-3 mb-3 mt-3">
         <p-button (onClick)="update()" label="Update"></p-button>
         <p-button (onClick)="canelEdit()" label="Cancel"></p-button>
@@ -122,5 +122,5 @@
     <div class="flex gap-3 mb-3 mt-3">
         <p-button (onClick)="onSubmit()" label="Save"></p-button>
     </div>
-</ng-container>
+</ng-container> -->
 <hr>

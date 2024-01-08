@@ -81,36 +81,39 @@ export class VitalsComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     let tokenId = changes['historyTokenId'].currentValue;
+    if(changes['healthRecord']){
 
-    if(!this.healthRecord.vital){
-      this.newData = true;
-    }else{
-      this.showEdit = true;
-      this.newData = false;
+      if(!this.healthRecord.vital){
+        this.newData = true;
+      }else{
+        this.showEdit = true;
+        this.newData = false;
+      }
+
+      if (this.healthRecord.vital) {
+        this.tokenVitals = <ITokenVitals>this.healthRecord.vital;
+        this.setHistoryVital(this.healthRecord.vital)
+      }
+
     }
   }
 
   ngOnInit(): void {
 
     this.subscribeForm();
-    if (this.healthRecord.vital) {
-      this.tokenVitals = <ITokenVitals>this.healthRecord.vital;
-      this.setHistoryVital(this.healthRecord.vital)
-    }
+
 
   }
 
   subscribeForm(){
     this.vitalForm.valueChanges.subscribe({
-      next: (x) => {
-
-      
-          console.log('changes');
-          this.currentValueSetter(x);
-        
+      next: (x) => {      
+        console.log('changes');
+        this.currentValueSetter(x);        
       }
     })
   }
+
   calculateBmi(){
     let bmi = 0;       
     let meters = this.feetAndInchesToCentimeters(this.feet.value ?? 0, this.inches.value ?? 0) / 100; 
@@ -167,6 +170,8 @@ export class VitalsComponent
   }
 
   currentValueSetter(value: { [key: string]: any }) {
+    console.log('current value setter', value);
+    
     this.vitalRequest = {
       pulseHeartRate: value['pulseHeartRate'],
       temperature: value['temperature'],
@@ -176,7 +181,7 @@ export class VitalsComponent
       bloodSugar: value['bloodSugar'],
       weight: value['weight'],
       height: value['height'],
-      bodyMassIndex: value['bodyMassIndex'],
+      bodyMassIndex: this.bodyMassIndex.value,
       oxygenSaturation: value['oxygenSaturation'],
       bodySurfaceArea: value['bodySurfaceArea'],
       reason: value['reason'],
@@ -184,6 +189,8 @@ export class VitalsComponent
       doctorId: this.healthRecord.doctorId,
       healthRecordId: this.healthRecordId
     }
+    console.log({bodyMassIndex:this.bodyMassIndex.value});
+    
     this.emitRequest.emit(this.vitalRequest);
   }
 
@@ -220,7 +227,7 @@ export class VitalsComponent
       bodyMassIndex: this.tokenVitals.bodyMassIndex,
       oxygenSaturation: this.tokenVitals.oxygenSaturation,
       bodySurfaceArea: this.tokenVitals.bodySurfaceArea
-    })
+    });
   }
 
 
@@ -244,9 +251,9 @@ export class VitalsComponent
         this.historyVital = vital;
         this.formSetter(vital);
         console.log(this.vitalRequest)
-        this.vitalForm.disable({
-          onlySelf: true
-        });
+        // this.vitalForm.disable({
+        //   onlySelf: true
+        // });
   }
 
   getVitalsById(vitalsId: string) {
@@ -255,17 +262,17 @@ export class VitalsComponent
         this.historyVital = x;
         this.formSetter(x);
         console.log(this.vitalRequest)
-        this.vitalForm.disable({
-          onlySelf: true
-        });
+        // this.vitalForm.disable({
+        //   onlySelf: true
+        // });
       }
     })
   }
 
   currentVitals() {
-    this.vitalForm.enable({
-      onlySelf: true
-    });
+    // this.vitalForm.enable({
+    //   onlySelf: true
+    // });
 
     if (this.vitalRequest) this.formSetter(this.vitalRequest);
     else this.vitalForm.reset();
@@ -273,6 +280,8 @@ export class VitalsComponent
   }
 
   formSetter(vitals: IVitalRequest) {
+    console.log('this isbmi formsetter', vitals.bodyMassIndex);
+    
     this.vitalForm.patchValue({
       pulseHeartRate: vitals.pulseHeartRate,
       temperature: vitals.temperature,
@@ -287,6 +296,9 @@ export class VitalsComponent
       bodySurfaceArea: vitals.bodySurfaceArea,
       reason: vitals.reason
     });
+    console.log('form value', this.vitalForm.value);
+    
+    this.currentValueSetter(this.vitalForm.value);
   }
 }
 

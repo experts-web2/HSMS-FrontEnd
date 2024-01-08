@@ -24,9 +24,9 @@
         {{ checkbox.name }}
     </div>
 </div> -->
-<ng-container  *ngIf="">
+<!-- <ng-container  *ngIf="">
     <p-button icon="pi pi-edit" (onClick)="edit()"></p-button>
-</ng-container>
+</ng-container> -->
 <div class="d-flex test-type">
     <div class="col-3 test-type_category">
         <div class="tab" *ngFor="let tab of tabsToView" [ngClass]="tab.active ? 'activeTab': ''"
@@ -50,11 +50,11 @@
 
         </div>
     </div>
-    <ng-container *ngIf="!newData">
+    <!-- <ng-container *ngIf="!newData">
         <p-button label="Update" (onClick)="updateLabOrder()"></p-button>
     </ng-container>
     <div class="bottom" *ngIf="newData">
         <div class="d-flex ml-auto">
             <p-button (click)="addLabOrder()">Save</p-button>
         </div>
-    </div>
+    </div> -->
