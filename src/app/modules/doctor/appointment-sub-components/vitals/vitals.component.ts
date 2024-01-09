@@ -80,7 +80,7 @@ export class VitalsComponent
   get bodyMassIndex(): AbstractControl { return this.vitalForm.get('bodyMassIndex') as AbstractControl }
 
   ngOnChanges(changes: SimpleChanges): void {
-    let tokenId = changes['historyTokenId'].currentValue;
+    // let tokenId = changes['historyTokenId'].currentValue;
     if(changes['healthRecord']){
 
       if(!this.healthRecord.vital){
@@ -89,7 +89,7 @@ export class VitalsComponent
         this.showEdit = true;
         this.newData = false;
       }
-
+        this.vitalForm.reset()
       if (this.healthRecord.vital) {
         this.tokenVitals = <ITokenVitals>this.healthRecord.vital;
         this.setHistoryVital(this.healthRecord.vital)
@@ -108,7 +108,6 @@ export class VitalsComponent
   subscribeForm(){
     this.vitalForm.valueChanges.subscribe({
       next: (x) => {      
-        console.log('changes');
         this.currentValueSetter(x);        
       }
     })
@@ -151,7 +150,6 @@ export class VitalsComponent
   update(){
     let vitalId: string = '';
     if(this.healthRecord.vital) vitalId = this.healthRecord.vital.id;
-    console.log(this.vitalRequest);
     
     this.vitalService.updateVitals(vitalId, this.vitalRequest).subscribe({
       next: (x) => {
@@ -170,7 +168,6 @@ export class VitalsComponent
   }
 
   currentValueSetter(value: { [key: string]: any }) {
-    console.log('current value setter', value);
     
     this.vitalRequest = {
       pulseHeartRate: value['pulseHeartRate'],
@@ -189,7 +186,6 @@ export class VitalsComponent
       doctorId: this.healthRecord.doctorId,
       healthRecordId: this.healthRecordId
     }
-    console.log({bodyMassIndex:this.bodyMassIndex.value});
     
     this.emitRequest.emit(this.vitalRequest);
   }
@@ -250,7 +246,6 @@ export class VitalsComponent
 
         this.historyVital = vital;
         this.formSetter(vital);
-        console.log(this.vitalRequest)
         // this.vitalForm.disable({
         //   onlySelf: true
         // });
@@ -261,7 +256,6 @@ export class VitalsComponent
       next: (x) => {
         this.historyVital = x;
         this.formSetter(x);
-        console.log(this.vitalRequest)
         // this.vitalForm.disable({
         //   onlySelf: true
         // });
@@ -280,7 +274,6 @@ export class VitalsComponent
   }
 
   formSetter(vitals: IVitalRequest) {
-    console.log('this isbmi formsetter', vitals.bodyMassIndex);
     
     this.vitalForm.patchValue({
       pulseHeartRate: vitals.pulseHeartRate,
@@ -296,7 +289,6 @@ export class VitalsComponent
       bodySurfaceArea: vitals.bodySurfaceArea,
       reason: vitals.reason
     });
-    console.log('form value', this.vitalForm.value);
     
     this.currentValueSetter(this.vitalForm.value);
   }

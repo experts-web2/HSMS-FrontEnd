@@ -50,6 +50,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   historyToken!: IToken;
   patientsToShow: Array<IPatient> = [];
   patientHistoryVisits!: Array<IToken>;
+  patientHistoryHealthRecords!: Array<IHealthRecord>;
   $unsubscribe: Observable<any> = of(null);
   logedInUser!: ILogedInUser;
   historyTokenId!: string;
@@ -85,7 +86,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
       next: (x) => {
         this.tokenId = x["tokenId"];
         this.healthRecordId = x["healthRecordId"] ?? '';
-        console.log({healthRecordId: x["healthRecordId"], params: x});
         
       }
     });
@@ -103,7 +103,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes['vitals']);
     
   }
 
@@ -113,7 +112,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
       this.getToken();
       this.getHealthRecordByTokenId(this.tokenId);
     } else if(this.healthRecordId){
-      console.log(this.healthRecordId);
       
       this.getHealthRecordById(this.healthRecordId)
     }
@@ -134,7 +132,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   getHealthRecordByTokenId(tokenId: string){
     this.healthRecordService.getHealthRecordByTokenId(tokenId).subscribe({
       next: (x) => {
-        console.log(x);
         this.healthRecord = x;
         this.healthRecordId = x.id;
         if(x.patient) this.patient = x.patient;
@@ -153,6 +150,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
         this.healthRecordId = x.id;
         if(x.patient) this.patient = x.patient;
         if(x.vital) this.tokenVitals = x.vital;
+         this.getHistoryHealthRecords();
       },
       error: (err) => {
 
@@ -180,7 +178,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   savePatientVisitDetails(){
-    console.log(this.labOrder);
     
     if(this.prescription && !this.healthRecord.prescription) this.addPrescription();
     if(this.vitals && !this.healthRecord.vital) this.addVitals();
@@ -231,6 +228,51 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
     })
   }
 
+  getHistoryHealthRecords(){
+    let healthRecordQuery: IFetchRequest = {
+      pagedListRequest:{
+        pageNo: 1,
+        pageSize: 100
+      },
+      queryOptionsRequest:{
+        
+        filtersRequest:[
+          {
+            field: 'DoctorId',
+            matchMode: FiltersMatchModes.Equal,
+            operator: FiltersOperators.And,
+            value: this.healthRecord.doctorId
+          },
+          {
+            field: 'PatientId',
+            matchMode: FiltersMatchModes.Equal,
+            operator: FiltersOperators.And,
+            value: this.healthRecord.patientId
+          },
+        ],
+        sortRequest:[
+          {
+            field: 'CreatedAt',
+            direction: SortOrder.Descending,
+            priority: 1
+          }
+        ]
+      }
+    }
+    
+
+    this.healthRecordService.getAllHealthRecords(healthRecordQuery).subscribe({
+      next: (x) => {
+        this.patientHistoryHealthRecords = x.data;
+        
+      },
+      error: (err) => {
+
+      }
+    })
+
+  }
+
   getHistoryVitals(tokenId: string){
     
   }
@@ -244,60 +286,42 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
     switch(this.previousTabId){
       case 'Prescription':
         if (this.healthRecord.prescription && !isEqual(this.prescription, this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription))) {
-          console.log('update prescription');
           this.updatePrescription(this.healthRecord.prescription.id);
           
-        } else if (!this.healthRecord.prescription) {
-          console.log('add prescription');
-          // this.addPrescription()
+        } else if (!this.healthRecord.prescription && this.prescription) {
+          
+          this.addPrescription()
         }else{
-          console.log('pdo nothing');
 
         }
         
       break;
       case 'Vitals':
-        console.log({vitalReq: this.vitals, healthRecordVital: this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals)});
         
         if (this.healthRecord.vital && !isEqual(this.vitals, this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals))) {
-          console.log('update vitals');
           this.updateVitals(this.healthRecord.vital.id)
-        } else if (!this.healthRecord.vital) {
-          console.log('add vitals');
+        } else if (!this.healthRecord.vital && this.vitals) {
           this.addVitals()
         } else {
-          console.log('do nothing');
           
         }
 
       break;
       case 'Medication':
         if (this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication))) {
-          console.log({medicationRes: this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication), medicationReq: this.medication});
-          
-          console.log('update medication');
           this.updateMedication(this.healthRecord.medication.id);
-        } else if (!this.healthRecord.medication){
-          console.log('add medication');
+        } else if (!this.healthRecord.medication && this.medication){
           this.addMedication()
-
         }else {
-          console.log('do nothing');
-          console.log({mappedMedication: this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication), medicationReq: this.healthRecord.medication});
-
-
         }
 
       break;
       case 'LabOrder':
         let healthRecordLabTests = this.healthRecord.labOrder?.labOrderDetails.map(x => x.labTestId) ?? [];
         if(this.healthRecord.labOrder && this.labOrder.labTestIds && !(this.labOrder.labTestIds?.length === healthRecordLabTests?.length) && !this.labOrder.labTestIds?.every(x => healthRecordLabTests.includes(x))){
-          console.log('update laborder');
           this.updateLabOrder(this.healthRecord.labOrder.id)
-        } else if (!this.healthRecord.labOrder) {
-          console.log('add laborder');
+        } else if (!this.healthRecord.labOrder && this.labOrder) {
           this.addLabOrder()
-          // this.addLabOrder();
         }
 
       break;
@@ -312,7 +336,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   activeChange(event: any){
-    console.log(event);
     
   }
 
@@ -408,7 +431,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   getVitalsByTokenId(tokenId: string){
     this.vitalsService.getVitalsByTokenId(tokenId).subscribe({
       next: (x) => {
-        console.log(x);
         if (x){
 
           this.token.tokenDetail = {
@@ -533,18 +555,12 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
     this.currentTabId = sectionId;
 
     if(sectionId === 'Medication' ){
-      // console.log(this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication)))
-      // console.log({medicationReq:this.medication,medicationHR: this.automapperService.map<IPrescriptionRequest>(this.healthRecord.medication, this.medication)});
     }
     if(sectionId === 'Prescription' ){
-      // console.log(this.healthRecord.prescription && !isEqual(this.prescription, this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription)))
-      // console.log({prescriptionReq:this.prescription,prescriptionHR: this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription)});
       
     }
     if(sectionId === 'Vitals' ){
-      // console.log(this.healthRecord.vital && !isEqual(this.vitals, this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals)))
     }
-    // console.log(`${sectionId} is now visible the most`);
     
     if(sectionId !== this.previousTabId){
       this.changeTab();
@@ -554,7 +570,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   }
   
   scrollToSection(sectionId: string): void {
-    console.log(sectionId);
     this.currentTabId = sectionId;
     // this.changeTab();
     
@@ -568,7 +583,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   test(event:any){
-    console.log(event);
     
   }
 

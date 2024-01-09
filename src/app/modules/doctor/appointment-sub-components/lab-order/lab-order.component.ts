@@ -117,11 +117,9 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     });
     if(this.testsListToShow.every(y => y.selected) && this.testsListToShow.length){
       this.allSelected = true;
-      console.log(true);
       
     }else{
       this.allSelected = false;
-      console.log(false);
     }
   }
 

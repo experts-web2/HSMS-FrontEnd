@@ -146,7 +146,6 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
 
     this.medicineService.getMedicine(medicineRequest).subscribe({
       next: (x) => {
-        // console.log(x);
         this.medicinesToShow = x.data;
         
       },
@@ -377,7 +376,6 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
   }
 
   formSetter(medication: IMedicationRequest){
-    // console.log('form setter');
     
     this.medicationForm.patchValue({
       medicationNotes: medication.medicationNotes,

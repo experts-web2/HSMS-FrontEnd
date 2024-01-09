@@ -15,13 +15,33 @@
     </div> 
 
     <div class="prrescription-input">
-        <label htmlFor="medicalHistory">Medical History</label>
+        <div class="flex flex-row gap-2 items-center py-1">
+            <label htmlFor="medicalHistory">Medical History</label>
+                <div class="procedure-select-div" >
+                    <p-calendar id="startdate" style="width: 110px" placeholder="Start Date" appendTo="body" class="datePicker" ></p-calendar>
+                </div>
+                <div class="procedure-select-div" >
+                    <p-calendar id="enddate" style="width: 110px" placeholder="End Date" appendTo="body" class="datePicker" ></p-calendar>
+                </div>
+                <div class="flex flex-row p-2">
+                    <p-checkbox  [binary]="true" inputId="continue"></p-checkbox>
+                    <label for="continue">Continue</label>
+                </div>
+        </div>
         <div class="inner-prescription">
             <textarea rows="1" cols="93" class="w-full textarea-height" id="medicalHistory" pInputTextarea formControlName="medicalHistory" ></textarea>
         </div>
     </div>
     <div class="prrescription-input">
-        <label htmlFor="complaint">Complaint</label>
+        <div class="flex flex-row gap-2 items-center py-1">
+            <label htmlFor="complaint">Complaint</label>
+                <div class="procedure-select-div" >
+                    <input id="days" pInputText type="number" style="width: 110px" placeholder="Days"   />
+                </div>
+                <div class="procedure-select-div" >
+                    <input id="Hours" pInputText type="number" style="width: 110px" placeholder="Hours"   />
+                </div>
+        </div>
         <div class="inner-prescription">
             <textarea rows="1" cols="93" class="w-full textarea-height" id="complaint" pInputTextarea formControlName="complaint"></textarea>
         </div>
@@ -31,11 +51,29 @@
         <div class="inner-prescription">
             <textarea rows="1" cols="93" class="w-full textarea-height" id="examination" pInputTextarea formControlName="examination"></textarea>
         </div>
+        <div class="prrescription-input pl-2">
+            <label htmlFor="positiveFindings">Positive Findings</label>
+            <div class="inner-prescription">
+                <textarea rows="1" cols="93" class="w-full textarea-height" id="positiveFindings" pInputTextarea formControlName="positiveFindings"></textarea>
+            </div>
+        </div>
+        <div class="prrescription-input pl-2">
+            <label htmlFor="otherExamination">Other Examinations</label>
+            <div class="inner-prescription">
+                <textarea rows="1" cols="93" class="w-full textarea-height" id="otherExamination" pInputTextarea formControlName="otherExamination"></textarea>
+            </div>
+        </div>
     </div>
     <div class="prrescription-input">
-        <label htmlFor="diagnosis">Diagnosis</label>
+        <label htmlFor="provisionalDiagnosis">Provisional Diagnosis</label>
         <div class="inner-prescription">
-            <textarea rows="1" cols="93" class="w-full textarea-height" id="diagnosis" pInputTextarea formControlName="diagnosis"></textarea>
+            <textarea rows="1" cols="93" class="w-full textarea-height" id="provisionalDiagnosis" pInputTextarea formControlName="provisionalDiagnosis"></textarea>
+        </div>
+    </div>
+    <div class="prrescription-input">
+        <label htmlFor="finalDiagnosis">Final Diagnosis</label>
+        <div class="inner-prescription">
+            <textarea rows="1" cols="93" class="w-full textarea-height" id="finalDiagnosis" pInputTextarea formControlName="finalDiagnosis"></textarea>
         </div>
     </div>
     <div class="prrescription-input">

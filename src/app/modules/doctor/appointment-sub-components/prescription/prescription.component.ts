@@ -81,6 +81,14 @@ export class PrescriptionComponent
         this.doctorId = this.healthRecord.doctorId;
       }
       if(this.healthRecord.prescription) this.setHistoryPrescription(this.healthRecord.prescription);
+      // else {
+      //   let newPrescription: IPrescriptionRequest ={
+      //     healthRecordId: this.healthRecord.id,
+      //     doctorId: this.healthRecord.id,
+      //     patientId: this.healthRecord.id
+      //   }
+      //   this.formSetter(newPrescription);
+      // }
     }
   }
 
@@ -88,7 +96,6 @@ export class PrescriptionComponent
 
     this.prescriptionForm.valueChanges.subscribe({
       next: (x) => {
-          console.log('log value chaneg');
           
           this.currentValueSetter(x);        
       }
@@ -109,7 +116,6 @@ export class PrescriptionComponent
       followUpDate: value['followUpDate'],
       healthRecordId: this.healthRecordId
     }
-    console.log(this.prescriptionRequest);
     
     this.emitRequest.emit(this.prescriptionRequest);
   }
@@ -186,7 +192,6 @@ export class PrescriptionComponent
     // this.prescriptionForm.enable({
     //   onlySelf: true
     // });
-    console.log(this.prescriptionRequest);
     
     if (this.prescriptionRequest) this.formSetter(this.prescriptionRequest);
     else this.prescriptionForm.reset();
