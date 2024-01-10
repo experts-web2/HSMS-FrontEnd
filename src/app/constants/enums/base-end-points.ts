@@ -26,5 +26,6 @@ export enum BaseEndPoints {
     PatientVisit = 'patientvisit',
     HealthRecord = 'healthrecord',
     Stock = 'stock',
-    salt = 'salt'
+    salt = 'salt',
+    Audit = 'audit'
 }

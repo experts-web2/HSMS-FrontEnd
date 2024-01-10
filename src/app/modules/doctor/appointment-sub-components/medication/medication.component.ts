@@ -338,7 +338,7 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
             durationValue: x.durationValue,
             route: x.route,
             frequency: x.frequency,
-            insturction: x.instruction
+            insturction: +x.instruction
           };
 
           return medicationDetail;
@@ -431,13 +431,14 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
             durationValue: x.durationValue,
             route: x.route,
             frequency: x.frequency,
-            insturction: x.instruction
+            insturction: +x.instruction
           };
 
           return medicationDetail;
         })
       };
-      this.emitRequest.emit(medicationRequest)
+      if(this.medicationForm.valid && this.medicationItems.valid) this.emitRequest.emit(medicationRequest);
+
     // }
 
   }

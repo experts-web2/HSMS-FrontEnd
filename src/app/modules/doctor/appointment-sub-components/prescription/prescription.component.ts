@@ -62,6 +62,14 @@ export class PrescriptionComponent
       advice: new FormControl<string | null>(null),
       investigation: new FormControl<string | null>(null),
       followUpDate: new FormControl<Date | null>(null),
+      positiveFindings: new FormControl<string | null>(null),
+      otherExamination: new FormControl<string | null>(null),
+      provisionalDiagnosis: new FormControl<string | null>(null),
+      finalDiagnosis: new FormControl<string | null>(null),
+      startDate: new FormControl<Date | null>(null),
+      endDate: new FormControl<Date | null>(null),
+      continue: new FormControl<boolean | null>(false),
+
       // procedure: new FormControl<Procedure | null>(null)
     });    
   }

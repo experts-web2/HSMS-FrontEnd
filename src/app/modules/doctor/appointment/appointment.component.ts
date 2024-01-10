@@ -103,10 +103,12 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    
+
   }
 
   ngOnInit(): void {
+    let h  = Symbol.for('test') ;
+    console.log(h);
     if (this.tokenId){
 
       this.getToken();

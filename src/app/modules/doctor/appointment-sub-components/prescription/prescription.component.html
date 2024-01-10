@@ -18,10 +18,10 @@
         <div class="flex flex-row gap-2 items-center py-1">
             <label htmlFor="medicalHistory">Medical History</label>
                 <div class="procedure-select-div" >
-                    <p-calendar id="startdate" style="width: 110px" placeholder="Start Date" appendTo="body" class="datePicker" ></p-calendar>
+                    <p-calendar id="startdate" [style]="{width: '110px'}" placeholder="Start Date" appendTo="body" class="datePicker" ></p-calendar>
                 </div>
                 <div class="procedure-select-div" >
-                    <p-calendar id="enddate" style="width: 110px" placeholder="End Date" appendTo="body" class="datePicker" ></p-calendar>
+                    <p-calendar id="enddate" [style]="{width: '110px'}" placeholder="End Date" appendTo="body" class="datePicker" ></p-calendar>
                 </div>
                 <div class="flex flex-row p-2">
                     <p-checkbox  [binary]="true" inputId="continue"></p-checkbox>
