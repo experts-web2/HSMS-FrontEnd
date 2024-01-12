@@ -1,10 +1,10 @@
 /* CSS Styles */
+@import '/src/variable.scss';
 .patient-page {
-
     margin: 0 auto;
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
-    padding: 20px;
+    // padding: 20px;
   }
 
   .first-title{
@@ -140,6 +140,43 @@
 
   .user-profile{
     width: 100%;
+    max-width: 300px;
+    z-index: 2;
+    @media screen and (max-width:1200px) {
+      &.user-about-hide{
+        position: fixed;
+        right: -270px;
+        .profile-wrapper{
+          background-color: $bgGray;
+        }
+      }
+      &.user-about-show{
+        background-color: $bgGray;
+        position: absolute;
+        box-shadow: 5px 10px 7px 8px rgba(0, 0, 0, 0.2);
+        right: 0px;
+      }
+    }
+  }
+
+  .user-profile-icon{
+    z-index: 5;
+  }
+
+  .user-left-section{
+    width: 100%;
+    max-width: 176px;
+    z-index: 1;
+    @media screen and (max-width:1200px) {
+      // background-color: $bgGray;
+      position: absolute;
+      &.user-side-hide{
+        left: -149px;
+      }
+      &.user-side-show{
+        left: 0px;
+      }
+    }
   }
 
   .active-section{
@@ -148,4 +185,9 @@
     @media screen and (max-width) {
       flex-direction: row;
     }
+  }
+
+  .section-menu-content{
+    background-color: $bgGray;
+    box-shadow: -2px -2px 10px 6px rgba(0, 0, 0, 0.2);
   }

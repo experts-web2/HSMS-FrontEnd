@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="flex lg:hidden">
-      <i class="fa-solid fa-magnifying-glass text-xl mr-4" (click)="mobileSerchBar = !mobileSerchBar"></i>
+      <i class="fa-solid fa-magnifying-glass text-xl mr-4 flex md:hidden" (click)="mobileSerchBar = !mobileSerchBar"></i>
       <div *ngIf="mobileSerchBar" [ngClass]="mobileSerchBar === true ? 'fixed left-0 right-10 mobile-search-bar':''">
         <app-global-search [mobileSerchBarData]="mobileSerchBar" (mobileSerchBar)="mobileSerchBar = !mobileSerchBar"></app-global-search>
       </div>

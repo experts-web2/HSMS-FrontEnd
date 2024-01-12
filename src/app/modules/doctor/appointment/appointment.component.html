@@ -31,61 +31,16 @@
     <h1 class="first-title">Current Appointment</h1>
   </div>
   <div class="flex flex-col lg:flex-row xl:gap-x-4 gap-y-4 justify-between relative" *ngIf="patient || token">
-    <i class="fa fa-solid fa-bars text-3xl user-profile-icon absolute right-4 cursor-pointer hidden lg:flex" (click)="userProfile = !userProfile"></i>
-    <section class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 xl:order-2 gap-x-3 gap-y-3 justify-between user-profile" [ngClass]="userProfile ? 'flex':'flex lg:hidden'">
-      <div class="d-flex flex-column bg-white align-items-center p-3 rounded-3">
-        <img
-          src="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg"
-          alt="Profile Picture" class="profile-picture rounded-5 bg-dark">
-        <div class="profile-details">
-          <h1 class="profile-name my-2">{{patient.name}}</h1>
-          <p class="profile-info"><b>{{getGender(patient.gender)}}:</b> {{patient.age.split('-').at(0)}}</p>
-          <p class="profile-location my-2">{{''}}</p>
-        </div>
-        <p-button>Update</p-button>
-      </div>
-      <div class="col-span-2">
-        <p-panel header="Summary" [toggleable]="true" aria-expanded="false">
-          <div class="medical-info d-flex flex-column bg-white align-items-center">
-            <h2 class="section-title">Vitals</h2>
-            <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa-solid w-5 fa-heart-pulse mr-3"></i>Pulse Heart
-                Rate:</span><span>{{tokenVitals?.pulseHeartRate ?? 'N/A'}}</span></div>
-            <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa fas w-5 fa-regular fa-temperature-high mr-3"></i>Temprature:</span><span>{{tokenVitals?.temperature
-                ?? 'N/A'}}</span></div>
-            <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa-solid w-5 fa-light fa-ruler-vertical mr-3"></i>height:</span><span>{{tokenVitals?.height
-                ?? 'N/A'}}</span></div>
-            <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa-solid w-5 fa-weight-scale mr-3"></i>Weight (kg):</span><span>{{tokenVitals?.weight ?? 'N/A'}}</span></div>
-            <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa-solid w-5 fa-child mr-3"></i>BMI:</span><span>{{tokenVitals?.bodyMassIndex ?? 'N/A'}}</span></div>
-            <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa-solid w-5 fa-heart mr-3"></i>Blood Pressure:</span><span>{{tokenVitals?.bloodPressure
-                ?? 'N/A'}}</span></div>
-            <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa-solid w-5 fa-lungs mr-3"></i>Oxygen
-                Saturation:</span><span>{{tokenVitals?.oxygenSaturation ?? 'N/A'}}</span></div>
-            <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa-solid w-5 fa-lungs mr-3"></i>Respiratory
-                Rate:</span><span>{{tokenVitals?.respiratoryRate ?? 'N/A'}}</span></div>
-            <div class="history-item-div"><span class="patient-info-labels"><i
-                  class="fa-solid w-5 fa-lungs mr-3"></i>Blood Sugar:</span><span>{{tokenVitals?.bloodSugar ??
-                'N/A'}}</span></div>
-          </div>
-        </p-panel>
-      </div>
-    </section>
-    <section class="flex flex-col md:flex-row md:gap-x-4 xl:order-1">
-      <div class="flex flex-col gap-2">
+    <!-- <i class="fa fa-solid fa-bars text-3xl user-profile-icon absolute right-4 cursor-pointer hidden lg:flex" (click)="userProfile = !userProfile"></i> -->
+    <div class="flex user-left-section" [ngClass]="userSideSection ? 'user-side-show':'user-side-hide'">
+      <div class="flex flex-col gap-2 section-menu-content">
         <div class="flex active-section bg-white rounded-md px-2 py-2 mb-2 md:mb-0 md:py-4 gap-4 h-fit overflow-scroll w-full">
           <p-button [ngClass]="currentTabId === 'Prescription' ? '':'outline-btn'" (onClick)="scrollToSection('Prescription')">Prescription</p-button>
           <p-button [ngClass]="currentTabId === 'Vitals' ? '':'outline-btn'" (onClick)="scrollToSection('Vitals')">Vitals</p-button>
           <p-button [ngClass]="currentTabId === 'Medication' ? '':'outline-btn'" (onClick)="scrollToSection('Medication')">Medication</p-button>
           <p-button [ngClass]="currentTabId === 'LabOrder' ? '':'outline-btn'" (onClick)="scrollToSection('LabOrder')">Lab Order</p-button>
           <p-button [ngClass]="currentTabId === 'Documents'? '':'outline-btn'" (onClick)="scrollToSection('Documents')">Documents</p-button>
-        </div>
+        </div> 
         <div class="bg-white active-section rounded-md flex flex-col gap-2 p-2">
           <h3>History Visits</h3>
           <div class="flex active-section bg-white rounded-md px-2 py-2 mb-2 md:mb-0 md:py-4 gap-4 h-fit overflow-scroll w-full">
@@ -96,7 +51,10 @@
           <p-button class="outline-btn">Lab Order</p-button>
           <p-button class="outline-btn">Documents</p-button> -->
         </div>
-      </div>
+      </div>   
+    <i class="fa fa-solid fa-bars text-3xl h-fit pr-1 user-profile-icon cursor-pointer bg-white flex xl:hidden" [ngClass]="userSideSection ? '':'mt-12'" (click)="userSideSection = !userSideSection"></i>
+    </div>
+    <section class="flex flex-col md:flex-row md:gap-x-4 overflow-scroll">
       <div class="flex-column align-items-center">
         <!-- <p-tabView class="flex justify-between appointment" (activeIndexChange)="changeTab($event)">
           <p-tabPanel header="Prescription">
@@ -126,7 +84,7 @@
             </p>
           </p-tabPanel>
         </p-tabView> -->
-        <div class="gap-16 grid h-screen overflow-scroll rounded-3 w-full lg:w-fit h-fit bg-white p-3"  #sectionContainer appSectionVisibility (mostVisibleSection)="handleSectionVisibility($event)">
+        <div class="gap-16 grid h-screen overflow-scroll rounded-3 w-full h-fit bg-white p-3"  #sectionContainer appSectionVisibility (mostVisibleSection)="handleSectionVisibility($event)">
           <section id="Prescription" #Prescription>
             <h2 class="text-2xl">Prescription</h2>
             <app-prescription [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="prescription = $event"
@@ -169,7 +127,54 @@
         </div>
       </div>
     </section>
-    
+    <div class="flex user-profile" [ngClass]="userProfile ? 'user-about-show pl-3 rounded':'user-about-hide'">
+    <i class="fa fa-solid fa-bars text-3xl user-profile-icon bg-white rounded h-fit cursor-pointer flex xl:hidden" [ngClass]="userProfile ? '-mr-8':''" (click)="userProfile = !userProfile"></i>
+      <div class="grid grid-cols-1 gap-y-3 justify-between profile-wrapper" [ngClass]="userProfile ? '':''">
+        <div class="d-flex flex-column bg-white align-items-center p-3 rounded-3">
+          <img
+            src="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg"
+            alt="Profile Picture" class="profile-picture rounded-5 bg-dark">
+          <div class="profile-details">
+            <h1 class="profile-name my-2">{{patient.name}}</h1>
+            <p class="profile-info"><b>{{getGender(patient.gender)}}:</b> {{patient.age.split('-').at(0)}}</p>
+            <p class="profile-location my-2">{{''}}</p>
+          </div>
+          <p-button>Update</p-button>
+        </div>
+        <div class="col-span-2">
+          <p-panel header="Summary" [toggleable]="true" aria-expanded="false">
+            <div class="medical-info d-flex flex-column bg-white align-items-center">
+              <h2 class="section-title">Vitals</h2>
+              <div class="history-item-div"><span class="patient-info-labels"><i
+                    class="fa-solid w-5 fa-heart-pulse mr-3"></i>Pulse Heart
+                  Rate:</span><span>{{tokenVitals?.pulseHeartRate ?? 'N/A'}}</span></div>
+              <div class="history-item-div"><span class="patient-info-labels"><i
+                    class="fa fas w-5 fa-regular fa-temperature-high mr-3"></i>Temprature:</span><span>{{tokenVitals?.temperature
+                  ?? 'N/A'}}</span></div>
+              <div class="history-item-div"><span class="patient-info-labels"><i
+                    class="fa-solid w-5 fa-light fa-ruler-vertical mr-3"></i>height:</span><span>{{tokenVitals?.height
+                  ?? 'N/A'}}</span></div>
+              <div class="history-item-div"><span class="patient-info-labels"><i
+                    class="fa-solid w-5 fa-weight-scale mr-3"></i>Weight (kg):</span><span>{{tokenVitals?.weight ?? 'N/A'}}</span></div>
+              <div class="history-item-div"><span class="patient-info-labels"><i
+                    class="fa-solid w-5 fa-child mr-3"></i>BMI:</span><span>{{tokenVitals?.bodyMassIndex ?? 'N/A'}}</span></div>
+              <div class="history-item-div"><span class="patient-info-labels"><i
+                    class="fa-solid w-5 fa-heart mr-3"></i>Blood Pressure:</span><span>{{tokenVitals?.bloodPressure
+                  ?? 'N/A'}}</span></div>
+              <div class="history-item-div"><span class="patient-info-labels"><i
+                    class="fa-solid w-5 fa-lungs mr-3"></i>Oxygen
+                  Saturation:</span><span>{{tokenVitals?.oxygenSaturation ?? 'N/A'}}</span></div>
+              <div class="history-item-div"><span class="patient-info-labels"><i
+                    class="fa-solid w-5 fa-lungs mr-3"></i>Respiratory
+                  Rate:</span><span>{{tokenVitals?.respiratoryRate ?? 'N/A'}}</span></div>
+              <div class="history-item-div"><span class="patient-info-labels"><i
+                    class="fa-solid w-5 fa-lungs mr-3"></i>Blood Sugar:</span><span>{{tokenVitals?.bloodSugar ??
+                  'N/A'}}</span></div>
+            </div>
+          </p-panel>
+        </div>
+      </div>
+    </div>
 
   </div>
 </div>

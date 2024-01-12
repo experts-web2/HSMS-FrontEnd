@@ -64,7 +64,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   healthRecord!: IHealthRecord;
   saved: boolean = true;
   userProfile = false;
-  userTabs = true;
+  userSideSection = false;
   constructor(
     private alertService: AlertService, 
     private readonly route: ActivatedRoute, 
