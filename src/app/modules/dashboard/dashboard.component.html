@@ -34,33 +34,48 @@
   <!-- <p-button class="navButton" (click)="addToken()">Add Token</p-button> -->
   <div class="d-flex">
     <span style="margin-right: 15px; margin-top: 15px;">Patient Visits</span>
-    <p-dropdown [options]="filter" [(ngModel)]="selectedFilter" name="filterString" placeholder="Select an option"></p-dropdown>
+    <div class="flex flex-row gap-2">
+      <p-dropdown [options]="filter" [(ngModel)]="selectedFilter" [optionValue]="'id'" (onChange)="graphPeriodChange($event)" [optionLabel]="'label'" name="filterString" placeholder="Select an option"></p-dropdown>
+      
+      <p-calendar *ngIf="selectedFilter === 'custom'" [(ngModel)]="rangeDates" selectionMode="range" (ngModelChange)="customRangeSelection($event)"></p-calendar>
+    </div>
   </div>
 </div>
 <div echarts [options]="chartOption" class=""></div>
+  <!-- <div class="flex flex-row justify-between">
+    <div class="w-1/2 shadow-lg pt-2 pl-1  rounded overflow-y-auto ml-3" style="height: 40vh">
+      <div class="grid grid-cols-3">
+        <span>Token#</span>
+        <span>Patient Info</span>
+        <span>Doctor</span>
+      </div>
+      <div class="flex flex-row" *ngFor="let token of allTokens">
+        <span>{{token.tokenNo}}</span>
+        <span>{{token.patientName}}</span>
+        <span>{{token.doctorName}}</span>
+      </div>
+    </div>
+    <div>
 
-  <div class=" mt-4 text-center">
+    </div>
+  </div> -->
+  <div class=" mt-4 text-center" *ngIf="userIsDoctor">
     <h2>Tokens Today</h2>
     <app-generic-table [data]="newTokens" [columns]="displayedTokensColumns" [clickableRow]="true" [rowClickAction]="roClickAction"
       [totalRecords]="tokneTotalRecords" [showPaginator]="false"></app-generic-table>  
   </div>
-  <div class=" mt-4 text-center">
+  <div class=" mt-4 text-center" *ngIf="userIsDoctor">
     <h2>Tokens Viewed Today</h2>
     <app-generic-table [data]="viewdTokens" [columns]="displayedTokensColumns" [clickableRow]="true" [rowClickAction]="roClickAction"
       [totalRecords]="tokneTotalRecords" [showPaginator]="false"></app-generic-table>
   </div>
-<div class="mt-4">
+<div class="mt-4" *ngIf="userIsDoctor">
   <h2 class="text-center">Appointments Today</h2>
   <app-generic-table [data]="appointmentsData" [columns]="displayedAppointmentColumns" 
     [totalRecords]="appointmentsTotalRecords" [showPaginator]="false"></app-generic-table>
 </div>
 
-
-
-
-
-
-<div class="mt-4 text-center">
+<div class="mt-4 text-center"  *ngIf="userIsDoctor">
   <h2>Messages</h2>
   <app-generic-table [data]="messagesData" [columns]="displayedMessageColumns"
     [totalRecords]="messageTotalRecords" [showPaginator]="false"></app-generic-table>

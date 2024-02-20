@@ -1,12 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as echarts from 'echarts';
-import {
-  PatientService,
-  AppointmentService,
-  TokenService,
-  UserService,
-} from 'src/app/services';
-import EChartOption = echarts.EChartsOption;
+import { PatientService, AppointmentService, TokenService, UserService } from 'src/app/services';
 import { AddTokenModalComponent } from '../dialog/add-token-modal/add-token-modal.component';
 import { UserStateService } from '../../State/user/user.service';
 import { IFetchRequest } from '../../models/interfaces/fetchTableRequest';
@@ -16,16 +9,16 @@ import { Router } from '@angular/router';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { takeUntil } from 'rxjs';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { EChartsOption } from 'echarts';
+import { xAxis } from 'src/app/constants/Constants/chartViews';
+import { clone, cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent
-  extends SubscriptionManagmentDirective
-  implements OnInit
-{
+export class DashboardComponent extends SubscriptionManagmentDirective implements OnInit {
   chartOption: any = {};
 
   appointmentsData!: Array<any>;
@@ -39,9 +32,13 @@ export class DashboardComponent
 
   tokensData!: Array<any>;
   tokneTotalRecords: number = 0;
+  rangeDates?: [Date, Date];
 
   messagesData!: Array<any>;
   messageTotalRecords: number = 0;
+
+  userIsAdmin: boolean = false;
+  userIsDoctor: boolean = false;
 
   displayedAppointmentColumns: Array<ITableColumns> = [
     {
@@ -87,17 +84,23 @@ export class DashboardComponent
   filter: any = [
     {
       id: 'week',
-      label: 'Last 7 Days',
+      label: 'Current Week',
     },
     {
       id: 'month',
-      label: 'Last 30 Days',
+      label: 'Current Month',
     },
     {
-      id: 'cutom',
+      id: 'year',
+      label: 'Last Year',
+    },
+    {
+      id: 'custom',
       label: 'Custom Range',
     },
   ];
+
+  selectedFilter: string = 'week';
 
   constructor(
     private patientService: PatientService,
@@ -107,9 +110,13 @@ export class DashboardComponent
     private readonly router: Router,
     private readonly userService: UserService,
     private dialog: DialogService,
-    private dialogRef:DynamicDialogRef,
+    private dialogRef: DynamicDialogRef,
   ) {
     super();
+  }
+
+  get allTokens (){
+    return [...this.viewdTokens, ...this.newTokens].sort((a: IToken, b: IToken) => a.createdAt.getTime() - b.createdAt.getTime())
   }
 
   ngOnInit(): void {
@@ -120,6 +127,13 @@ export class DashboardComponent
     this.getTotalpatients();
     this.getAllUsers();
     this.chartOption = this.createChartOption([17, 22, 31, 46, 12, 40, 33, 16]);
+
+    this.userStateService.getUserState().subscribe({
+      next: (x) => {
+        this.userIsAdmin = x.roles.includes('Admin');
+        this.userIsDoctor = x.roles.includes('Doctor');
+      }
+    })
   }
 
   getViewdTokens() {
@@ -169,26 +183,13 @@ export class DashboardComponent
     this.router.navigate([`doctor/appointment/${rowData.id}`]);
   }
 
-  private createChartOption(data: number[]): EChartOption {
+  private createChartOption(data: number[]): EChartsOption {
     return {
       color: ['#5A79C3'],
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
+        data: xAxis.week,
         show: true,
       },
       yAxis: {
@@ -209,7 +210,45 @@ export class DashboardComponent
     };
   }
 
-  selectedFilter: string = 'Last 7 Days';
+  customRangeSelection([startDate, endDate]: [Date, Date]){
+    if(startDate && endDate) {
+
+      this.chartOption.xAxis.data = xAxis.custom(startDate, endDate);
+      this.chartOption = cloneDeep(this.chartOption);    
+
+    };
+  }
+
+  graphPeriodChange({value, originalEvent}: {value: string, originalEvent: PointerEvent} ){
+    console.log(value);
+    console.log(this.selectedFilter);
+    this.rangeDates = undefined;
+    switch(value){
+      case 'week':
+        console.log(`hit ${value}`);
+        
+        this.chartOption.xAxis.data = xAxis.week; 
+        break
+      case 'month':
+        console.log(`hit ${value}`);
+
+        this.chartOption.xAxis.data = xAxis.month();
+        break
+      case 'year':
+        console.log(`hit ${value}`);
+
+        this.chartOption.xAxis.data = xAxis.year;
+        break
+      case 'custom':
+        console.log(`hit ${value}`);
+
+        this.chartOption.xAxis.data = xAxis.week;
+        break
+    }
+
+    this.chartOption = cloneDeep(this.chartOption);    
+  }
+
 
   getAppointments(fetchRequest: IFetchRequest = {}) {
     this.appointmentService.getAppointments(fetchRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({

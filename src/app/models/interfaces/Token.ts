@@ -1,6 +1,6 @@
 export interface IToken {
     id: string;
-    createdAt: string;
+    createdAt: Date;
     modifiedAt: string;
     createdById: string;
     createdBy: string;

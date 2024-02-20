@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { GenericTableComponent } from 'src/app/shared/components';
 import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 
 
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
     DashboardRoutingModule,
     DropdownModule,
     FormsModule,
+    CalendarModule,
     GenericTableComponent,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),

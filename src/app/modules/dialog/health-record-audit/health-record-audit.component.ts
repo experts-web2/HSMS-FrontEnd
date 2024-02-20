@@ -16,7 +16,7 @@ export class HealthRecordAuditComponent implements OnInit{
 
   constructor (
     private readonly auditService: AuditService,
-    private readonly dialogRef:DynamicDialogRef,
+    private readonly dialogRef: DynamicDialogRef,
     private readonly dialogConfig: DynamicDialogConfig<{id: string}>,
   ) {
       
@@ -40,10 +40,6 @@ export class HealthRecordAuditComponent implements OnInit{
 
   close(){
     this.dialogRef.close()
-    let h :symbol = Symbol('kj') ;
-    console.log(h);
-    
-    
   }
 }
 

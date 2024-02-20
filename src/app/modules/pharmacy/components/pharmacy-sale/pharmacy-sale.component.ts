@@ -40,13 +40,7 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
     private readonly stockService: StockService
   ){
     super();
-    let initialMedicine = this.fb.group({
-      medicineId: new FormControl<string | null>(null, [Validators.required]),
-      unitQty: new FormControl<number | null>(1, [Validators.required]),
-      unitPrice: new FormControl<number | null>(0, [Validators.required]),
-      stock: new FormControl<number | null>(0, [Validators.required]),
-    });
-
+    let initialMedicine = this.getMedicineForm();
     this.saleMedicineForm = this.fb.group({
       customerName: new FormControl<string | null>(null, [Validators.required]),
       medicineSaleItems: this.fb.array([initialMedicine]),      
@@ -103,28 +97,30 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
   }
 
   addMedicine(){ 
-    let newMedicine = this.fb.group({
-      medicineId: new FormControl<string | null>(null, [Validators.required]),
-      unitQty: new FormControl<number | null>(1, [Validators.required]),
-      unitPrice: new FormControl<number | null>(0, [Validators.required]),
-      stock: new FormControl<number | null>(0, [Validators.required]),
-    });
+    let newMedicine = this.getMedicineForm();
+    this.medicines.push(newMedicine);    
+  }
 
-    this.medicines.push(newMedicine);
-    
+  getMedicineForm(): FormGroup {
+    let medicineForm = this.fb.group({
+      medicineId: new FormControl<string | null>(null, [Validators.required]),
+      unitQty: new FormControl<number | null>(1, [Validators.required, Validators.min(0), this.nonNegativeValidator],),
+      unitPrice: new FormControl<number | null>(0, [Validators.required, Validators.min(0), this.nonNegativeValidator]),
+      stock: new FormControl<number | null>(0, [Validators.required]),
+      total: new FormControl<number | null>(0, {})
+    },{
+      Validators:[]
+    });
+    medicineForm.get('total')?.disable({onlySelf: true});
+    return medicineForm;
   }
 
   removeMedicine(index: number){
     this.medicines.removeAt(index);
     if(this.medicines.length < 1){
-      let initialMedicine = this.fb.group({
-        medicineId: new FormControl<string | null>(null, [Validators.required]),
-        qty: new FormControl<number | null>(1, [Validators.required]),
-        price: new FormControl<number | null>(0, [Validators.required]),
-      });
+      let initialMedicine = this.getMedicineForm();
 
       this.medicines.push(initialMedicine);
-
     }
   }
 
@@ -135,6 +131,18 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
         this.medicinesToShow = x.data;
       }
     })
+  }
+
+  calculateTotal(index: number){
+    console.log('changes');
+    
+    let medicine = this.medicines.at(index);
+    let unitQty = medicine.get('unitQty');
+    let unitPrice = medicine.get('unitPrice');
+    let total = medicine.get('total')
+    if(unitPrice && unitQty){
+      total?.setValue(unitQty.value * unitPrice.value);
+    }
   }
 
   getVendorsDropDown(){
@@ -269,6 +277,17 @@ export class PharmacySaleComponent extends SubscriptionManagmentDirective implem
 
   getMedicineType(potency: number): string{
     return MedicineType[potency];
+  }
+
+   nonNegativeValidator(control: AbstractControl) {
+    const value = control.value;
+  
+    if (value < 0) {
+      control.setValue(0);
+      return { 'nonNegative': true };
+    }
+  
+    return null;
   }
 
   openDialog(data: {invoice: IMedicineSale, medicines: Array<IDropDown>}){

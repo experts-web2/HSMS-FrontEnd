@@ -44,13 +44,19 @@
                                         </label>
                                     <input
                                         class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        type="number" formControlName="unitQty">
+                                        type="number" (input)="calculateTotal(i)" formControlName="unitQty">
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 text-sm font-bold mb-2" for="">Price</label>
                                     <input
                                         class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        type="number" formControlName="unitPrice">
+                                        type="number" (input)="calculateTotal(i)" formControlName="unitPrice">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="">Total</label>
+                                    <input 
+                                        class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        type="number"  formControlName="total">
                                 </div>
 
                             </div>
@@ -66,10 +72,10 @@
                         Add a medicine</p-button>
                 </div>
                 <div>
-                    <div> 
+                    <div class=""> 
                         <h2>Discount:</h2>           
                         <p-dropdown placeholder="Select Discount Type" [options]="discountTypes" optionLabel="label" optionValue="value" formControlName="disountType" ></p-dropdown>
-                        <input pInputText type="number" placeholder="Discount Amount" formControlName="discountInp" #dicountAmount (input)="discountAmountChange()" />
+                        <input pInputText class="ml-2" type="number" placeholder="Discount Amount" formControlName="discountInp" style="height: 50px" #dicountAmount (input)="discountAmountChange()" />
                     </div>        
                 </div>
             </form>
