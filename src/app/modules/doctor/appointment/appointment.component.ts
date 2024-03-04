@@ -320,9 +320,9 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
       break;
       case 'LabOrder':
         let healthRecordLabTests = this.healthRecord.labOrder?.labOrderDetails.map(x => x.labTestId) ?? [];
-        if(this.healthRecord.labOrder && this.labOrder.labTestIds && !(this.labOrder.labTestIds?.length === healthRecordLabTests?.length) && !this.labOrder.labTestIds?.every(x => healthRecordLabTests.includes(x))){
+        if(this.healthRecord.labOrder && this.labOrder.labTestIds && this.labOrder.labTestIds.length && !(this.labOrder.labTestIds?.length === healthRecordLabTests?.length) && !this.labOrder.labTestIds?.every(x => healthRecordLabTests.includes(x))){
           this.updateLabOrder(this.healthRecord.labOrder.id)
-        } else if (!this.healthRecord.labOrder && this.labOrder) {
+        } else if (!this.healthRecord.labOrder && this.labOrder && this.labOrder.labTestIds.length) {
           this.addLabOrder()
         }
 

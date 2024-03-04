@@ -33,6 +33,7 @@ import { FilterOperator } from 'primeng/api';
 import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
 import { IPatient } from 'src/app/models/interfaces/patient-model';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { TriggerService } from 'src/app/services/trigger.service';
 
 @Component({
   selector: 'app-add-token-modal',
@@ -109,7 +110,8 @@ export class AddTokenModalComponent
     private readonly doctorService: DoctorService,
     private readonly testService: TestService,
     private readonly tokenService: TokenService,
-    private readonly alertService: AlertService
+    private readonly alertService: AlertService,
+    private readonly triggerService: TriggerService
   ) {
     super();
     this.display = this.config.data.display;
@@ -314,6 +316,7 @@ export class AddTokenModalComponent
         .subscribe({
           next: (x) => {
             this.alertService.success('Token added successfully.');
+            this.triggerService.tokenTrigger.next(x);
             this.dialogRef.close();
           },
           error: (err) => {

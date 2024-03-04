@@ -13,6 +13,7 @@ import {
 } from 'date-fns';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { DataTypesEnum } from 'src/app/constants/enums/dataTypes';
+import { SchedulingService } from 'src/app/services';
 
 const colors: any = {
   red: {
@@ -143,10 +144,10 @@ export class SchedulingComponent implements OnInit {
 
   activeDayIsOpen: boolean = true;
 
-  constructor() {}
+  constructor(private readonly schedulsService: SchedulingService) {}
 
   ngOnInit(): void {
-    
+    this.getSchedules()
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -161,6 +162,18 @@ export class SchedulingComponent implements OnInit {
       }
       this.viewDate = date;
     }
+  }
+
+  getSchedules(){
+    this.schedulsService.getSchedules({}).subscribe({
+      next: (x) => {
+        console.log(x);
+        
+      },
+      error: (err) => {
+
+      }
+    })
   }
 
   eventTimesChanged({

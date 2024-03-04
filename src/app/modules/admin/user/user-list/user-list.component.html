@@ -1,3 +1,7 @@
-<div class="text-center inside-header"><h1>User</h1> <p-button (click)="addUser()"><i class="pi pi-plus me-2"></i> Add User</p-button></div>
+<div class="text-center inside-header">
+    <h1>User</h1>
+        <p-button (click)="addUser()"><i class="pi pi-plus me-2"></i> Add User</p-button>
+
+</div>
 <app-generic-table [data]="userList" [columns]="columns" (edit)="edit($event)" (delete)="deleteUser($event)" [actionsToShow]="actionsToShow" [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
  

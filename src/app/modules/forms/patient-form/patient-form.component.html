@@ -20,19 +20,22 @@
             <label>Phone#<span class="text-danger">*</span></label>
             <div class="inpt-phone items-start">
                 <div class="flex flex-column">
-                    <input type="number" pattern="[0-9]*" class="form-control w-full p-1" [ngClass]="{ 'ng-invalid ng-dirty' :phoneNum.touched && phoneNum.invalid}" pInputText placeholder="3212345667" formControlName="phoneNum">
+                    <input type="text" class="form-control w-full p-1" [ngClass]="{ 'ng-invalid ng-dirty' :phoneNum.touched && phoneNum.invalid}" pInputText placeholder="3212345667" formControlName="phoneNum">
                     <small class="text-danger" *ngIf="(phoneNum.touched && phoneNum.invalid)">Phone# is required.</small>
                 </div>
                 <span class="plus-sign mx-1">+</span>
-                <p-dropdown
-                class="inpt-Ph-rel relation-ship-dropdown"
-                [ngClass]="{ 'ng-invalid ng-dirty': relation.touched && relation.invalid }"
-                placeholder="Select Relation"
-                formControlName="relation"
-                [options]="relations"
-                optionLabel="label"
-                optionValue="value"
-              ></p-dropdown>     
+                <span class="p-float-label">
+                    <p-dropdown
+                    [ngClass]="{ 'ng-invalid ng-dirty': relation.touched && relation.invalid }"
+                    placeholder="Select Relation"
+                    formControlName="relation"
+                    [options]="relations"
+                    optionLabel="label"
+                    optionValue="value"
+                    inputId="float-label"
+                  ></p-dropdown>     
+                    <label for="float-label">Attendee</label>
+                </span>
             </div>
         </div>
         <div class="input_Divs">

@@ -10,6 +10,7 @@ import { IMedicinerequest } from 'src/app/models/interfaces/medicine-Request';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { AlertService, MedicineService } from 'src/app/services';
 import { MedicineFormComponent } from '../medicine-form/medicine-form.component';
+import { FileUploadComponent } from 'src/app/modules/dialog/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-medicine-list',
@@ -115,6 +116,30 @@ export class MedicineListComponent
 
   edit(editMedicine: IMedicinerequest) {
     this.addMedicine(editMedicine, 'update');
+  }
+
+  importMedicine(){
+    this.dialogService.open(FileUploadComponent, {
+      header: 'Import Medicine From CSV',
+      width: '50%',
+      data: {
+        fileType: 'csv'
+      }
+    }).onClose.subscribe({
+      next: (x: FormData | null) => {
+        
+        if(x) this.medicineService.importMedicine(x).subscribe({
+          next: (x) => {
+            this.getMedicine()
+            this.alertService.success('Medicines imported from csv successfully.')
+          },
+          error: (err) => {
+            this.alertService.error('An error occoured while uploading medicines from csv.')
+
+          }
+        })
+      }
+    })
   }
 
   delete(deleteMedicine: any) {

@@ -37,6 +37,7 @@ import { BrandFormComponent } from './medicine-brand/brand-form/brand-form.compo
 import { BrandListComponent } from './medicine-brand/brand-list/brand-list.component';
 import { MedicineSaltsListComponent } from './medicine-salts/medicine-salts-list/medicine-salts-list.component';
 import { MedicineSaltsFormComponent } from './medicine-salts/medicine-salts-form/medicine-salts-form.component';
+import { FileUploadComponent } from '../dialog/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { MedicineSaltsFormComponent } from './medicine-salts/medicine-salts-form
   ],
   imports: [
     CommonModule,
+    FileUploadComponent,
     AdminRoutingModule,
     PrimeNgModule,
     FormsModule,

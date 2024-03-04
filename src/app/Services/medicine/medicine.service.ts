@@ -37,4 +37,8 @@ export class MedicineService extends HttpService {
   getMedicineDropDown(): Observable<Array<IDropDown>> {
     return this.get(`${this.baseEndPoint}/dropdown`);
   }
+
+  importMedicine(file: FormData): Observable<any>{
+    return super.post(`${this.baseEndPoint}/import`, file);
+  }
 }

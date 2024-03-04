@@ -52,7 +52,7 @@ export class PatientFormComponent
     this.patientForm = this.fb.group({
       mrNum: new FormControl({value: null, disabled: true}, [Validators.required]),
       name: new FormControl(null, [Validators.required]),
-      phoneNum: new FormControl('', [Validators.required, this.validatePakistaniPhoneNumber]),
+      phoneNum: new FormControl('', [Validators.required, Validators.pattern(/^(?:\+923|03)\d{9}$/)]),
       relation: new FormControl(Relations.Self, [Validators.required]),
       gender: new FormControl('Male', [Validators.required]),
       age: new FormControl(null, [Validators.required]),
@@ -220,8 +220,9 @@ export class PatientFormComponent
     }
   }
 
-  validatePakistaniPhoneNumber(control: AbstractControl): ValidationErrors | null {
-    const phoneNumberRegex = /^3\d{9}$/; // Adjust the regex as needed
+  validatePakistaniPhoneNumber(control: AbstractControl<string>): ValidationErrors | null {
+    const phoneNumberRegex = /^(?:\+923|03)\d{9}$/; // Adjust the regex as needed
+
     if (control.value && !phoneNumberRegex.test(control.value)) {
       return { invalidPhoneNumber: true };
     }

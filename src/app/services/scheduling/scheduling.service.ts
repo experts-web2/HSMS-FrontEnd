@@ -4,13 +4,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseEndPoints } from 'src/app/constants/enums/base-end-points';
 import { IScheduleRequest } from 'src/app/models/interfaces/schedule-Request';
+import { IFetchRequest } from 'src/app/models/interfaces/fetchTableRequest';
+import { AsyncPipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SchedulingService extends HttpService {
 
-  constructor(private readonly http: HttpClient) {
+  constructor(private readonly http: HttpClient, private readonly asyncPipe: AsyncPipe) {
     super(http)
    }
 
@@ -18,19 +20,7 @@ export class SchedulingService extends HttpService {
     return this.post(`${BaseEndPoints.Scheduling}`, schedule);
   }
 
-  // getPrescriptionById(id: string): Observable<IPrescription>{
-  //   return this.get(`${BaseEndPoints.Prescription}/${id}`)
-  // }
-
-  // getPrescriptionByTokenId(tokenId: string): Observable<IPrescription>{
-  //   return this.get(`${BaseEndPoints.Prescription}/getbytokenid/${tokenId}`)
-  // }
-
-  // updatePrescriptionById(id: string, prescription: IPrescriptionRequest): Observable<any>{
-  //   return this.post(`${BaseEndPoints.Prescription}/${id}`, prescription)
-  // }
-  
-  // getPrescriptionHistoryDropDown(patientId: string): Observable<Array<IDropDown>>{
-  //   return this.get(`${BaseEndPoints.Prescription}/dropdownbypatientid/${patientId}`);
-  // }
+  getSchedules(query: IFetchRequest): Observable<any>{
+    return this.post(`${BaseEndPoints.Scheduling}/all`, query);
+  }
 }

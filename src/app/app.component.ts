@@ -150,7 +150,7 @@ export class AppComponent implements OnInit {
 
   addPatient() {
     const dialogRef = this.pNgDialog.open(PatientFormComponent, {
-      header: "Add Token",
+      header: "Add Patient",
       width: '600px',
     });
   }

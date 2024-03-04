@@ -148,14 +148,14 @@
                     </select>
                 </div>
                 <div class="ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
-                    <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
-                    <input class="pulse h-10 lg:ml-3" type="number" pInputText name="totalDiscount"
-                        formControlName="totalDiscount" (input)="calculate(true)">
-                </div>
-                <div class="ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
                     <label for="total_discount" class="min-w-fit">Grand Total: Rs. </label>
                     <input type="text" class="pulse lg:ml-3" pInputText placeholder="0"
                         formControlName="grandTotal" />
+                </div>
+                <div class="ms-auto my-6 d-flex justify-content-between flex-col lg:flex-row items-start">
+                    <label class="d-flex align-items-center min-w-fit" for="totalDiscount">Total Discount:</label>
+                    <input class="pulse h-10 lg:ml-3" type="number" pInputText name="totalDiscount"
+                        formControlName="totalDiscount" (input)="calculate(true)">
                 </div>
                 <div class="ms-auto flex-col lg:flex-row d-flex justify-content-between items-start">
                     <label for="total_discount" class="min-w-fit">Paid: Rs.</label>

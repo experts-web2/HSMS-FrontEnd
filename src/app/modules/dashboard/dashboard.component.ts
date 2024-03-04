@@ -11,7 +11,8 @@ import { takeUntil } from 'rxjs';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { EChartsOption } from 'echarts';
 import { xAxis } from 'src/app/constants/Constants/chartViews';
-import { clone, cloneDeep } from 'lodash';
+import { clone, cloneDeep, sortBy, uniqBy } from 'lodash';
+import { TriggerService } from '../../services/trigger.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +25,7 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
   appointmentsData!: Array<any>;
   newTokens: Array<IToken> = [];
   viewdTokens: Array<IToken> = [];
+  allTokens: Array<IToken> = [];
   appointmentsTotalRecords: number = 0;
   roClickAction: Function = this.rowClick.bind(this);
 
@@ -66,21 +68,6 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
     },
   ];
 
-  displayedTokensColumns: Array<ITableColumns> = [
-    {
-      name: 'Token#',
-      property: 'tokenNo',
-    },
-    {
-      name: 'Patient Name',
-      property: 'patientName',
-    },
-    {
-      name: 'Doctor Name',
-      property: 'doctorName',
-    },
-  ];
-
   filter: any = [
     {
       id: 'week',
@@ -111,11 +98,12 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
     private readonly userService: UserService,
     private dialog: DialogService,
     private dialogRef: DynamicDialogRef,
+    private readonly triggerService: TriggerService
   ) {
     super();
   }
 
-  get allTokens (){
+  get appendAllTokens (){
     return [...this.viewdTokens, ...this.newTokens].sort((a: IToken, b: IToken) => a.createdAt.getTime() - b.createdAt.getTime())
   }
 
@@ -126,14 +114,25 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
     this.getViewdTokens();
     this.getTotalpatients();
     this.getAllUsers();
+
     this.chartOption = this.createChartOption([17, 22, 31, 46, 12, 40, 33, 16]);
+
+    this.triggerService.tokenTrigger.subscribe({
+      next: (x) => {
+        if(x){
+          this.getUnViewdTokens();
+          // this.getViewdTokens();
+          this.triggerService.tokenTrigger.next(null);
+        }
+      }
+    });
 
     this.userStateService.getUserState().subscribe({
       next: (x) => {
         this.userIsAdmin = x.roles.includes('Admin');
         this.userIsDoctor = x.roles.includes('Doctor');
       }
-    })
+    });
   }
 
   getViewdTokens() {
@@ -143,6 +142,8 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
       .subscribe({
         next: (x) => {
           this.viewdTokens = x;
+          this.allTokens = sortBy(uniqBy([...this.allTokens, ...this.viewdTokens], 'id'),  'createdAt');
+
         },
         error: (err) => {},
       });
@@ -155,6 +156,7 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
       .subscribe({
         next: (x) => {
           this.newTokens = x;
+          this.allTokens = sortBy(uniqBy([...this.allTokens, ...this.newTokens], 'id'), 'createdAt');
         },
         error: (err) => {},
       });
@@ -220,28 +222,18 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
   }
 
   graphPeriodChange({value, originalEvent}: {value: string, originalEvent: PointerEvent} ){
-    console.log(value);
-    console.log(this.selectedFilter);
     this.rangeDates = undefined;
     switch(value){
-      case 'week':
-        console.log(`hit ${value}`);
-        
+      case 'week':        
         this.chartOption.xAxis.data = xAxis.week; 
         break
       case 'month':
-        console.log(`hit ${value}`);
-
         this.chartOption.xAxis.data = xAxis.month();
         break
       case 'year':
-        console.log(`hit ${value}`);
-
         this.chartOption.xAxis.data = xAxis.year;
         break
       case 'custom':
-        console.log(`hit ${value}`);
-
         this.chartOption.xAxis.data = xAxis.week;
         break
     }
@@ -259,6 +251,7 @@ export class DashboardComponent extends SubscriptionManagmentDirective implement
 
       }
     })
+
     this.patientService.getAppointments().pipe(takeUntil(this.componetDestroyed)).subscribe((res: any) => {
       this.appointmentsData = res.appointments
     })

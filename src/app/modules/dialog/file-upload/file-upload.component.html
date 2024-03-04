@@ -1,0 +1,10 @@
+<div class="flex flex-column">
+    <div class="flex flex-row">
+        <p-fileUpload mode="basic" chooseLabel="Choose a CSV to import data" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept=".csv" [maxFileSize]="1000000" (onSelect)="onUpload($event)"></p-fileUpload>
+
+    </div>
+    <div class="flex justify-end gap-2">
+        <p-button  [label]="'Upload'" (onClick)="upload()"></p-button>
+        <p-button [label]="'Close'" (onClick)="close(null)"></p-button>
+    </div>
+</div>

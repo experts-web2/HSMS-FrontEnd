@@ -1,3 +1,9 @@
-<div class="text-center inside-header"><h1>Medicine</h1> <p-button (click)="addMedicine()"><i class="pi pi-plus me-2"></i> Add Medicine</p-button></div>
+<div class="text-center inside-header">
+    <h1>Medicine</h1> 
+    <div class="flex flex-row gap-2">
+        <p-button pTooltip="Import Medicine From CSV" (onClick)="importMedicine()"><i class="fa-solid fa-file-import"></i></p-button>
+        <p-button (click)="addMedicine()"><i class="pi pi-plus me-2"></i> Add Medicine</p-button>
+    </div> 
+</div>
 
 <app-generic-table [data]="medicineList" [columns]="columns" (edit)="edit($event)" (delete)="delete($event)" [actionsToShow]="actionsToShow" [showActions]="true" [totalRecords]="totalRecords"></app-generic-table>
