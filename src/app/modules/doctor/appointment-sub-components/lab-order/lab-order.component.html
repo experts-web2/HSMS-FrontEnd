@@ -50,6 +50,10 @@
 
         </div>
     </div>
+
+    <div class="grid grid-cols-6">
+        <p-chip *ngFor="let test of (testsList | filterBy: 'id' : selectedTestIds : 'match') " [label]="test.name" (onRemove)="removeTest(test.id)" [removable]="true"></p-chip>
+    </div>
     <!-- <ng-container *ngIf="!newData">
         <p-button label="Update" (onClick)="updateLabOrder()"></p-button>
     </ng-container>

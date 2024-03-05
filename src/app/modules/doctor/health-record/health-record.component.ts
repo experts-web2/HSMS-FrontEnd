@@ -15,6 +15,7 @@ import { DrPrescriptionPrintComponent } from '../appointment-sub-components/dr-p
 import { DialogService } from 'primeng/dynamicdialog';
 import * as moment from 'moment';
 import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-health-record',
@@ -25,6 +26,8 @@ export class HealthRecordComponent implements OnInit {
   currentDate: Date = new Date();
   doctorsList: Array<IDoctor> = [];
   patientList: Array<IPatient> = [];
+  patientsControl: FormControl = new FormControl<string|null>(null);
+  doctorsControl: FormControl = new FormControl<string|null>(null);
   selectedDoctor!: IDoctor;
   visible: boolean = false;
   doctorId!: string;
@@ -52,11 +55,10 @@ export class HealthRecordComponent implements OnInit {
   ){
     this.userStateService.getUserState().subscribe({
       next: (x) => {
-        if(x.entityIds){
-          
+        if(x.entityIds){          
           this.doctorId = x.entityIds['DoctorId'];
         }
-        console.log(x);
+        
         this.logedInUser = x;
       },
       error: (err) => {
@@ -69,6 +71,11 @@ export class HealthRecordComponent implements OnInit {
     this.resetFilters();
     this.getHealthRecords();
     // this.getPagedHealthRecords();
+  }
+
+  clearPatients(){
+    console.log('clear patients');
+    
   }
 
   getPagedHealthRecords(pageNo?: number){

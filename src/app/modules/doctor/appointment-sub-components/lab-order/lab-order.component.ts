@@ -8,6 +8,7 @@ import { ILabeTest } from 'src/app/models/interfaces/labTest';
 import { ILabTestCategory } from 'src/app/models/interfaces/labTestCategory';
 import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
 import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-lab-order',
@@ -33,7 +34,6 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
   checkboxes: any[] = [];
   tabId: string = '';
   selectedCategories: any[] = [];
-  selectedTestsIds: Array<string> = []
 
   constructor(
     private readonly testCategoryService: TestCategoryService,
@@ -42,6 +42,8 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     private readonly laborderService: LabOrderService,
   ) {
     super();
+    this.getTests();
+    this.getTestCategories();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -55,9 +57,11 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
       this.labOrderRequest = {
         doctorId: this.healthRecord.doctorId,
         patientId: this.healthRecord.patientId,
-        labTestIds: [],
+        labTestIds: this.healthRecord.labOrder?.labTestIds ?? [],
         healthRecordId: this.healthRecordId
       }
+
+      this.selectedTestIds = this.healthRecord.labOrder?.labTestIds ?? [];
 
       if(this.tabsToView.length) this.getVisibleTests(this.tabsToView[0].id);
       this.emitRequest.emit(this.labOrderRequest)
@@ -67,8 +71,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   ngOnInit(): void {
 
-    this.getTests()
-    this.getTestCategories();
+
     // this.emitRequest.emit(this.labOrderRequest);
   }
 
@@ -112,13 +115,12 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   getVisibleTests(categoryId: string) {
     this.testsListToShow = this.testsList.filter(x => x.testCategoryId === categoryId);
-    this.testsListToShow.forEach(x => {
-      if(this.selectedTestsIds.includes(x.id)) x.selected = true;
-    });
+    
+    this.testsListToShow.forEach(x => this.selectedTestIds.includes(x.id) ?  x.selected = true : null);    
+
     if(this.testsListToShow.every(y => y.selected) && this.testsListToShow.length){
-      this.allSelected = true;
-      
-    }else{
+      this.allSelected = true;      
+    } else {
       this.allSelected = false;
     }
   }
@@ -126,8 +128,6 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
   selectLabTest(event: any) {
 
   }
-
-
 
   selectAllCheckboxes(event: any): void {
     if (event.target.checked) {
@@ -149,7 +149,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
       this.testsListToShow.forEach(checkbox => {
         if (checkbox.testCategoryId === this.tabId) {
           checkbox.selected = false;
-          if (this.selectedTestsIds.includes(checkbox.id)) this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== checkbox.id);
+          if (this.selectedTestIds.includes(checkbox.id)) this.selectedTestIds = this.selectedTestIds.filter(x => x !== checkbox.id);
         }
       });
     }
@@ -162,22 +162,35 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
       if(x.id === selectedValue.id) x.selected = checked;
     })
     if (checked) {
-      this.selectedTestsIds.push(selectedValue.id);
+      this.selectedTestIds.push(selectedValue.id);
     }
-    else this.selectedTestsIds = this.selectedTestsIds.filter(x => x !== selectedValue.id);
+    else this.selectedTestIds = this.selectedTestIds.filter(x => x !== selectedValue.id);
    
     this.selectAllChecked();
 
     if(this.testsListToShow.every(test => test.selected)) this.allSelected = true;
     else this.allSelected = false;
 
-    this.labOrderRequest.labTestIds = this.selectedTestsIds;
+    this.labOrderRequest.labTestIds = this.selectedTestIds;
     this.emitRequest.emit(this.labOrderRequest);
 
   }
 
   edit(){
 
+  }
+
+  removeTest(testId: string){
+    
+    for (const test of this.testsListToShow) {
+      if(test.id === testId){
+        test.selected = false;
+        break;
+      }
+    }
+
+    this.selectedTestIds = this.selectedTestIds.filter(x => x !== testId);
+    this.testsList = JSON.parse(JSON.stringify(this.testsList))
   }
 
   updateLabOrder(){
@@ -200,7 +213,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     let labOrderPayload: ILabOrderRequest = {
       doctorId: this.healthRecord.doctorId,
       patientId: this.healthRecord.patientId,
-      labTestIds: this.selectedTestsIds,
+      labTestIds: this.selectedTestIds,
       healthRecordId: this.healthRecordId
     }
 
@@ -218,7 +231,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   selectAllChecked() {
     for (let test of this.testsListToShow.filter(x => x.testCategoryId === this.tabId)) {
-      let includes = this.selectedTestsIds.includes(test.id);
+      let includes = this.selectedTestIds.includes(test.id);
       if (includes) this.allSelected = true;
       else {
         this.allSelected = false;

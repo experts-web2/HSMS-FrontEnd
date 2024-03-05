@@ -12,7 +12,7 @@ import { AsyncPipe } from '@angular/common';
 })
 export class SchedulingService extends HttpService {
 
-  constructor(private readonly http: HttpClient, private readonly asyncPipe: AsyncPipe) {
+  constructor(private readonly http: HttpClient) {
     super(http)
    }
 

@@ -30,6 +30,7 @@ import { CameraComponent } from '../camera/camera.component';
 import { CameraModule } from '../camera/camera.module';
 import { HealthRecordComponent } from './health-record/health-record.component';
 import { SectionVisibilityDirective } from 'src/app/shared/directive/section_visibility/section-visibility.directive';
+import { FilterByPipe } from 'src/app/shared/pipes/filter-by.pipe';
 @NgModule({
   declarations: [
     DoctorRootComponent,
@@ -54,6 +55,7 @@ import { SectionVisibilityDirective } from 'src/app/shared/directive/section_vis
     GenericTableComponent,
     CameraModule,
     ToastModule,
+    FilterByPipe,
     MessagesModule,
     ButtonModule,
     AddPrescriptionDialogueComponent,

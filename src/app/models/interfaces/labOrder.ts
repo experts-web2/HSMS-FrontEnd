@@ -3,10 +3,11 @@ import { IDoctor } from "./Doctor";
 import { IPatient } from "./patient-model";
 
 export interface ILabOrder extends IBaseResponse{
-    patientId: string
-    doctorId: string
-    healthRecordId: string
-    labOrderDetails: ILabOrderDetail[]
+    patientId: string;
+    doctorId: string;
+    healthRecordId: string;
+    labOrderDetails: ILabOrderDetail[];
+    labTestIds?: Array<string>;
     doctor?: IDoctor;
     patient?: IPatient;
 }

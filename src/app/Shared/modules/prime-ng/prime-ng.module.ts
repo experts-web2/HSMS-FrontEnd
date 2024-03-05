@@ -36,6 +36,7 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { FileUploadModule } from 'primeng/fileupload';
 import { AccordionModule } from 'primeng/accordion';
 import { CardModule } from 'primeng/card'
+import { ChipModule } from 'primeng/chip'
 import { BadgeModule } from 'primeng/badge'
 @NgModule({
   declarations: [],
@@ -63,6 +64,7 @@ import { BadgeModule } from 'primeng/badge'
     SlideMenuModule,
     SliderModule,
     PaginatorModule,
+    ChipModule,
     ButtonModule,
     TreeSelectModule,
     CalendarModule,

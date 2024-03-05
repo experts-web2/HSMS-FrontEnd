@@ -1,9 +1,8 @@
 <div class="flex justify-between m-4 p-1">
     <div>
         <label for="">Patient Name </label>
-        <!-- <p-badge *ngIf="patientsAuto.value" value="X" severity="danger" pTooltip="Clear" (onClick)="patientsAuto.clear()"></p-badge> -->
-        {{patientsAuto.value}}
-        <p-autoComplete [minLength]="3" [field]="'name'" #patientsAuto [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="patientSelected($event.id)" placeholder="" (onClear)="123">
+        <p-badge *ngIf="patientsControl.value" [appendTo]="patientsAuto" value="X" severity="danger" pTooltip="Clear" (onClick)="clearPatients()"></p-badge>
+        <p-autoComplete [minLength]="3" [field]="'name'" #patientsAuto [suggestions]="patientList" (completeMethod)="patientQuery($event)" (onSelect)="patientSelected($event.id)" placeholder="" (onClear)="123" [formControl]="patientsControl">
             <ng-template let-patient pTemplate="item">
                 <div class="flex flex-column">
                     <span><strong>mr#: </strong>{{patient.mrNo}}  <strong>Name: </strong>{{patient.name}} </span>
@@ -52,12 +51,13 @@
 
 <ng-container *ngIf="healthRecords">
 <ng-container *ngFor="let healthRecord of healthRecords">
-    <div class="flex flex-row justify-between m-3 p-3 items-center rounded-t-lg bg-slate-200">
+    <div class="grid grid-cols-6 m-3 p-3 items-center rounded-t-lg bg-slate-200">
         <div><span class="font-bold">Mr#:</span> {{healthRecord.patient?.mrNo}} , <span class="font-bold">Patient:</span> {{healthRecord.patient?.name}}</div>
+        <div><span class="font-bold">Doctor Name:</span> {{healthRecord.doctor?.name}}</div>
         <div><span class="font-bold">Added By:</span> {{healthRecord.patient?.createdBy}}</div>
         <div><span class="font-bold">Created At:</span> {{healthRecord.createdAt | date: 'dd MMM,yyyy'}}</div>
         <div><span class="font-bold">Added At:</span> {{healthRecord.createdAt | date: 'dd/MM/yyyy hh:mm a'}}</div>
-        <div class="flex gap-3">
+        <div class="flex justify-end gap-3">
           <p-button [icon]="'pi pi-file-edit'" (onClick)="previewHealthRecord(healthRecord.id)"></p-button>
           <p-button [icon]="'pi pi-print'" (onClick)="getHealthRecord(healthRecord.id)"></p-button>
         </div>

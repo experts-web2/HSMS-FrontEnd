@@ -42,7 +42,7 @@
   </div>
 </div>
 <div echarts [options]="chartOption" class=""></div>
-  <div class="flex flex-row justify-between">
+  <div class="flex flex-row justify-between" *ngIf="userIsDoctor">
     <div class="w-1/2 shadow-lg pt-2 pl-1  rounded overflow-y-auto ml-3" style="height: 40vh">
       <div class="grid grid-cols-4  font-bold">
         <span>Token#</span>
