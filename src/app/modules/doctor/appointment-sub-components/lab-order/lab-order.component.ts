@@ -49,6 +49,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['healthRecord']){
       this.selectedTestIds = [];
+      if(this.testsList.length) this.testsList.forEach(x => x.selected = false);
       this.labOrderRequest = undefined;
       if(this.healthRecord.labOrder){
         this.newData = false;
