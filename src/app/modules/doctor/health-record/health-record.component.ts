@@ -74,7 +74,6 @@ export class HealthRecordComponent implements OnInit {
   }
 
   clearPatients(){
-    console.log('clear patients');
     
   }
 
@@ -110,7 +109,6 @@ export class HealthRecordComponent implements OnInit {
   }
 
   selectedPatient(patientId: string){
-    console.log(patientId);
     this.patientIdForHealthRecord = patientId;
   }
 
@@ -121,7 +119,6 @@ export class HealthRecordComponent implements OnInit {
     }
     this.healthRecordService.addHealthRecoed(healthRecordRequest).subscribe({
       next: (x) => {
-        console.log(x);
         this.alertService.success('Health Record Created Successfully.');
         this.router.navigate(['doctor/health_record', x.id])
       },
@@ -333,13 +330,11 @@ export class HealthRecordComponent implements OnInit {
   }
 
   patientQuery(event: any){
-    console.log(event.query);
     this.getPatients(event.query)
     
   }
 
   doctorQuery(event: any){
-    console.log(event.query);
     this.getDoctors(event.query)
     
   }

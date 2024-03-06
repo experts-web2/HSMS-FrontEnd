@@ -1,37 +1,14 @@
-<div class="patient-page mb-2" *ngIf="false">
-  <div class="grid grid-cols-1 md:grid-cols-3 m-3 gap-4 w-full md:w-1/2 items-end">
-    <div class=" flex flex-col justify-content-between justify-items-center position-relative">
-      <label for="patient">Patient</label>
-      <p-autoComplete #autoComplete [suggestions]="patientsToShow" (completeMethod)="searchPatient($event)"
-        (onSelect)="patientSelect(autoComplete.value.id)" field="name" [showEmptyMessage]="true">
-        <ng-template let-patient pTemplate="item">
-          <div class="flex flex-column">
-            <span><strong>mr#: </strong>{{patient.mrNo}} <strong>Name: </strong>{{patient.name}} </span>
-            <small><strong>Phone#: </strong>{{patient.phoneNumber}} <strong>Age: </strong>{{patient.age}} </small>
-            <hr class="">
-          </div>
-        </ng-template>
-      </p-autoComplete>
-    </div>
-    <div class="flex flex-col">
-      <label for="visit">Visit</label>
-      <select
-        class="rounded border-solid border-2 h-10  flex flex-col md:flex-row justify-content-between justify-items-center position-relative"
-        name="" id="visit" #patientHistory (change)="selectPatientHistoryVisit(patientHistory.value)"
-        [disabled]="!patientHistoryVisits">
-        <option [value]="null" [defaultSelected]="true" disabled>Select a history visit</option>
-        <option *ngFor="let visit of patientHistoryVisits" [value]="visit.id">{{visit.createdAt | date: 'EEE MMM, dd/yyyy'}}</option>
-      </select>
-    </div>
-    <p-button [label]="'Print History'" class="h-fit" (onClick)="openHistoryView()"></p-button>
-  </div>
-</div>
+
 <div class="patient-page">
-  <div class="flex justify-between">
-    <h1 class="first-title">Current Appointment</h1>
+  <div class="flex justify-between my-3">
+    <h1 class="first-title">Health Record</h1>
+  </div>
+  <div class="grid grid-cols-3 my-2" *ngIf="healthRecord.doctor">
+    <div> <span><strong>Dctor Name: </strong>{{healthRecord.doctor?.name}}</span></div>
+    <div> <span><strong>Patient Name: </strong>{{healthRecord.patient?.name}}</span></div>
+    <div> <span><strong>Visit Date: </strong>{{healthRecord.createdAt | date: "MMM, dd/yyyy"}}</span></div>
   </div>
   <div class="flex flex-col lg:flex-row xl:gap-x-4 gap-y-4 justify-between relative" *ngIf="patient || token">
-    <!-- <i class="fa fa-solid fa-bars text-3xl user-profile-icon absolute right-4 cursor-pointer hidden lg:flex" (click)="userProfile = !userProfile"></i> -->
     <div class="flex user-left-section" [ngClass]="userSideSection ? 'user-side-show':'user-side-hide'">
       <div class="flex flex-col gap-2 section-menu-content">
         <div class="flex active-section bg-white rounded-md px-2 py-2 mb-2 md:mb-0 md:py-4 gap-4 h-fit overflow-scroll w-full">
@@ -46,44 +23,12 @@
           <div class="flex active-section bg-white rounded-md px-2 py-2 mb-2 md:mb-0 md:py-4 gap-4 h-fit overflow-scroll w-full">
             <p-button *ngFor="let hr of patientHistoryHealthRecords"  [ngClass]="healthRecord.id === hr.id ? '':'outline-btn'" (onClick)="getHealthRecordById(hr.id)">{{hr.createdAt | date: 'dd/MM/yyyy'}}</p-button>
           </div>
-          <!-- <p-button class="outline-btn">Vitals</p-button>
-          <p-button class="outline-btn">Medication</p-button>
-          <p-button class="outline-btn">Lab Order</p-button>
-          <p-button class="outline-btn">Documents</p-button> -->
         </div>
       </div>   
     <i class="fa fa-solid fa-bars text-3xl h-fit pr-1 user-profile-icon cursor-pointer bg-white flex xl:hidden" [ngClass]="userSideSection ? '':'mt-12'" (click)="userSideSection = !userSideSection"></i>
     </div>
     <section class="flex flex-col md:flex-row md:gap-x-4 overflow-scroll">
       <div class="flex-column align-items-center">
-        <!-- <p-tabView class="flex justify-between appointment" (activeIndexChange)="changeTab($event)">
-          <p-tabPanel header="Prescription">
-            <app-prescription [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="prescription = $event"
-              [healthRecordId]="healthRecordId"></app-prescription>
-          </p-tabPanel>
-          <p-tabPanel header="Vitals">
-            <app-vitals [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="vitals = $event"
-              [healthRecordId]="healthRecordId"></app-vitals>
-          </p-tabPanel>
-          <p-tabPanel header="Medication">
-            <app-medication [healthRecord]="healthRecord" [historyTokenId]="historyTokenId" (emitRequest)="medication = $event"
-              [healthRecordId]="healthRecordId"></app-medication>
-          </p-tabPanel>
-          <p-tabPanel header="Lab Order">
-            <app-lab-order [token]="token" (emitRequest)="labOrder = $event" [healthRecord]="healthRecord"
-              [healthRecordId]="healthRecordId"></app-lab-order>
-          </p-tabPanel>
-          <p-tabPanel header="Documents">
-            <p>
-              <app-files-preview [patientId]="patient.id"></app-files-preview>
-            </p>
-          </p-tabPanel>
-          <p-tabPanel header="Radiology Order">
-            <p>
-              At vero eos et
-            </p>
-          </p-tabPanel>
-        </p-tabView> -->
         <div class="gap-16 grid h-screen overflow-scroll rounded-3 w-full h-fit bg-white p-3"  #sectionContainer appSectionVisibility (mostVisibleSection)="handleSectionVisibility($event)">
           <section id="Prescription" #Prescription>
             <h2 class="text-2xl">Prescription</h2>
@@ -112,15 +57,9 @@
           </section>
         </div>
         <div class="flex bg-white p-3 mt-2 rounded-md">
-
-          <!-- <div class="m-1 ">
-            <p-button class="" [label]="'Save'" (onClick)="savePatientVisitDetails()" *ngIf="saved"></p-button>
-          </div> -->
-  
           <div class="m-1">
             <p-button class="" [label]="'Upload a file'" (onClick)="openUploadFileDialog()"
               [icon]="'https://www.primefaces.org/cdn/api/upload.php'"></p-button>
-            <!-- <p-fileUpload mode="basic" chooseLabel="Upload a file" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" [maxFileSize]="1000000" (onUpload)="null"></p-fileUpload> -->
           </div>
           <div class="m-1"> <p-button [label]="'Print Prescription'" (onClick)="openPrescriptionPrintDialogue()"></p-button>
           </div>
@@ -147,28 +86,28 @@
               <h2 class="section-title">Vitals</h2>
               <div class="history-item-div"><span class="patient-info-labels"><i
                     class="fa-solid w-5 fa-heart-pulse mr-3"></i>Pulse Heart
-                  Rate:</span><span>{{tokenVitals?.pulseHeartRate ?? 'N/A'}}</span></div>
+                  Rate:</span><span>{{healthRecord.vital?.pulseHeartRate ?? 'N/A'}}</span></div>
               <div class="history-item-div"><span class="patient-info-labels"><i
-                    class="fa fas w-5 fa-regular fa-temperature-high mr-3"></i>Temprature:</span><span>{{tokenVitals?.temperature
+                    class="fa fas w-5 fa-regular fa-temperature-high mr-3"></i>Temprature:</span><span>{{healthRecord.vital?.temperature
                   ?? 'N/A'}}</span></div>
               <div class="history-item-div"><span class="patient-info-labels"><i
-                    class="fa-solid w-5 fa-light fa-ruler-vertical mr-3"></i>height:</span><span>{{tokenVitals?.height
+                    class="fa-solid w-5 fa-light fa-ruler-vertical mr-3"></i>height:</span><span>{{healthRecord.vital?.height
                   ?? 'N/A'}}</span></div>
               <div class="history-item-div"><span class="patient-info-labels"><i
-                    class="fa-solid w-5 fa-weight-scale mr-3"></i>Weight (kg):</span><span>{{tokenVitals?.weight ?? 'N/A'}}</span></div>
+                    class="fa-solid w-5 fa-weight-scale mr-3"></i>Weight (kg):</span><span>{{healthRecord.vital?.weight ?? 'N/A'}}</span></div>
               <div class="history-item-div"><span class="patient-info-labels"><i
-                    class="fa-solid w-5 fa-child mr-3"></i>BMI:</span><span>{{tokenVitals?.bodyMassIndex ?? 'N/A'}}</span></div>
+                    class="fa-solid w-5 fa-child mr-3"></i>BMI:</span><span>{{healthRecord.vital?.bodyMassIndex ?? 'N/A'}}</span></div>
               <div class="history-item-div"><span class="patient-info-labels"><i
-                    class="fa-solid w-5 fa-heart mr-3"></i>Blood Pressure:</span><span>{{tokenVitals?.bloodPressure
+                    class="fa-solid w-5 fa-heart mr-3"></i>Blood Pressure:</span><span>{{healthRecord.vital?.bloodPressure
                   ?? 'N/A'}}</span></div>
               <div class="history-item-div"><span class="patient-info-labels"><i
                     class="fa-solid w-5 fa-lungs mr-3"></i>Oxygen
-                  Saturation:</span><span>{{tokenVitals?.oxygenSaturation ?? 'N/A'}}</span></div>
+                  Saturation:</span><span>{{healthRecord.vital?.oxygenSaturation ?? 'N/A'}}</span></div>
               <div class="history-item-div"><span class="patient-info-labels"><i
                     class="fa-solid w-5 fa-lungs mr-3"></i>Respiratory
-                  Rate:</span><span>{{tokenVitals?.respiratoryRate ?? 'N/A'}}</span></div>
+                  Rate:</span><span>{{healthRecord.vital?.respiratoryRate ?? 'N/A'}}</span></div>
               <div class="history-item-div"><span class="patient-info-labels"><i
-                    class="fa-solid w-5 fa-lungs mr-3"></i>Blood Sugar:</span><span>{{tokenVitals?.bloodSugar ??
+                    class="fa-solid w-5 fa-lungs mr-3"></i>Blood Sugar:</span><span>{{healthRecord.vital?.bloodSugar ??
                   'N/A'}}</span></div>
             </div>
           </p-panel>
@@ -178,19 +117,3 @@
 
   </div>
 </div>
-
-<!-- <ng-container *ngIf="">
-<ng-container *ngFor=""> -->
-<!-- <div class="flex flex-row justify-between m-3 p-3 items-center rounded-t-lg bg-slate-200">
-  <div><span class="font-bold">Mr#:</span> {{6574}} , <span class="font-bold">Patient:</span> {{'Aslam'}}</div>
-  <div><span class="font-bold">Added By:</span> {{'Furqan'}}</div>
-  <div><span class="font-bold">Created At:</span> {{currentDate | date: 'dd MMM,yyyy'}}</div>
-  <div><span class="font-bold">Added At:</span> {{currentDate | date: 'dd/MM/yyyy hh:mm a'}}</div>
-  <div class="flex gap-3">
-    <p-button [icon]="'pi pi-file-edit'"></p-button>
-    <p-button [icon]="'pi pi-print'"></p-button>
-  </div>
-</div> -->
-<!-- </ng-container>
-
-</ng-container> -->

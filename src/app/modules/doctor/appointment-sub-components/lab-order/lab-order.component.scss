@@ -64,10 +64,29 @@
 }
 
 .test-type{
-  height: 300px;
+  height: 500px;
   &_category,
   &_detail{
     height: 100%;
     overflow-y: auto;
   }
+}
+
+::ng-deep{
+  .custom-chip{
+    .p-component{
+      background-color: #11438F;
+      .p-element.p-icon-wrapper{
+        color: white;
+      } 
+    }
+    .p-chip-text{
+      max-width: 100px;
+      min-width: 100px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      color: #fff;
+    }
+  } 
 }

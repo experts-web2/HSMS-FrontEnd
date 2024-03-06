@@ -11,7 +11,6 @@ import { UserStateService } from 'src/app/State/user/user.service';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
 import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequest';
-import { IToken } from 'src/app/models/interfaces/Token';
 import { AlertService, PrescriptionService } from 'src/app/services';
 import { IPrescription } from 'src/app/models/interfaces/Prescription';
 import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
@@ -27,14 +26,13 @@ export class PrescriptionComponent
 {
   @Input() healthRecord!: IHealthRecord;
   @Input() historyTokenId!: string;
-  @Input() prescriptionRequest!: IPrescriptionRequest;
+  @Input() prescriptionRequest?: IPrescriptionRequest;
   @Input() healthRecordId!: string;
   @Output() emitRequest: EventEmitter<IPrescriptionRequest> = new EventEmitter<IPrescriptionRequest>();
   @Input() doctorId!: string;
   patientId!: string;
-  newData: boolean = false;
-  showEdit: boolean = false;
   prescriptionForm!: FormGroup;
+  showReason: boolean = false;
   loggedInDoctor!: ILogedInUser;
   improvementOptions: any[] = [];
   historyDropDown: Array<IDropDown> = [];
@@ -69,42 +67,34 @@ export class PrescriptionComponent
       startDate: new FormControl<Date | null>(null),
       endDate: new FormControl<Date | null>(null),
       continue: new FormControl<boolean | null>(false),
-
-      // procedure: new FormControl<Procedure | null>(null)
+      reason: new FormControl<string | null>(null),
+      days: new FormControl<number | null>(null),
+      hours: new FormControl<number | null>(null),
     });    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['healthRecord']) {
-      if(!this.healthRecord.prescription){
-        this.newData = true;
-        this.showEdit = false;
-      }else{
-        this.newData = false;
-        this.showEdit = true;
-      }
-
+      this.prescriptionForm.reset();
+      this.prescriptionRequest = undefined;
       if (this.healthRecord) {
         this.patientId = this.healthRecord.patientId;
         this.doctorId = this.healthRecord.doctorId;
       }
-      if(this.healthRecord.prescription) this.setHistoryPrescription(this.healthRecord.prescription);
-      // else {
-      //   let newPrescription: IPrescriptionRequest ={
-      //     healthRecordId: this.healthRecord.id,
-      //     doctorId: this.healthRecord.id,
-      //     patientId: this.healthRecord.id
-      //   }
-      //   this.formSetter(newPrescription);
-      // }
+
+      if(this.healthRecord.prescription){
+        // this.prescriptionForm.get('reason')?.addValidators([Validators.required]);
+        // this.showReason = true;
+        this.setHistoryPrescription(this.healthRecord.prescription);
+      } 
+
     }
   }
 
   ngOnInit(): void {
 
     this.prescriptionForm.valueChanges.subscribe({
-      next: (x) => {
-          
+      next: (x) => {          
           this.currentValueSetter(x);        
       }
     });
@@ -122,10 +112,19 @@ export class PrescriptionComponent
       advice: value['advice'],
       investigation: value['investigation'],
       followUpDate: value['followUpDate'],
-      healthRecordId: this.healthRecordId
+      healthRecordId: this.healthRecordId,
+      positiveFindings: value['positiveFindings'],
+      startDate: value['startDate'],
+      endDate: value['endDate'],
+      continue: value['continue'],
+      provisionalDiagnosis: value['provisionalDiagnosis'],
+      finalDiagnosis: value['finalDiagnosis'],
+      days: value['days'],
+      hours: value['hours'],
+      otherExaminations: value['otherExamination']
     }
     
-    this.emitRequest.emit(this.prescriptionRequest);
+   this.emitRequest.emit(this.prescriptionRequest);
   }
 
   getPrescriptionHistoryDropDown() {
@@ -161,35 +160,7 @@ export class PrescriptionComponent
 
   }
 
-  savePrescription(print?: boolean) {
-    let values = this.prescriptionForm.value;
 
-    // let prescription: IPrescriptionRequest = {
-    //   doctorId: this.doctorId,
-    //   patientId: this.patientId,
-    //   medicalHistory: values['medicalHistory'],
-    //   complaint: values['complaint'],
-    //   examination: values['examination'],
-    //   diagnosis: values['diagnosis'],
-    //   clinicNotes: values['clinicNotes'],
-    //   advice: values['advice'],
-    //   investigation: values['investigation'],
-    //   followUpDate: values['followUpDate']
-    // }
-
-    this.prescriptionService.addPrescription(this.prescriptionRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.alertService.success('Prescription Saved Successfully.');
-        this.newData = false;
-        this.showEdit = true;
-        this.prescriptionForm.disable({onlySelf: true})
-        this.emitRequest.emit(x);
-      },
-      error: (err) => {
-
-      }
-    })
-  }
 
   onSelectHistory(prescriptionId: string) {
     this.getPrescription(prescriptionId);
@@ -207,36 +178,6 @@ export class PrescriptionComponent
     this.historyPrescription = null;
   }
 
-  edit(){
-    this.showEdit = false;
-    this.prescriptionForm.enable();
-  }
-
-  cancelEdit(){
-    this.showEdit = true;
-    // this.prescriptionForm.disable({
-    //   onlySelf: true
-    // });
-  }
-
-  update(){
-    let prescriptionId: string = '';
-    if(this.healthRecord.prescription) prescriptionId = this.healthRecord.prescription.id;
-    this.prescriptionService.updatePrescriptionById(prescriptionId, this.prescriptionRequest).subscribe({
-      next: (x) => {
-        this.alertService.success('Prescription Updated Successfully.');
-        this.showEdit = true;
-        this.healthRecord.prescription = x;
-        this.prescriptionForm.disable({
-          onlySelf: true
-        });
-      },
-      error: (err) => {
-        this.alertService.error('An Error Occoured While Updating.');
-      }
-    })
-  }
-
   formSetter(prescription: IPrescriptionRequest){
     this.prescriptionForm.patchValue({
       medicalHistory: prescription.medicalHistory,
@@ -246,7 +187,17 @@ export class PrescriptionComponent
       clinicNotes: prescription.clinicNotes,
       advice: prescription.advice,
       investigation: prescription.investigation,
-      followUpDate: prescription.followUpDate
+      followUpDate: prescription.followUpDate,
+      positiveFindings: prescription.positiveFindings,
+      startDate: prescription.startDate,
+      endDate: prescription.endDate,
+      continue: prescription.continue,
+      provisionalDiagnosis: prescription.provisionalDiagnosis,
+      finalDiagnosis: prescription.finalDiagnosis,
+      days: prescription.days,
+      hours: prescription.hours,
+      otherExaminations: prescription.otherExaminations,
+      reason: prescription.reason
     })
 
     this.currentValueSetter(this.prescriptionForm.value);

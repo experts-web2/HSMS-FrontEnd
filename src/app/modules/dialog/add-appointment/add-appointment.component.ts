@@ -80,12 +80,10 @@ export class AddAppointmentComponent implements OnInit {
     this.getPatientsDropDown();
     this.addAppointmentForm.valueChanges.subscribe({
       next: (x) => {
-        console.log(x);
         
       }
     })
 
-    console.log(moment().format('HH:mm:ss').toString());
     
   }
 
@@ -115,7 +113,6 @@ export class AddAppointmentComponent implements OnInit {
   }
 
   selectAppointmentType(event: any){
-    console.log(event);
     
   }
 

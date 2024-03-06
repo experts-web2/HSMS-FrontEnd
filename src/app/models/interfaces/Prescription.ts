@@ -15,4 +15,14 @@ export interface IPrescription extends IBaseResponse {
     procedure?: number;
     followUpDate?: Date;
     healthRecordId: string;
+    reason?: string
+    startDate?: Date;
+    endDate?: Date;
+    continue?: boolean;
+    days?: number;
+    hours?: number;
+    positiveFindings?: string;
+    otherExaminations?: string;
+    provisionalDiagnosis?: string;
+    finalDiagnosis?: string;
   }

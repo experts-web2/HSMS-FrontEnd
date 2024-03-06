@@ -3,18 +3,15 @@ import {
   Input,
   OnInit,
   OnChanges,
-  TemplateRef,
-  ViewChild,
   SimpleChanges,
   Output,
   EventEmitter,
 } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { AlertService, LoaderService, VitalService } from 'src/app/services';
 import { SubscriptionManagmentDirective } from 'src/app/shared/directive/subscription-managment.directive';
 import { IDropDown } from 'src/app/models/interfaces/Dropdown';
-import { IToken } from 'src/app/models/interfaces/Token';
 import { IVitalRequest } from 'src/app/models/interfaces/vitalsRequest';
 import { IVital } from 'src/app/models/vitals';
 import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
@@ -24,17 +21,14 @@ import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
   templateUrl: './vitals.component.html',
   styleUrls: ['./vitals.component.scss'],
 })
-export class VitalsComponent
-  extends SubscriptionManagmentDirective
-  implements OnInit, OnChanges {
+export class VitalsComponent extends SubscriptionManagmentDirective implements OnInit, OnChanges {
   @Input() tokenVitals!: ITokenVitals;
   @Input() healthRecord!: IHealthRecord;
   @Input() historyVital!: IVital | null;
   @Input() historyTokenId!: string;
   @Input() healthRecordId!: string;
-  vitalRequest!: IVitalRequest;
-  showEdit: boolean = false;
-  newData: boolean = false;
+  vitalRequest?: IVitalRequest;
+  showReason: boolean = false;
   @Output() emitRequest: EventEmitter<IVitalRequest> = new EventEmitter<IVitalRequest>();
   vitalForm!: FormGroup;
   showMenu: string = '';
@@ -83,14 +77,11 @@ export class VitalsComponent
     // let tokenId = changes['historyTokenId'].currentValue;
     if(changes['healthRecord']){
 
-      if(!this.healthRecord.vital){
-        this.newData = true;
-      }else{
-        this.showEdit = true;
-        this.newData = false;
-      }
         this.vitalForm.reset()
+        this.vitalRequest = undefined;
       if (this.healthRecord.vital) {
+        this.showReason = true;
+        this.vitalForm.get('reason')?.addValidators([Validators.required])
         this.tokenVitals = <ITokenVitals>this.healthRecord.vital;
         this.setHistoryVital(this.healthRecord.vital)
       }
@@ -99,10 +90,7 @@ export class VitalsComponent
   }
 
   ngOnInit(): void {
-
     this.subscribeForm();
-
-
   }
 
   subscribeForm(){
@@ -131,40 +119,6 @@ export class VitalsComponent
     const totalCentimeters = feetInCentimeters + inchesInCentimeters;
 
     return totalCentimeters;
-}
-
-  edit(){
-    this.showEdit = false;
-    this.subscribeForm();
-    this.vitalForm.enable();
-  }
-
-  canelEdit(){
-    this.showEdit = true;
-    this.subscribeForm();
-    this.vitalForm.disable({
-      onlySelf: true
-    })
-  }
-
-  update(){
-    let vitalId: string = '';
-    if(this.healthRecord.vital) vitalId = this.healthRecord.vital.id;
-    
-    this.vitalService.updateVitals(vitalId, this.vitalRequest).subscribe({
-      next: (x) => {
-        this.alertService.success('Vitals Updated Successfully.');
-        this.showEdit = true;
-        this.healthRecord.vital = x;
-        this.vitalForm.disable({
-          onlySelf: true
-        });
-        this.emitRequest.emit(x);
-      },
-      error: (err) => {
-        this.alertService.error('An Error Occured While Updating Vitals');
-      }
-    })
   }
 
   currentValueSetter(value: { [key: string]: any }) {
@@ -190,27 +144,6 @@ export class VitalsComponent
     this.emitRequest.emit(this.vitalRequest);
   }
 
-  onSubmit() {
-
-    this.loaderService.show();
-    this.vitalService.addVitals(this.vitalRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        this.alertService.success('Vitals added successfully', 'Success');
-        this.newData = false;
-        this.showEdit = true;
-        this.vitalForm.disable({
-          onlySelf: true
-        });
-        this.emitRequest.emit(x);
-
-
-      }, error: (err) => {
-
-      }
-    })
-
-  }
-
   setVitalsFromInput() {
     this.vitalForm.patchValue({
       pulseHeartRate: this.tokenVitals.pulseHeartRate,
@@ -222,7 +155,7 @@ export class VitalsComponent
       height: this.tokenVitals.height,
       bodyMassIndex: this.tokenVitals.bodyMassIndex,
       oxygenSaturation: this.tokenVitals.oxygenSaturation,
-      bodySurfaceArea: this.tokenVitals.bodySurfaceArea
+      bodySurfaceArea: this.tokenVitals.bodySurfaceArea,
     });
   }
 

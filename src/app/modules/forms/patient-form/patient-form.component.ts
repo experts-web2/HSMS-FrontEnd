@@ -106,7 +106,6 @@ export class PatientFormComponent
   }
 
   onSubmit() {
-    console.log(this.patientForm.value);
     
     if(this.patientForm.invalid){
       this.alertService.error('Please Fill In All Required Fields.');
@@ -157,13 +156,11 @@ export class PatientFormComponent
   }
 
   concatDate(years:string, months?:string, days?:string){
-    console.log({years,months,days});
     let date = `${years}`;
     this.patientForm.patchValue({'age': date}); 
   }
 
   appendFilesToUpload(event: any){
-    console.log(event);
     
   }
 
@@ -212,7 +209,6 @@ export class PatientFormComponent
   getUploadImage(event: any) {
     // let img = await this.toBase64(file.target.files[0]);
     let files: Array<File> = event.target.files
-    console.log(files);
     for(let file of files){
 
       this.appendFilesToUpload(file)

@@ -23,7 +23,7 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
   tabs: any[] = [];
   roles = [{ id: Roles.Doctor, name: 'Doctor' }, { id: Roles.Nurse, name: 'Nurse' }, { id: Roles.Patient, name: 'Ptient' }, { id: Roles.Admin, name: 'Admin' }, { id: Roles.LabTechnician, name: 'Lab Technician' }, { id: Roles.LabAdmin, name: 'Lab Admin' }];
   testPriorty = [{ id: 1, name: 'Routine' }, { id: 2, name: 'Urgent' }];
-  labOrderRequest!: ILabOrderRequest;
+  labOrderRequest?: ILabOrderRequest;
   testsList: ILabTestList[] = [];
   tabsToView: ILabtestCategoriesTabs[] = [];
   selectedTestIds: Array<string> = [];
@@ -48,7 +48,8 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['healthRecord']){
-
+      this.selectedTestIds = [];
+      this.labOrderRequest = undefined;
       if(this.healthRecord.labOrder){
         this.newData = false;
         this.selectedTestIds = this.healthRecord.labOrder.labOrderDetails.map(x => x.labTestId) ?? [];
@@ -171,8 +172,9 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     if(this.testsListToShow.every(test => test.selected)) this.allSelected = true;
     else this.allSelected = false;
 
-    this.labOrderRequest.labTestIds = this.selectedTestIds;
+    if(this.labOrderRequest) this.labOrderRequest.labTestIds = this.selectedTestIds;
     this.emitRequest.emit(this.labOrderRequest);
+    this.selectedTestIds = cloneDeep(this.selectedTestIds);
 
   }
 
@@ -190,44 +192,11 @@ export class LabOrderComponent extends SubscriptionManagmentDirective implements
     }
 
     this.selectedTestIds = this.selectedTestIds.filter(x => x !== testId);
-    this.testsList = JSON.parse(JSON.stringify(this.testsList))
+    if(this.labOrderRequest) this.labOrderRequest.labTestIds = this.selectedTestIds;
+    this.emitRequest.emit(this.labOrderRequest);
+
   }
 
-  updateLabOrder(){
-    let labOrderId: string = '';
-    if(this.healthRecord.labOrder) labOrderId = this.healthRecord.labOrder.id;
-    this.laborderService.updateLabOrder(labOrderId ,this.labOrderRequest).subscribe({
-      next: (x) => {
-        this.alertService.success('Lab Order Updated Sucessfully.');
-        this.emitRequest.emit(x);
-        this.newData = false;
-      },
-      error: (err) => {
-        this.alertService.error('An Error Occoured While Updating Lab Order.')
-      }
-    })
-  }
-
-  addLabOrder() {
-
-    let labOrderPayload: ILabOrderRequest = {
-      doctorId: this.healthRecord.doctorId,
-      patientId: this.healthRecord.patientId,
-      labTestIds: this.selectedTestIds,
-      healthRecordId: this.healthRecordId
-    }
-
-    this.laborderService.addMedication(labOrderPayload).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {        
-        this.alertService.success('Lab Order Added Successfully.');
-        this.emitRequest.emit(labOrderPayload);
-        this.newData = false
-      },
-      error: (err) => {
-        this.alertService.error('Something went wrong while adding laborder.')
-      }
-    })
-  }
 
   selectAllChecked() {
     for (let test of this.testsListToShow.filter(x => x.testCategoryId === this.tabId)) {

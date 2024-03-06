@@ -84,7 +84,7 @@
                 </div>
                 <hr>
                 <div class="flex flex-row">
-                <section class="w-1/4">
+                <section class="w-1/4 flex flex-col">
                     <div class="">
                         <h2 class="text-center">Prescription</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -117,6 +117,12 @@
                                 <p class="text-black">{{historyData.prescription?.investigation ?? 'N/A '}}</p>
                             </div>
                         </div>
+                    </div>
+                    <div *ngIf="healthRecord.labOrder">
+                        <h2>Laboratory Tests</h2>
+                        <ul>
+                            <li *ngFor="let lab of healthRecord.labOrder.labOrderDetails">{{lab.labTestName}}</li>
+                        </ul>
                     </div>
                    
                 </section>

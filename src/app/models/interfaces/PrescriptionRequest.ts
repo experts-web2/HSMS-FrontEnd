@@ -22,4 +22,5 @@ export interface IPrescriptionRequest {
     procedure?: Procedure;
     followUpDate?: Date;
     healthRecordId: string;
+    reason?: string;
 }

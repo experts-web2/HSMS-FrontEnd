@@ -167,7 +167,6 @@ export class SchedulingComponent implements OnInit {
   getSchedules(){
     this.schedulsService.getSchedules({}).subscribe({
       next: (x) => {
-        console.log(x);
         
       },
       error: (err) => {

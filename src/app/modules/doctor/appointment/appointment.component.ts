@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of, takeUntil } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UserStateService } from 'src/app/State/user/user.service';
 import { FiltersMatchModes } from 'src/app/constants/enums/FilterMatchModes';
 import { FiltersOperators } from 'src/app/constants/enums/FilterOperators';
@@ -15,18 +15,15 @@ import { IVital } from 'src/app/models/vitals';
 import { AlertService, TokenService, PatientService, VitalService, MedicationService, PrescriptionService } from 'src/app/services';
 import { LabOrderService } from '../../../services/lab-order/lab-order.service';
 import { DialogService } from 'primeng/dynamicdialog';
-import { PatientHistoryPageComponent } from '../appointment-sub-components/patient-history-page/patient-history-page.component';
 import { DrPrescriptionPrintComponent } from '../appointment-sub-components/dr-prescription-print/dr-prescription-print.component';
 import { IVitalRequest } from '../../../models/interfaces/vitalsRequest';
 import { IPrescriptionRequest } from 'src/app/models/interfaces/PrescriptionRequest';
 import { IMedicationRequest } from '../../../models/interfaces/MedicationRequest';
 import { ILabOrderRequest } from 'src/app/models/interfaces/LabOrder-Request';
 import { AddFilesDialogComponent } from '../appointment-sub-components/add-files-dialog/add-files-dialog.component';
-import { PatientVisitService } from 'src/app/services/patient visit/patient-visit.service';
 import { HealtRecordService } from 'src/app/services/health-record/healt-record.service';
-import { IPatientVisitRequest } from 'src/app/models/interfaces/patientVisitRequest';
 import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
-import {Dictionary, isEqual, isEqualWith} from 'lodash';
+import { cloneDeep, isEqual} from 'lodash';
 import { AutomapperService } from '../../../services/mapper/automapper.service';
 @Component({
   selector: 'app-appointment',
@@ -65,6 +62,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   saved: boolean = true;
   userProfile = false;
   userSideSection = false;
+
   constructor(
     private alertService: AlertService, 
     private readonly route: ActivatedRoute, 
@@ -76,26 +74,23 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
     private readonly prescriptionService: PrescriptionService, 
     private readonly LabOrderService: LabOrderService, 
     private readonly dialogService: DialogService,
-    private readonly patientVisitService: PatientVisitService,
     private readonly healthRecordService: HealtRecordService,
     private readonly automapperService: AutomapperService,
-    private readonly el: ElementRef, 
-    private readonly renderer: Renderer2
   ) {
+
     this.route.params.subscribe({
       next: (x) => {
         this.tokenId = x["tokenId"];
-        this.healthRecordId = x["healthRecordId"] ?? '';
-        
+        this.healthRecordId = x["healthRecordId"] ?? '';        
       }
     });
 
     this.userStateService.getUserState().subscribe({
       next: (x) => {
-        this.logedInUser = x; 
-        
+        this.logedInUser = x;         
       }
-    })
+    });
+
   }
 
   ngAfterViewInit(): void {
@@ -107,14 +102,12 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit(): void {
-    let h  = Symbol.for('test') ;
-    console.log(h);
-    if (this.tokenId){
 
+    if (this.tokenId) {
       this.getToken();
       this.getHealthRecordByTokenId(this.tokenId);
-    } else if(this.healthRecordId){
-      
+    } 
+    else if (this.healthRecordId) {      
       this.getHealthRecordById(this.healthRecordId)
     }
     else {
@@ -139,9 +132,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
         if(x.patient) this.patient = x.patient;
         if(x.vital) this.tokenVitals = x.vital;
       },
-      error: (err) => {
-
-      }
+      error: (err) => {}
     })
   }
 
@@ -154,9 +145,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
         if(x.vital) this.tokenVitals = x.vital;
          this.getHistoryHealthRecords();
       },
-      error: (err) => {
-
-      }
+      error: (err) => {}
     })
   }
 
@@ -179,65 +168,13 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
     })
   }
 
-  savePatientVisitDetails(){
-    
-    if(this.prescription && !this.healthRecord.prescription) this.addPrescription();
-    if(this.vitals && !this.healthRecord.vital) this.addVitals();
-    if(this.medication && !this.healthRecord.medication) this.addMedication();
-    if(this.labOrder && !this.healthRecord.labOrder) this.addLabOrder();
-  
-  }
-
-  getPatientHistorvisits(patientId: string) {
-    let tokensPayload: IFetchRequest = {
-      pagedListRequest:{
-        pageNo: 1,
-        pageSize: 100
-      },
-      queryOptionsRequest:{
-        filtersRequest:[
-          {
-            field: 'DoctorId',
-            matchMode: FiltersMatchModes.Equal,
-            operator: FiltersOperators.And,
-            value: this.logedInUser.entityIds ? this.logedInUser.entityIds['DoctorId'] : ''
-          },
-          {
-            field: 'PatientId',
-            matchMode: FiltersMatchModes.Equal,
-            operator: FiltersOperators.And,
-            value: patientId
-          },
-        ],
-        sortRequest:[
-          {
-            field: 'CreatedAt',
-            direction: SortOrder.Descending,
-            priority: 1
-          }
-        ]
-      }
-    }
-
-    this.tokenService.getAllTokens(tokensPayload).subscribe({
-      next: (x) => {
-        this.patientHistoryVisits = x.data;
-        // this.openPatientHistoryDialog();
-      },
-      error: (err) => {
-
-      }
-    })
-  }
-
   getHistoryHealthRecords(){
     let healthRecordQuery: IFetchRequest = {
       pagedListRequest:{
         pageNo: 1,
         pageSize: 100
       },
-      queryOptionsRequest:{
-        
+      queryOptionsRequest:{        
         filtersRequest:[
           {
             field: 'DoctorId',
@@ -260,92 +197,58 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
           }
         ]
       }
-    }
-    
+    }    
 
     this.healthRecordService.getAllHealthRecords(healthRecordQuery).subscribe({
       next: (x) => {
-        this.patientHistoryHealthRecords = x.data;
-        
+        this.patientHistoryHealthRecords = x.data;        
       },
       error: (err) => {
-
       }
     })
 
   }
 
-  getHistoryVitals(tokenId: string){
-    
-  }
-
-  getHistoryPrescription(tokenId: string){
-
-  }
-
   changeTab(){
-
     switch(this.previousTabId){
-      case 'Prescription':
-        if (this.healthRecord.prescription && !isEqual(this.prescription, this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription))) {
-          this.updatePrescription(this.healthRecord.prescription.id);
-          
-        } else if (!this.healthRecord.prescription && this.prescription) {
-          
+      case 'Prescription':        
+        if (this.prescription && this.healthRecord.prescription && !isEqual(this.prescription, this.automapperService.map<IPrescriptionRequest>(this.healthRecord.prescription, this.prescription))) {
+          this.updatePrescription(this.healthRecord.prescription.id);          
+        } else if (!this.healthRecord.prescription && this.prescription) {          
           this.addPrescription()
-        }else{
-
-        }
-        
+        }        
       break;
-      case 'Vitals':
-        
-        if (this.healthRecord.vital && !isEqual(this.vitals, this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals))) {
+      case 'Vitals':      
+        if (this.vitals && this.healthRecord.vital && !isEqual(this.vitals, this.automapperService.map<IVitalRequest>(this.healthRecord.vital, this.vitals))) {
           this.updateVitals(this.healthRecord.vital.id)
         } else if (!this.healthRecord.vital && this.vitals) {
           this.addVitals()
-        } else {
-          
         }
-
       break;
       case 'Medication':
-        if (this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication))) {
+        if (this.medication && this.healthRecord.medication && !isEqual(this.medication, this.automapperService.map<IMedicationRequest>(this.healthRecord.medication, this.medication))) {
           this.updateMedication(this.healthRecord.medication.id);
         } else if (!this.healthRecord.medication && this.medication){
           this.addMedication()
-        }else {
         }
-
       break;
       case 'LabOrder':
-        let healthRecordLabTests = this.healthRecord.labOrder?.labOrderDetails.map(x => x.labTestId) ?? [];
-        if(this.healthRecord.labOrder && this.labOrder.labTestIds && this.labOrder.labTestIds.length && !(this.labOrder.labTestIds?.length === healthRecordLabTests?.length) && !this.labOrder.labTestIds?.every(x => healthRecordLabTests.includes(x))){
+        let healthRecordLabTests = this.healthRecord.labOrder?.labTestIds ?? [];
+        if(this.labOrder && this.healthRecord.labOrder && this.labOrder.labTestIds && !isEqual(this.labOrder.labTestIds.sort(), healthRecordLabTests.sort())){
           this.updateLabOrder(this.healthRecord.labOrder.id)
         } else if (!this.healthRecord.labOrder && this.labOrder && this.labOrder.labTestIds.length) {
           this.addLabOrder()
         }
-
       break;
       default:
       break;
     }
-
-  }
-
-  getHistoryMedications(tokenId: string){
-
-  }
-
-  activeChange(event: any){
-    
   }
 
   getToken() {
     this.tokenService.getTokenById(this.tokenId).subscribe({
       next: (x) => {
         this.token = x;
-        this.getPatient(x.patientId);
         this.markTokenAsViewd(x.id);
       },
     });
@@ -359,82 +262,15 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
     })
   }
 
-  getPatient(patientId: string) {
-    this.patientService.getPatientById(patientId).subscribe({
-      next: (x) => {
-        this.patient = x;
-      },
-    });
-  }
-
-  getPatientsBySearch(searchQuery: string){
-    let query: IFetchRequest = {
-      pagedListRequest: {
-        pageNo: 1,
-        pageSize: 100
-      },
-      queryOptionsRequest:{
-        filtersRequest:[
-          {
-            field: 'Name',
-            matchMode: FiltersMatchModes.Contains,
-            operator: FiltersOperators.Or,
-            value: searchQuery,
-            ignoreCase: true
-          },
-          {
-            field: 'MRNo',
-            matchMode: FiltersMatchModes.Contains,
-            operator: FiltersOperators.Or,
-            value: searchQuery,
-            ignoreCase: true
-          },
-          {
-            field: 'PhoneNumber',
-            matchMode: FiltersMatchModes.Contains,
-            operator: FiltersOperators.Or,
-            value: searchQuery,
-            ignoreCase: true
-          },
-        ]
-      }
-    }
-
-    this.patientService.getPatients(query).subscribe({
-      next: (x)=>{
-        this.patientsToShow = x.data;
-      },
-      error: (err) => {
-
-      }
-    })
-  }
-
   getGender(gender: Genders): string {
     return Genders[gender];
   }
 
-  searchPatient(queryObj: any) {
-    let query = queryObj.query;
-    this.getPatientsBySearch(query);
-  }
-
-  patientSelect(patientId: string) {
-    this.getPatientHistorvisits(patientId);
-    this.getPatient(patientId);
-  }
-
-  getPatientVisits(visitId: string) {
-    this.tokenService.getTokenById('').subscribe({
-      next: (x) => {},
-    });
-  }
   
   getVitalsByTokenId(tokenId: string){
     this.vitalsService.getVitalsByTokenId(tokenId).subscribe({
       next: (x) => {
         if (x){
-
           this.token.tokenDetail = {
             tokenId: this.token.id,
             pulseHeartRate: x.pulseHeartRate,
@@ -456,8 +292,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
         }
         else {
           this.token.tokenDetail = undefined;
-        }
-        
+        }        
       }
     })
   }
@@ -465,12 +300,11 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   addPrescription(){
     this.prescriptionService.addPrescription(this.prescription).subscribe({
       next: (x) => {
-        this.alertService.success('Presctiption Saved Successfully.')
+        this.alertService.success('Presctiption Saved Successfully.');
         this.healthRecord.prescription = x;
       },
       error: (err) => {
-        this.alertService.error('An Error Occoured While Saving Prescription.')
-
+        this.alertService.error('An Error Occoured While Saving Prescription.');
       }
     })
   }
@@ -478,12 +312,11 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   addVitals(){
     this.vitalsService.addVitals(this.vitals).subscribe({
       next: (x) => {
-        this.alertService.success('Vitals Saved Successfully.')
+        this.alertService.success('Vitals Saved Successfully.');
         this.healthRecord.vital = x;
       },
       error: (err) => {
-        this.alertService.error('An Error Occoured While Saving Vitals.')
-
+        this.alertService.error('An Error Occoured While Saving Vitals.');
       }
     })
   }
@@ -491,12 +324,11 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   addMedication(){
     this.medicationService.addMedication(this.medication).subscribe({
       next: (x) => {
-        this.alertService.success('Medication Saved Successfully.')
+        this.alertService.success('Medication Saved Successfully.');
         this.healthRecord.medication = x;
       },
       error: (err) => {
-        this.alertService.error('An Error Occoured While Saving Medication.')
-
+        this.alertService.error('An Error Occoured While Saving Medication.');
       }
     })
   }
@@ -506,10 +338,10 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
       next: (x) => {
         this.alertService.success('Lab Order Saved Successfully.')
         this.healthRecord.labOrder = x;
+        this.healthRecord = cloneDeep(this.healthRecord);
       },
       error: (err) => {
         this.alertService.error('An Error Occoured While Saving Lab Order.')
-
       }
     })
   }
@@ -517,12 +349,12 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   updatePrescription(prescriptionId: string){
     this.prescriptionService.updatePrescriptionById(prescriptionId, this.prescription).subscribe({
       next: (x) => {
-        this.alertService.success('Presctiption Saved Successfully.')
+        this.alertService.success('Presctiption Saved Successfully.');
         this.healthRecord.prescription = x;
+        this.healthRecord = cloneDeep(this.healthRecord);
       },
       error: (err) => {
-        this.alertService.error('An Error Occoured While Saving Prescription.')
-
+        this.alertService.error('An Error Occoured While Saving Prescription.');
       }
     })
   }
@@ -532,10 +364,10 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
       next: (x) => {
         this.alertService.success('Vitals Saved Successfully.')
         this.healthRecord.vital = x;
+        this.healthRecord = cloneDeep(this.healthRecord);
       },
       error: (err) => {
         this.alertService.error('An Error Occoured While Saving Vitals.')
-
       }
     })
   }
@@ -545,6 +377,7 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
       next: (x) => {
         this.alertService.success('Medication Saved Successfully.')
         this.healthRecord.medication = x;
+        this.healthRecord = cloneDeep(this.healthRecord);
       },
       error: (err) => {
         this.alertService.error('An Error Occoured While Saving Medication.')
@@ -556,14 +389,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   handleSectionVisibility(sectionId: string ) {
     this.currentTabId = sectionId;
 
-    if(sectionId === 'Medication' ){
-    }
-    if(sectionId === 'Prescription' ){
-      
-    }
-    if(sectionId === 'Vitals' ){
-    }
-    
     if(sectionId !== this.previousTabId){
       this.changeTab();
       this.previousTabId = sectionId;
@@ -572,20 +397,13 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
   }
   
   scrollToSection(sectionId: string): void {
-    this.currentTabId = sectionId;
-    // this.changeTab();
-    
+    this.currentTabId = sectionId;    
     const container = this.sectionContainer?.nativeElement;
     const sectionElement = document.getElementById(sectionId);
 
     if (sectionElement && container) {
       container.scrollTo({behavior: 'smooth', top: sectionElement.offsetTop});
-    }
-  
-  }
-
-  test(event:any){
-    
+    }  
   }
 
   updateLabOrder(labOrderId: string){
@@ -597,21 +415,6 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
       error: (err) => {
         this.alertService.error('An Error Occoured While Saving Lab Order.')
 
-      }
-    })
-  }
-
-  openHistoryView(){
-    this.openPatientHistoryDialog();
-  }
-
-  openPatientHistoryDialog(){
-    this.dialogService.open(PatientHistoryPageComponent, {
-      width: '90%',
-      height: '100%',
-      data: {
-        historyVisits: this.patientHistoryVisits,
-        patient: this.patient
       }
     })
   }

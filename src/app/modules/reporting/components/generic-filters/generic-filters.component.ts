@@ -97,7 +97,6 @@ export class GenericFiltersComponent implements OnInit {
   }
 
   selectedPatient(patientId: string){
-    console.log(patientId);
     this.patientIdForHealthRecord = patientId;
   }
 
@@ -108,7 +107,6 @@ export class GenericFiltersComponent implements OnInit {
     }
     this.healthRecordService.addHealthRecoed(healthRecordRequest).subscribe({
       next: (x) => {
-        console.log(x);
         this.alertService.success('Health Record Created Successfully.');
         this.router.navigate(['doctor/health_record', x.id])
       },
@@ -289,8 +287,6 @@ export class GenericFiltersComponent implements OnInit {
 
   getByDateRange(pageNo: number = 1){
     if(!this.dateRange.length || this.dateRange.some(x => x === null)) return;
-    console.log(this.dateRange);
-    console.log({startDate: moment(this.dateRange[0]).startOf('day').toDate(), endDate: moment(this.dateRange[1]).endOf('day').toDate()});
     
        let filtersRequest: Array<IFiltersRequest> = [
           {
@@ -311,13 +307,11 @@ export class GenericFiltersComponent implements OnInit {
   }
 
   patientQuery(event: any){
-    console.log(event.query);
     this.getPatients(event.query)
     
   }
 
   doctorQuery(event: any){
-    console.log(event.query);
     this.getDoctors(event.query)
     
   }

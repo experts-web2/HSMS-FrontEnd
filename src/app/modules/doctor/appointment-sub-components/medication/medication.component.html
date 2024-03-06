@@ -1,10 +1,5 @@
 <div class="flex col-12 flex-column">
     <hr class="w-90 mb-2"  style="border: 1px solid #979797;">
-    <!-- <ng-container *ngIf="!newData && showEdit">
-        <div  class="flex flex-row-reverse m-3">
-            <p-button icon="pi pi-file-edit" (onClick)="edit()"></p-button>
-        </div>
-    </ng-container> -->
     <div class="flex flex-column col-12 border border-secondary rounded p-1" [formGroup]="medicationForm">
         <div formArrayName="medicationItems">
             <div *ngFor="let form of medicationItems.controls; let i = index" class="flex">
@@ -103,16 +98,6 @@
             <p-button class="mt-4 mb-2" (click)="addMedicationItem()"><i class="pi pi-plus"></i> Drug</p-button>
         </div>
         <textarea rows="2" cols="93" class="mb-4 mt-2" placeholder="Medication Notes" id="investigation" pInputTextarea formControlName="medicationNotes"></textarea>
+        <textarea *ngIf="showReason" rows="2" cols="93" class="mb-4 mt-2" placeholder="Reason" id="reason" pInputTextarea formControlName="reason"></textarea>
     </div>
-    <!-- <ng-container *ngIf="!newData && !showEdit">
-        <div class="flex gap-3 mb-3 mt-3">
-            <p-button label="Update" (onClick)="update()"></p-button>
-            <p-button label="Cancel" (onClick)="cancelEdit()"></p-button>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="newData && !showEdit">
-        <div class="flex gap-3 mb-3 mt-3">
-            <p-button label="Save" (onClick)="save()"></p-button>
-        </div>
-    </ng-container> -->
 </div>

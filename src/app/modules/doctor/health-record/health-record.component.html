@@ -51,7 +51,7 @@
 
 <ng-container *ngIf="healthRecords">
 <ng-container *ngFor="let healthRecord of healthRecords">
-    <div class="grid grid-cols-6 m-3 p-3 items-center rounded-t-lg bg-slate-200">
+    <div class="grid grid-cols-6 gap-1 m-3 p-3 items-center rounded-t-lg bg-slate-200">
         <div><span class="font-bold">Mr#:</span> {{healthRecord.patient?.mrNo}} , <span class="font-bold">Patient:</span> {{healthRecord.patient?.name}}</div>
         <div><span class="font-bold">Doctor Name:</span> {{healthRecord.doctor?.name}}</div>
         <div><span class="font-bold">Added By:</span> {{healthRecord.patient?.createdBy}}</div>

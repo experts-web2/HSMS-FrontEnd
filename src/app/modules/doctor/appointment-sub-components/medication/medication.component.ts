@@ -29,19 +29,18 @@ import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 export class MedicationComponent extends SubscriptionManagmentDirective implements OnInit, OnChanges {
   @Input() healthRecord!: IHealthRecord;
   @Input() historyTokenId!: string;
-  @Input() medicationRequest!: IMedicationRequest;
+  @Input() medicationRequest?: IMedicationRequest;
   @Input() healthRecordId!: string;
   @Output() emitRequest: EventEmitter<IMedicationRequest> = new EventEmitter<IMedicationRequest>()
   historyDropDown: Array<IDropDown> = [];
-  showEdit: boolean = false;
-  newData: boolean = false;
   medicationForm!: FormGroup;
+  showReason: boolean = false;
   loggedInDoctor!: ILogedInUser;
   medicines: Array<IMedicine> = [];
   medicinesToShow: Array<IMedicine> = [];
   medicationItem!: FormGroup;
   improvementOptions: any[] = [];
-  suggestions: any[]= [];
+  suggestions: any[] = [];
   medicineNameBinding: 'name' | 'medicineName' = 'name';
   medicationRoutes = MedicationRoutes;
   medicationFrequencies = MedicationFrequencies;
@@ -61,45 +60,41 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
     this.medicationItem = this.getMedicationItemForm();
 
     this.medicationForm = this.fb.group({
-      medicationItems: this.fb.array([this.medicationItem],[Validators.required]),
+      medicationItems: this.fb.array([this.medicationItem], [Validators.required]),
       doctorId: new FormControl<string | null>(null, [Validators.required]),
       patientId: new FormControl<string | null>(null, [Validators.required]),
       followUpDate: new FormControl<Date | null>(null),
-      medicationNotes: new FormControl<string | null>(null)
+      medicationNotes: new FormControl<string | null>(null),
+      reason: new FormControl<string| null>(null)
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // this.setHistoryMedication(this.historyTokenId);
-    if(changes['healthRecord']){
+    if (changes['healthRecord']) {
+      this.medicationForm.reset();
+      this.removeAllMedicationItem()
+      this.medicationRequest = undefined;
       this.medicationForm.get('doctorId')?.setValue(this.healthRecord.doctorId);
       this.medicationForm.get('patientId')?.setValue(this.healthRecord.patientId);
       if (this.healthRecord.medication) {
-        this.showEdit = true; 
-        this.newData = false;
         this.setHistoryMedication(this.healthRecord.medication);
-      } else {
-        this.newData = true;
-        this.showEdit = false; 
       }
     }
   }
 
-  get medicationItems(): FormArray{
-      return this.medicationForm.get('medicationItems') as FormArray;
+  get medicationItems(): FormArray {
+    return this.medicationForm.get('medicationItems') as FormArray;
   }
 
   ngOnInit(): void {
-    
     this.medicationForm.valueChanges.subscribe({
       next: (x) => {
-         this.currentValueSetter(x);
+        this.currentValueSetter(x);
       }
     });
   }
 
-  currentValueSetter(value: {[name: string]: any}){
-    
+  currentValueSetter(value: { [name: string]: any }) {
     this.medicationRequest = {
       medicationDetails: this.medicationItems.value.map((x: any) => {
         let medicationDetail: IMedicationDetail = {
@@ -121,18 +116,17 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
       healthRecordId: this.healthRecordId
     }
 
-    this.emitRequest.emit(this.medicationRequest);
+    if(this.medicationItems.valid) this.emitRequest.emit(this.medicationRequest);
   }
 
-  search(e: any){
-
+  search(e: any) {
     let medicineRequest: IFetchRequest = {
-      pagedListRequest:{
+      pagedListRequest: {
         pageNo: 1,
         pageSize: 1000
       },
       queryOptionsRequest: {
-        filtersRequest:[
+        filtersRequest: [
           {
             field: 'Name',
             value: e.query,
@@ -142,21 +136,17 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
           }
         ]
       }
-    }
+    };
 
     this.medicineService.getMedicine(medicineRequest).subscribe({
       next: (x) => {
         this.medicinesToShow = x.data;
-        
       },
-      error: (err: Error) => {
-
-      }
-    })
-    
+      error: (err: Error) => { }
+    });
   }
 
-  getMedicationItemForm(): FormGroup{
+  getMedicationItemForm(): FormGroup {
     return this.fb.group({
       medicine: new FormControl<IMedicine | null>(null),
       medicineId: new FormControl<string | null>(null, [Validators.required]),
@@ -171,53 +161,20 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
     });
   }
 
-  edit(){
-    this.showEdit = false;
-    this.medicationForm.enable();
-  }
-
-  cancelEdit(){
-    this.showEdit = true;
-    this.medicationForm.disable({
-      onlySelf: true
-    });
-  }
-
-  update(){
-    let medicationId: string = '';
-
-    if(this.healthRecord.medication) medicationId = this.healthRecord.medication.id;
-
-    this.medicationService.updateMedication(medicationId, this.medicationRequest).subscribe({
-      next: (x) => {
-        this.alertService.success('Medication Updated Successfully.');
-        this.healthRecord.medication = x;
-        this.medicationForm.disable({
-          onlySelf: true
-        });
-        this.showEdit = true;
-      },
-      error: (err) =>{
-        this.alertService.error('An Error Occoured While Updateing Medication.')
-      }
-    });
-  }
-
-  onMedicineSelect(index: number, medicine: IMedicine){
+  onMedicineSelect(index: number, medicine: IMedicine) {
     this.medicationItems.at(index).get('medicineName')?.setValue(medicine.name);
-    this.medicationItems.at(index).get('medicineId')?.setValue(medicine.id);   
-
+    this.medicationItems.at(index).get('medicineId')?.setValue(medicine.id);
   }
 
-  getPotencyUnit(potency: number): string{
+  getPotencyUnit(potency: number): string {
     return PotencyUnits[potency];
   }
 
-  getMedicineType(potency: number): string{
+  getMedicineType(potency: number): string {
     return MedicineType[potency];
   }
 
-  getMedicineHistoryDropDown(){
+  getMedicineHistoryDropDown() {
     this.medicationService.getMedicationHistoryDropDown(this.healthRecord.patientId).pipe(takeUntil(this.componetDestroyed)).subscribe({
       next: (x) => {
         this.historyDropDown = x;
@@ -225,222 +182,122 @@ export class MedicationComponent extends SubscriptionManagmentDirective implemen
     })
   }
 
-  setHistoryMedication(medication: IMedication){
+  setHistoryMedication(medication: IMedication) {
 
-        this.medicationRequest = {
-          medicationDetails: [],
-          medicationNotes: this.medicationForm.controls['medicationNotes'].value,
-          doctorId: this.healthRecord.doctorId,
-          patientId: this.healthRecord.patientId,
-          healthRecordId: this.healthRecordId
-        } 
+    this.medicationRequest = {
+      medicationDetails: [],
+      medicationNotes: this.medicationForm.controls['medicationNotes'].value,
+      doctorId: this.healthRecord.doctorId,
+      patientId: this.healthRecord.patientId,
+      healthRecordId: this.healthRecordId
+    }
 
-        this.medicationRequest.medicationDetails = this.medicationItems.value;
-        this.historyMedication = medication;
+    this.medicationRequest.medicationDetails = this.medicationItems.value;
+    this.historyMedication = medication;
 
-        // this.medicationForm.disable({
-        //   onlySelf: true
-        // });
-
-        this.formSetter(medication);
-
+    this.formSetter(medication);
   }
 
-  getMedicationById(medicationId: string){
-    this.medicationService.getMedicationById(medicationId).pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        
-        this.medicationRequest.medicationDetails = this.medicationItems.value ?? [];
-        this.historyMedication = x;
-        this.medicationForm.disable({
-          onlySelf: true
-        });
-        this.formSetter(x)
-      }
-    })
-  }
-
-  onHistorySelection(medicationId: string){
-    this.getMedicationById(medicationId);
-  }
-
-  getMedicine(){
-    this.medicineService.getMedicineDropDown().pipe(takeUntil(this.componetDestroyed)).subscribe({
-      next: (x) => {
-        // this.medicines = x;
-        
-        // this.medicinesToShow = x;
-
-      },
-      error: (err)=>{
-
-      }
-    })
-  }
-
-  submitMedications(){
-
-  }
-
-  setDuration(index: number, duration: any){
-    
+  setDuration(index: number, duration: any) {
     this.medicationItems.at(index).get('duration')?.setValue(duration.value);
   }
 
-  setDosage(index: number, dosage: {label: string, value: MedicationDosageEnum}){
+  setDosage(index: number, dosage: { label: string, value: MedicationDosageEnum }) {
     this.medicationItems.at(index).patchValue({
       dosage: dosage.value
     })
   }
 
-  setRoute(index: number, route: {label: string, value: MedicationRouteEnum}){
+  setRoute(index: number, route: { label: string, value: MedicationRouteEnum }) {
     this.medicationItems.at(index).patchValue({
       route: route.value
     })
   }
 
-  setInstruction(index: number, instruction: {label: string, value: MedicationInstructionEnum}){
+  setInstruction(index: number, instruction: { label: string, value: MedicationInstructionEnum }) {
     this.medicationItems.at(index).patchValue({
       instruction: instruction.value
     })
   }
 
-  setFrequency(index: number, frequency: {label: string, value: MedicationFrequencyEnum}){
+  setFrequency(index: number, frequency: { label: string, value: MedicationFrequencyEnum }) {
     this.medicationItems.at(index).patchValue({
       frequency: frequency.value
     })
   }
 
-  removeMedicationItem(index: any){
-    this.medicationItems.removeAt(index);   
-    if(this.medicationItems.length < 1) this.addMedicationItem();
+  removeMedicationItem(index: any) {
+    this.medicationItems.removeAt(index);
+    if (this.medicationItems.length < 1) this.addMedicationItem();
   }
 
-  addMedicationItem(){
+  removeAllMedicationItem() {
+    for(let i=0;i < this.medicationItems.length; i++){
+      this.medicationItems.removeAt(i)
+    }
+    this.addMedicationItem()
+  }
+
+  addMedicationItem() {
     let medicationForm = this.getMedicationItemForm();
     this.medicationItems.push(medicationForm);
   }
 
-  save(){
-    
-    if(this.medicationItems.valid && this.medicationForm.get('patientId')?.valid && this.medicationForm.get('doctorId')?.valid){
-      let medicationRequest: IMedicationRequest = {
-        patientId: this.medicationForm.controls['patientId'].value,
-        doctorId: this.medicationForm.controls['doctorId'].value,
-        medicationNotes: this.medicationForm.controls['medicationNotes'].value,
-        healthRecordId: this.healthRecordId,
-        medicationDetails: this.medicationItems.value.map((x: any) => {
-          let medicationDetail: IMedicationDetail = {
-            medicineId: x.medicineId,
-            dosage: x.dosage,
-            dosageValue: x.dosageValue,
-            duration: x.duration,
-            durationValue: x.durationValue,
-            route: x.route,
-            frequency: x.frequency,
-            insturction: +x.instruction
-          };
-
-          return medicationDetail;
-        })
-      };
-
-      this.medicationService.addMedication(medicationRequest).pipe(takeUntil(this.componetDestroyed)).subscribe({
-        next: (x) => {
-          this.alertService.success('Medication Saved.');
-          this.newData = false;
-          this.showEdit = true;
-          this.medicationForm.disable({
-            onlySelf: true
-          });
-        },
-        error: (err) => {
-          this.alertService.error('There was an error while saving medication.')
-        }
-      })
-      
-    }
-    else{
-      this.alertService.error('Form is invalid.')
-    }
-  }
-
-  currentMedication(){
+  currentMedication() {
     this.historyMedication = null;
-    
-    this.medicationForm.enable({
-      onlySelf: true
-    });
-    if(this.medicationRequest) this.formSetter(this.medicationRequest);
+
+    this.medicationForm.enable({ onlySelf: true });
+
+    if (this.medicationRequest) this.formSetter(this.medicationRequest);
     else this.medicationForm.reset();
   }
 
-  formSetter(medication: IMedicationRequest){
-    
+  formSetter(medication: IMedicationRequest) {
+
     this.medicationForm.patchValue({
-      medicationNotes: medication.medicationNotes,
-      // medicationItems: medication.medicationDetails
+      medicationNotes: medication.medicationNotes
     })
 
-    medication.medicationDetails.forEach((x, i) => {    
-      // console.log({
-      //   medicineId: x.medicineId,
-      //   medicineName: this.medicines.find(y => y.id === x.medicineId)?.name,
-      //   dosage: x.dosage,
-      //   frequency: x.frequency,
-      //   route: x.route,
-      //   duration: x.duration,
-      //   instruction: x.insturction,
-      //   durationValue:x.durationValue,
-      //   dosageValue: x.dosageValue,
-      //   medicines: this.medicines
-      // });
-
-      // this.medicationItems.at(i).disable({
-      //   onlySelf: true
-      // })
-      
-      this.medicationItems.at(i).patchValue({
-        medicineId: x.medicineId,
+    medication.medicationDetails.forEach((x, i) => {
+      this.medicationItems.at(i).patchValue(
+        {
+          medicineId: x.medicineId,
           medicineName: '',
           dosage: x.dosage,
           frequency: x.frequency,
           route: x.route,
           duration: x.duration,
           instruction: x.insturction,
-          durationValue:x.durationValue,
+          durationValue: x.durationValue,
           dosageValue: x.dosageValue,
           medicine: x.medicineResponse
-        })
+        }
+      );
 
-      if(medication.medicationDetails.length > this.medicationItems.length) this.addMedicationItem();
+      if (medication.medicationDetails.length > this.medicationItems.length) this.addMedicationItem();
     })
 
-    // if(this.medicationForm.get('patientId')?.valid && this.medicationForm.get('doctorId')?.valid){
-      let medicationRequest: IMedicationRequest = {
-        patientId: this.medicationForm.controls['patientId'].value,
-        doctorId: this.medicationForm.controls['doctorId'].value,
-        medicationNotes: this.medicationForm.controls['medicationNotes'].value,
-        healthRecordId: this.healthRecordId,
-        medicationDetails: this.medicationItems.value.map((x: any) => {
-          let medicationDetail: IMedicationDetail = {
-            medicineId: x.medicineId,
-            dosage: x.dosage,
-            dosageValue: x.dosageValue,
-            duration: x.duration,
-            durationValue: x.durationValue,
-            route: x.route,
-            frequency: x.frequency,
-            insturction: +x.instruction
-          };
+    let medicationRequest: IMedicationRequest = {
+      patientId: this.medicationForm.controls['patientId'].value,
+      doctorId: this.medicationForm.controls['doctorId'].value,
+      medicationNotes: this.medicationForm.controls['medicationNotes'].value,
+      healthRecordId: this.healthRecordId,
+      medicationDetails: this.medicationItems.value.map((x: any) => {
+        let medicationDetail: IMedicationDetail = {
+          medicineId: x.medicineId,
+          dosage: x.dosage,
+          dosageValue: x.dosageValue,
+          duration: x.duration,
+          durationValue: x.durationValue,
+          route: x.route,
+          frequency: x.frequency,
+          insturction: +x.instruction
+        };
 
-          return medicationDetail;
-        })
-      };
-      if(this.medicationForm.valid && this.medicationItems.valid) this.emitRequest.emit(medicationRequest);
+        return medicationDetail;
+      })
+    };
 
-    // }
-
+    if (this.medicationForm.valid && this.medicationItems.valid) this.emitRequest.emit(medicationRequest);
   }
-
 }

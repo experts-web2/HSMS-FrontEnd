@@ -1,19 +1,7 @@
 <div [formGroup]="prescriptionForm">
     <hr class="w-90 mb-2"  style="border: 1px solid #979797;">
     <div class="flex flex-row-reverse">
-        <!-- <select class="form-select w-full md:w-1/3" name="" id="" #prescriptionHistory (change)="onSelectHistory(prescriptionHistory.value)">
-            <option [value]="null" [defaultSelected]="true" disabled>Prescriptions History</option>
-            <option *ngFor="let his of historyDropDown" [value]="his.id">{{his.name | date: 'EEE MMM, dd/yyyy'}}</option>
-        </select> -->
-        <!-- <ng-container *ngIf="showEdit && !newData">
-            <div class="flex flex-row-reverse">
-                <p-button (onClick)="edit()" icon="pi pi-file-edit"></p-button>
-
-            </div>
-        </ng-container> -->
-        <!-- <p-button *ngIf="historyPrescription" label="Curent Prescription" (onClick)="currentPrescription()"></p-button> -->
     </div> 
-
     <div class="prrescription-input">
         <label htmlFor="medicalHistory">Medical History</label>
         <div class="flex flex-row gap-2 items-center py-1">
@@ -36,10 +24,10 @@
         <label htmlFor="complaint">Complaint</label>
         <div class="flex flex-row gap-2 items-center py-1">
                 <div class="procedure-select-div" >
-                    <input id="days" pInputText type="number" style="width: 110px" placeholder="Days"   />
+                    <input id="days" pInputText type="number" style="width: 110px" placeholder="Days"  formControlName="days" />
                 </div>
                 <div class="procedure-select-div" >
-                    <input id="Hours" pInputText type="number" style="width: 110px" placeholder="Hours"   />
+                    <input id="Hours" pInputText type="number" style="width: 110px" placeholder="Hours"  formControlName="hours" />
                 </div>
         </div>
         <div class="inner-prescription">
@@ -94,41 +82,12 @@
             <textarea rows="1" cols="93" class="w-full textarea-height" id="investigation" pInputTextarea formControlName="investigation"></textarea>
         </div>
     </div>
-    <!-- <div class="prrescription-input">
-        <label htmlFor="procedure">Procedure</label>
-        <div class="procedure-select-div">
-            <select class="form-select md:w-60 lg:w-80"  disabled  name="" id="" placeholder="Select Procedure"></select>
+    <div class="prrescription-input" *ngIf="showReason">
+        <label htmlFor="investigation">Reason</label>
+        <div class="inner-prescription">
+            <textarea rows="1" cols="93" class="w-full textarea-height" id="reason" pInputTextarea formControlName="reason"></textarea>
         </div>
     </div>
-    <div class="add-procedure">
-        <p-button  ><i class="pi pi-plus mr-2"></i> Add Procedure</p-button>
-    </div>
-    <div class="flex flex-col md:flex-row justify-between gap-y-6 md:gap-x-5 items-center mt-6">
-        <div class="w-full">
-            <label htmlFor="improvement" >Improvement</label>
-        <div class="procedure-select-div" name="improvement">
-            <select class="form-select w-full md:w-60 lg:w-80" disabled name="" id="" placeholder="Select Improvement"></select>
-        </div>
-        </div>
-        <div class="d-flex flex-column w-full">
-            <label htmlFor="date">Recomended Follow-up Appointment Date</label>
-                <p-calendar id="date" class="datePicker" [showIcon]="true" formControlName="followUpDate"></p-calendar>
-        </div>
-    </div> -->
-    <!-- <div class="d-flex mt-4" *ngIf="!historyPrescription">
-        <p-button class="mr-4" (click)="savePrescription(true)">Save & Print</p-button>
-        <p-button (click)="savePrescription()">Save</p-button>
-    </div> -->
-    <!-- <ng-container *ngIf="!showEdit && !newData">
-        <div class="flex gap-3 mb-3 mt-3">
-            <p-button (onClick)="update()" label="Update"></p-button>
-            <p-button (onClick)="cancelEdit()" label="Cancel"></p-button>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="!showEdit && newData">
-        <div class="flex gap-3 mb-3 mt-3">
-            <p-button (onClick)="savePrescription()" label="Save"></p-button>
-        </div>
-    </ng-container> -->
+
     <hr>
 </div>
