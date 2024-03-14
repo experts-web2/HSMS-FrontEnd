@@ -1,11 +1,13 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { UserStateService } from 'src/app/State/user/user.service';
 import { MedicationDosageEnum } from 'src/app/constants/Constants/MedicationDosage';
 import { MedicationDurationEnum } from 'src/app/constants/Constants/MedicationDuration';
 import { MedicationFrequencies, MedicationFrequencyEnum } from 'src/app/constants/Constants/MedicationFrequency';
 import { MedicationInstructionEnum, MedicationInstructions } from 'src/app/constants/Constants/MedicationInstructions';
 import { MedicationRouteEnum, MedicationRoutes } from 'src/app/constants/Constants/MedicationRoute';
 import { IDoctor } from 'src/app/models/interfaces/Doctor';
+import { ILogedInUser } from 'src/app/models/interfaces/Iloggedinuser';
 import { IMedication } from 'src/app/models/interfaces/Medication';
 import { IPrescription } from 'src/app/models/interfaces/Prescription';
 import { IToken } from 'src/app/models/interfaces/Token';
@@ -13,7 +15,7 @@ import { IHealthRecord } from 'src/app/models/interfaces/healthRecord';
 import { IPatient } from 'src/app/models/interfaces/patient-model';
 import { ITableColumns } from 'src/app/models/interfaces/table-Columns';
 import { IVital } from 'src/app/models/vitals';
-import { DoctorService, LabOrderService, LoaderService, MedicationService, PrescriptionService, VitalService } from 'src/app/services';
+import { AccountService, DoctorService, LabOrderService, LoaderService, MedicationService, PrescriptionService, VitalService } from 'src/app/services';
 
 @Component({
   selector: 'app-dr-prescription-print',
@@ -27,7 +29,9 @@ export class DrPrescriptionPrintComponent {
   patient!: IPatient;
   token!: IToken;
   healthRecord!: IHealthRecord;
-
+  currentuser!: ILogedInUser;
+  accountId!: string
+  account:any;
   constructor(
     private readonly dialogRef: DynamicDialogRef, 
     private readonly dialogConfig: DynamicDialogConfig<{healthRecord: IHealthRecord}>,
@@ -36,13 +40,21 @@ export class DrPrescriptionPrintComponent {
     private readonly prescriptionService: PrescriptionService,
     private readonly labOrderService: LabOrderService,
     private readonly doctorService: DoctorService,
+    private readonly userStateService: UserStateService,
+    private readonly accountService: AccountService
   ){
-    
+    let currentUser = this.userStateService.User_State.value;  
+    this.accountId = currentUser?.accountId;   
   }
 
   ngOnInit(): void {
     let tokenId = '';
     let doctorId = '';
+    this.accountService.getAccountByID(this.accountId).subscribe(account => {
+      console.log(account);
+      this.account = account;
+      
+    })
     console.log(this.dialogConfig.data);
     if(this.dialogConfig.data?.healthRecord){
       this.healthRecord = this.dialogConfig.data?.healthRecord;

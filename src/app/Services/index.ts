@@ -22,3 +22,4 @@ export * from "./patient-test/patient-test.service";
 export * from "./medicine-brand/medicine-brand.service";
 export * from "./prescription/prescription.service";
 export * from "./scheduling/scheduling.service";
+export * from "./account/account.service";

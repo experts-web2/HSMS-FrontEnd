@@ -280,6 +280,13 @@ p-autoComplete {
       width: 126px;
     }
   }
+  .p-fileupload-files {
+    button.p-element{
+      background-color: $ctrlbg;
+      color: $green-theme-WhiteTextColor;
+      border: 2px solid $green-theme-border;
+    }
+  }
 }
 
 .uploadfile-card{

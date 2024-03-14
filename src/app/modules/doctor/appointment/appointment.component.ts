@@ -421,9 +421,13 @@ export class AppointmentComponent implements OnInit, OnChanges, AfterViewInit {
 
   openUploadFileDialog(){
     this.dialogService.open(AddFilesDialogComponent,{
-      width: '40%',
-      height: '50%',
-      data: {patient: this.patient}
+      width: window.innerWidth > 600 ? '40%': '90vw',
+      height: window.innerWidth > 600 ? 'auto' :'90vh',
+      header:'Upload Files',
+      data: {patient: this.patient},
+      style: {
+        'max-height': '90vh'
+      }
     })
   }
 }

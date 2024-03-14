@@ -1,6 +1,6 @@
 <div #printElement>
     <div class="flex justify-between m-3">
-        <div class="w-20 flex items-center font-bold">
+        <div class="w-20 flex items-end font-bold">
             {{healthRecord.doctor?.qualification}}
         </div>
         <div class="grid grid-cols-2 gap-4">
@@ -28,7 +28,7 @@
                     <div>
                         <div class="text-center">
 
-                            <h2 class="text-center">Vitals</h2>
+                            <h2 class="text-center text-xl font-bold my-2">Vitals</h2>
                         </div>
                         <div class="grid grid-cols-6 gap-1 md:grid-cols-6 gap-1">
                             <div>
@@ -86,40 +86,40 @@
                 <div class="flex flex-row">
                 <section class="w-1/4 flex flex-col">
                     <div class="">
-                        <h2 class="text-center">Prescription</h2>
+                        <h2 class="text-center text-xl font-bold my-2">Prescription</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <h3>Medical History</h3>
-                                <p class="text-black">{{historyData.prescription?.medicalHistory ?? 'N/A'}}</p>
+                                <h3 class="text-lg">Medical History</h3>
+                                <p class="text-black break-words">{{historyData.prescription?.medicalHistory ?? 'N/A'}}</p>
                             </div>
                             <div>
-                                <h3>Complaint</h3>
-                                <p class="text-black">{{historyData.prescription?.complaint ?? 'N/A'}}</p>
+                                <h3 class="text-lg">Complaint</h3>
+                                <p class="text-black break-words">{{historyData.prescription?.complaint ?? 'N/A'}}</p>
                             </div>
                             <div>
-                                <h3>Examination</h3>
-                                <p class="text-black">{{historyData.prescription?.examination ?? 'N/A'}}</p>
+                                <h3 class="text-lg">Examination</h3>
+                                <p class="text-black break-words">{{historyData.prescription?.examination ?? 'N/A'}}</p>
                             </div>
                             <div>
-                                <h3>Diagnosis</h3>
-                                <p class="text-black">{{historyData.prescription?.diagnosis ?? 'N/A'}}</p>
+                                <h3 class="text-lg">Diagnosis</h3>
+                                <p class="text-black break-words">{{historyData.prescription?.diagnosis ?? 'N/A'}}</p>
                             </div>
                             <div>
-                                <h3>Clinical Notes</h3>
-                                <p class="text-black">{{historyData.prescription?.clinicNotes ?? 'N/A'}}</p>
+                                <h3 class="text-lg">Clinical Notes</h3>
+                                <p class="text-black break-words">{{historyData.prescription?.clinicNotes ?? 'N/A'}}</p>
                             </div>
                             <div>
-                                <h3>Advice</h3>
-                                <p class="text-black">{{historyData.prescription?.advice ?? 'N/A'}}</p>
+                                <h3 class="text-lg">Advice</h3>
+                                <p class="text-black break-words">{{historyData.prescription?.advice ?? 'N/A'}}</p>
                             </div>
                             <div>
-                                <h3>Investigation</h3>
-                                <p class="text-black">{{historyData.prescription?.investigation ?? 'N/A '}}</p>
+                                <h3 class="text-lg">Investigation</h3>
+                                <p class="text-black break-words">{{historyData.prescription?.investigation ?? 'N/A '}}</p>
                             </div>
                         </div>
                     </div>
                     <div *ngIf="healthRecord.labOrder">
-                        <h2>Laboratory Tests</h2>
+                        <h2 class="text-center text-xl font-bold my-2">Laboratory Tests</h2>
                         <ul>
                             <li *ngFor="let lab of healthRecord.labOrder.labOrderDetails">{{lab.labTestName}}</li>
                         </ul>
@@ -127,19 +127,19 @@
                    
                 </section>
             
-                <section class="w-3/4 border-l p-4">
+                <section class="w-3/4 border-l px-4 pb-4">
                     <div>
                         <div class="">
-                            <h2 class="text-center">Medications</h2>
+                            <h2 class="text-center text-xl font-bold my-2">Medications</h2>
 
                         </div>
-                        <div *ngFor="let medication of medicationTableData" class="border-b">
+                        <div *ngFor="let medication of medicationTableData" class="border-b mb-2">
                             <div>
-                                <h2>
+                                <h2 class="text-lg">
                                     {{medication.name ?? 'Medicine Name'}}
                                 </h2>
+                                <p class="mt-1 text-black"> Take {{medication.dosage}}, {{medication.frequency}} for {{medication.duration}} by {{medication.route}}.</p>
                             </div>
-                            <span> Take {{medication.dosage}}, {{medication.frequency}} for {{medication.duration}} by {{medication.route}}.</span>
 
                             <!-- <app-generic-table [columns]="medicationTableColumns" [data]="medicationTableData" [showPaginator]="false"></app-generic-table> -->
                         </div>
